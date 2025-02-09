@@ -1,6 +1,33 @@
 :root {
   --font-size: 1em;
+
+  --background-color-dark: #101010;
+  --background-color-light: #f1f1f1;
+
+  --accent-color: #0aa;
+  --accent-color-transparent: #00aaaaaa;
+
+  --font-color-dark: #101010;
+  --font-color-dimdark: #444;
+  --font-color-light: #f1f1f1;
+  --font-color-dimlight: #aaa;
 }
+.theme-blood {
+  --font-size: 1em;
+
+  --background-color-dark: #101010;
+  --background-color-light: #f1f1f1;
+
+  --accent-color: #a00;
+  --accent-color-transparent: #aa0000aa;
+
+  --font-color-dark: #101010;
+  --font-color-dimdark: #444;
+  --font-color-light: #f1f1f1;
+  --font-color-dimlight: #aaa;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Mono:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 body, html {
   margin: 0;
@@ -8,12 +35,38 @@ body, html {
   width:100%;
   height:100%;
   font-family: "FrenchDespair", sans-serif; font-weight: 100;
-  background: #f1f1f1;
+  /* font-family: "Bodoni Moda SC", sans-serif; */
+  background: var(--background-color-light);
   font-size: var(--font-size);
 }
 
 * {
   padding: 0; margin: 0;
+}
+
+#search_bar {
+  margin-bottom: 1em; width: 100%; background-color: #f00;
+  display: flex; flex-direction: row;
+}
+#search_bar input[type="text"], #search_bar button {
+  all: unset;
+  background-color: var(--background-color-light);
+  outline: 2px solid var(--background-color-dark); border-radius: .25em;
+  margin-right: .5em; padding: 0 .25em;
+}
+
+#content_list {
+  font-family: "Bodoni Moda SC", sans-serif;
+  width: calc(100% - 100px); max-width: 40em;
+  position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+}
+
+#list_grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(7em, 1fr)); gap: 1em;
+}
+
+.grid_item {
+  aspect-ratio: 1/1; /* height: 10em; */ outline: solid 2px var(--background-color-dark); border-radius: .25em;
 }
 
 @font-face {
@@ -22,17 +75,17 @@ body, html {
 }
 
 #side_bar_backdrop {
-  background-color: #000000a5;
+  background-color: var(--accent-color-transparent);
   width: 100%; height: 100%;
   position: fixed; top: 0; left: 0;
-  transition: opacity 500ms
+  transition: opacity 500ms; z-index: 1;
   /* cursor: pointer; */
 }
 
 #side_bar {
   overflow: hidden;
   position: absolute; top: 0; left: 0;
-  background: #101010;
+  background: var(--background-color-dark);
   width: 100%; height: 100%;
   transition: width 500ms;
 }
@@ -41,6 +94,7 @@ body, html {
 }
 #side_bar_backdrop.hide {
   opacity: 0;
+  pointer-events: none;
 }
 #side_bar_backdrop.hide #side_bar{
   width: 0;
@@ -49,10 +103,22 @@ body, html {
 }
 
 #boot_splash {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column; background: #101010; align-items: center; justify-content: center;
+  position: absolute; 
+  left: 50%; 
+  top: 50%; 
+  transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; 
+  background: var(--background-color-dark); 
+  align-items: center; 
+  justify-content: center;
   z-index: 1; width: 100%; height: 100%;
   transition: background 500ms, top 500ms;
+}
+.embbeded_container {
+  transition: opacity 500ms;
+}
+#boot_splash.open .embbeded_container {
+  opacity: 0;
 }
 .logo {
   max-width: 10em; height: 10em; aspect-ratio: 1/1;
@@ -61,10 +127,14 @@ body, html {
 #boot_splash.open {
   pointer-events: none;
   background: transparent;
-  top: 30%
+  top: 60%
+}
+#boot_splash.open i {
+  pointer-events: all;
 }
 #boot_splash i {
-  font-size: .8em; display: flex; justify-content: center; color: #aaa;
+  pointer-events: none;
+  font-size: .8em; display: flex; justify-content: center; color: var(--font-color-dimlight);
   transform: translateY(-4em);
   transition: opacity 500ms;
   max-width: 20em; text-align: center;
@@ -87,5 +157,5 @@ body, html {
   background: transparent;
 }
 #menu input[type="button"]:hover {
-  background: #555;
+  background: var(--accent-color);
 }

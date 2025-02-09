@@ -69,14 +69,8 @@ const randomquote = {
       ],
       embbededlink: `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/1CNQL8KVLyPxE8h3D7YZ6s?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
   },
-
-
-
-
-
-  
   "music23 - Larme Noire": {
-    lyricsquote: ["Mes larmes coulent encore, noire comme le plomb."],
+    lyricsquote: ["Mes larmes coulent encore, noires comme le plomb."],
     embbededlink: `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/24vvr2bczZ9IEnC6V8CvjT?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
   },
   "music24 - Roule avec moi": {
@@ -245,7 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
     var quoteLength = randomquote[tokeylist[randomKeyIndex]].lyricsquote.length;
     var randomQuoteIndex = Math.round(Math.random() * (quoteLength - 1));
     console.log(randomKeyIndex, randomQuoteIndex, quoteLength)
-    boot_splash.querySelector('i').textContent = randomquote[tokeylist[randomKeyIndex]].lyricsquote[randomQuoteIndex];
+    boot_splash.querySelector('i').textContent = "“ " + randomquote[tokeylist[randomKeyIndex]].lyricsquote[randomQuoteIndex] + " ”";
     boot_splash.querySelector('.embbeded_container').innerHTML = randomquote[tokeylist[randomKeyIndex]].embbededlink;
     setTimeout(() => {
         //boot_splash.classList.add("open");
@@ -264,6 +258,12 @@ side_bar_backdrop.addEventListener("click", function(event) {
     if (event.target === this) {
         side_bar_backdrop.classList.add('hide');
     }
+});
+
+boot_splash.addEventListener("click", function(event) {
+  if (event.target === this) {
+    // boot_splash.classList.add("open")
+  }
 });
 
 function toggleClass(el, cla) {
