@@ -49,7 +49,6 @@ body, html {
 }
 
 #boot_splash {
-  pointer-events: none;
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
   display: flex; flex-direction: column; background: #101010; align-items: center; justify-content: center;
   z-index: 1; width: 100%; height: 100%;
@@ -60,6 +59,7 @@ body, html {
   transition: opacity 250ms;
 }
 #boot_splash.open {
+  pointer-events: none;
   background: transparent;
   top: 30%
 }
