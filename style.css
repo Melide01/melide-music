@@ -8,7 +8,7 @@ body, html {
   width:100%;
   height:100%;
   font-family: "FrenchDespair", sans-serif; font-weight: 100;
-  background: #101010;
+  background: #f1f1f1;
   font-size: var(--font-size);
 }
 
@@ -21,14 +21,71 @@ body, html {
   src: url('FrenchDespair.otf');
 }
 
-#bootsplash {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  display: flex; flex-direction: column;
-}
-#bootsplash i {
-  font-size: .8em; display: flex; justify-content: center; color: #aaa;
+#side_bar_backdrop {
+  background-color: #000000a5;
+  width: 100%; height: 100%;
+  position: fixed; top: 0; left: 0;
+  transition: opacity 500ms
+  /* cursor: pointer; */
 }
 
+#side_bar {
+  overflow: hidden;
+  position: absolute; top: 0; left: 0;
+  background: #101010;
+  width: 100%; height: 100%;
+  transition: width 500ms;
+}
+#side_bar.peak {
+  width: 80%;
+}
+#side_bar_backdrop.hide {
+  opacity: 0;
+}
+#side_bar_backdrop.hide #side_bar{
+  width: 0;
+  text-overflow: clip; white-space: nowrap;
+  pointer-events: none;
+}
+
+#boot_splash {
+  pointer-events: none;
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; background: #101010; align-items: center; justify-content: center;
+  z-index: 1; width: 100%; height: 100%;
+  transition: background 500ms, top 500ms;
+}
 .logo {
-  height: 8em; width: 8em;
+  max-width: 10em; height: 10em; aspect-ratio: 1/1;
+  transition: opacity 250ms;
+}
+#boot_splash.open {
+  background: transparent;
+  top: 30%
+}
+#boot_splash i {
+  font-size: .8em; display: flex; justify-content: center; color: #aaa;
+  transform: translateY(-4em);
+  transition: opacity 500ms;
+  max-width: 20em; text-align: center;
+}
+#side_bar.peak #boot_splash i {
+  opacity: 0;
+}
+#menu {
+  display: flex; flex-direction: column;
+  height: 100%; width: 100%; align-items: center; justify-content: center; gap: .5em;
+}
+
+#menu input[type="button"] {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  background: transparent;
+}
+#menu input[type="button"]:hover {
+  background: #555;
 }
