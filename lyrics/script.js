@@ -12,19 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 lyricsdata = data;
-                displayLyrics(data);
             })
             .catch(error => {
                 lyrics_container.textContent = error + `../songs/${songId}/lyrics.json`;
             });
     }
-
 });
 
-function displayLyrics(arr) {
-    lyricsdata = arr;
+function initialize() {
+    if (!!!lyricsdata) {
+        setTimeout(() => {
+            if (!!!lyricsdata) {
+                return
+            } else {
+                displayLyrics();
+            };
+        }, 500);
+    } else {
+        displayLyrics();
+    }
+}
+
+function displayLyrics() {
     var output = ""
-    arr.forEach((e, i) => {
+    lyricsdata.forEach((e, i) => {
         output += `<div class="lyrics_line">${e}</div>`
     });
     lyrics_container.innerHTML = output;
