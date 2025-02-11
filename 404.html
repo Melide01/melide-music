@@ -22,6 +22,8 @@
         var path = window.location.pathname;
         if (path.startsWith("/lyrics/")) {
             window.location.replace("/lyrics/index.html" + window.location.pathname.replace('/lyrics', ''));
+        } else if (path.startsWith("/track_display/")) {
+            window.location.replace("/track_display/index.html" + window.location.pathname.replace('/track_display', ''));
         }
     </script>
 </body>
