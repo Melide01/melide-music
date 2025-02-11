@@ -8,7 +8,7 @@ var lyricsdata;
 
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
-        fetch(`songs/${songId}/lyrics.json`)
+        fetch(`../songs/${songId}/lyrics.json`)
             .then(response => response.json())
             .then(data => {
                 lyricsdata = data;
