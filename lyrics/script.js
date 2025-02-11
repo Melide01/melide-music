@@ -1,5 +1,5 @@
-const pathParts = window.location.pathname.split("/");
-const songId = pathParts[pathParts.length - 1];
+const params = new URLSearchParams(window.location.search)
+const songId = params.get("song");
 
 const lyrics_container = document.getElementById('lyrics_container');
 const lyrics_explanation = document.getElementById('lyrics_explanation');
@@ -7,15 +7,18 @@ const lyrics_explanation = document.getElementById('lyrics_explanation');
 var lyricsdata;
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch(`songs/${songId}/lyrics.json`)
-        .then(response => response.json())
-        .then(data => {
-            lyricsdata = data;
-            displayLyrics();
-        })
-        .catch(error => {
-            console.error("Error loading song:", error);
-        });
+    if (songId) {
+        fetch(`songs/${songId}/lyrics.json`)
+            .then(response => response.json())
+            .then(data => {
+                lyricsdata = data;
+                displayLyrics();
+            })
+            .catch(error => {
+                console.error("Error loading song:", error);
+            });
+    }
+
 });
 
 function displayLyrics(arr) {
@@ -32,19 +35,19 @@ addListeners();
 
 var lastactive = undefined;
 function toggleActive(el) {
-  if (el === lastactive) {
-    el.classList.remove("active");
-    lastactive = undefined;
-    toggleClass(navigation_menu, 'open');
-    return;
-  }
-  if (!!lastactive) {
-    lastactive.classList.remove("active");
-  } else {
-    // pass
-  }
-  el.classList.add("active");
-  lastactive = el;
+    if (el === lastactive) {
+        el.classList.remove("active");
+        lastactive = undefined;
+        toggleClass(navigation_menu, 'open');
+        return;
+    }
+    if (!!lastactive) {
+        lastactive.classList.remove("active");
+    } else {
+        // pass
+    }
+    el.classList.add("active");
+    lastactive = el;
 }
 
 function addListeners() {
@@ -55,7 +58,7 @@ function addListeners() {
             if (e.children.length === 0) {
                 toggleActive(e)
                 setTimeout(() => {
-                    
+
                     e.appendChild(lyrics_explanation)
                 }, 100);
             };
