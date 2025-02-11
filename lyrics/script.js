@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayLyrics();
             })
             .catch(error => {
-                console.error("Error loading song:", error);
+                lyrics_container.innerHTML = error;
             });
     }
 
