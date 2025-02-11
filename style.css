@@ -279,7 +279,54 @@ body, html {
 }
 
 .content.center {
-  width: calc(100% - 1em); max-width: 20em;
+  font-family: "Bodoni Moda SC", sans-serif; 
+  width: calc(100% - 1em); max-width: 40em;
   position: absolute; top: .5em;
   left: 50%; transform: translateX(-50%);
+}
+
+#lyrics_container {
+  padding: .5em 1em; margin-top: 1em;
+  outline: solid 1px var(--background-color-dimlight);
+  background-color: #fff;
+}
+
+.lyrics_line {
+  cursor: pointer;
+  padding: .25em 1em;
+  transition: background 200ms;
+  background-color: #fff;
+}
+.lyrics_line:hover {
+  background-color: #eee;
+}
+
+.lyrics_line.special {
+  padding: 1em 1em;
+}
+
+#lyrics_explanation {
+  width: calc(100% - 4em); padding: 0 2em;
+  
+  border-radius: .25em;
+  outline: solid 1px var(--background-color-dimlight);
+  background-color: #fff; margin-top: 1em;
+  overflow: hidden;
+}
+.lyrics_line.active {
+  background-color: #cee;
+}
+.lyrics_line #lyrics_explanation {
+  animation: showUp 250ms forwards;
+}
+
+@keyframes showUp {
+  from {
+    opacity: 0;
+    padding: 0 2em;
+  }
+  to {
+    opacity: 1;
+    padding: .5em 2em;
+  }
 }
