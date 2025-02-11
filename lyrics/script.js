@@ -4,7 +4,7 @@ const songId = params.get("song");
 const lyrics_container = document.getElementById('lyrics_container');
 const lyrics_explanation = document.getElementById('lyrics_explanation');
 
-var lyricsdata;
+var lyricsdata = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 lyricsdata = data;
+                initialize();
             })
             .catch(error => {
                 lyrics_container.textContent = error + `../songs/${songId}/lyrics.json`;
