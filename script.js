@@ -2,6 +2,7 @@ const side_bar_backdrop = document.getElementById('side_bar_backdrop');
 const side_bar = document.getElementById('side_bar');
 const boot_splash = document.getElementById('boot_splash');
 const menu = document.getElementById('menu');
+const navigation_menu = document.getElementById('navigation_menu');
 
 const available_languages = {
   "fr-FR": "FR",
@@ -527,126 +528,12 @@ const randomquote = {
   }
 };
 
-const musicmanifest = {
-  "Larmes Noires": {
-    albumimage: "sngl_ln.jpg"
-  },
-  "Catnip": {
-    albumimage: "sngl_ctnp.jpg"
-  },
-  "Don't Fight": {
-    albumimage: "sngl_df.jpg"
-  },
-  "I Know You Hate Me": {
-    albumimage: "sngl_ikyhm.jpg"
-  },
-  "Je ne rêve plus": {
-    albumimage: "sngl_jnrp.jpg"
-  },
-  "T trop cute": {
-    albumimage: "sngl_ttc.jpg"
-  },
-  "T'es encore là": {
-    albumimage: "sngl_tel.jpg"
-  },
-  "Tout doux, démons": {
-    albumimage: "sngl_tdd.jpg"
-  },
-  "Tu me rends fier": {
-    albumimage: "sngl_tmrf.jpg"
-  },
+var musicmanifest;
 
-  "Je crois que ça bug": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Est-elle": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Laissez moi seule": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "On se lève tard": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "J'suis vraiment mais alors tellement con": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Thanks - 2022 Remastered": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Crush": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Shot de Doliprane": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Je veux pas te perdre": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Ines": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Piss Track": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Derealisation": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "1h11": {
-    albumimage: "albm_jdst.jpg"
-  },
-  "Elle veut aller dans les states": {
-    albumimage: "sngl_evadls.jpg"
-  },
-  "J'ai cesser de vous plaire": {
-    albumimage: "sngl_jcdvp.jpg"
-  },
-  "Roule avec moi": {
-    albumimage: "sngl_ram.jpg"
-  },
-  "Mr Redman": {
-    albumimage: "albm_ps.jpg"
-  },
-  "A-t-elle": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Je ferais avec": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Compliqué pour moi": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Du temps": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Childhood cliché": {
-    albumimage: "albm_ps.jpg"
-  },
-  "To Make the Pain Go Away": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Elle veut que je la laisse": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Je rêve encore": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Thanks to Her": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Dans ton panier": {
-    albumimage: "albm_ps.jpg"
-  },
-  "J'ai plus d'espace": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Baby, qu'est ce que t'es": {
-    albumimage: "albm_ps.jpg"
-  },
-  "Sorcellerie": {
-    albumimage: "albm_ps.jpg"
-  }
-};
+fetch('songs.json')
+  .then(response => response.json())
+  .then(data => musicmanifest = data)
+  .catch(error => console.error('Error:', error));
 
 function setLanguage(lang) {
   if (lang) navigator.userLanguage = lang;
@@ -703,16 +590,25 @@ function toggleClass(el, cla) {
   }
 }
 
+function updateSongInfo(key) {
+  console.log(key);
+  navigation_menu.querySelector('.song_info').querySelector("h1").textContent = key;
+  navigation_menu.querySelector('.song_info').querySelector("h2").textContent = musicmanifest[key].metadata.artists;
+}
+
 var lastactive = undefined;
 function toggleActive(el) {
   if (el === lastactive) {
     el.classList.remove("active");
     lastactive = undefined;
+    toggleClass(navigation_menu, 'open');
     return;
   }
   if (!!lastactive) {
     lastactive.classList.remove("active");
-  };
+  } else {
+    toggleClass(navigation_menu, 'open');
+  }
   el.classList.add("active");
   lastactive = el;
 }
@@ -745,7 +641,7 @@ function displayResult(obj) {
   asKey.forEach((k, i) => {
     console.log(obj[k].albumimage);
 
-    output += `<div class="grid_item" onclick="toggleActive(this)"><img src="assets/album_covers/${obj[k].albumimage}"><div class="metadata"><p>${k}</p></div></div>`;
+    output += `<div class="grid_item" onclick="toggleActive(this); updateSongInfo('${k}')"><div class="icons"><img src="assets/icons/lyrics_icon.png"><img src="assets/icons/trackplayer_icon.png"></div><img src="assets/album_covers/${obj[k].albumimage}"><div class="metadata"><p>${k}</p></div></div>`;
   });
 
   output += '</div>'

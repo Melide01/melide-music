@@ -43,6 +43,38 @@ body, html {
   padding: 0; margin: 0;
 }
 
+#navigation_menu {
+  pointer-events: none; 
+  display: flex; flex-direction: row; align-items: center; justify-content: center;
+  overflow: hidden; height: 0;
+  position: fixed; bottom: 0; left: 0; width: calc(100% - 5em);
+  z-index: 1; padding: 0 2.5em;
+  background: linear-gradient(-45deg, var(--background-color-dimdark), var(--background-color-light));
+  transition: height 200ms;
+}
+#navigation_menu .song_info {
+  width: 50%;
+  flex-shrink: 0; flex-grow: 1;
+}
+#navigation_menu .nav_buttons {
+  cursor: pointer; 
+  flex-shrink: 1; min-width: 10em;
+  display: flex; flex-direction: column; gap: .25em;
+}
+#navigation_menu.open {
+  padding: 0 2.5em 2.5em 2.5em;
+  pointer-events: all;
+  height: 7em;
+}
+#navigation_menu .nav_buttons button {
+  all: unset; text-align: end; font-size: 1.25em;
+  padding: 0 .25em; transition: padding 200ms;
+  background: linear-gradient(to left, var(--background-color-light), transparent); color: var(--font-color-dark);
+}
+#navigation_menu .nav_buttons button:hover {
+  padding-right: .5em;
+}
+
 #side_bar_backdrop {
   background-color: var(--accent-color-transparent);
   width: 100%; height: 100%;
@@ -77,11 +109,14 @@ body, html {
   top: 50%; 
   transform: translate(-50%, -50%);
   display: flex; flex-direction: column; 
-  background: var(--background-color-dark); 
+  background: var(--background-color-dark); color: var(--font-color-light);
   align-items: center; 
   justify-content: center;
   z-index: 1; width: 100%; height: 100%;
   transition: background 500ms, top 500ms;
+}
+#boot_splash a {
+  color: var(--accent-color); cursor: pointer; text-decoration: underline 2px var(--accent-color); margin-top: 1em;
 }
 .embbeded_container {
   transition: opacity 500ms;
@@ -181,7 +216,8 @@ body, html {
   aspect-ratio: 1/1; outline: solid 2px var(--background-color-dark); border-radius: .25em;
   cursor: pointer; background-color: var(--background-color-light);
   margin: 0; padding: 0; overflow: hidden; transform: translateY(0);
-  opacity: .7;
+  display: flex; justify-content: center; align-items: center;
+  opacity: .7; position: relative;
   transition: transform 70ms, opacity 100ms;
 }
 .grid_item:hover {
@@ -190,17 +226,24 @@ body, html {
 .grid_item.active {
   transform: scale(110%); border-radius: 0; outline: 4px solid var(--background-color-dark); opacity: 1;
 }
-.grid_item.active img {
-  height: 110%; transform: translate(-5%, -5%);
+.grid_item:hover img {
+  height: 100%;
 }
 .grid_item img {
-  height: 100%; aspect-ratio: 1/1;
-  transform: translate(0, 0);
+  height: 110%; aspect-ratio: 1/1;
   transition: height 200ms, transform 200ms;
 }
 .grid_item .metadata {
-  padding: .25em .25em;
+  padding: .25em .25em; font-size: .1em;
   position: absolute; bottom: 0; left: 0; color: var(--font-color-light); font-weight: bold;
   background: linear-gradient(to top, var(--background-color-darktransparent), transparent);
   width: 100%;z-index: 999;
+}
+
+.grid_item .icons {
+  display: flex; flex-direction: column; width: 2em; position: absolute; top: 0; right: 0;
+}
+
+.grid_item .icons img {
+  width: 2em; aspect-ratio: 1/1; z-index: 1;
 }

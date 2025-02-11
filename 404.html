@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- <script defer src="script.js"></script> -->
+</head>
+
+<body>
+    <div id="boot_splash">
+        <img preload class="logo" src="melidelogo.png">
+        <i>Erreur 404</i>
+        <p>Cette page n'existe pas.</p>
+        <a href="index.html">Retourner à la page d'acceuil?</a>
+        <div class="embbeded_container"></div>
+    </div>
+
+    <script>
+        var path = window.location.pathname;
+        if (path.startsWith("/lyrics/")) {
+            window.location.replace("/lyrics/index.html" + window.location.pathname.replace('/lyrics', ''));
+        }
+    </script>
+</body>
+
+</html>
