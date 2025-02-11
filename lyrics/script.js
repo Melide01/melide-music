@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayLyrics();
             })
             .catch(error => {
-                lyrics_container.innerHTML = error;
+                lyrics_container.innerHTML = error + `../songs/${songId}/lyrics.json`;
             });
     }
 
