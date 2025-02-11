@@ -37,7 +37,7 @@ function initialize() {
 function displayLyrics() {
     var output = ""
     lyricsdata.forEach((e, i) => {
-        output += `<div class="lyrics_line" onclick="toggleActive(this); this.appendChild(lyrics_explanation)">${e}</div>`
+        output += `<div class="lyrics_line" onclick="if (children.length === 0) {toggleActive(this); this.appendChild(lyrics_explanation) }">${e}</div>`
     });
     lyrics_container.innerHTML = output;
 }
