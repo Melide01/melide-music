@@ -37,14 +37,10 @@ function initialize() {
 function displayLyrics() {
     var output = ""
     lyricsdata.forEach((e, i) => {
-        output += `<div class="lyrics_line">${e}</div>`
+        output += `<div class="lyrics_line" onclick="toggleActive(this); this.appendChild(lyrics_explanation)">${e}</div>`
     });
     lyrics_container.innerHTML = output;
-
-    addEventListener();
 }
-
-addListeners();
 
 var lastactive = undefined;
 function toggleActive(el) {
@@ -61,20 +57,4 @@ function toggleActive(el) {
     }
     el.classList.add("active");
     lastactive = el;
-}
-
-function addListeners() {
-    var lyrics_lines = document.querySelectorAll('.lyrics_line');
-
-    lyrics_lines.forEach((e, i) => {
-        e.addEventListener('click', () => {
-            if (e.children.length === 0) {
-                toggleActive(e)
-                setTimeout(() => {
-
-                    e.appendChild(lyrics_explanation)
-                }, 100);
-            };
-        })
-    });
 }
