@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(response => response.json())
             .then(data => {
                 lyricsdata = data;
-                displayLyrics();
+                displayLyrics(data);
             })
             .catch(error => {
                 lyrics_container.textContent = error + `../songs/${songId}/lyrics.json`;
@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function displayLyrics(arr) {
+    lyricsdata = arr;
     var output = ""
     arr.forEach((e, i) => {
         output += `<div class="lyrics_line">${e}</div>`
