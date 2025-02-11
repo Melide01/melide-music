@@ -53,7 +53,7 @@ body, html {
   transition: height 200ms;
 }
 #navigation_menu .song_info {
-  width: 50%;
+  width: 50%; font-size: .7em;
   flex-shrink: 0; flex-grow: 1;
 }
 #navigation_menu .nav_buttons {
@@ -226,7 +226,7 @@ body, html {
 .grid_item.active {
   transform: scale(110%); border-radius: 0; outline: 4px solid var(--background-color-dark); opacity: 1;
 }
-.grid_item:hover img {
+.grid_item:hover img, .grid_item.active img {
   height: 100%;
 }
 .grid_item img {
@@ -234,7 +234,7 @@ body, html {
   transition: height 200ms, transform 200ms;
 }
 .grid_item .metadata {
-  padding: .25em .25em; font-size: .1em;
+  padding: .25em .25em;
   position: absolute; bottom: 0; left: 0; color: var(--font-color-light); font-weight: bold;
   background: linear-gradient(to top, var(--background-color-darktransparent), transparent);
   width: 100%;z-index: 999;

@@ -640,8 +640,16 @@ function displayResult(obj) {
 
   asKey.forEach((k, i) => {
     console.log(obj[k].albumimage);
+    console.log(obj[k].modules);
 
-    output += `<div class="grid_item" onclick="toggleActive(this); updateSongInfo('${k}')"><div class="icons"><img src="assets/icons/lyrics_icon.png"><img src="assets/icons/trackplayer_icon.png"></div><img src="assets/album_covers/${obj[k].albumimage}"><div class="metadata"><p>${k}</p></div></div>`;
+    output += `<div class="grid_item" onclick="toggleActive(this); updateSongInfo('${k}')"><div class="icons">`;
+
+    if (!!obj[k].modules) {
+      if (obj[k].modules.lyrics) output += '<img src="assets/icons/lyrics_icon.png">'
+      if (obj[k].modules.track_display) output += '<img src="assets/icons/trackplayer_icon.png">'
+    };
+
+    output += `</div><img src="assets/album_covers/${obj[k].albumimage}"><div class="metadata"><p>${k}</p></div></div>`;
   });
 
   output += '</div>'

@@ -1,6 +1,10 @@
 {
     "Larmes Noires": {
       "albumimage": "sngl_ln.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -11,6 +15,10 @@
     },
     "Catnip": {
       "albumimage": "sngl_ctnp.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -21,6 +29,10 @@
     },
     "Don’t Fight": {
       "albumimage": "sngl_df.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -31,6 +43,10 @@
     },
     "I Know You Hate Me": {
       "albumimage": "sngl_ikyhm.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -41,6 +57,10 @@
     },
     "Je ne rêve plus": {
       "albumimage": "sngl_jnrp.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -51,6 +71,11 @@
     },
     "T trop cute": {
       "albumimage": "sngl_ttc.jpg",
+      "data_folder_name": "t_trop_cute",
+      "modules": {
+        "lyrics": false,
+        "track_display": true
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -61,6 +86,10 @@
     },
     "T’es encore là": {
       "albumimage": "sngl_tel.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -71,6 +100,10 @@
     },
     "Tout doux, démons": {
       "albumimage": "sngl_tdd.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -81,6 +114,11 @@
     },
     "Tu me rends fier": {
       "albumimage": "sngl_tmrf.jpg",
+      "data_folder_name": "tu_me_rends_fier",
+      "modules": {
+        "lyrics": false,
+        "track_display": true
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -91,6 +129,10 @@
     },
     "Je crois que ça bug": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -101,6 +143,11 @@
     },
     "Est-elle": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "est_elle",
+      "modules": {
+        "lyrics": false,
+        "track_display": true
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -111,6 +158,10 @@
     },
     "Laissez moi seule": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -121,6 +172,10 @@
     },
     "On se lève tard": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -131,6 +186,10 @@
     },
     "J’suis vraiment mais alors tellement con": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -141,6 +200,10 @@
     },
     "Thanks - 2022 Remastered": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -151,6 +214,10 @@
     },
     "Crush": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -161,6 +228,10 @@
     },
     "Shot de Doliprane": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -171,6 +242,10 @@
     },
     "Je veux pas te perdre": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -181,6 +256,10 @@
     },
     "Ines": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -191,6 +270,10 @@
     },
     "Piss Track": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -201,6 +284,10 @@
     },
     "Derealisation": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -211,6 +298,10 @@
     },
     "1h11": {
       "albumimage": "albm_jdst.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -221,6 +312,10 @@
     },
     "Elle veut aller dans les states": {
       "albumimage": "sngl_evadls.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -231,6 +326,10 @@
     },
     "J’ai cesser de vous plaire": {
       "albumimage": "sngl_jcdvp.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -241,6 +340,10 @@
     },
     "Roule avec moi": {
       "albumimage": "sngl_ram.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -251,6 +354,10 @@
     },
     "Mr Redman": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -261,6 +368,10 @@
     },
     "A-t-elle": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -271,6 +382,11 @@
     },
     "Je ferais avec": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "je_ferais_avec",
+      "modules": {
+        "lyrics": false,
+        "track_display": true
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -281,6 +397,10 @@
     },
     "Compliqué pour moi": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -291,6 +411,10 @@
     },
     "Du temps": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -301,6 +425,10 @@
     },
     "Childhood cliché": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -311,6 +439,10 @@
     },
     "To Make the Pain Go Away": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -321,6 +453,10 @@
     },
     "Elle veut que je la laisse": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -331,6 +467,10 @@
     },
     "Je rêve encore": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -341,6 +481,10 @@
     },
     "Thanks to Her": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -351,6 +495,10 @@
     },
     "Dans ton panier": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -361,6 +509,11 @@
     },
     "J’ai plus d’espace": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "jai_plus_despace",
+      "modules": {
+        "lyrics": false,
+        "track_display": true
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -371,6 +524,10 @@
     },
     "Baby, qu’est ce que t’es": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
@@ -381,6 +538,10 @@
     },
     "Sorcellerie": {
       "albumimage": "albm_ps.jpg",
+      "data_folder_name": "",
+      "modules": {
+
+      },
       "metadata": {
         "artists": "Melide",
         "release_date": "01/01/2001",
