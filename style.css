@@ -23,7 +23,7 @@
   --accent-color-light: #a00;
   --accent-color-light-transparent: #aa0000aa;;
 }
-
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Forum&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Mono:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda+SC:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Mono:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 @font-face {
   font-family: "FrenchDespair";
@@ -286,9 +286,10 @@ body, html {
 }
 
 #lyrics_container {
+  font-family: "Bodoni Moda SC", serif; font-size: 1.25em; font-weight: 500;
   padding: .5em 1em; margin-top: 1em;
   outline: solid 1px var(--background-color-dimlight);
-  background-color: #fff;
+  background-color: #fff; margin-bottom: 1em;
 }
 
 .lyrics_line {
@@ -303,6 +304,13 @@ body, html {
 
 .lyrics_line.special {
   padding: 1em 1em;
+  background-color: #eee;
+}
+.lyrics_line.special:hover {
+  background-color: #ddd;
+}
+.lyrics_line.special.active {
+  background-color: #cee;
 }
 .lyrics_line.active {
   background-color: #cee;
