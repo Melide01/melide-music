@@ -5,9 +5,19 @@ const songTitle = document.getElementById('songTitle');
 const songArtists = document.getElementById('songArtists');
 const songGenre = document.getElementById('songGenre');
 
+const song_player = document.getElementById('song_player');
+
 const lyrics_container = document.getElementById('lyrics_container');
 
 var lyricsdata = [];
+
+function toggleClass(el, cla) {
+    if (el.classList.contains(cla)) {
+      el.classList.remove(cla);
+    } else {
+      el.classList.add(cla);
+    }
+  }
 
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
@@ -37,7 +47,12 @@ function initialize() {
     }
 }
 
+var domlines = [];
+
 function displayLyrics() {
+    song_player.querySelector('source').src = lyricsdata.metadata.src;
+    song_player.src = lyricsdata.metadata.src;
+
     songTitle.textContent = lyricsdata.metadata.title;
     songArtists.textContent = lyricsdata.metadata.artists;
     songGenre.textContent = lyricsdata.metadata.genres;
@@ -55,6 +70,33 @@ function displayLyrics() {
         output += "</div>"
     });
     lyrics_container.innerHTML = output;
+
+
+    domlines = lyrics_container.querySelectorAll(".lyrics_line");
+};
+
+var lastIndex = 0;
+var isLyricsSync = false;
+function updateSyncLyrics(time) {
+    if (!isLyricsSync) return;
+    if (time < 0 || !lyricsdata || !lyricsdata.lyrics.length) return;
+
+    let lyrics = lyricsdata.lyrics;
+    let newIndex = lastIndex;
+
+    while (newIndex < lyrics.length - 1 && time >= lyrics[newIndex + 1].timecode) {
+        newIndex++;
+    }
+
+    while (newIndex > 0 && time < lyrics[newIndex].timecode) {
+        newIndex--;
+    }
+
+    if (newIndex !== lastIndex) {
+        toggleActive(domlines[lastIndex]);
+        lastIndex = newIndex;
+        toggleActive(domlines[lastIndex]);
+    };
 }
 
 var lastactive = undefined;

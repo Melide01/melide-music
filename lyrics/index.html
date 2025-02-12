@@ -10,13 +10,21 @@
 <body>
     <div class="content center">
         <section>
-            <h1 style="font-size: 2em;" id="songTitle">Title</h1>
-            <h2 style="font-size: medium;" id="songArtists">by Author</h2>
-            <h3 style="font-size: small;" id="songGenre">genre</h3>
+            <h1 style="font-size: 2em;" id="songTitle"></h1>
+            <h2 style="font-size: medium;" id="songArtists"></h2>
+            <h3 style="font-size: small;" id="songGenre"></h3>
         </section>
+
+        <section style="background-color: #444; color: #fff;">
+            <audio controls id="song_player" ontimeupdate="timeconsole.textContent = this.currentTime; updateSyncLyrics(this.currentTime)">
+                <source src="">
+            </audio>
+            <p id="timeconsole"></p>
+            <div>Sync Lyrics : <div class="input_toggle active" style="font-size: 2em;" onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}"></div></div>
+            
+        </section>
+        
         <section id="lyrics_container">
-            <div class="lyrics_line special">#BREAK</div>
-            <div class="lyrics_line">This is a lyrics line</div>
         </section>
     </div>    
 </body>

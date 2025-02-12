@@ -2,76 +2,77 @@
     "metadata": {
         "title": "Est elle",
         "artists": "Melide",
-        "genres": "Indie Rock"
+        "genres": "Indie Rock",
+        "src": "../songs/est_elle/Est-elle.mp3"
     },
     "lyrics": [
         {
-            "type": "lyrics_line",
+            "timecode": 0,
             "lyrics": "#INTRO", 
             "explain": "J’ai voulu faire cette musique comme si c’était une cassette radio qui se jouait d’où l’effet sonore du début."
         },
         {
-            "type": "lyrics_line",
+            "timecode": 3.5,
             "lyrics": "T’as pris tout mon mal, tu l’as mis ailleurs", 
             "explain": ""
         },
         {
-            "type": "lyrics_line",
+            "timecode": 8.5,
             "lyrics": "Cacher dans le sable et ça depuis des heures", 
             "explain": "La fille de la musique m’a vraiment mis à l’aise, elle est plus agée que moi et elle m’a donner cette maturité que je manquais."
         },
         {
-            "type": "lyrics_line",
+            "timecode": 14,
             "lyrics": "#VERSE", 
             "explain": "L’instrumentale s’intensiffit"
         },
         {
-            "type": "lyrics_line",
+            "timecode": 14.5,
             "lyrics": "On voulait bien plus que du sex", 
             "explain": ""
         },
         {
-            "type": "lyrics_line",
+            "timecode": 20,
             "lyrics": "On s’attendait pas à être vexé", 
             "explain": "Dans les relations, je m’attendais pas à ce que le désir prennent tellement le dessus sur le reste que ça en devient toxique, il n’y a plus que le sex et c’est ça qui m’a déçu."
         },
         {
-            "type": "lyrics_line",
+            "timecode": 24.5,
             "lyrics": "#PRE REFRAIN", 
             "explain": "Ajout de guitare électrique éffrénnée, la batterie s’accélère"
         },
         {
-            "type": "lyrics_line",
+            "timecode": 25,
             "lyrics": "Mais il n’est pas certain, faut rebroussé chemin mais t’es pas certaine", 
             "explain": "Quand elle est partit j’ai pas compris directement. Alors j’ai essayé de me mettre à sa place"
         },
         {
-            "type": "lyrics_line",
+            "timecode": 33.5,
             "lyrics": "Bloqué dans le noir, corps contre corps.", 
             "explain": ""
         },
         {
-            "type": "lyrics_line",
+            "timecode": 39.3,
             "lyrics": "Est-ce pour un soir ou est-ce que j’en veut encore.", 
             "explain": ""
         },
         {
-            "type": "lyrics_line",
+            "timecode": 44,
             "lyrics": "On n’est pas d’accord.", 
             "explain": "Juste avant qu’elle ne parte on faisait encore nos bails et ça s’est finit du jour au lendemain, elle voulait partir et je voulais qu’elle reste."
         },
         {
-            "type": "lyrics_line",
+            "timecode": 46.5,
             "lyrics": "#REFRAIN", 
             "explain": "Le rythme est cadré mais le chant est long et doux."
         },
         {
-            "type": "lyrics_line",
+            "timecode": 47,
             "lyrics": "La vie est rose et je me pose si elle est amoureuse.", 
             "explain": ""
         },
         {
-            "type": "lyrics_line",
+            "timecode": 58,
             "lyrics": "Ou est-elle un gosse, elle se pose, est-elle amoureuse.", 
             "explain": "Ce sont des questions qu’on se pose tous je crois qu’on l’autre s’en va comme ça."
         }
