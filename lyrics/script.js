@@ -1,8 +1,11 @@
 const params = new URLSearchParams(window.location.search)
 const songId = params.get("song");
 
+const songTitle = document.getElementById('songTitle');
+const songArtists = document.getElementById('songArtists');
+const songGenre = document.getElementById('songGenre');
+
 const lyrics_container = document.getElementById('lyrics_container');
-const lyrics_explanation = document.getElementById('lyrics_explanation');
 
 var lyricsdata = [];
 
@@ -35,9 +38,21 @@ function initialize() {
 }
 
 function displayLyrics() {
-    var output = ""
-    lyricsdata.forEach((e, i) => {
-        output += `<div class="lyrics_line" onclick="if (children.length === 0) {toggleActive(this); this.appendChild(lyrics_explanation) }">${e}</div>`
+    songTitle.textContent = lyricsdata.metadata.title;
+    songArtists.textContent = lyricsdata.metadata.artists;
+    songGenre.textContent = lyricsdata.metadata.genres;
+
+    var output = "";
+    lyricsdata.lyrics.forEach((e, i) => {
+        output += `<div class="lyrics_line`;
+        if (e.lyrics.startsWith("#")) {
+            output += ` special`;
+        }
+        output += `" onclick="toggleActive(this);">${e.lyrics}`;
+        if (e.explain !== '') {
+            output += `<div class="lyrics_explanation">${e.explain}</div>`;
+        }
+        output += "</div>"
     });
     lyrics_container.innerHTML = output;
 }
