@@ -338,3 +338,36 @@ body, html {
     opacity: 1; transform: translateY(0);
   }
 }
+
+.compact_logo {
+  position: relative;
+  transform: translate(-1.7em, -4em);
+  /* background-color: red; */
+  width: 10em; height: 15em;
+} 
+
+.logo1, .logo2, .logo3 {
+  position: absolute;
+}
+.compact_logo .logo1 {
+  transform: rotate(0) translate(-2em, -.1em) scale(50%);
+  animation: melideLoading 3s infinite 1s;
+}
+.compact_logo .logo2 {
+  transform: rotate(120deg) translate(-2em, -.1em) scale(50%);
+  animation: melideLoading 3s infinite 1s;
+}
+.compact_logo .logo3 {
+  transform: rotate(240deg) translate(-2em, -.1em) scale(50%);
+  animation: melideLoading 3s infinite 1s;
+}
+
+@keyframes melideLoading {
+  0%{
+    opacity: 0;
+    transform: rotate(0) translate(-2em, -.1em) scale(50%);
+  }
+  50% {
+    transform: rotate(360deg) translate(-2em, -.1em) scale(50%);
+  }
+}

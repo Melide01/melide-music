@@ -2,6 +2,8 @@ const params = new URLSearchParams(window.location.search)
 const songId = params.get("song");
 const project_style = document.getElementById('project_style');
 
+const side_bar_backdrop = document.getElementById('side_bar_backdrop');
+
 const songTitle = document.getElementById('songTitle');
 const songArtists = document.getElementById('songArtists');
 const songGenre = document.getElementById('songGenre');
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             loadLyricsMd();
         }, 100);    
-    }
+    };
 });
 
 function loadLyricsJson() {
@@ -56,6 +58,9 @@ function loadLyricsMd() {
 var domlines = [];
 var time_code = [];
 function displayLyrics() {
+    setTimeout(() => {
+        side_bar_backdrop.classList.add('hide');
+    }, 5500);
     // lyrics_container.textContent = lyricsarr;
     var ldata = lyrics.split('\n');
     console.log(ldata);
