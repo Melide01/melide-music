@@ -1,5 +1,6 @@
 const params = new URLSearchParams(window.location.search)
 const songId = params.get("song");
+const project_style = document.getElementById('project_style');
 
 const songTitle = document.getElementById('songTitle');
 const songArtists = document.getElementById('songArtists');
@@ -80,6 +81,14 @@ function displayLyrics() {
     songTitle.textContent = lyricsdata.metadata.title;
     songArtists.textContent = lyricsdata.metadata.artists;
     songGenre.textContent = lyricsdata.metadata.genres;
+
+    var style_output = "";
+
+    lyricsdata.metadata.style.forEach((e, i) => {
+       style_output += e; 
+    });
+
+    project_style.innerHTML = style_output;
 
     lyrics_container.innerHTML = output;
     domlines = lyrics_container.querySelectorAll(".lyrics_line");
