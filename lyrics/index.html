@@ -28,14 +28,14 @@
         </div>
       </div>
 
-    <div class="content center">
+    <div class="content center font_quicksand">
         <section>
             <h1 style="font-size: 2em;" id="songTitle"></h1>
             <h2 style="font-size: medium;" id="songArtists"></h2>
             <h3 style="font-size: small;" id="songGenre"></h3>
         </section>
 
-        <section style="background-color: #444; color: #fff;">
+        <section style="background-color: #444; color: #fff;" class="font_quicksand">
             <audio controls id="song_player" ontimeupdate="timeconsole.textContent = this.currentTime; updateSyncLyrics(this.currentTime)">
                 <source src="">
             </audio>
@@ -44,7 +44,7 @@
             
         </section>
         
-        <section id="lyrics_container">
+        <section id="lyrics_container" class="font_quicksand">
         </section>
     </div>    
 </body>

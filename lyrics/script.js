@@ -26,9 +26,6 @@ function toggleClass(el, cla) {
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
         loadLyricsJson();
-        setTimeout(() => {
-            loadLyricsMd();
-        }, 100);    
     };
 });
 
@@ -37,6 +34,7 @@ function loadLyricsJson() {
         .then(response => response.json())
         .then(data => {
             lyricsdata = data;
+            loadLyricsMd();
         })
         .catch(error => {
             lyrics_container.textContent = error + `../songs/${songId}/lyrics.json`;
@@ -49,32 +47,47 @@ function loadLyricsMd() {
         .then(data => {
             lyrics = data;
             displayLyrics();
+            setTimeout(() => {
+                side_bar_backdrop.classList.add('hide');    
+            }, 2500);
         })
         .catch(error => {
             lyrics_container.textContent = error + `../songs/${songId}/lyrics.md`;
         });
 };
 
+function formatTime(seconds) {
+    console.log(seconds)
+    // if (typeof seconds !== "numbers" || seconds < 0) return "Invalid input";
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    if (hours > 0) {
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    } else {
+        return `${minutes}:${String(secs).padStart(2, '0')}`;
+    }
+}
+
 var domlines = [];
 var time_code = [];
 function displayLyrics() {
-    setTimeout(() => {
-        side_bar_backdrop.classList.add('hide');
-    }, 5500);
     // lyrics_container.textContent = lyricsarr;
     var ldata = lyrics.split('\n');
     console.log(ldata);
+    console.log(lyricsdata)
 
     var output = "";
 
     ldata.forEach((e) => {
         output += e.replace(/^(#\s*)?([^[\]{}]+?)\s*(?:\[(.*?)\])?\s*(?:\{(.*?)\})?\s*$/, (match, hash, mainText, subText, timecode) => {
             let specialClass = hash ? 'special' : '';
-            let explanationDiv = subText ? `<div class="lyrics_explanation">${subText}</div>` : '';
+            let explanationDiv = subText ? `<div class="lyrics_explanation">${lyricsdata.metadata.lyrics_author} : “ ${subText} ”</div>` : '';
 
             time_code.push(timecode?.trim() || "")
-
-            return `<div class="lyrics_line ${specialClass}" onclick="toggleActive(this)">${mainText}${explanationDiv}</div>`;
+            return `<div class="lyrics_line ${specialClass}" onclick="toggleActive(this)">${formatTime(parseInt(timecode))} - ${mainText}${explanationDiv}</div>`;
         })
     });
 
@@ -137,5 +150,6 @@ function toggleActive(el) {
         // pass
     }
     el.classList.add("active");
+    el.scrollIntoView({ behavior: "smooth", block: "center"})
     lastactive = el;
 }

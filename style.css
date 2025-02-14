@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
 :root {
   --font-size: 1em;
 
@@ -23,10 +24,16 @@
   --accent-color-light: #a00;
   --accent-color-light-transparent: #aa0000aa;;
 }
-@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+Pinstripe:ital@0;1&display=swap');
 @font-face {
   font-family: "FrenchDespair";
   src: url('FrenchDespair.otf');
+}
+
+.font_quicksand {
+  font-family: "Quicksand", serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
 }
 
 body, html {
@@ -315,6 +322,7 @@ body, html {
 }
 
 .lyrics_line .lyrics_explanation {
+  text-align: center; font-size: .8em; font-weight: 700;
   overflow: hidden;
   display: none;
   width: calc(100% - 4em); padding: .25em 2em;
@@ -339,27 +347,32 @@ body, html {
   }
 }
 
+#side_bar_backdrop.hide .compact_logo {
+  animation: none;
+}
+
 .compact_logo {
   position: relative;
   transform: translate(-1.7em, -4em);
   /* background-color: red; */
   width: 10em; height: 15em;
+  animation: compactlogoanim 2000ms infinite 1s;
 } 
 
 .logo1, .logo2, .logo3 {
-  position: absolute;
+  position: absolute; opacity: 0;
 }
 .compact_logo .logo1 {
   transform: rotate(0) translate(-2em, -.1em) scale(50%);
-  animation: melideLoading 3s infinite 1s;
+  animation: melideLoading 2000ms infinite 1s;
 }
 .compact_logo .logo2 {
   transform: rotate(120deg) translate(-2em, -.1em) scale(50%);
-  animation: melideLoading 3s infinite 1s;
+  animation: melideLoading 2000ms infinite 1s;
 }
 .compact_logo .logo3 {
   transform: rotate(240deg) translate(-2em, -.1em) scale(50%);
-  animation: melideLoading 3s infinite 1s;
+  animation: melideLoading 2000ms infinite 1s;
 }
 
 @keyframes melideLoading {
@@ -369,5 +382,15 @@ body, html {
   }
   50% {
     transform: rotate(360deg) translate(-2em, -.1em) scale(50%);
+  }
+  100% {opacity: 1;}
+}
+
+@keyframes compactlogoanim {
+  0%, 90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }

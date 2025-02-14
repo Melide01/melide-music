@@ -4,15 +4,16 @@
         "artists": "Melide",
         "genres": "Indie Rock",
         "src": "../songs/est_elle/Est-elle.mp3",
+        "lyrics_author": "John (Melide)",
         "style": [
+            "body, html {background: #e28; color: #fff; margin: 0;padding: 0;",
             "#lyrics_container {font-size: 1.25em;padding: .5em 1em; margin-top: 1em;outline: solid 1px var(--background-color-dimlight);background-color: #fff; margin-bottom: 1em;}",
-            ".lyrics_line {cursor: pointer;padding: .25em 1em;transition: background 200ms;background-color: #fff;}",
+            ".lyrics_line {color:#222;font-weight: 600;cursor: pointer;padding: .25em 1em;transition: background 200ms;background-color: #fff;}",
             ".lyrics_line:hover {background-color: #eee;}",
             ".lyrics_line.special {padding: 1em 1em;background-color: #eee;}",
             ".lyrics_line.special:hover {background-color: #ddd;}",
-            ".lyrics_line.special.active {background-color: #ecc;}",
-            ".lyrics_line.active {background-color: #ecc;}",
-            ".lyrics_line .lyrics_explanation {overflow: hidden;display: none;width: calc(100% - 4em); padding: .25em 2em;border-radius: .25em;outline: solid 1px var(--background-color-dimlight);background-color: #fff; margin-top: 1em;opacity: 0;}",
+            ".lyrics_line.special.active {background-color: #ebc;}",
+            ".lyrics_line.active {background-color: #ebc;}",
             ".lyrics_line.active .lyrics_explanation {display: block;opacity: 1;animation: showUp 200ms forwards;}"
         ]
     }
