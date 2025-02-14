@@ -375,32 +375,85 @@ body, html {
   }
 }
 
-#side_bar_backdrop.hide .compact_logo {
+#side_bar_backdrop.hide #compact_logo {
   animation: none;
 }
 
-.compact_logo {
+#compact_logo {
   position: relative;
   transform: translate(-1.7em, -4em);
   /* background-color: red; */
   width: 10em; height: 15em;
+}
+#compact_logo.loading {
   animation: compactlogoanim 2000ms infinite 1s;
-} 
+}
+#compact_logo.error {
+  filter: invert(20%) sepia(100%) saturate(500%) hue-rotate(-65deg) brightness(45%) contrast(200%);
+  animation: none;
+  opacity: 1;
+}
 
 .logo1, .logo2, .logo3 {
   position: absolute; opacity: 0;
 }
-.compact_logo .logo1 {
+#compact_logo.loading .logo1 {
   transform: rotate(0) translate(-2em, -.1em) scale(50%);
   animation: melideLoading 2000ms infinite 1s;
 }
-.compact_logo .logo2 {
+#compact_logo.loading .logo2 {
   transform: rotate(120deg) translate(-2em, -.1em) scale(50%);
   animation: melideLoading 2000ms infinite 1s;
 }
-.compact_logo .logo3 {
+#compact_logo.loading .logo3 {
   transform: rotate(240deg) translate(-2em, -.1em) scale(50%);
   animation: melideLoading 2000ms infinite 1s;
+}
+
+#compact_logo.error .logo1 {
+  opacity: 1;
+  transform: rotate(0deg) translate(-2em, -.1em) scale(50%);
+  animation: melideLoadingError1 500ms forwards;
+}
+#compact_logo.error .logo2 {
+  opacity: 1;
+  transform: rotate(120deg) translate(-2em, -.1em) scale(50%);
+  animation: melideLoadingError2 500ms forwards;
+}
+#compact_logo.error .logo3 {
+  opacity: 1;
+  transform: rotate(240deg) translate(-2em, -.1em) scale(50%);
+  animation: melideLoadingError3 500ms forwards;
+}
+
+@keyframes melideLoadingError1 {
+  0%{
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(0deg) translate(-1em, -.5em) scale(50%);
+    opacity: 1;
+  }
+}
+
+@keyframes melideLoadingError2 {
+  0%{
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(120deg) translate(-1em, -.5em) scale(50%);
+    opacity: 1;
+  }
+}
+
+@keyframes melideLoadingError3 {
+  0%{
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(240deg) translate(-1em, -.5em) scale(50%);
+    opacity: 1;
+  }
 }
 
 @keyframes melideLoading {

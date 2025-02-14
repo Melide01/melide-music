@@ -2,7 +2,10 @@ const params = new URLSearchParams(window.location.search)
 const songId = params.get("song");
 const project_style = document.getElementById('project_style');
 
+const boot_splash = document.getElementById('boot_splash');
+
 const side_bar_backdrop = document.getElementById('side_bar_backdrop');
+const compact_logo = document.getElementById('compact_logo');
 
 const songTitle = document.getElementById('songTitle');
 const songArtists = document.getElementById('songArtists');
@@ -26,7 +29,11 @@ function toggleClass(el, cla) {
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
         loadLyricsJson();
-    };
+    } else {
+        setTimeout(() => {
+            displayError("Aucune paroles n'a été trouvé");
+        }, 2700);
+    }
 });
 
 function loadLyricsJson() {
@@ -37,8 +44,18 @@ function loadLyricsJson() {
             loadLyricsMd();
         })
         .catch(error => {
-            lyrics_container.textContent = error + `../songs/${songId}/lyrics.json`;
+            displayError(error);
         });
+}
+
+function displayError(error) {
+    console.log(error);
+    boot_splash.querySelector('i').style.color = "#f00";
+    boot_splash.querySelector('i').textContent = error;
+    compact_logo.classList.remove("loading");
+    compact_logo.style.animation = "none";
+    compact_logo.offsetHeight = "none";
+    compact_logo.classList.add("error");
 }
 
 function loadLyricsMd() {
@@ -48,11 +65,11 @@ function loadLyricsMd() {
             lyrics = data;
             displayLyrics();
             setTimeout(() => {
-                side_bar_backdrop.classList.add('hide');    
+                side_bar_backdrop.classList.add('hide');
             }, 2500);
         })
         .catch(error => {
-            lyrics_container.textContent = error + `../songs/${songId}/lyrics.md`;
+            displayError(error);
         });
 };
 
@@ -150,6 +167,6 @@ function toggleActive(el) {
         // pass
     }
     el.classList.add("active");
-    el.scrollIntoView({ behavior: "smooth", block: "center"})
+    el.scrollIntoView({ behavior: "smooth", block: "center"});
     lastactive = el;
 }
