@@ -37,6 +37,7 @@
 }
 
 body, html {
+  background-position: center; background-size: 10px 10px;
   margin: 0;
   padding: 0;
   width:100%;
@@ -354,7 +355,7 @@ body, html {
   overflow: hidden;
   display: none;
   width: calc(100% - 4em); padding: .25em 2em;
-  border-radius: .25em;
+  border-radius: 2em;
   outline: solid 1px var(--background-color-dimlight);
   background-color: #fff; margin-top: 1em;
   opacity: 0;
@@ -389,7 +390,7 @@ body, html {
   animation: compactlogoanim 2000ms infinite 1s;
 }
 #compact_logo.error {
-  filter: invert(20%) sepia(100%) saturate(500%) hue-rotate(-65deg) brightness(45%) contrast(200%);
+  filter: invert(20%) brightness(45%) contrast(200%);
   animation: none;
   opacity: 1;
 }
@@ -474,4 +475,68 @@ body, html {
   100% {
     opacity: 0;
   }
+}
+
+#lyrics_controls {
+  display: flex; flex-direction: row;
+  padding: .5em;
+  background-color: var(--background-color-dimdark); justify-content: space-between; align-items: center;
+}
+#lyrics_controls .lyrics_controls_tab {
+  display: flex; flex-direction: column;
+}
+
+#lyrics_controls .lyrics_controls_tab .toggleLabel {
+  display: flex; flex-direction: row; justify-content: end; align-items: center;
+}
+
+/* CUSTOM AUDIO PLAYER */
+.custom-audio-player {
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-audio-player .controls {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px;
+  height: 1.5em;
+  /* position: relative; background: #11111155;*/
+  overflow: hidden;
+}
+
+.custom-audio-player .albumcover {
+  aspect-ratio: 1/1;
+  position: absolute; height: 100%; left: 0; top: 0; z-index: -1;
+}
+
+.custom-audio-player .backgroundImg {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  width: 100%; height: auto; z-index: -1; max-width: none;
+}
+
+.custom-audio-player button {
+  background: #444; color: #fff; border: none; padding: 10px; cursor: pointer;
+}
+
+.custom-audio-player img {
+  height: 100%; cursor: pointer;
+}
+
+.custom-audio-player button:hover {
+  background: #555;
+}
+
+.custom-audio-player .time-bar {
+  border-radius: 3em; overflow: hidden;
+  flex-grow: 1;
+  margin: 0 10px;
+  position: relative;
+  height: 100%; background: #aaaaaaaa;
+  border-radius: 0; cursor: pointer;
+}
+
+.custom-audio-player .progress {
+  border-radius: 3em; overflow: hidden;
+  height: 100%; background-color: #00caffaa;
+  width: 0; border-radius: 0 5px 5px 0;
 }

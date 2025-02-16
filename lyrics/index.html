@@ -1,57 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paroles</title>
-    <link rel="stylesheet" href="../style.css"/>
-    <style id="project_style"></style>
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paroles</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style id="project_style"></style>
+  <script defer src="script.js"></script>
 </head>
+
 <body>
   <div id="top_bar_nav">
     <a href="../index.html">Retour</a>
     <img src="../assets/mld_logo_all_white.png">
   </div>
 
-    <div id="side_bar_backdrop">
-        <div id="side_bar">
-          <div id="boot_splash">
-            <div id="compact_logo" class="loading">
-                <img preload class="logo1" src="../assets/mld_logo_left_white.png">
-                <img preload class="logo2" src="../assets/mld_logo_left_white.png">
-                <img preload class="logo3" src="../assets/mld_logo_left_white.png">
+  <div id="side_bar_backdrop">
+    <div id="side_bar">
+      <div id="boot_splash">
+        <div id="compact_logo" class="loading">
+          <img preload class="logo1" src="../assets/mld_logo_left_white.png">
+          <img preload class="logo2" src="../assets/mld_logo_left_white.png">
+          <img preload class="logo3" src="../assets/mld_logo_left_white.png">
+        </div>
+
+        <i>Chargement des paroles</i>
+      </div>
+      <form id="menu">
+        <input type="button" value="Dernières sorties">
+        <input type="button" value="Press KIT">
+        <input type="button" value="Plus...">
+      </form>
+    </div>
+  </div>
+
+  <div class="content center font_quicksand">
+    <section>
+      <h1 style="font-size: 2em;" id="songTitle"></h1>
+      <h2 style="font-size: medium;" id="songArtists"></h2>
+      <h3 style="font-size: small;" id="songGenre"></h3>
+    </section>
+
+    <section id="lyrics_controls" class="font_quicksand">
+      <div class="lyrics_controls_tab" style="flex-grow: 1;">
+
+
+        <div class="custom-audio-player">
+          <img class="backgroundImg">
+          <div class="controls">
+            <img class="albumcover">
+            <img src="../assets/icons/playBtn.png"
+              onclick="if (player.isPlaying) {player.stop(); this.src = '../assets/icons/playBtn.png'} else {player.play(player.pausedAt); this.src = '../assets/icons/pauseBtn.png'}">
+            <div class="time-bar" onclick="" onmousedown="isDragging = true; updateVisualProgress(event)"
+              onmousemove="if (isDragging) {updateVisualProgress(event)}"
+              onmouseup="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}">
+              <div class="progress"></div>
             </div>
-            
-            <i>Chargement des paroles</i>
           </div>
-          <form id="menu">
-            <input type="button" value="Dernières sorties">
-            <input type="button" value="Press KIT">
-            <input type="button" value="Plus...">
-          </form>
+        </div>
+
+
+        <audio id="song_player" ontimeupdate="timeconsole.textContent = this.currentTime;">
+          <source src="">
+        </audio>
+        <p id="timeconsole"></p>
+        <div class="toggleLabel">Paroles synchronisées : <div class="input_toggle active"
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}">
+          </div>
+        </div>
+        <div class="toggleLabel">Explications des paroles : <div class="input_toggle active"
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isExplicative = true} else {isExplicative = false}">
+          </div>
         </div>
       </div>
+      <div class="lyrics_controls_tab">
+        <h2>Pistes Audio</h2>
+        <div class="toggleLabel">Voix : <div class="input_toggle active"
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}">
+          </div>
+        </div>
+        <div class="toggleLabel">Batterie : <div class="input_toggle active"
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}">
+          </div>
+        </div>
+        <div class="toggleLabel">Autres : <div class="input_toggle active"
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}">
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div class="content center font_quicksand">
-        <section>
-            <h1 style="font-size: 2em;" id="songTitle"></h1>
-            <h2 style="font-size: medium;" id="songArtists"></h2>
-            <h3 style="font-size: small;" id="songGenre"></h3>
-        </section>
-
-        <section style="background-color: #444; color: #fff;" class="font_quicksand">
-            <audio controls id="song_player" ontimeupdate="timeconsole.textContent = this.currentTime; updateSyncLyrics(this.currentTime)">
-                <source src="">
-            </audio>
-            <p id="timeconsole"></p>
-            <div>Sync Lyrics : <div class="input_toggle active" style="font-size: 2em;" onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isLyricsSync = true} else {isLyricsSync = false}"></div></div>
-            
-        </section>
-        
-        <section id="lyrics_container" class="font_quicksand">
-        </section>
-        <br><br><br><br><br><br><br><br><br><br><br><br>
-    </div>    
+    <section id="lyrics_container" class="font_quicksand">
+    </section>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+  </div>
 </body>
+
 </html>

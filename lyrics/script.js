@@ -23,17 +23,15 @@ function toggleClass(el, cla) {
         el.classList.remove(cla);
     } else {
         el.classList.add(cla);
-    }
+    };
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     if (songId) {
         loadLyricsJson();
     } else {
-        setTimeout(() => {
-            displayError("Aucune paroles n'a été trouvé");
-        }, 2700);
-    }
+        window.location.href = "../index.html";
+    };
 });
 
 function loadLyricsJson() {
@@ -44,13 +42,13 @@ function loadLyricsJson() {
             loadLyricsMd();
         })
         .catch(error => {
-            displayError(error);
-        });
+            displayError("Aucune paroles n'a été trouvé");
+        })
 }
 
 function displayError(error) {
     console.log(error);
-    boot_splash.querySelector('i').style.color = "#f00";
+    boot_splash.querySelector('i').style.color = "#ccc";
     boot_splash.querySelector('i').textContent = error;
     compact_logo.classList.remove("loading");
     compact_logo.style.animation = "none";
@@ -69,14 +67,11 @@ function loadLyricsMd() {
             }, 2500);
         })
         .catch(error => {
-            displayError(error);
+            displayError("Aucune paroles n'a été trouvé");
         });
 };
 
 function formatTime(seconds) {
-    console.log(seconds)
-    // if (typeof seconds !== "numbers" || seconds < 0) return "Invalid input";
-
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -85,17 +80,13 @@ function formatTime(seconds) {
         return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     } else {
         return `${minutes}:${String(secs).padStart(2, '0')}`;
-    }
+    };
 }
 
 var domlines = [];
 var time_code = [];
 function displayLyrics() {
-    // lyrics_container.textContent = lyricsarr;
     var ldata = lyrics.split('\n');
-    console.log(ldata);
-    console.log(lyricsdata)
-
     var output = "";
 
     ldata.forEach((e) => {
@@ -105,13 +96,12 @@ function displayLyrics() {
 
             time_code.push(timecode?.trim() || "")
             return `<div class="lyrics_line ${specialClass}" onclick="toggleActive(this)">${formatTime(parseInt(timecode))} - ${mainText}${explanationDiv}</div>`;
-        })
+        });
     });
 
-    console.log(time_code);
-
-    song_player.querySelector('source').src = lyricsdata.metadata.src;
-    song_player.src = lyricsdata.metadata.src;
+    // song_player.querySelector('source').src = lyricsdata.metadata.src;
+    // song_player.src = lyricsdata.metadata.src;
+    // SONG SRC DISPL
 
     songTitle.textContent = lyricsdata.metadata.title;
     songArtists.textContent = lyricsdata.metadata.artists;
@@ -131,11 +121,11 @@ function displayLyrics() {
 
 var lastIndex = 0;
 var isLyricsSync = true;
+var isExplicative = true;
 function updateSyncLyrics(time) {
     if (!isLyricsSync) return;
     if (time < 0 || !time_code || !time_code.length) return;
 
-    // let lyrics = lyricsdata.lyrics;
     let newIndex = lastIndex;
 
     while (newIndex < time_code.length - 1 && time >= time_code[newIndex + 1]) {
@@ -158,15 +148,116 @@ function toggleActive(el) {
     if (el === lastactive) {
         el.classList.remove("active");
         lastactive = undefined;
-        /* toggleClass(navigation_menu, 'open'); */
         return;
-    }
+    };
     if (!!lastactive) {
         lastactive.classList.remove("active");
-    } else {
-        // pass
-    }
+    };
     el.classList.add("active");
     el.scrollIntoView({ behavior: "smooth", block: "center"});
     lastactive = el;
 }
+
+class AudioSyncPlayer {
+    constructor(audioFiles) {
+        this.audioFiles = audioFiles;
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.buffers = [];
+        this.sources = [];
+        this.isPlaying = false;
+        this.startTime = 0;
+        this.pausedAt = 0;
+        this.duration = 0;
+        this.lastSeekTime = 0;
+    }
+
+    async loadAudioFiles() {
+        const promises = this.audioFiles.map(file => this.loadAudioBuffer(file));
+        this.buffers = await Promise.all(promises);
+        this.duration = Math.max(...this.buffers.map(buffer => buffer.duration));
+    }
+
+    async loadAudioBuffer(url) {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        return this.audioContext.decodeAudioData(arrayBuffer);
+    }
+
+    play(startFrom = 0) {
+        if (this.isPlaying) return;
+
+        this.startTime = this.audioContext.currentTime - startFrom;
+        this.lastSeekTime = startFrom;
+
+        this.sources = this.buffers.map(buffer => {
+            const source = this.audioContext.createBufferSource();
+            source.buffer = buffer;
+            source.connect(this.audioContext.destination);
+            source.start(0, startFrom);
+            return source;
+        });
+
+        this.isPlaying = true;
+
+        // Monitor track: Stop all if any tracks ends
+        this.sources.forEach(source => {
+            source.onended = () => this.stop();
+        });
+
+        requestAnimationFrame(updateProgressBar);
+    }
+
+    stop() {
+        if (!this.isPlaying) return;
+
+        this.pausedAt = this.audioContext.currentTime - this.startTime;
+        this.sources.forEach(source => source.stop());
+        this.sources = [];
+        this.isPlaying = false;
+    }
+
+    seek(time) {
+        if (this.buffers.length === 0) return;
+        this.stop();
+        this.play(time);
+    }
+
+    getCurrentTime() {
+        return this.isPlaying ? this.audioContext.currentTime - this.startTime : this.pausedAt;
+    }
+};
+
+const player = new AudioSyncPlayer([
+    "../songs/est_elle/ee_others.mp3",
+    "../songs/est_elle/ee_bass.mp3",
+    "../songs/est_elle/ee_voc.mp3"
+]);
+player.loadAudioFiles();
+
+const cap_controls = document.querySelector('.custom-audio-player').querySelector('.controls');
+const progress = cap_controls.querySelector('.time-bar').querySelector('.progress');
+let isDragging = false;
+
+function updateProgressBar() {
+    if (player.isPlaying && !isDragging) {
+        // const rect = cap_controls.querySelector('.time-bar').getBoundingClientRect();
+        // const offsetX = event.clientX - rect.left;
+        // const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
+        const percentage = player.getCurrentTime() / player.duration;
+        progress.style.width = `${percentage * 100}%`;
+
+        updateSyncLyrics(player.getCurrentTime());
+        requestAnimationFrame(updateProgressBar);
+    }
+}
+
+function updateVisualProgress(event, seek = false) {
+    const rect = cap_controls.querySelector('.time-bar').getBoundingClientRect();
+    const offsetX = event.clientX - rect.left;
+    const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
+    progress.style.width = `${percentage * 100}%`;
+
+    if (seek) {
+        return percentage * player.duration;
+    }
+};
