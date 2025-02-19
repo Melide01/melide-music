@@ -45,19 +45,27 @@
     <section id="lyrics_controls" class="font_quicksand">
       <div class="lyrics_controls_tab" style="flex-grow: 1;">
 
-
         <div class="custom-audio-player">
           <img class="backgroundImg">
           <div class="controls">
             <img class="albumcover">
             <img src="../assets/icons/playBtn.png"
               onclick="if (player.isPlaying) {player.stop(); this.src = '../assets/icons/playBtn.png'} else {player.play(player.pausedAt); this.src = '../assets/icons/pauseBtn.png'}">
-            <div class="time-bar" onclick="" onmousedown="isDragging = true; updateVisualProgress(event)"
+            <div class="time-bar" 
+              onmousedown="isDragging = true; updateVisualProgress(event)"
               onmousemove="if (isDragging) {updateVisualProgress(event)}"
-              onmouseup="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}">
+              onmouseup="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}"
+              onmouseleave="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}"
+              ontouchstart="isDragging = true; updateVisualProgress(event)"
+              ontouchmove="if (isDragging) {updateVisualProgress(event)}"
+              ontouchend="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}"
+              ontouchleave="if (isDragging) {isDragging = false; const newTime = updateVisualProgress(event, true); player.seek(newTime)}"
+              >
               <div class="progress"></div>
             </div>
+            
           </div>
+          <span id="audio_time_text">0:00</span>
         </div>
 
 
@@ -70,7 +78,7 @@
           </div>
         </div>
         <div class="toggleLabel">Explications des paroles : <div class="input_toggle active"
-            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {isExplicative = true} else {isExplicative = false}">
+            onclick="toggleClass(this, 'active'); if (this.classList.contains('active')) {lyrics_container.classList.remove('no_explanation')} else {lyrics_container.classList.add('no_explanation')}">
           </div>
         </div>
       </div>

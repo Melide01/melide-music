@@ -14,6 +14,7 @@ const songGenre = document.getElementById('songGenre');
 const song_player = document.getElementById('song_player');
 
 const lyrics_container = document.getElementById('lyrics_container');
+const audio_time_text = document.getElementById('audio_time_text');
 
 var lyricsdata = [];
 var lyrics;
@@ -77,14 +78,15 @@ function formatTime(seconds) {
     const secs = seconds % 60;
 
     if (hours > 0) {
-        return `${hours}:${String(minutes).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        return `${hours}:${String(minutes).padStart(2, '0')}:${String(Math.round(secs)).padStart(2, '0')}`;
     } else {
-        return `${minutes}:${String(secs).padStart(2, '0')}`;
+        return `${minutes}:${String(Math.round(secs)).padStart(2, '0')}`;
     };
 }
 
 var domlines = [];
 var time_code = [];
+let player;
 function displayLyrics() {
     var ldata = lyrics.split('\n');
     var output = "";
@@ -99,13 +101,17 @@ function displayLyrics() {
         });
     });
 
-    // song_player.querySelector('source').src = lyricsdata.metadata.src;
-    // song_player.src = lyricsdata.metadata.src;
-    // SONG SRC DISPL
-
     songTitle.textContent = lyricsdata.metadata.title;
     songArtists.textContent = lyricsdata.metadata.artists;
     songGenre.textContent = lyricsdata.metadata.genres;
+    
+    console.log(lyricsdata.metadata.src)
+    player = new AudioSyncPlayer([
+        "../songs/est_elle/ee_others.mp3",
+        "../songs/est_elle/ee_bass.mp3", 
+        "../songs/est_elle/ee_drums.mp3"
+    ]);;
+    player.loadAudioFiles();
 
     var style_output = "";
 
@@ -118,10 +124,11 @@ function displayLyrics() {
     lyrics_container.innerHTML = output;
     domlines = lyrics_container.querySelectorAll(".lyrics_line");
 };
+console.log("im shit", player)
+
 
 var lastIndex = 0;
 var isLyricsSync = true;
-var isExplicative = true;
 function updateSyncLyrics(time) {
     if (!isLyricsSync) return;
     if (time < 0 || !time_code || !time_code.length) return;
@@ -227,12 +234,15 @@ class AudioSyncPlayer {
     }
 };
 
-const player = new AudioSyncPlayer([
-    "../songs/est_elle/ee_others.mp3",
-    "../songs/est_elle/ee_bass.mp3",
-    "../songs/est_elle/ee_voc.mp3"
-]);
-player.loadAudioFiles();
+console.log(lyricsdata)
+
+// const player = new AudioSyncPlayer([
+    // "../songs/est_elle/ee_others.mp3",
+    // "../songs/est_elle/ee_bass.mp3",
+    // "../songs/est_elle/ee_voc.mp3"
+// ]);
+
+
 
 const cap_controls = document.querySelector('.custom-audio-player').querySelector('.controls');
 const progress = cap_controls.querySelector('.time-bar').querySelector('.progress');
@@ -245,7 +255,7 @@ function updateProgressBar() {
         // const percentage = Math.min(Math.max(offsetX / rect.width, 0), 1);
         const percentage = player.getCurrentTime() / player.duration;
         progress.style.width = `${percentage * 100}%`;
-
+        audio_time_text.textContent = formatTime(player.getCurrentTime());
         updateSyncLyrics(player.getCurrentTime());
         requestAnimationFrame(updateProgressBar);
     }

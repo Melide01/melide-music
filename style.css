@@ -329,7 +329,8 @@ body, html {
 .lyrics_line {
   cursor: pointer;
   padding: .25em 1em;
-  transition: background 200ms;
+  opacity: .8; transform: translateX(1em);
+  transition: all 300ms;
   background-color: #fff;
 }
 .lyrics_line:hover {
@@ -348,6 +349,7 @@ body, html {
 }
 .lyrics_line.active {
   background-color: #cee;
+  opacity: 1; transform: translateX(0);
 }
 
 .lyrics_line .lyrics_explanation {
@@ -364,6 +366,10 @@ body, html {
   display: block;
   opacity: 1;
   animation: showUp 200ms forwards;
+}
+
+#lyrics_container.no_explanation .lyrics_explanation {
+  display: none;
 }
 
 
@@ -539,4 +545,15 @@ body, html {
   border-radius: 3em; overflow: hidden;
   height: 100%; background-color: #00caffaa;
   width: 0; border-radius: 0 5px 5px 0;
+}
+
+.book_holder {
+  display: flex;
+  width: 100%;
+  justify-content: center; align-items: center;
+}
+
+.book_holder canvas {
+  width: 100%;
+  max-width: 50em;
 }
