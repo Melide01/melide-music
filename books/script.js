@@ -7,7 +7,8 @@ var pageNumber = -1;
     pageNumber = parseInt(urlParams.get('page')) || 1;
     const pdfUrl = `../assets/books/${bookName}.pdf`;
 
-    console.log("trying its best to load :", pdfUrl)
+    alert("trying its best to load :", pdfUrl)
+    
     let doc;
     // ABOVE WORKS FINE
     try {
@@ -16,7 +17,7 @@ var pageNumber = -1;
             loadPdf,
             new Promise((_, reject) => setTimeout(() => reject(new Error("PDF Load Timeout")), 5000))
         ]);
-        console.log("PDF Loaded succesfully")
+        alert("PDF Loaded succesfully")
     } catch (error) {
         console.error("Failed to load the PDF. Check the file path", error);
         // THIS CONSOLE LOG OUT IS ALSO IGNORED
@@ -31,7 +32,7 @@ var pageNumber = -1;
     document.getElementById('navBtnLeft').addEventListener("click", async () => {
         let newPage = pageNumber - 1;
         if (newPage >= 1) {
-            console.log(newPage);
+            alert(newPage);
             await changePage(doc, newPage);
         };
     });
@@ -39,7 +40,7 @@ var pageNumber = -1;
     document.getElementById('navBtnRight').addEventListener("click", async () => {
         let newPage = pageNumber + 1;
         if (newPage <= doc.numPages) {
-            console.log(newPage);
+            alert(newPage);
             await changePage(doc, newPage);
         };
     });
@@ -70,7 +71,7 @@ var pageNumber = -1;
 let renderTask = null;
 async function getPage(doc, pageNumber) {
     if (!doc || pageNumber<1 || pageNumber>doc.numPages) {
-        console.log("big error im crying");
+        alert("big error im crying");
         return;
     }
 
