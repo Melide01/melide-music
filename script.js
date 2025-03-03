@@ -571,16 +571,52 @@ menu.addEventListener("click", function (event) {
 });
 
 side_bar_backdrop.addEventListener("click", function (event) {
-  if (event.target === this) {
-    side_bar_backdrop.classList.add('hide');
-  }
+  if (event.target === this) side_bar_backdrop.classList.add('hide');
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 boot_splash.addEventListener("click", function (event) {
-  if (event.target === this) {
-    boot_splash.classList.add("open")
-  }
+  // if (event.target === this) boot_splash.classList.add("open")
+  // UNCOMMENT ABOVE TO WORK
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function toggleClass(el, cla) {
   if (el.classList.contains(cla)) {
