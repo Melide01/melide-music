@@ -1,5 +1,12 @@
-const mini_melide = document.getElementById('mini_melide');
+// GLOBALS
+var siteType;
+var song_data;
+var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec";
+
+// HTML ELEMENTS
+var mini_melide;
 const screen_loader = document.getElementById('screen_loader');
+const evermade_tracks = document.getElementById('evermade_tracks');
 
 function handleLoading(callback = false) {
     if (!callback) {
@@ -7,23 +14,163 @@ function handleLoading(callback = false) {
     } else {
         screen_loader.classList.remove('loading');
     }
+};
+
+function forceReloadData() {
+    sessionStorage.setItem("allData", undefined);
 }
 
-var toggle_debug = -1;
-mini_melide.addEventListener('click', () => {
-    if (toggle_debug === -1) {
-        toggle_debug = 1;
-    } else if (toggle_debug === 1) {
-        toggle_debug = -1;
+// LOADED
+var url_params;
+document.addEventListener("DOMContentLoaded", () => {
+    url_params = new URLSearchParams(window.location.search);
+
+    siteType = document.documentElement.dataset.site;
+    mini_melide = document.getElementById('mini_melide');
+
+    const cached = sessionStorage.getItem("allData");
+
+    if (!!!cached) {
+        // IF THE DATAS ARE NOT CACHED
+       
+
+        if (siteType === "home") {
+            // MINI MELIDE
+            var toggle_debug = -1;
+            mini_melide.addEventListener('click', () => {
+                if (toggle_debug === -1) {
+                    toggle_debug = 1;
+                } else if (toggle_debug === 1) {
+                    toggle_debug = -1;
+                }
+            
+                moveMelide(toggle_debug);
+            });
+            moveMelide(0, false);
+            setTimeout(() => {
+                mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+            }, 2800);
+    
+            fetch(fetchable_google_sheet)
+                .then(res => res.json())
+                .then(data => {
+                    sessionStorage.setItem("allData", JSON.stringify(data));
+                    song_data = data;
+                    loadDashboard(data);
+                })
+                .catch(err => console.error(err))
+        } else if (siteType === "tracks") {
+            fetch(fetchable_google_sheet)
+                .then(res => res.json())
+                .then(data => {
+                    sessionStorage.setItem("allData", JSON.stringify(data));
+                    song_data = data;
+                    loadTracksPanel();
+                })
+                .catch(err => console.error(err))
+        }
+    } else {
+
+        // IF THE DATAS ARE CACHED
+        song_data = JSON.parse(cached);
+
+        if (siteType === "home") {
+            // MINI MELIDE
+            var toggle_debug = -1;
+            mini_melide.addEventListener('click', () => {
+                if (toggle_debug === -1) {
+                    toggle_debug = 1;
+                } else if (toggle_debug === 1) {
+                    toggle_debug = -1;
+                }
+            
+                moveMelide(toggle_debug);
+            });
+
+            moveMelide(0, false);
+            setTimeout(() => {
+                mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+            }, 2800);
+            
+            loadDashboard(song_data)
+        } else if (siteType === "tracks") {
+            loadTracksPanel();
+        }
     }
 
-    moveMelide(toggle_debug);
+    
 });
 
+// 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
+function loadTracksPanel(index = 3, filter = "Released") {
+    const track_container = document.getElementById('track_container');
+    track_container.innerHTML = "";
+    const range = song_data.tracks_data.filter(v => v[index] === filter);
+
+    range.forEach((e, i) => {
+        const track_card_div = document.createElement('div'); track_card_div.classList.add('track_card', 'mini', 'clickable'); track_card_div.style.opacity = "1";
+        
+        var conditional_style_coverart = "";
+        if (e[10] !== "") {
+            const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
+            img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e[10]}`;
+            track_card_div.appendChild(img_track_cover);
+        } else {
+            conditional_style_coverart = "grid-column: 1/3;";
+        }
+
+        const tracks_meta = document.createElement('div'); tracks_meta.classList.add('vertical');
+        tracks_meta.style = "gap: 0;" + conditional_style_coverart;
+        tracks_meta.innerHTML = `<b>${e[1]}</b><i>${e[7]}</i>`;
+
+        track_card_div.appendChild(tracks_meta);
+
+
+        const action_div = document.createElement('div'); action_div.classList.add('vertical');
+
+        const is_onplatform = e[15] !== "" || e[16] !== "" || e[17] !== "";
+        if (is_onplatform) {
+            // PEUT ETRE ECOUTER SUR UNE PLATEFORME
+            const platform_button = document.createElement('input'); platform_button.type = "button"; platform_button.value = "Écouter";
+            action_div.appendChild(platform_button);
+            platform_button.addEventListener('click', () => {
+                window.open(e[16])
+            })
+        }
+
+        if (e[13] === "true") {
+            const download_button = document.createElement('input'); download_button.type = "button"; download_button.value = "Download";
+            action_div.appendChild(download_button);
+        }
+
+        
+
+        track_card_div.appendChild(action_div);
+        
+        if (e[9] !== "") {
+            const mood_div = document.createElement('div'); mood_div.classList.add('horizontal'); mood_div.style = "grid-column: 1/4; gap: .5em; justify-content: end;"
+            const mood_list = e[9].split(', ').map(v => `<span class="capsule">${v}</span>`).join("");
+            mood_div.innerHTML = mood_list;
+            track_card_div.appendChild(mood_div);
+        }
+
+        track_container.appendChild(track_card_div);
+
+        // EVENT LISTENER
+        track_card_div.addEventListener("click", (event) => {
+            if (event.target.tagName !== "INPUT") {
+                console.log(event.target)
+                url_params.set("track", e[0]);  
+                window.history.replaceState({}, "", `${location.pathname}?${url_params}`)
+            }
+        })
+    })
+}
+
 var evermade_songs = {};
-// 0: (15) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Type', 'Track Artists', 'Genres', 'Cover Art', 'Explicit', 'Is Up', 'Audio File', 'Spotify Link', 'YouTube Link', 'SoundCloud Link']
+// 0: (15) Track ID   	Track Name  	Album	 Track State	 Track Release Date 	Track Creation Date	   Track Type	Track Artists	Genres	Cover Art	Explicit	Is Up	Audio File	Spotify Link	YouTube Link	SoundCloud Link	Likes	UPC	ISRC
 const random_colors = ['color1', 'color2', 'color3']
-const evermade_tracks = document.getElementById('evermade_tracks');
+
 function loadDashboard(data) {
     // SETS DATA
     song_data = data;
@@ -102,26 +249,9 @@ function getLatestRelease(data) {
 
     document.querySelector('[name="latest_song_title"]').textContent = latest_track[0][1];
     document.querySelector('[name="latest_song_artist"]').textContent = latest_track[0][7];
-    document.querySelector('[name="latest_song_cover"]').src = `https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][9]}`;
-    document.querySelector('[name="latest_song_card"]').style.backgroundImage = `url("https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][9]}")`;
+    document.querySelector('[name="latest_song_cover"]').src = `https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][10]}`;
+    document.querySelector('[name="latest_song_card"]').style.backgroundImage = `url("https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][10]}")`;
 }
-
-// LOADED
-document.addEventListener("DOMContentLoaded", () => {
-    moveMelide(0, false);
-
-    fetch(fetchable_google_sheet)
-        .then(res => res.json())
-        .then(data => {
-            song_data = data;
-            loadDashboard(data);
-        })
-        .catch(err => console.error(err))
-})
-
-var song_data;
-var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbyUG1NPXehB9_Ytzor6oLoIQn9rOjwt3XJ3CM4F12mVboXRirT39cfcbhMk9jGu9cQ7/exec";
-
 
 // MINI MELIDE RELATED
 var mini_melide_is_moving = false;
@@ -154,8 +284,4 @@ function moveMelide(dir = 0.5, playanim = true) {
 
     mini_melide.style.left = direction;
     mini_melide.style.transform = `TranslateX(${counter_anchor})`;
-}
-
-setTimeout(() => {
-    mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
-}, 2800);
+};

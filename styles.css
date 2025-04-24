@@ -69,6 +69,7 @@ header .logo {
 
 #latest_song_progressbar {
   content: ""; height: 1em; background-color: #38e4cd;
+  text-align: end;
 }
 
 .contentChild {
@@ -85,6 +86,15 @@ header .logo {
 }
 .clickable:active {
   outline: solid .2em var(--light-color);
+}
+
+.capsule {
+  word-break: keep-all;
+  cursor: default;
+  color: #000; background: linear-gradient(to top, #bbb, var(--light-color));
+  border-radius: calc(var(--padding) * 2);
+  padding: calc(var(--padding) / 2);
+  outline: solid .2em #aaa;
 }
 
 .papernote.clickable {
@@ -110,6 +120,7 @@ header .logo {
   border-image: url("assets/borderimg_note_sepia.webp") 50 fill;
 }
 
+/* TRACK CARDS */
 .track_card {
   opacity: 0; transition: opacity .5s;
   outline: solid 1px #aaa;
@@ -123,6 +134,10 @@ header .logo {
 .track_card img {
   transition: opacity 1s;
   opacity: 0;
+}
+
+.track_card.mini {
+  grid-template-columns: 10% 50% auto; font-size: .7em;
 }
 
 /* MINI MELIDE RELATED */

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr" data-site="tracks">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melide : Toutes les tracks</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="../scripts.js" defer></script>
+</head>
+<body>
+  <div id="screen_loader">
+    <img src="../assets/loading_screen_layer3.webp">
+    <img src="../assets/loading_screen_layer2.webp">
+    <img src="../assets/loading_screen_layer1.webp">
+  </div>
+  <header>
+    <div class="contentChild horizontal" style="justify-content: space-between;">
+      <div class="horizontal">
+        <img src="../assets/mld_logo_all_white.png" class="logo">
+        <label>Melide</label>
+      </div>
+      <div class="horizontal list" style="padding: 1em">
+        <a class="papernote sepia clickable" href="../index.html" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
+        <a class="papernote sepia clickable disabled">Contact</a>
+        <a class="papernote sepia clickable disabled">Merch</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="header_img" style="background-image: url('../assets/bg_artistic_underwater.webp')">
+  </div>
+  
+  <div id="mainContent">
+    <div class="contentChild">
+      <div class="papernote autofill" style="padding: .1em">
+        <input class="papernote disabled" type="text" placeholder="Rechercher...">
+        <select onchange="loadTracksPanel(3, this.value)" class="papernote">
+          <option>Released</option>
+          <option>Unreleased</option>
+          <option>Work</option>
+        </select>
+
+        <select onchange="loadTracksPanel(6, this.value)" class="papernote">
+          <option>Song</option>
+          <option>Beat/Instrumental</option>
+          <option>Remix</option>
+          <option>Cover</option>
+          <option>Soundtrack</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="contentChild">
+
+        <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
+          <div class="basicContainer vertical">
+            <p style="font-size: .7em; color: #999">Menu</p>
+            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
+            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
+          </div>
+          
+          <div id="track_container" class="basicContainer vertical" style="max-height: 20em; overflow: auto;">
+            <img src="../assets/loading gif.GIF" class="loading_balls">
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+  <div class="beauty_icons_grid"></div>
+</body>
+</html>

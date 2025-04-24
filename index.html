@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr" data-site="home">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +20,7 @@
         <label>Melide</label>
       </div>
       <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable" onclick="handleLoading(); setTimeout(() => {handleLoading(true);}, 2500);">Maison</a>
+        <a class="papernote sepia clickable disabled" onclick="handleLoading(); setTimeout(() => {handleLoading(true);}, 2500);">Maison</a>
         <a class="papernote sepia clickable disabled">Contact</a>
         <a class="papernote sepia clickable disabled">Merch</a>
       </div>
@@ -37,7 +37,7 @@
     <div class="contentChild">
       <div class="papernote autofill" style="padding: .1em">
         <a class="papernote clickable disabled">Toutes les musiques</a>
-        <a class="papernote clickable disabled">Les prod/instrumentales</a>
+        <a class="papernote clickable" href="tracks/index.html">Les prod/instrumentales</a>
         <a class="papernote clickable disabled">Tout les samples</a>
         <a class="papernote clickable disabled">Les autres projets...</a>
       </div>
@@ -59,9 +59,14 @@
               <div class="vertical" style="position: relative; margin-top: .5em;">
                 <label name="latest_song_timer"></label>
                 <div id="latest_song_progressbar"></div>
-                <a class="papernote clickable disabled" style="display: none;">Écouter en exclusivité</a>
-                <a class="papernote clickable disabled" style="display: none;">Écouter</a>
-                <a class="papernote clickable disabled" style="display: none;">Plus</a>
+                <div style="width: 100%; display: none; justify-content: center;">
+                  <div class="vertical" style="width: 80%; gap: .5em;">
+                    <a class="capsule clickable">Écouter</a>
+                    <a class="capsule clickable">Plus</a>
+                  </div>
+                </div>
+                
+                
               </div>
               
             </div>
@@ -74,14 +79,20 @@
         <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
           <i name="dashboard_everytrack_number" style="grid-column: 1/3;"></i>
           <div class="statistic_bar" style="grid-column: 1/3;" id="evermade_tracks"></div>
+          
+          <p></p>
+          <p style="font-size: .7em; color: #999">Articles</p>
+
           <div class="basicContainer vertical">
             <p style="font-size: .7em; color: #999">Menu</p>
             <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
             <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
           </div>
+          
           <div class="basicContainer vertical" style="display: none; max-height: 10em; overflow: auto;">
-
+            
             <div class="track_card clickable" style="opacity: 1;">
+              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
               <img alt="something" style="opacity: 1;">
               <div class="vertical" style="gap: 0;">
                 <b>Title</b>
@@ -90,6 +101,7 @@
               </div>
             </div>
             <div class="track_card clickable" style="opacity: 1;">
+              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
               <img alt="something" style="opacity: 1;">
               <div class="vertical" style="gap: 0;">
                 <b>Title</b>
@@ -98,6 +110,7 @@
               </div>
             </div>
             <div class="track_card clickable" style="opacity: 1;">
+              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
               <div class="vertical" style="gap: 0; grid-column: 1/3;">
                 <b>Title</b>
                 <i>Author</i>
