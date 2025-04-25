@@ -32,6 +32,10 @@ body, html {
   box-sizing: border-box;
 }
 
+select:active, select:focus, input:active, input:focus {
+  outline: none;
+}
+
 img {
   max-width: 100%;
 }
@@ -93,8 +97,11 @@ header .logo {
   cursor: default;
   color: #000; background: linear-gradient(to top, #bbb, var(--light-color));
   border-radius: calc(var(--padding) * 2);
-  padding: calc(var(--padding) / 2);
+  padding: 0 var(--padding);
   outline: solid .2em #aaa;
+}
+.capsule.minim {
+  background: #eee; border: none; outline: none;
 }
 
 .papernote.clickable {
@@ -346,4 +353,22 @@ header .logo {
 
 .logo {
   max-width: 15em; height: auto;
+}
+
+@keyframes flicker1 {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .7;
+  }
+}
+
+@keyframes flicker2 {
+  0%, 10% {
+    text-shadow: 0 0 5px #fff;
+  }
+  5%, 20%, 100% {
+    text-shadow: 0 0 5px transparent;
+  }
 }

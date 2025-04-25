@@ -20,7 +20,7 @@
         <label>Melide</label>
       </div>
       <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable" href="../index.html" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
+        <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
         <a class="papernote sepia clickable disabled">Contact</a>
         <a class="papernote sepia clickable disabled">Merch</a>
       </div>
@@ -32,22 +32,38 @@
   
   <div id="mainContent">
     <div class="contentChild">
-      <div class="papernote autofill" style="padding: .1em">
-        <input class="papernote disabled" type="text" placeholder="Rechercher...">
-        <select onchange="loadTracksPanel(3, this.value)" class="papernote">
-          <option>Released</option>
-          <option>Unreleased</option>
-          <option>Work</option>
+      <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em">
+        
+        <input oninput="sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
+        
+        <select onchange="sortPannel('date', 4, this.value)" class="papernote">
+          <option>Trier...</option>
+          <option>Croissant</option>
+          <option>Décroissant</option>
         </select>
 
-        <select onchange="loadTracksPanel(6, this.value)" class="papernote">
-          <option>Song</option>
-          <option>Beat/Instrumental</option>
-          <option>Remix</option>
-          <option>Cover</option>
-          <option>Soundtrack</option>
-        </select>
+        <div class="autoFill">
+          <select onchange="loadTracksPanel(3, this.value)" class="capsule">
+            <option>Trier...</option>
+            <option>Released</option>
+            <option>Unreleased</option>
+            <option>Work</option>
+          </select>
+  
+          <select onchange="loadTracksPanel(6, this.value)" class="capsule">
+            <option>Trier...</option>
+            <option>Song</option>
+            <option>Beat/Instrumental</option>
+            <option>Remix</option>
+            <option>Cover</option>
+            <option>Soundtrack</option>
+          </select>
+        </div>
+        
+
+        
       </div>
+
     </div>
 
     <div class="contentChild">
@@ -62,6 +78,7 @@
           <div id="track_container" class="basicContainer vertical" style="max-height: 20em; overflow: auto;">
             <img src="../assets/loading gif.GIF" class="loading_balls">
           </div>
+
         </div>
       </div>
 

@@ -47,8 +47,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 moveMelide(toggle_debug);
             });
             moveMelide(0, false);
+
+            current_melide = Object.keys(mini_melide_anim)[Math.round(Math.random() * (Object.keys(mini_melide_anim).length - 1))];
+            console.log(current_melide)
+            mini_melide.src = mini_melide_anim[current_melide].greet;
             setTimeout(() => {
-                mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+                mini_melide.src = mini_melide_anim[current_melide].idle;
             }, 2800);
     
             fetch(fetchable_google_sheet)
@@ -70,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 .catch(err => console.error(err))
         }
     } else {
-
         // IF THE DATAS ARE CACHED
         song_data = JSON.parse(cached);
 
@@ -87,9 +90,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 moveMelide(toggle_debug);
             });
 
+            mini_melide.src = mini_melide_anim[current_melide].greet;
             moveMelide(0, false);
             setTimeout(() => {
-                mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+                // moveMelide(0);
+                mini_melide.src = mini_melide_anim[current_melide].idle;
             }, 2800);
             
             loadDashboard(song_data)
@@ -101,15 +106,107 @@ document.addEventListener("DOMContentLoaded", () => {
     
 });
 
-// 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
-function loadTracksPanel(index = 3, filter = "Released") {
+function sortPannel(type = "date", index = 4, filter = "") {
     const track_container = document.getElementById('track_container');
-    track_container.innerHTML = "";
-    const range = song_data.tracks_data.filter(v => v[index] === filter);
+    const range = song_data.tracks_data.slice(1);
+
+    // RESET
+    if (filter === "Trier...") {
+        Object.keys(track_element).forEach((i) => {
+            track_container.append(track_element[i]);
+        });
+        return;
+    }
+
+    const indexedRange = range.map((val, i) => ({ val, originalIndex: i }));
+
+    if (type === "text") {
+        const search = filter.toLowerCase();
+
+        const ranked = indexedRange
+            .map(({ val, originalIndex }) => {
+                // You can change which fields to search here
+                const matchCount = val.reduce((count, field) => {
+                    if (typeof field === "string" && field.toLowerCase().includes(search) || filter === "") {
+                        return count + 1;
+                    }
+                    return count;
+                }, 0);
+
+                return { val, originalIndex, matchCount };
+            })
+            .filter(({ matchCount }) => matchCount > 0)
+            .sort((a, b) => b.matchCount - a.matchCount);
+        
+        Object.keys(track_element).forEach((i) => {
+            track_element[i].style.display = "none";
+        });
+
+        ranked.forEach(({ originalIndex }) => {
+            const el = track_element[originalIndex];
+            if (el) {
+                el.style.display = "grid";
+                track_container.prepend(el);
+            }
+        });
+
+        if (filter === "") {
+            sortPannel("date", 4, "Trier...");
+        }
+        //loadTracksPanel(index, search, "text");
+    }
+
+    if (type === "date") {
+        const direction = filter === "Décroissant" ? -1 : 1;
+        indexedRange.sort((a, b) => {
+            const dateA = new Date(a.val[index]); 
+            const dateB = new Date(b.val[index]);
+            return (dateA - dateB) * direction;
+        });
+    }
+
+    // RENDERS SORTED ELEMENTS
+    indexedRange.forEach(({ originalIndex }) => {
+        const el = track_element[originalIndex];
+        if (el) track_container.prepend(el);
+    });
+}
+
+// 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
+var track_element = {};
+var search_argument = {};
+function loadTracksPanel(index = 3, filter = "Released", type = "list") {
+    search_argument[index] = filter;
+
+    const track_container = document.getElementById('track_container');
+    const range = song_data.tracks_data.slice(1);
+
+    const search_results = range.reduce((acc, val, idx) => {
+        const is_match = Object.entries(search_argument).every(([key, expected]) => {
+            return expected === "Trier..." || val[key] === expected;
+        })
+
+        if (is_match) {
+            acc[idx] = val;
+        }
+
+        return acc;
+    }, {});
+    
+    track_container.querySelector('.loading_balls').style.display = "none"
 
     range.forEach((e, i) => {
+        if (!!track_element[i]) {
+            if (!!search_results[i]) {
+                track_element[i].style.display = "grid";
+            } else {
+                track_element[i].style.display = "none";
+            }
+            return
+        };
         const track_card_div = document.createElement('div'); track_card_div.classList.add('track_card', 'mini', 'clickable'); track_card_div.style.opacity = "1";
-        
+        track_element[i] = track_card_div;
+
         var conditional_style_coverart = "";
         if (e[10] !== "") {
             const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
@@ -143,13 +240,11 @@ function loadTracksPanel(index = 3, filter = "Released") {
             action_div.appendChild(download_button);
         }
 
-        
-
         track_card_div.appendChild(action_div);
         
         if (e[9] !== "") {
             const mood_div = document.createElement('div'); mood_div.classList.add('horizontal'); mood_div.style = "grid-column: 1/4; gap: .5em; justify-content: end;"
-            const mood_list = e[9].split(', ').map(v => `<span class="capsule">${v}</span>`).join("");
+            const mood_list = e[9].split(', ').map(v => `<span class="capsule minim">${v}</span>`).join("");
             mood_div.innerHTML = mood_list;
             track_card_div.appendChild(mood_div);
         }
@@ -159,7 +254,7 @@ function loadTracksPanel(index = 3, filter = "Released") {
         // EVENT LISTENER
         track_card_div.addEventListener("click", (event) => {
             if (event.target.tagName !== "INPUT") {
-                console.log(event.target)
+                console.log(e[0])
                 url_params.set("track", e[0]);  
                 window.history.replaceState({}, "", `${location.pathname}?${url_params}`)
             }
@@ -178,9 +273,17 @@ function loadDashboard(data) {
 
     // PREPARE AND SET LATEST RELEASE INFO
     evermade_songs = {
-        "Postés": Math.round(data.tracks_data.filter(a => a[3] === "Released").length / data.tracks_data.length * 100) + "%",
-        "Inaccessibles": Math.round(data.tracks_data.filter(a => a[3] === "Unreleased").length / data.tracks_data.length * 100) + "%",
-        "En travaux": Math.round(data.tracks_data.filter(a => a[3] === "Work").length / data.tracks_data.length * 100) + "%",
+        "Postés": {
+            "value": Math.round(data.tracks_data.filter(a => a[3] === "Released").length / data.tracks_data.length * 100) + "%",
+            "animation": "flicker2 2s infinite linear"
+        },
+        "Inaccessibles": {
+            "value": Math.round(data.tracks_data.filter(a => a[3] === "Unreleased").length / data.tracks_data.length * 100) + "%",
+            "animation": "flicker1 2s infinite linear"
+        },
+        "En travaux": {
+            "value": Math.round(data.tracks_data.filter(a => a[3] === "Work").length / data.tracks_data.length * 100) + "%",
+        }
     }
     getLatestRelease(data);
 
@@ -188,8 +291,12 @@ function loadDashboard(data) {
     Object.keys(evermade_songs).forEach((key, index) => {
         const segment = document.createElement('div');
         segment.classList.add('bar-segment', random_colors[index % random_colors.length]);
-        segment.style.width = evermade_songs[key];
-        segment.textContent = evermade_songs[key] + " - " + key;
+        segment.style.width = evermade_songs[key].value;
+        segment.textContent = evermade_songs[key].value + " - " + key;
+
+        if (!!evermade_songs[key]?.animation && evermade_songs[key]?.animation !== "") {
+            segment.style.animation = evermade_songs[key].animation;
+        }
         evermade_tracks.appendChild(segment);
     });
 };
@@ -256,29 +363,57 @@ function getLatestRelease(data) {
 // MINI MELIDE RELATED
 var mini_melide_is_moving = false;
 var mini_melide_last_position;
+
+var current_melide = "melide01";
+
+const mini_melide_anim = {
+    "melide01": {
+        "walk_to_left": "assets/mini_melide/mini_melide_walk_to_left.gif",
+        "walk_to_right": "assets/mini_melide/mini_melide_walk_to_right.gif",
+        "run_to_left": "assets/mini_melide/mini_melide_run_to_left.gif",
+        "run_to_right": "assets/mini_melide/mini_melide_run_to_right.gif",
+        "idle": "assets/mini_melide/mini_melide_idle.gif",
+        "greet": "assets/mini_melide/mini_melide_greets.gif"
+    },
+    "melide_minecraft": {
+        "walk_to_left": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
+        "walk_to_right": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
+        "run_to_left": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
+        "run_to_right": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
+        "idle": "assets/mini_melide/minecraft/idle0000.png",
+        "greet": "assets/mini_melide/minecraft/mini_melide_minecraft_greet.gif"
+    }
+}
+
 function moveMelide(dir = 0.5, playanim = true) {
     if (mini_melide_is_moving) return;
     if (playanim) {
         mini_melide_is_moving = true;
-        if (window.innerWidth < 750) {
-            if (dir > mini_melide_last_position) {
-                mini_melide.src = 'assets/mini_melide/mini_melide_walk_to_right.gif';
-            } else if (dir < mini_melide_last_position) {
-                mini_melide.src = 'assets/mini_melide/mini_melide_walk_to_left.gif';
-            } else {
-                mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+        
+        if (dir > mini_melide_last_position) {
+            if (window.innerWidth < 750) {
+                mini_melide.src = mini_melide_anim[current_melide].walk_to_right;
+            } else if (window.innerWidth < 1250) {
+                mini_melide.src = mini_melide_anim[current_melide].run_to_right;;
             }
+            
+        } else if (dir < mini_melide_last_position) {
+            if (window.innerWidth < 750) {
+                mini_melide.src = mini_melide_anim[current_melide].walk_to_left;
+            } else if (window.innerWidth < 1250) {
+                mini_melide.src = mini_melide_anim[current_melide].run_to_left;
+            }
+        } else {
+            mini_melide.src = mini_melide_anim[current_melide].idle;
         }
-
-        mini_melide_last_position = dir;
 
         setTimeout(() => {
             mini_melide_is_moving = false;
-            mini_melide.src = 'assets/mini_melide/mini_melide_idle.gif';
+            mini_melide.src = mini_melide_anim[current_melide].idle;
         }, 2000);
     };
     
-    
+    mini_melide_last_position = dir;
     const direction = String((dir + 1) * 50) + "%";
     const counter_anchor = String((dir + 1) * -50) + "%";
 
