@@ -199,7 +199,7 @@ function sortPannel(type = "date", index = 4, filter = "") {
 // 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
 var track_element = {};
 var search_argument = {};
-function loadTracksPanel(index = 3, filter = "Released", type = "list") {
+function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
     search_argument[index] = filter;
 
     const track_container = document.getElementById('track_container');

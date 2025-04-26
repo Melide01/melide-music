@@ -16,10 +16,11 @@
   </div>
   <header>
     <div class="contentChild horizontal" style="justify-content: space-between;">
-      <div class="horizontal">
+      <div class="horizontal" id="logo_icon">
         <img src="../assets/mld_logo_all_white.png" class="logo">
         <label>Melide</label>
       </div>
+      <a id="goBack_button" class="papernote sepia clickable" onclick="goBack()">Retour</a>
       <div class="horizontal list" style="padding: 1em">
         <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
         <a class="papernote sepia clickable disabled">Contact</a>
@@ -32,7 +33,7 @@
   </div>
   
   <div id="mainContent">
-    <div class="contentChild">
+    <div class="contentChild" id="search_panel">
       <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em">
         
         <input oninput="sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
@@ -60,57 +61,48 @@
             <option>Soundtrack</option>
           </select>
         </div>
-        
-
-        
       </div>
 
-    </div>
-
-    <div class="contentChild">
-
-        <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
-          <div class="basicContainer vertical">
-            <p style="font-size: .7em; color: #999">Menu</p>
-            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
-            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
-          </div>
+      <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
+        <div class="basicContainer vertical">
+          <p style="font-size: .7em; color: #999">Menu</p>
+          <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
+          <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
+        </div>
           
-          <div id="track_container" class="basicContainer vertical" style="max-height: 20em; overflow: auto;">
-            <img src="../assets/loading gif.GIF" class="loading_balls">
-          </div>
-
+        <div id="track_container" class="basicContainer vertical" style="max-height: 20em; overflow: auto;">
+          <img src="../assets/loading gif.GIF" class="loading_balls">
         </div>
       </div>
+    </div>
 
-      <div class="contentChild" style="display: none;">
-        <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
-          <img style="transform: translateY(-2.5em); width: 100%;" src="../assets/album_covers/albm_jdst.jpg">
-          <div class="vertical">
-            <h2>Title</h2>
-            <p>from album</p>
-            <p>Author</p>
-          </div>
-
-          <div class="vertical">
-            <input type="button" value="Écouter l'extrait">
-            <input type="button" value="Écouter sur Spotify">
-            <input type="button" value="Écouter sur YouTube">
-            <input type="button" value="Écouter sur SoundCloud">
-          </div>
+    <div class="contentChild" id="track_display" style="display: none;">
+      <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
+        <img name="track_ui_coverart" style="transform: translateY(-2.5em); width: 100%;">
+        <div class="vertical" name="track_ui_meta">
+          <h2 name="track_ui_title">Title</h2>
+          <p  name="track_ui_album">from Album</p>
+          <p  name="track_ui_artists">Author</p>
         </div>
 
         <div class="vertical">
-          <p>Current state : </p>
-          <p>Release date : </p>
-          <p>Genres : </p>
-          
-          <input type="button" value="download">
+          <input name="track_ui_listen_preview" type="button" value="Écouter l'extrait">
+          <input name="track_ui_presave" type="button" value="Pre-save">
+          <input name="track_ui_spotify" type="button" value="Écouter sur Spotify">
+          <input name="track_ui_youtube" type="button" value="Écouter sur YouTube">
+          <input name="track_ui_soundcloud" type="button" value="Écouter sur SoundCloud">
         </div>
       </div>
-  </div>
 
-  
+      <div class="vertical">
+        <p name="track_ui_current_state" style="background-color: #555;">État : </p>
+        <p name="track_ui_release_date">Date de sortie : </p>
+        <p name="track_ui_genres">Genres : </p>
+          
+        <input name="track_ui_download" type="button" value="Télécharger">
+      </div>
+    </div>  
+  </div>
   
 </body>
 </html>
