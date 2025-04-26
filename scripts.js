@@ -7,6 +7,15 @@ var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl6oTE0XK
 var mini_melide;
 const screen_loader = document.getElementById('screen_loader');
 const evermade_tracks = document.getElementById('evermade_tracks');
+const notification = document.getElementById('notification');
+
+function notify(title, description, dirY, dirX, type = "") {
+    notification.querySelector('[name="notif_title"]').textContent = title;
+    notification.querySelector('[name="notif_desc"]').textContent = description;
+    notification.classList = "";
+    notification.offsetWidth;
+    notification.classList.add(dirY, dirX, type);
+}
 
 function handleLoading(callback = false) {
     if (!callback) {
@@ -17,7 +26,7 @@ function handleLoading(callback = false) {
 };
 
 function forceReloadData() {
-    sessionStorage.setItem("allData", undefined);
+    sessionStorage.setItem("tracks", undefined);
 }
 
 // LOADED
@@ -28,12 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
     siteType = document.documentElement.dataset.site;
     mini_melide = document.getElementById('mini_melide');
 
-    const cached = sessionStorage.getItem("allData");
+    const cached_tracks = sessionStorage.getItem("tracks");
 
-    if (!!!cached) {
+    if (!!!cached_tracks) {
         // IF THE DATAS ARE NOT CACHED
-       
-
+        // FROM DIFFERENT SITE TYPE
         if (siteType === "home") {
             // MINI MELIDE
             var toggle_debug = -1;
@@ -44,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     toggle_debug = -1;
                 }
             
-                moveMelide(toggle_debug);
+                moveMelide(toggle_debug, true, true);
             });
             moveMelide(0, false);
 
@@ -55,27 +63,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 mini_melide.src = mini_melide_anim[current_melide].idle;
             }, 2800);
     
-            fetch(fetchable_google_sheet)
+            fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
-                    sessionStorage.setItem("allData", JSON.stringify(data));
+                    console.log(data)
+                    sessionStorage.setItem("tracks", JSON.stringify(data));
                     song_data = data;
                     loadDashboard(data);
                 })
-                .catch(err => console.error(err))
+                .catch(err => {notify("Erreur", "Une erreur s'est produite", "top", "center", "bad"); console.error(err)})
         } else if (siteType === "tracks") {
-            fetch(fetchable_google_sheet)
+            
+            fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
-                    sessionStorage.setItem("allData", JSON.stringify(data));
+                    sessionStorage.setItem("tracks", JSON.stringify(data));
                     song_data = data;
-                    loadTracksPanel();
+                    
+                    const params = new URLSearchParams(window.location.search);
+                    const track = params.get("track");
+                    if (track) {
+                        loadTrack(track);
+                    } else {
+                        loadTracksPanel();
+                    };
                 })
-                .catch(err => console.error(err))
+                .catch(err => {notify("Erreur", "Une erreur s'est produite", "top", "center", "bad"); console.error(err)})
         }
     } else {
         // IF THE DATAS ARE CACHED
-        song_data = JSON.parse(cached);
+        song_data = JSON.parse(cached_tracks);
 
         if (siteType === "home") {
             // MINI MELIDE
@@ -87,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     toggle_debug = -1;
                 }
             
-                moveMelide(toggle_debug);
+                moveMelide(toggle_debug, true, true);
             });
 
             mini_melide.src = mini_melide_anim[current_melide].greet;
@@ -99,7 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
             
             loadDashboard(song_data)
         } else if (siteType === "tracks") {
-            loadTracksPanel();
+            const params = new URLSearchParams(window.location.search);
+            const track = params.get("track");
+            console.log("debug", song_data.tracks_data.filter(v => String(v[0]) === String(track)))
+            if (track) {
+                loadTrack(track);
+            } else {
+                loadTracksPanel();
+            };
         }
     }
 
@@ -254,9 +278,9 @@ function loadTracksPanel(index = 3, filter = "Released", type = "list") {
         // EVENT LISTENER
         track_card_div.addEventListener("click", (event) => {
             if (event.target.tagName !== "INPUT") {
-                console.log(e[0])
                 url_params.set("track", e[0]);  
                 window.history.replaceState({}, "", `${location.pathname}?${url_params}`)
+                loadTrack(e[0]);
             }
         })
     })
@@ -385,8 +409,14 @@ const mini_melide_anim = {
     }
 }
 
-function moveMelide(dir = 0.5, playanim = true) {
+function moveMelide(dir = 0.5, playanim = true, is_playerdriven = false) {
     if (mini_melide_is_moving) return;
+
+    if (is_playerdriven) {
+        // GET MINI MELIDES DATA 
+        notify("Mini-melide", "Mini-melide à marcher " + window.innerWidth + " pixels", "bottom", "right", "game");
+    }
+
     if (playanim) {
         mini_melide_is_moving = true;
         

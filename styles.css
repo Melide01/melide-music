@@ -47,7 +47,7 @@ a {
 header {
   z-index: 99;
   position: fixed; left: 0; top: 0;
-  /* position: relative; */ padding: calc(var(--padding) * 2) 0;
+  padding: calc(var(--padding) * 2) 0;
   display: flex; flex-direction: row;
   height: 1.5em; width: 100%;
   font-weight: bold;
@@ -63,6 +63,80 @@ header .logo {
   width: 100%; height: 150px; overflow: hidden;
   display: flex; flex-direction: row; justify-content: center;
   background-size: 100% auto; background-position: 50% 50%;
+}
+
+#notification {
+  display: none; cursor: default;
+  font-size: .7em; text-shadow: 0 0 1px #000, 0 0 3px #000;
+  position: fixed; background-color: #777; outline: #444 solid 1px;
+  padding: calc(var(--padding) * 1) calc(var(--padding) * 4); border-radius: calc(var(--padding) / 2);
+  z-index: 998;
+}
+#notification:hover {
+  opacity: .5;
+}
+
+#notification.top.center {
+  display: block;
+  animation: notifPopUpTopCenter 5s forwards;
+}
+#notification.bottom.left {
+  display: block;
+  animation: notifPopUpBottomLeft 5s forwards;
+}
+#notification.bottom.right {
+  display: block;
+  animation: notifPopUpBottomRight 5s forwards;
+}
+
+#notification.good {
+  background: linear-gradient(to bottom, #9d5, #2a2);
+}
+#notification.game {
+  background: linear-gradient(to bottom, #0af, #02a);
+}
+#notification.bad {
+  color: #f99;
+  background: linear-gradient(to top, #d22, #722);
+}
+#notification.info {
+  color: #ddd;
+  background: linear-gradient(to bottom, #777, #da8);
+}
+
+@keyframes notifPopUpTopCenter {
+  0%, 100% {
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  20%, 80% {
+    top: var(--padding);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes notifPopUpBottomLeft {
+  0%, 100% {
+    bottom: -100%;
+    left: var(--padding);
+  }
+  20%, 80% {
+    bottom: var(--padding);
+    left: var(--padding);
+  }
+}
+
+@keyframes notifPopUpBottomRight {
+  0%, 100% {
+    bottom: -100%;
+    right: var(--padding);
+  }
+  20%, 80% {
+    bottom: var(--padding);
+    right: var(--padding);
+  }
 }
 
 #mainContent {

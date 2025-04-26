@@ -6,6 +6,7 @@
   <title>Melide : Toutes les tracks</title>
   <link rel="stylesheet" href="../styles.css">
   <script src="../scripts.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
   <div id="screen_loader">
@@ -82,8 +83,34 @@
         </div>
       </div>
 
+      <div class="contentChild" style="display: none;">
+        <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
+          <img style="transform: translateY(-2.5em); width: 100%;" src="../assets/album_covers/albm_jdst.jpg">
+          <div class="vertical">
+            <h2>Title</h2>
+            <p>from album</p>
+            <p>Author</p>
+          </div>
+
+          <div class="vertical">
+            <input type="button" value="Écouter l'extrait">
+            <input type="button" value="Écouter sur Spotify">
+            <input type="button" value="Écouter sur YouTube">
+            <input type="button" value="Écouter sur SoundCloud">
+          </div>
+        </div>
+
+        <div class="vertical">
+          <p>Current state : </p>
+          <p>Release date : </p>
+          <p>Genres : </p>
+          
+          <input type="button" value="download">
+        </div>
+      </div>
   </div>
 
-  <div class="beauty_icons_grid"></div>
+  
+  
 </body>
 </html>
