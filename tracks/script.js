@@ -38,7 +38,7 @@ function loadTrack(index) {
         track_ui_coverart.style.display = "none";
         track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 1/3";
     }
-
+    // https://drive.google.com/uc?export=download&id=[YOUR_FILE_ID]
     // PREVIEW BUTTON
     if (data[14] !== "") {
         track_ui_listen_preview.style.display = "block";
