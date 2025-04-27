@@ -8,11 +8,13 @@
   <script src="scripts.js" defer></script>
 </head>
 <body>
+  <!-- NOTIFICATION BUUBLE -->
   <div id="notification" class="">
     <h2 name="notif_title">Title</h2>
     <p name="notif_desc">Description</p>
   </div>
 
+  <!-- CONTENT -->
   <div id="screen_loader">
     <img src="assets/loading_screen_layer3.webp">
     <img src="assets/loading_screen_layer2.webp">
@@ -41,8 +43,8 @@
   <div id="mainContent">
     <div class="contentChild">
       <div class="papernote autofill" style="padding: .1em">
-        <a class="papernote clickable" href="/tracks/">Toutes les musiques</a>
-        <a class="papernote clickable disabled">Les prod/instrumentales</a>
+        <a class="papernote clickable" href="/tracks/?filter=croissant">Toutes les musiques</a>
+        <a class="papernote clickable" href="/tracks/?filter=croissant&?type=beat%2Finstrumental">Les prod/instrumentales</a>
         <a class="papernote clickable disabled">Tout les samples</a>
         <a class="papernote clickable disabled">Les autres projets...</a>
       </div>

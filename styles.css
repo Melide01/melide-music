@@ -12,14 +12,13 @@
 /* FONTS */
 @font-face {
   font-family: 'FrenchDespair';
-  src: url("FrenchDespair.otf") format("opentype");
+  src: url("assets/FrenchDespair.otf") format("opentype");
 }
 
 /* GLOBALS */
 body, html {
   font-size: 120%;
   padding: 0; margin: 0;
-  
   /* font-family: "Noto Sans", sans-serif; */
   font-optical-sizing: auto;
   font-style: normal;
@@ -90,18 +89,18 @@ header .logo {
 }
 
 #notification.good {
-  background: linear-gradient(to bottom, #9d5, #2a2);
+  background: linear-gradient(to bottom, #9d5, #20ad2555);
 }
 #notification.game {
-  background: linear-gradient(to bottom, #0af, #02a);
+  background: linear-gradient(to bottom, #0af, #0425af55);
 }
 #notification.bad {
   color: #f99;
-  background: linear-gradient(to top, #d22, #722);
+  background: linear-gradient(to top, #d22, #7a202055);
 }
 #notification.info {
   color: #ddd;
-  background: linear-gradient(to bottom, #777, #da8);
+  background: linear-gradient(to bottom, #777, #dfa78555);
 }
 
 @keyframes notifPopUpTopCenter {
@@ -387,7 +386,7 @@ header .logo {
   align-items: flex-start; gap: calc(var(--padding) / 2);
 }
 .autofill * {
-  flex-grow: 1;
+  flex-grow: 0;
   text-wrap: nowrap; text-overflow: ellipsis; overflow: hidden; display: inline-block;
 }
 
@@ -445,4 +444,21 @@ header .logo {
   5%, 20%, 100% {
     text-shadow: 0 0 5px transparent;
   }
+}
+
+
+.modal_backdrop {
+  z-index: 1000; opacity: 0;
+  display: none; flex-direction: column;
+  justify-content: center; align-items: center;
+  position: fixed; top: 0; left: 0; background-color: #000000aa;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+.modal_backdrop>div {
+  width: 70%; height: 25%; display: flex; align-items: center; justify-content: center;
+}
+.modal_backdrop.reveal {
+  display: flex; opacity: 1;
+  pointer-events: all;
 }

@@ -5,10 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Melide : Toutes les tracks</title>
   <link rel="stylesheet" href="../styles.css">
+  
+  <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+
   <script src="../scripts.js" defer></script>
   <script src="script.js" defer></script>
 </head>
 <body>
+  <!-- MODAL -->
+   <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+    <div id="preview_anything">
+      <iframe></iframe>
+    </div>
+   </div>
+
+  <!-- NOTIFICATION BUUBLE -->
+  <div id="notification" class="">
+    <h2 name="notif_title">Title</h2>
+    <p name="notif_desc">Description</p>
+  </div>
+
+  <!-- CONTENT -->
   <div id="screen_loader">
     <img src="../assets/loading_screen_layer3.webp">
     <img src="../assets/loading_screen_layer2.webp">
@@ -20,7 +37,9 @@
         <img src="../assets/mld_logo_all_white.png" class="logo">
         <label>Melide</label>
       </div>
+
       <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
+
       <div class="horizontal list" style="padding: 1em">
         <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
         <a class="papernote sepia clickable disabled">Contact</a>
@@ -36,26 +55,26 @@
     <div class="contentChild" id="search_panel">
       <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em">
         
-        <input oninput="sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
+        <input oninput="updateURL('search', this.value); sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
         
-        <select onchange="sortPannel('date', 4, this.value)" class="papernote">
+        <select id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 4, this.value)" class="papernote">
           <option>Trier...</option>
           <option>Croissant</option>
           <option>Décroissant</option>
         </select>
 
         <div class="autoFill">
-          <select onchange="loadTracksPanel(3, this.value)" class="capsule">
+          <select id="state_filter" onchange="updateURL('state', this.value); loadTracksPanel(3, this.value)" class="capsule">
             <option>Trier...</option>
             <option>Released</option>
             <option>Unreleased</option>
             <option>Work</option>
           </select>
   
-          <select onchange="loadTracksPanel(6, this.value)" class="capsule">
+          <select id="type_filter" onchange="updateURL('type', this.value); loadTracksPanel(6, this.value)" class="capsule">
             <option>Trier...</option>
             <option>Song</option>
-            <option>Beat/Instrumental</option>
+            <option>Beat/instrumental</option>
             <option>Remix</option>
             <option>Cover</option>
             <option>Soundtrack</option>
@@ -70,7 +89,7 @@
           <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
         </div>
           
-        <div id="track_container" class="basicContainer vertical" style="max-height: 20em; overflow: auto;">
+        <div id="track_container" class="basicContainer vertical" style="max-height: 25em; overflow: auto;">
           <img src="../assets/loading gif.GIF" class="loading_balls">
         </div>
       </div>
@@ -97,7 +116,7 @@
       <div class="vertical">
         <p name="track_ui_current_state" style="background-color: #555;">État : </p>
         <p name="track_ui_release_date">Date de sortie : </p>
-        <p name="track_ui_genres">Genres : </p>
+        <p name="track_ui_genres" class="autofill"></p>
           
         <input name="track_ui_download" type="button" value="Télécharger">
       </div>

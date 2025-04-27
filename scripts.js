@@ -1,6 +1,7 @@
 // GLOBALS
 var siteType;
 var song_data;
+var cached_tracks;
 var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec";
 
 // HTML ELEMENTS
@@ -15,6 +16,19 @@ function notify(title, description, dirY, dirX, type = "") {
     notification.classList = "";
     notification.offsetWidth;
     notification.classList.add(dirY, dirX, type);
+}
+
+var opened_modal;
+function revealModal(id = "", callback = false) {
+    const modal = document.getElementById(id);
+    
+    if (id !== "" && !opened_modal?.parentElement.classList.contains("reveal") && !callback) {
+        opened_modal = modal;
+        opened_modal.parentElement.classList.add('reveal');
+    } else {
+        opened_modal.parentElement.classList.remove('reveal');
+        opened_modal = undefined;
+    }
 }
 
 function handleLoading(callback = false) {
@@ -34,260 +48,105 @@ var url_params;
 document.addEventListener("DOMContentLoaded", () => {
     url_params = new URLSearchParams(window.location.search);
 
+    // VARS
     siteType = document.documentElement.dataset.site;
     mini_melide = document.getElementById('mini_melide');
+    cached_tracks = sessionStorage.getItem("tracks");
 
-    const cached_tracks = sessionStorage.getItem("tracks");
+    const setupMiniMelide = () => {
+        let toggle_debug = -1;
+        mini_melide.addEventListener('click', () => {
+            toggle_debug = -toggle_debug;
+            moveMelide(toggle_debug, true, true);
+        });
+        
+        // RANDOM MELIDE
+        current_melide = Object.keys(mini_melide_anim)[Math.floor(Math.random() * Object.keys(mini_melide_anim).length)];
 
-    if (!!!cached_tracks) {
-        // IF THE DATAS ARE NOT CACHED
-        // FROM DIFFERENT SITE TYPE
-        if (siteType === "home") {
-            // MINI MELIDE
-            var toggle_debug = -1;
-            mini_melide.addEventListener('click', () => {
-                if (toggle_debug === -1) {
-                    toggle_debug = 1;
-                } else if (toggle_debug === 1) {
-                    toggle_debug = -1;
-                }
-            
-                moveMelide(toggle_debug, true, true);
-            });
-            moveMelide(0, false);
+        mini_melide.src = mini_melide_anim[current_melide].greet;
+        moveMelide(0, false);
 
-            current_melide = Object.keys(mini_melide_anim)[Math.round(Math.random() * (Object.keys(mini_melide_anim).length - 1))];
-            console.log(current_melide)
-            mini_melide.src = mini_melide_anim[current_melide].greet;
-            setTimeout(() => {
-                mini_melide.src = mini_melide_anim[current_melide].idle;
-            }, 2800);
-    
+        setTimeout(() => {
+            mini_melide.src = mini_melide_anim[current_melide].idle;
+        }, 2800)
+    };
+
+    const handleHome = (data) => {
+        if (!cached_tracks) {
+            setupMiniMelide();
             fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
-                    console.log(data)
                     sessionStorage.setItem("tracks", JSON.stringify(data));
                     song_data = data;
                     loadDashboard(data);
                 })
-                .catch(err => {notify("Erreur", "Une erreur s'est produite", "top", "center", "bad"); console.error(err)})
-        } else if (siteType === "tracks") {
-            
+                .catch(err => {
+                    notify("Erreur", "Une erreur s'est produite", "top", "center", "bad");
+                    console.error(err);
+                });
+        } else {
+            setupMiniMelide();
+            loadDashboard(song_data);
+        }
+    };
+
+    const handleTracks = (data) => {
+        const loadTracks = () => {
+            const track = url_params.get("track");
+            const filter = !!url_params.get("filter") ? url_params.get("filter") : "Trier..."; // Trier..., Croissant, Decroissant
+            const state = !!url_params.get("state") ? url_params.get("state") : "Trier..."; // Trier..., Released, Unreleased, Work, Removed
+            const type = !!url_params.get("type") ? url_params.get("type") : "Trier..."; // Trier..., Song, Beat/Instrumental, Remix, Cover, Soundtrack
+            const search = !!url_params.get("search") ? url_params.get("search") : ""; // Any search
+
+            if (track) {
+                loadTrack(track)
+            } else {
+                const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+                // search_argument[4] = capitalize(filter);
+                // search_argument[3] = capitalize(state);
+                // search_argument[6] = capitalize(type);
+
+                if (search !== "") {
+                    loadTracksPanel();
+                    sortPannel("text", 1, search.replace("_", " "));
+                } else {
+                    loadTracksPanel(3, capitalize(state));
+                    loadTracksPanel(6, capitalize(type));
+                    sortPannel("date", 4, capitalize(filter));
+                }
+            }
+        }
+
+        if (!cached_tracks) {
             fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
                     sessionStorage.setItem("tracks", JSON.stringify(data));
                     song_data = data;
-                    
-                    const params = new URLSearchParams(window.location.search);
-                    const track = params.get("track");
-                    if (track) {
-                        loadTrack(track);
-                    } else {
-                        loadTracksPanel();
-                    };
+                    loadTracks();
                 })
-                .catch(err => {notify("Erreur", "Une erreur s'est produite", "top", "center", "bad"); console.error(err)})
+                .catch(err => {
+                    notify("Erreur", "Une erreur s'est produite", "top", "center", "bad");
+                    console.error(err);
+                });
+        } else {
+            loadTracks();
         }
-    } else {
-        // IF THE DATAS ARE CACHED
-        song_data = JSON.parse(cached_tracks);
+    };
 
-        if (siteType === "home") {
-            // MINI MELIDE
-            var toggle_debug = -1;
-            mini_melide.addEventListener('click', () => {
-                if (toggle_debug === -1) {
-                    toggle_debug = 1;
-                } else if (toggle_debug === 1) {
-                    toggle_debug = -1;
-                }
-            
-                moveMelide(toggle_debug, true, true);
-            });
+    song_data = cached_tracks ? JSON.parse(cached_tracks) : null;
 
-            mini_melide.src = mini_melide_anim[current_melide].greet;
-            moveMelide(0, false);
-            setTimeout(() => {
-                // moveMelide(0);
-                mini_melide.src = mini_melide_anim[current_melide].idle;
-            }, 2800);
-            
-            loadDashboard(song_data)
-        } else if (siteType === "tracks") {
-            const params = new URLSearchParams(window.location.search);
-            const track = params.get("track");
-            console.log("debug", song_data.tracks_data.filter(v => String(v[0]) === String(track)))
-            if (track) {
-                loadTrack(track);
-            } else {
-                loadTracksPanel();
-            };
-        }
+    // REDIRECTS
+    if (siteType === "home") {
+        handleHome();
+    } else if (siteType === "tracks") {
+        handleTracks();
     }
 
-    
 });
 
-function sortPannel(type = "date", index = 4, filter = "") {
-    const track_container = document.getElementById('track_container');
-    const range = song_data.tracks_data.slice(1);
-
-    // RESET
-    if (filter === "Trier...") {
-        Object.keys(track_element).forEach((i) => {
-            track_container.append(track_element[i]);
-        });
-        return;
-    }
-
-    const indexedRange = range.map((val, i) => ({ val, originalIndex: i }));
-
-    if (type === "text") {
-        const search = filter.toLowerCase();
-
-        const ranked = indexedRange
-            .map(({ val, originalIndex }) => {
-                // You can change which fields to search here
-                const matchCount = val.reduce((count, field) => {
-                    if (typeof field === "string" && field.toLowerCase().includes(search) || filter === "") {
-                        return count + 1;
-                    }
-                    return count;
-                }, 0);
-
-                return { val, originalIndex, matchCount };
-            })
-            .filter(({ matchCount }) => matchCount > 0)
-            .sort((a, b) => b.matchCount - a.matchCount);
-        
-        Object.keys(track_element).forEach((i) => {
-            track_element[i].style.display = "none";
-        });
-
-        ranked.forEach(({ originalIndex }) => {
-            const el = track_element[originalIndex];
-            if (el) {
-                el.style.display = "grid";
-                track_container.prepend(el);
-            }
-        });
-
-        if (filter === "") {
-            sortPannel("date", 4, "Trier...");
-        }
-        //loadTracksPanel(index, search, "text");
-    }
-
-    if (type === "date") {
-        const direction = filter === "Décroissant" ? -1 : 1;
-        indexedRange.sort((a, b) => {
-            const dateA = new Date(a.val[index]); 
-            const dateB = new Date(b.val[index]);
-            return (dateA - dateB) * direction;
-        });
-    }
-
-    // RENDERS SORTED ELEMENTS
-    indexedRange.forEach(({ originalIndex }) => {
-        const el = track_element[originalIndex];
-        if (el) track_container.prepend(el);
-    });
-}
-
-// 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
-var track_element = {};
-var search_argument = {};
-function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
-    search_argument[index] = filter;
-
-    const track_container = document.getElementById('track_container');
-    const range = song_data.tracks_data.slice(1);
-
-    const search_results = range.reduce((acc, val, idx) => {
-        const is_match = Object.entries(search_argument).every(([key, expected]) => {
-            return expected === "Trier..." || val[key] === expected;
-        })
-
-        if (is_match) {
-            acc[idx] = val;
-        }
-
-        return acc;
-    }, {});
-    
-    track_container.querySelector('.loading_balls').style.display = "none"
-
-    range.forEach((e, i) => {
-        if (!!track_element[i]) {
-            if (!!search_results[i]) {
-                track_element[i].style.display = "grid";
-            } else {
-                track_element[i].style.display = "none";
-            }
-            return
-        };
-        const track_card_div = document.createElement('div'); track_card_div.classList.add('track_card', 'mini', 'clickable'); track_card_div.style.opacity = "1";
-        track_element[i] = track_card_div;
-
-        var conditional_style_coverart = "";
-        if (e[10] !== "") {
-            const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
-            img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e[10]}`;
-            track_card_div.appendChild(img_track_cover);
-        } else {
-            conditional_style_coverart = "grid-column: 1/3;";
-        }
-
-        const tracks_meta = document.createElement('div'); tracks_meta.classList.add('vertical');
-        tracks_meta.style = "gap: 0;" + conditional_style_coverart;
-        tracks_meta.innerHTML = `<b>${e[1]}</b><i>${e[7]}</i>`;
-
-        track_card_div.appendChild(tracks_meta);
-
-
-        const action_div = document.createElement('div'); action_div.classList.add('vertical');
-
-        const is_onplatform = e[15] !== "" || e[16] !== "" || e[17] !== "";
-        if (is_onplatform) {
-            // PEUT ETRE ECOUTER SUR UNE PLATEFORME
-            const platform_button = document.createElement('input'); platform_button.type = "button"; platform_button.value = "Écouter";
-            action_div.appendChild(platform_button);
-            platform_button.addEventListener('click', () => {
-                window.open(e[16])
-            })
-        }
-
-        if (e[13] === "true") {
-            const download_button = document.createElement('input'); download_button.type = "button"; download_button.value = "Download";
-            action_div.appendChild(download_button);
-        }
-
-        track_card_div.appendChild(action_div);
-        
-        if (e[9] !== "") {
-            const mood_div = document.createElement('div'); mood_div.classList.add('horizontal'); mood_div.style = "grid-column: 1/4; gap: .5em; justify-content: end;"
-            const mood_list = e[9].split(', ').map(v => `<span class="capsule minim">${v}</span>`).join("");
-            mood_div.innerHTML = mood_list;
-            track_card_div.appendChild(mood_div);
-        }
-
-        track_container.appendChild(track_card_div);
-
-        // EVENT LISTENER
-        track_card_div.addEventListener("click", (event) => {
-            if (event.target.tagName !== "INPUT") {
-                url_params.set("track", e[0]);  
-                window.history.replaceState({}, "", `${location.pathname}?${url_params}`)
-                loadTrack(e[0]);
-            }
-        })
-    })
-}
-
 var evermade_songs = {};
-// 0: (15) Track ID   	Track Name  	Album	 Track State	 Track Release Date 	Track Creation Date	   Track Type	Track Artists	Genres	Cover Art	Explicit	Is Up	Audio File	Spotify Link	YouTube Link	SoundCloud Link	Likes	UPC	ISRC
 const random_colors = ['color1', 'color2', 'color3']
 
 function loadDashboard(data) {
@@ -407,7 +266,7 @@ const mini_melide_anim = {
         "idle": "assets/mini_melide/minecraft/idle0000.png",
         "greet": "assets/mini_melide/minecraft/mini_melide_minecraft_greet.gif"
     }
-}
+};
 
 function moveMelide(dir = 0.5, playanim = true, is_playerdriven = false) {
     if (mini_melide_is_moving) return;
