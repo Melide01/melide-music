@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr" data-site="home">
 <head>
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <meta property="og:title" content="Melide" />
+  <meta property="og:description" content="Le meilleur site web artiste." />
+  <meta property="og:image" content="assets/web_thumbnail.png" />
+  <meta property="og:url" content="https://www.melide.music/" />
+  <meta property="og:type" content="website" />
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Melide</title>
@@ -60,10 +68,10 @@
   <div id="mainContent">
     <div class="contentChild">
       <div class="papernote autofill" style="padding: .1em">
-        <a class="papernote clickable" href="/tracks/?filter=croissant">Toutes les musiques</a>
-        <a class="papernote clickable" href="/tracks/?filter=croissant&type=beat%2Finstrumental">Les prod/instrumentales</a>
-        <a class="papernote clickable disabled">Tout les samples</a>
-        <a class="papernote clickable disabled">Les autres projets...</a>
+        <a class="papernote clickable" href="/tracks/?filter=croissant">Musiques</a>
+        <a class="papernote clickable" href="/tracks/?filter=croissant&type=beat%2Finstrumental">Prod</a>
+        <a class="papernote clickable disabled">Samples</a>
+        <a class="papernote clickable disabled">Autres...</a>
       </div>
     </div>
 
@@ -74,21 +82,20 @@
         <div class="papernote">
           <b name="latest_song_announce"></b>
           <img class="loading_balls" src="assets/loading gif.GIF">
-          <div name="latest_song_card" class="track_card">
-            <img name="latest_song_cover" onload="this.style.opacity = '1'; this.parentElement.style.opacity = '1'; this.parentElement.parentElement.querySelector('.loading_balls').style.display = 'none';">
+          <div name="latest_song_card" class="track_card" style="grid-template-columns: 150px auto;">
+            <img style="max-height: 150px" name="latest_song_cover" onload="this.style.opacity = '1'; this.parentElement.style.opacity = '1'; this.parentElement.parentElement.querySelector('.loading_balls').style.display = 'none';">
             
             <div class="vertical" style="gap: 0; background-color: #ffffffcc;">
               <p name="latest_song_title"></p>
               <p name="latest_song_artist" style="font-size: 70%; opacity: .7;"></p>
               <div class="vertical" style="position: relative; margin-top: .5em;">
-                <label name="latest_song_timer"></label>
-                <div id="latest_song_progressbar"></div>
-                <div style="width: 100%; display: none; justify-content: center;">
-                  <div class="vertical" style="width: 80%; gap: .5em;">
-                    <a class="capsule clickable">Écouter</a>
-                    <a class="capsule clickable">Plus</a>
-                  </div>
+                
+                <div style="width: 100%; display: flex; justify-content: center;">
+                  <div id="latest_action" class="vertical" style="max-width: 350px; margin-top: .5em; width: 80%; gap: .25em;"></div>
                 </div>
+                <label style="text-shadow: none; font-size: .9em; margin-top: 1em;" name="latest_song_timer"></label>
+                <div id="latest_song_progressbar"></div>
+                
                 
                 
               </div>

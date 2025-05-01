@@ -255,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 var evermade_songs = {};
-const random_colors = ['color1', 'color2', 'color3']
+const random_colors = ['color1', 'color3', 'color3', 'color2']
 
 function loadDashboard(data) {
     // SETS DATA
@@ -274,6 +274,9 @@ function loadDashboard(data) {
         },
         "En travaux": {
             "value": Math.round(data.tracks_data.filter(a => a[3] === "Work").length / data.tracks_data.length * 100) + "%",
+        },
+        "Retirés": {
+            "value": Math.round(data.tracks_data.filter(a => a[3] === "Removed").length / data.tracks_data.length * 100) + "%",
         }
     }
     getLatestRelease(data);
@@ -334,6 +337,7 @@ function getLatestRelease(data) {
     release_date = new Date(latest_track[0][4]);
     creation_date = new Date(latest_track[0][5]);
 
+    // CHECK IF ITS RELEASED OR NOT YET
     if (release_date.getTime() < today_date.getTime()) {
         document.querySelector('[name="latest_song_announce"]').textContent = "Dernière sortie :";
     } else {
@@ -344,6 +348,16 @@ function getLatestRelease(data) {
     if (release_date - today_date > 0) {
         updateRemainingTime(release_date);
     }
+
+    const latest_action = document.getElementById('latest_action');
+    var latest_buttons = `
+        ${latest_track[0][15] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][15] + '">Pre-save</a>' : ""}
+        ${latest_track[0][16] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][16] + '">Écouter sur Spotify</a>' : ""}
+        ${latest_track[0][17] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][17] + '">Écouter sur YouTube</a>' : ""}
+        ${latest_track[0][18] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][18] + '">Écouter sur SoundCloud</a>' : ""}
+        ${latest_track[0][19] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][19] + '">Écouter le lien</a>' : ""}
+        `;
+    latest_action.innerHTML = latest_buttons;
 
     document.querySelector('[name="latest_song_title"]').textContent = latest_track[0][1];
     document.querySelector('[name="latest_song_artist"]').textContent = latest_track[0][7];

@@ -3,9 +3,16 @@
   --max-width: 900px;
   --padding: .5em;
 
-  --accent-color-dark: #00685f;
-  --accent-color-normal: #00bb8c;
-  --accent-color-light: #acf5ff;
+  --pure-white: #fff;
+  --pure-black: #222;
+
+  --accent-color-dark: #005a4e;
+  --accent-color-normal: #38e4cd;
+  --accent-color-light: #d2fcff;
+
+  --counter-color-dark: #a88151;
+  --counter-color-normal: #FFD299;
+  --counter-color-light: #f3e6cd;
 
   --light-color: #fcfcfc;
   --dark-color: #222;
@@ -26,7 +33,8 @@ body, html {
   /* font-family: "Noto Sans", sans-serif; */
   font-optical-sizing: auto;
   font-style: normal;
-  background: #222; color: #fff;
+  background: var(--pure-black); color: var(--pure-white);
+  transition: background-color 1000ms;
 }
 
 * {
@@ -177,7 +185,8 @@ header .logo {
 }
 
 #latest_song_progressbar {
-  content: ""; height: 1em; background-color: #38e4cd;
+  content: ""; height: 1em; /* background-color: #38e4cd; */
+  background-color: var(--accent-color-normal);
   text-align: end;
 }
 
@@ -206,7 +215,15 @@ header .logo {
   outline: solid .2em #aaa;
 }
 .capsule.minim {
+  transition: background-color 50ms ease-out;
   background: #eee; border: none; outline: none;
+}
+.capsule.minim.clickable:hover {
+  background: #ddd;
+  transform: scale(101%);
+}
+.capsule.minim.clickable:active {
+  transform: scale(95%);
 }
 
 .papernote.clickable {

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr" data-site="blogs">
 <head>
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Melide : Les blogs</title>
@@ -90,31 +91,32 @@
         </div>
       </div>
 
-      <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
-        <div class="basicContainer vertical">
+      <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto; background: #ccc;">
+        <div class="basicContainer vertical" style="background: #ccc; color: #000;">
           <p style="font-size: .7em; color: #999">Menu</p>
           <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
           <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
         </div>
           
-        <div id="blog_container" class="basicContainer vertical" style="max-height: 25em; overflow: auto;">
+        <div id="blog_container" class="basicContainer vertical" style="background: #ddd; max-height: 25em; overflow: auto;">
           <img src="../assets/loading gif.GIF" class="loading_balls">
         </div>
       </div>
     </div>
 
     
-    <div class="contentChild" id="blog_display" style="display: none;">
-      <div class="track_card" style="font-size: 1em; opacity: 1; display: grid; grid-template-columns: 4em auto 7em; outline: 1px #555 solid; background: #555; padding: .25em;">
+    <div class="contentChild" id="blog_display">
+      <div class="track_card" style="font-size: 1em; opacity: 1; display: grid; grid-template-columns: 4.2em auto 7em; outline: 1px #555 solid; background: #555; padding: .25em;">
         <a class="papernote clickable sepia" style="font-weight: bold; font-size: 100%;" onclick="goBack()">Retour</a>
         <span></span>
         <a style="display: none;" class="papernote clickable">Prochain</a>
       </div>
 
-      <div class="track_card" style="opacity: 1; padding: 0; grid-template-columns: auto 7em; margin: .5em 0 1em 0; outline: none; border-right: solid 1px #aaa; border-top: solid 1px #aaa;">
+      <div class="track_card" style="background: #f7f7f7;; opacity: 1; padding: 0; align-items: center; grid-template-columns: auto 10em; margin: .5em 0 1em 0; outline: none; border-right: solid 1px #aaa; border-top: solid 1px #aaa;">
         <h1 name="blog_title"></h1>
-        <p name="blog_author"></p>
-        <i name="blog_date"></i>
+        <i style="opacity: .5; text-align: end; padding-right: .25em;" name="blog_date"></i>
+        <p></p>
+        <p style="text-align: end; padding-right: .25em;" name="blog_author"></p>
       </div>
       <div class="break"></div>
       <div name="blog_container"></div>  

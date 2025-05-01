@@ -9,14 +9,26 @@ const blog_display = document.getElementById('blog_display');
 
 function parseMD(data) {
     const lines = data.split('\n');
-    var output = data;
+    var output = "";
+    var break_conditionned = false;
     for (let i=0; i<lines.length; i++) {
-        output = output.replace(/\#\#\s(.*)/gm, '<h2>$1</h2>')
+        if (lines[i].match(/\-\s(.*)/gm)) {
+            break_conditionned = true;
+        } else {
+            break_conditionned = false;
+        }
+        output += lines[i]
+            .replace(/\#\#\s(.*)/gm, '<h2>$1</h2>')
+            .replace(/\((.*?)\)\=\=(.*?)\=\=/gm, '<div style="display: inline;background: $1">$2</div>')
+            .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
             .replace(/\!\[image\]\((.*)\)\{(.*)\}/gm, '<img src="https://drive.google.com/thumbnail?sz=w1920&id=$1" $2>')
-            .replace("\n", "<br>")
-
+            .replace(/\[(.*)\]\((.*?)\)/gm, '<a target="_blank" href="$1">$2</a>')
+            .replace(/\-\-\-/gm, '<br><div class="break"></div>')
+            .replace(/\-\s(.*)/gm, "<li>$1</li>");
+        
+        if (!break_conditionned) output += "<br>";
+        console.log(output)   
     }
-
     blog_display.querySelector('[name="blog_container"]').innerHTML = output;
 }
 
@@ -137,11 +149,12 @@ function loadBlogsPanel(index = 0, filter = "Trier...", type = "list") {
             }
             return
         };
-        const blog_card_div = document.createElement('div'); blog_card_div.classList.add('track_card', 'mini', 'clickable'); blog_card_div.style.opacity = "1";
+        const blog_card_div = document.createElement('div'); blog_card_div.classList.add('track_card', 'mini', 'clickable');
         blog_card_div.style = `position: relative; opacity: 1; ${String(e[2]) === "true" ? "background: #ffffff55;" : ''}`;
 
         // FIRST META
-        const date_p = document.createElement('p'); date_p.textContent = e[8]; date_p.style = "grid-column: 1/4; text-align: right; font-size: .7em; opacity: .5"; blog_card_div.appendChild(date_p);
+        const date_blog = new Date(e[8]);
+        const date_p = document.createElement('p'); date_p.textContent = date_blog.toLocaleDateString() + " " + date_blog.toLocaleTimeString(); date_p.style = "grid-column: 1/4; text-align: right; font-size: .7em; opacity: .5"; blog_card_div.appendChild(date_p);
 
         if (String(e[2]) === "true") {
             console.log(e[2])
@@ -164,7 +177,7 @@ function loadBlogsPanel(index = 0, filter = "Trier...", type = "list") {
 
         const blogs_meta = document.createElement('div'); blogs_meta.classList.add('vertical');
         blogs_meta.style = "gap: 0;" + conditional_style_thumbnail;
-        blogs_meta.innerHTML = `<b>${e[3]}</b><i>${e[4]}</i>`;
+        blogs_meta.innerHTML = `<h2>${e[3]}</h2><i>${e[4]}</i>`;
         blog_card_div.appendChild(blogs_meta);
 
         if (e[6] !== "") {
@@ -201,7 +214,8 @@ function loadBlog(index) {
     const blog_author = blog_display.querySelector('[name="blog_author"]');
 
     blog_title.textContent = data[3];
-    blog_date.textContent = data[8];
+    const post_date = new Date(data[8])
+    blog_date.textContent = post_date.toLocaleDateString() + " " + post_date.toLocaleTimeString();
     blog_author.textContent = data[1];
 
     search_panel.style.display = "none";

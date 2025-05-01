@@ -1,18 +1,43 @@
-#blog_display {
-    font-size: 75%;
+body, html {
+    background: #ddd;
 }
 
-#blog_display *:not(button, input, a) {
+.basicContainer {
+    background-color: #f00;
+}
+
+.track_card {
+    text-shadow: none;
+    background: #fff; color: #000;
+}
+
+#blog_display {
+    font-size: 75%; display: none;
+    background-color: var(--pure-white);
+    color: var(--pure-black); 
+}
+
+#blog_display * {
     font-family: sans-serif;
-    padding: 0 1em;
+    padding: 0;
 }
 
 #blog_display h1 {
-    background: var(--accent-color-dark);
-    color: var(--accent-color-light);
+    background: #eee;
+    color: var(--accent-color-dark);
     padding-left: .18em;
 }
 
 #blog_display h2 {
-    color: var(--accent-color-light);
+    color: var(--pure-white);
+    background-color: var(--counter-color-light); padding: 0 .25em; color: var(--counter-color-dark);
+    font-weight: 800;
+}
+
+#blog_display a, #blog_display b {
+    font-weight: 600;
+}
+
+#blog_display a {
+    font-size: 100%;
 }
