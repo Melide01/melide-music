@@ -1,31 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr" data-site="blogs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- <script defer src="script.js"></script> -->
-</head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melide : Les blogs</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+  <script src="scripts.js" defer></script>
 
+  <style>
+    body, html {
+      background: #ccc; color: #f00;
+    }
+  </style>
+</head>
 <body>
-    <div id="boot_splash">
-        <img preload class="logo" src="melidelogo.png">
-        <i>Erreur 404</i>
-        <p>Cette page n'existe pas.</p>
-        <a href="index.html">Retourner à la page d'acceuil?</a>
-        <div class="embbeded_container"></div>
+  <!-- MODAL -->
+   <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+    <div id="preview_anything">
+      <iframe></iframe>
+    </div>
+   </div>
+
+  <!-- NOTIFICATION BUUBLE -->
+  <div id="notification" class="">
+    <h2 name="notif_title">Title</h2>
+    <p name="notif_desc">Description</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="screen_loader">
+    <img src="assets/loading_screen_layer3.webp">
+    <img src="assets/loading_screen_layer2.webp">
+    <img src="assets/loading_screen_layer1.webp">
+  </div>
+  <header>
+    <div class="contentChild horizontal" style="justify-content: space-between;">
+      <div class="horizontal" id="logo_icon">
+        <img src="assets/mld_logo_all_white.png" class="logo">
+        <label>Melide</label>
+      </div>
+
+      <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
+
+      <div class="horizontal list" style="padding: 1em">
+        <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
+        <a class="papernote sepia clickable disabled">Contact</a>
+        <a class="papernote sepia clickable disabled">Merch</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- SEARCH PANNEL -->
+  <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_artistic_underwater.webp')">
+  </div>
+  
+  <!-- MAIN CONTENT -->
+  <div id="mainContent">
+    <div class="contentChild" id="search_panel">
+        <h1>Erreur 404</h1>
+        <p>Page introuvable.</p><p style="font-size: .5em; color: #ccc">( ou peut être je suis juste nul en programmation dsl ).</p>
+        <br><br>
+        <div class="vertical" style="align-items: center;">
+          <img style="max-width: 400px;" src="assets/melides_404.webp">
+        </div>
+        
     </div>
 
-    <script>
-        var path = window.location.pathname;
-        if (path.startsWith("/lyrics/")) {
-            window.location.replace("/lyrics/index.html" + window.location.pathname.replace('/lyrics', ''));
-        } else if (path.startsWith("/track_display/")) {
-            window.location.replace("/track_display/index.html" + window.location.pathname.replace('/track_display', ''));
-        }
-    </script>
+    <div class="contentChild" id="blog_display" style="display: none;"></div>  
+  </div>
+  
 </body>
-
 </html>

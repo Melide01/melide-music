@@ -1,7 +1,11 @@
 /* UTILS */
 :root {
-  --max-width: 600px;
+  --max-width: 900px;
   --padding: .5em;
+
+  --accent-color-dark: #00685f;
+  --accent-color-normal: #00bb8c;
+  --accent-color-light: #acf5ff;
 
   --light-color: #fcfcfc;
   --dark-color: #222;
@@ -53,15 +57,43 @@ header {
   align-items: center; justify-content: center;
   background-color: #00684E55;
   color: #fff;
+  transition: opacity 500ms;
+}
+header.open {
+  animation: fadeIn .5s forwards;
+}
+header.close {
+  animation: fadeOut .5s forwards;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 header .logo {
   height: 1em; width: auto; 
 }
 
-.header_img {
+#header_banner {
+  transition: height 500ms;
   width: 100%; height: 150px; overflow: hidden;
   display: flex; flex-direction: row; justify-content: center;
   background-size: 100% auto; background-position: 50% 50%;
+}
+#header_banner.minim {
+  height: 100px;
+  transition: height 1000ms;
 }
 
 #notification {
@@ -141,7 +173,7 @@ header .logo {
 #mainContent {
   width: 100%;
   display: flex; flex-direction: column;
-  align-items: center;
+  align-items: center; /* background: #ffcc0055; */
 }
 
 #latest_song_progressbar {
@@ -151,7 +183,7 @@ header .logo {
 
 .contentChild {
   width: 100%; padding: var(--padding);
-  max-width: var(--max-width); /* background-color: #ff000055; */
+  max-width: var(--max-width); 
 }
 
 .clickable {
@@ -237,14 +269,20 @@ header .logo {
   height: 2em;
   position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
 }
-#screen_loader {
+
+#screen_loader, .fake_screen_loader {
+  display: none;
   pointer-events: none;
   position: fixed; top: 0; left: 0;
   width: 100%; height: 100%; z-index: 999;
 }
+.fake_screen_loader { z-index: -1; }
 #screen_loader.loading {
   display: block;
   pointer-events: all;
+}
+#screen_loader.loaded, .fake_screen_loader.loaded {
+  display: block;
 }
 #screen_loader.loading img:nth-child(1) {
   animation: animateBGLoading3 1s forwards;
@@ -256,16 +294,16 @@ header .logo {
   animation: animateBGLoading1 1s forwards;
 }
 
-#screen_loader img:nth-child(1) {
+#screen_loader img:nth-child(1), #screen_loader.loaded img:nth-child(1) {
   animation: animateBGDeloading3 1s forwards;
 }
-#screen_loader img:nth-child(2) {
+#screen_loader img:nth-child(2), #screen_loader.loaded img:nth-child(2) {
   animation: animateBGDeloading2 1s forwards;
 }
-#screen_loader img:nth-child(3) {
+#screen_loader img:nth-child(3), #screen_loader.loaded img:nth-child(3) {
   animation: animateBGDeloading1 1s forwards;
 }
-#screen_loader img {
+#screen_loader img, .fake_screen_loader img {
   width: 100%; height: 100%;
   object-fit: cover; position: absolute; top: 0; left: 0;
   display: block;
@@ -377,6 +415,9 @@ header .logo {
 }
 
 /* UTILS CUSTOM CLASSES */
+.break {
+  width: 100%; height: 2px; background-color: #555; margin: calc(var(--padding) * 2) 0;
+}
 .disabled {
   opacity: .5;
   pointer-events: none;
@@ -456,7 +497,7 @@ header .logo {
   pointer-events: none;
 }
 .modal_backdrop>div {
-  width: 70%; height: 25%; display: flex; align-items: center; justify-content: center;
+  padding: calc(var(--padding) * 4); display: flex; align-items: center; justify-content: center;
 }
 .modal_backdrop.reveal {
   display: flex; opacity: 1;

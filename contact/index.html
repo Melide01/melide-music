@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr" data-site="contact">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melide : Toutes les tracks</title>
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="style.css">
+  
+  <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+
+  <script src="../scripts.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- MODAL -->
+   <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+    <div id="preview_anything">
+      <iframe></iframe>
+    </div>
+   </div>
+
+  <!-- NOTIFICATION BUUBLE -->
+  <div id="notification" class="">
+    <h2 name="notif_title">Title</h2>
+    <p name="notif_desc">Description</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="fake_screen_loader loaded">
+    <img style="transform: scale(100%);" src="../assets/loading_screen_layer3.webp">
+    <img style="transform: scale(115%);" src="../assets/loading_screen_layer2.webp">
+    <img style="transform: scale(120%);" src="../assets/loading_screen_layer1.webp">
+  </div>
+
+  <header class="open">
+    <div class="contentChild horizontal" style="justify-content: space-between;">
+      <div class="horizontal" id="logo_icon">
+        <img src="../assets/mld_logo_all_white.png" class="logo">
+        <label>Melide</label>
+      </div>
+
+      <div class="horizontal list" style="padding: 1em">
+        <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); const header = this.parentElement.parentElement.parentElement; header.classList.remove('open'); header.classList.add('close'); setTimeout(() => {window.location.href = this.href;}, 500);">Maison</a>
+        <a class="papernote sepia clickable disabled">Contact</a>
+        <a class="papernote sepia clickable disabled">Merch</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="mainContent" style="margin-top: 3em;">
+    <div class="contentChild vertical">
+      <div class="papernote vertical">
+        <b>Melide</b>
+        <p>Depuis 2016 jusqu'à 2025</p>
+        <p>auteur, producer, programmer</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 25% auto; gap: .25em">
+        <div class="vertical papernote">
+          <h4>Email</h4>
+          <h4>Instagram</h4>
+          <h4>Spotify</h4>
+          <h4>Soundcloud</h4>
+        </div>
+
+        <div class="vertical papernote">
+          <h4>john.teuira.tahiti@gmail.com</h4>
+          <h4>@Le.Melide</h4>
+          <h4>Melide</h4>
+          <h4>le.melide</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</body>
+</html>

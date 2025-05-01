@@ -16,13 +16,52 @@ function updateURL(type = "", value = "") {
 
 // HANDLE EVENT LISTENERS
 const track_ui_listen_preview = track_display.querySelector('[name="track_ui_listen_preview"]');
+
+const track_ui_presave = track_display.querySelector('[name="track_ui_presave"]');
+const track_ui_spotify = track_display.querySelector('[name="track_ui_spotify"]');
+const track_ui_youtube = track_display.querySelector('[name="track_ui_youtube"]');
+const track_ui_soundcloud = track_display.querySelector('[name="track_ui_soundcloud"]');
+const track_ui_other = track_display.querySelector('[name="track_ui_other"]');
+const track_ui_download = track_display.querySelector('[name="track_ui_download"]');
+
 var preview_id;
 track_ui_listen_preview.addEventListener('click', () => {
     document.getElementById('preview_anything').querySelector('iframe').src = "https://drive.google.com/file/d/" + preview_id + "/preview";
     revealModal("preview_anything");
-})
+});
+
+var presave_link;
+track_ui_presave.addEventListener('click', () => {
+    window.open(presave_link)
+});
+
+var spotify_link;
+track_ui_spotify.addEventListener('click', () => {
+    window.open(spotify_link)
+});
+
+var youtube_link;
+track_ui_youtube.addEventListener('click', () => {
+    window.open(youtube_link)
+});
+
+var soundcloud_link;
+track_ui_soundcloud.addEventListener('click', () => {
+    window.open(soundcloud_link)
+});
+
+var other_link;
+track_ui_other.addEventListener('click', () => {
+    window.open(other_link)
+});
+
+track_ui_download.addEventListener('click', () => {
+    customModal("Désolé", "La fonctionnalité de téléchargement n'est pas encore prête", "Ok", () => {revealModal('custom_modal', true); notify('', 'Good boy', 'center', 'top', 'good')}, "Mince, pourquoi?", () => {revealModal('custom_modal', true); notify('', 'Ne pose pas de question.', 'center', 'top', 'bad')})
+});
 
 function loadTrack(index) {
+    header_banner.classList.add('minim');
+
     const params = new URLSearchParams(window.location.search);
     const track = params.get("track");
     const data = song_data.tracks_data.filter(v => String(v[0]) === String(index))[0];
@@ -37,15 +76,10 @@ function loadTrack(index) {
     const track_ui_album = track_display.querySelector('[name="track_ui_album"]');
     const track_ui_artists = track_display.querySelector('[name="track_ui_artists"]');
 
-    const track_ui_presave = track_display.querySelector('[name="track_ui_presave"]');
-    const track_ui_spotify = track_display.querySelector('[name="track_ui_spotify"]');
-    const track_ui_youtube = track_display.querySelector('[name="track_ui_youtube"]');
-    const track_ui_soundcloud = track_display.querySelector('[name="track_ui_soundcloud"]');
-
     const track_ui_current_state = track_display.querySelector('[name="track_ui_current_state"]');
     const track_ui_release_date = track_display.querySelector('[name="track_ui_release_date"]');
     const track_ui_genres = track_display.querySelector('[name="track_ui_genres"]');
-    const track_ui_download = track_display.querySelector('[name="track_ui_download"]');
+    
 
     if (data[10] !== "") {
         track_ui_coverart.src = `https://drive.google.com/thumbnail?sz=w1920&id=${data[10]}`;
@@ -56,6 +90,7 @@ function loadTrack(index) {
         track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 1/3";
     }
     // https://drive.google.com/uc?export=download&id=[YOUR_FILE_ID]
+
     // PREVIEW BUTTON
     if (data[14] !== "") {
         track_ui_listen_preview.style.display = "block";
@@ -65,6 +100,7 @@ function loadTrack(index) {
     };
 
     if (data[15] !== "") {
+        presave_link = data[15];
         track_ui_presave.style.display = "block";
     } else {
         track_ui_presave.style.display = "none";
@@ -72,6 +108,7 @@ function loadTrack(index) {
 
     // SPOTIFY BUTTON
     if (data[16] !== "") {
+        spotify_link = data[16];
         track_ui_spotify.style.display = "block";
     } else {
         track_ui_spotify.style.display = "none";
@@ -79,6 +116,7 @@ function loadTrack(index) {
 
     // YOUTUBE BUTTON
     if (data[17] !== "") {
+        youtube_link = data[17];
         track_ui_youtube.style.display = "block";
     } else {
         track_ui_youtube.style.display = "none";
@@ -86,11 +124,21 @@ function loadTrack(index) {
 
     // SOUNDCLOUD BUTTON
     if (data[18] !== "") {
+        soundcloud_link = data[18];
         track_ui_soundcloud.style.display = "block";
     } else {
         track_ui_soundcloud.style.display = "none";
     }
 
+    // OTHER BUTTON
+    if (data[19] !== "") {
+        other_link = data[19];
+        track_ui_other.style.display = "block";
+    } else {
+        track_ui_other.style.display = "none";
+    }
+
+    // DOWNLOAD BUTTON
     if (String(data[13]) === "true" && (data[23] === "" || parseInt(data[23]) === 0)) {
         track_ui_download.style.display = "block";
     } else {
@@ -109,6 +157,8 @@ function loadTrack(index) {
 }
 
 function goBack() {
+    header_banner.classList.remove('minim');
+
     updateURL("track");
     search_panel.style.display = "block";
     track_display.style.display = "none";

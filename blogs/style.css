@@ -1,0 +1,18 @@
+#blog_display {
+    font-size: 75%;
+}
+
+#blog_display *:not(button, input, a) {
+    font-family: sans-serif;
+    padding: 0 1em;
+}
+
+#blog_display h1 {
+    background: var(--accent-color-dark);
+    color: var(--accent-color-light);
+    padding-left: .18em;
+}
+
+#blog_display h2 {
+    color: var(--accent-color-light);
+}

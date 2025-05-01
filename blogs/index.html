@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr" data-site="tracks">
+<html lang="fr" data-site="blogs">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melide : Les tracks</title>
+  <title>Melide : Les blogs</title>
   <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="style.css">
   
   <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 
@@ -15,11 +16,11 @@
   <!-- MODAL -->
   <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
     <div style="display: none;" id="preview_anything">
-      <iframe style="width: 100%;"></iframe>
+      <iframe></iframe>
     </div>
   
     <div style="display: none;" id="custom_modal">
-      <div class="track_card" style="opacity: 1;">
+      <div class="track_card minim" style="opacity: 1;">
         <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
         <p name="custom_modal_content" style="grid-column: 1/3;"></p>
         <button name="custom_modal_btn1"></button>
@@ -47,7 +48,7 @@
         <label>Melide</label>
       </div>
 
-      <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
+      <!-- <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a> -->
 
       <div class="horizontal list" style="padding: 1em">
         <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
@@ -57,36 +58,34 @@
     </div>
   </header>
 
-  <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_ps.webp')">
+  <!-- SEARCH PANNEL -->
+  <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_weird_place.webp')">
   </div>
   
+  <!-- MAIN CONTENT -->
   <div id="mainContent">
     <div class="contentChild" id="search_panel">
-      <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em">
+      <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em; margin-bottom: .5em;">
         
-        <input oninput="updateURL('search', this.value); sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
+        <input oninput="updateURL('search', this.value); sortPannel('text', 3, this.value)" class="papernote" type="text" placeholder="Rechercher...">
         
-        <select id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 4, this.value)" class="papernote">
+        <select id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 8, this.value)" class="papernote">
           <option>Trier...</option>
           <option>Croissant</option>
           <option>Décroissant</option>
         </select>
 
         <div class="autoFill">
-          <select id="state_filter" onchange="updateURL('state', this.value); loadTracksPanel(3, this.value)" class="capsule">
+          <select id="state_filter" onchange="updateURL('pinned', this.value); loadBlogsPanel(2, this.value)" class="capsule">
             <option>Trier...</option>
-            <option>Released</option>
-            <option>Unreleased</option>
-            <option>Work</option>
+            <option>Épingler</option>
+            <option>Non épingler</option>
           </select>
-  
-          <select id="type_filter" onchange="updateURL('type', this.value); loadTracksPanel(6, this.value)" class="capsule">
+          <select id="type_filter" onchange="updateURL('type', this.value); loadBlogsPanel(5, this.value)" class="capsule">
             <option>Trier...</option>
-            <option>Song</option>
-            <option>Beat/instrumental</option>
-            <option>Remix</option>
-            <option>Cover</option>
-            <option>Soundtrack</option>
+            <option>Musique</option>
+            <option>Jeu vidéo</option>
+            <option>Autres</option>
           </select>
         </div>
       </div>
@@ -98,38 +97,27 @@
           <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
         </div>
           
-        <div id="track_container" class="basicContainer vertical" style="max-height: 25em; overflow: auto;">
+        <div id="blog_container" class="basicContainer vertical" style="max-height: 25em; overflow: auto;">
           <img src="../assets/loading gif.GIF" class="loading_balls">
         </div>
       </div>
     </div>
 
-    <div class="contentChild" id="track_display" style="display: none;">
-      <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
-        <img name="track_ui_coverart" style="transform: translateY(-2.5em); width: 100%;">
-        <div class="vertical" name="track_ui_meta">
-          <h2 name="track_ui_title"></h2>
-          <p  name="track_ui_album"></p>
-          <p  name="track_ui_artists"></p>
-        </div>
-
-        <div class="vertical">
-          <input name="track_ui_listen_preview" type="button" value="Écouter l'extrait">
-          <input name="track_ui_presave" type="button" value="Pre-save">
-          <input name="track_ui_spotify" type="button" value="Écouter sur Spotify">
-          <input name="track_ui_youtube" type="button" value="Écouter sur YouTube">
-          <input name="track_ui_soundcloud" type="button" value="Écouter sur SoundCloud">
-          <input name="track_ui_other" type="button" value="Écouter le lien">
-        </div>
+    
+    <div class="contentChild" id="blog_display" style="display: none;">
+      <div class="track_card" style="font-size: 1em; opacity: 1; display: grid; grid-template-columns: 4em auto 7em; outline: 1px #555 solid; background: #555; padding: .25em;">
+        <a class="papernote clickable sepia" style="font-weight: bold; font-size: 100%;" onclick="goBack()">Retour</a>
+        <span></span>
+        <a style="display: none;" class="papernote clickable">Prochain</a>
       </div>
 
-      <div class="vertical">
-        <p name="track_ui_current_state" style="background-color: #555;"></p>
-        <p name="track_ui_release_date"></p>
-        <p name="track_ui_genres" class="autofill"></p>
-          
-        <input name="track_ui_download" type="button" value="Télécharger">
+      <div class="track_card" style="opacity: 1; padding: 0; grid-template-columns: auto 7em; margin: .5em 0 1em 0; outline: none; border-right: solid 1px #aaa; border-top: solid 1px #aaa;">
+        <h1 name="blog_title"></h1>
+        <p name="blog_author"></p>
+        <i name="blog_date"></i>
       </div>
+      <div class="break"></div>
+      <div name="blog_container"></div>  
     </div>  
   </div>
   

@@ -8,6 +8,22 @@
   <script src="scripts.js" defer></script>
 </head>
 <body>
+  <!-- MODAL -->
+  <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+    <div style="display: none;" id="preview_anything">
+      <iframe></iframe>
+    </div>
+  
+    <div style="display: none;" id="custom_modal">
+      <div class="track_card minim" style="opacity: 1;">
+        <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
+        <p name="custom_modal_content" style="grid-column: 1/3;"></p>
+        <button name="custom_modal_btn1"></button>
+        <button name="custom_modal_btn2"></button>
+      </div>
+    </div>
+  </div>
+
   <!-- NOTIFICATION BUUBLE -->
   <div id="notification" class="">
     <h2 name="notif_title">Title</h2>
@@ -15,7 +31,7 @@
   </div>
 
   <!-- CONTENT -->
-  <div id="screen_loader">
+  <div id="screen_loader" class="loaded">
     <img src="assets/loading_screen_layer3.webp">
     <img src="assets/loading_screen_layer2.webp">
     <img src="assets/loading_screen_layer1.webp">
@@ -27,14 +43,15 @@
         <label>Melide</label>
       </div>
       <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable disabled" onclick="handleLoading(); setTimeout(() => {handleLoading(true);}, 2500);">Maison</a>
-        <a class="papernote sepia clickable disabled">Contact</a>
+        <a class="papernote sepia clickable disabled" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
+        <a class="papernote sepia clickable disabled" href="/contact/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Contact</a>
         <a class="papernote sepia clickable disabled">Merch</a>
+        <a class="papernote sepia clickable disabled">Connexion</a>
       </div>
     </div>
   </header>
 
-  <div class="header_img" style="background-image: url('assets/bg_artistic_underwater.webp')">
+  <div id="header_banner" class="header_img" style="background-image: url('assets/bg_artistic_underwater_contrasted.webp')">
     <img style="height: 100%;" src="assets/melides_untouched_2.webp">
   </div>
 
@@ -88,50 +105,13 @@
           <div class="statistic_bar" style="grid-column: 1/3;" id="evermade_tracks"></div>
         </div>
 
-        <div class="basicContainer" style="gap: .5em; margin-top: 1em; display: grid; grid-template-columns: 25% auto;">
-          <p></p>
-          <p style="font-size: .7em; color: #999">Blogs</p>
+        
 
-          <div class="basicContainer vertical">
-            <p style="font-size: .7em; color: #999">Menu</p>
-            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
-            <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
-          </div>
-          
-          <div class="basicContainer vertical" style="display: none; max-height: 10em; overflow: auto;">
-            
-            <div class="track_card clickable" style="opacity: 1;">
-              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
-              <img alt="something" style="opacity: 1;">
-              <div class="vertical" style="gap: 0;">
-                <b>Title</b>
-                <i>Author</i>
-                <span>Description</span>
-              </div>
-            </div>
-            <div class="track_card clickable" style="opacity: 1;">
-              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
-              <img alt="something" style="opacity: 1;">
-              <div class="vertical" style="gap: 0;">
-                <b>Title</b>
-                <i>Author</i>
-                <span>Description</span>
-              </div>
-            </div>
-            <div class="track_card clickable" style="opacity: 1;">
-              <span style="grid-column: 1/3; font-size: .7em; color: #999">dd/mm/aaaa - hh:mm</span>
-              <div class="vertical" style="gap: 0; grid-column: 1/3;">
-                <b>Title</b>
-                <i>Author</i>
-                <span>Description long ass fuck shit fuck</span>
-              </div>
-            </div>
+      </div>
 
-            <input style="background: none;" class="papernote clickable" type="button" value="Voir plus...">
-
-          </div>
-        </div>
-
+      <div class="basicContainer" style="gap: .5em; margin-top: 1em; display: grid; grid-template-columns: 25% auto;">
+        <p style="font-size: .7em; color: #999; grid-column: 1/3;">Blogs</p>          
+        <div id="blog_container" class="basicContainer vertical" style="max-height: 10em; overflow: auto; grid-column: 1/3"></div>
       </div>
     </div>
 

@@ -1,7 +1,13 @@
 // GLOBALS
 var siteType;
+
 var song_data;
+var blog_data;
+
 var cached_tracks;
+var cached_blogs;
+
+// https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec
 var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec";
 
 // HTML ELEMENTS
@@ -9,7 +15,9 @@ var mini_melide;
 const screen_loader = document.getElementById('screen_loader');
 const evermade_tracks = document.getElementById('evermade_tracks');
 const notification = document.getElementById('notification');
+const header_banner = document.getElementById('header_banner');
 
+// NOTIFICATION
 function notify(title, description, dirY, dirX, type = "") {
     notification.querySelector('[name="notif_title"]').textContent = title;
     notification.querySelector('[name="notif_desc"]').textContent = description;
@@ -18,20 +26,46 @@ function notify(title, description, dirY, dirX, type = "") {
     notification.classList.add(dirY, dirX, type);
 }
 
+// CUSTOM MODAL DISPLAY
+const custom_modal = document.getElementById('custom_modal');
+const custom_modal_title = custom_modal.querySelector('[name="custom_modal_title"]');
+const custom_modal_content = custom_modal.querySelector('[name="custom_modal_content"]');
+const custom_modal_btn1 = custom_modal.querySelector('[name="custom_modal_btn1"]');
+const custom_modal_btn2 = custom_modal.querySelector('[name="custom_modal_btn2"]');
+var btn1cb = () => {};
+var btn2cb = () => {};
+custom_modal_btn1.addEventListener('click', () => btn1cb());
+custom_modal_btn2.addEventListener('click', () => btn2cb());
+function customModal(title, content, btn1, btn1Callback = btn1cb, btn2, btn2Callback = btn2cb) {
+    custom_modal_title.textContent = title;
+    custom_modal_content.textContent = content;
+    custom_modal_btn1.textContent = btn1;
+    custom_modal_btn2.textContent = btn2;
+    btn1cb = btn1Callback;
+    btn2cb = btn2Callback;
+    revealModal("custom_modal");
+}
+
+// MODAL REVEAL AND CLOSING
 var opened_modal;
 function revealModal(id = "", callback = false) {
     const modal = document.getElementById(id);
+    console.log(callback)
     
     if (id !== "" && !opened_modal?.parentElement.classList.contains("reveal") && !callback) {
         opened_modal = modal;
+        opened_modal.style.display = "flex";
         opened_modal.parentElement.classList.add('reveal');
     } else {
+        opened_modal.style.display = "none";
         opened_modal.parentElement.classList.remove('reveal');
         opened_modal = undefined;
     }
 }
 
+// LOADING SYSTEMS
 function handleLoading(callback = false) {
+    screen_loader.classList.remove('loaded');
     if (!callback) {
         screen_loader.classList.add('loading');
     } else {
@@ -43,7 +77,23 @@ function forceReloadData() {
     sessionStorage.setItem("tracks", undefined);
 }
 
-// LOADED
+// <div class="track_card clickable" style="opacity: 1;"><span style="grid-column: 1/3; font-size: .7em; color: #999">${v[7]}</span><img alt="something" style="opacity: 1;"><div class="vertical" style="gap: 0;"><b>${v[3]}</b><i>${v[1]}</i><span>...</span></div></div>
+
+function loadBlogsContainer(data) {
+    const blog_container = document.getElementById('blog_container');
+    console.log(data.blogs_data)
+    data.blogs_data.sort((a, b) => 
+        new Date(b[8]) - new Date(a[8])
+        ).sort((a, b) => {
+            if (String(a[2]) === "true" && String(b[2]) !== "true") return -1;
+            if (String(a[2]) !== "true" && String(b[2]) === "true") return 1;
+            return 0;
+        }).forEach((e) => {
+        blog_container.innerHTML += `<div onclick="window.location.href = '/blogs/?blog=${e[0]}'" class="track_card clickable" style="font-size: 70%; position: relative; opacity: 1; ${String(e[2]) === "true" ? "background: #ffffff55;" : ''}">${String(e[2]) === "true" ? '<img src="assets/icons/pinned.webp" style="position: absolute; top: .25em; left: 0; opacity: 1; grid-column: 1/3;">' : ""}<span style="text-align: right; grid-column: 1/3; font-size: .7em; color: #999">${new Date(e[8]).toLocaleDateString()}</span><img src="https://drive.google.com/thumbnail?sz=w1920&id=${e[11]}" style="opacity: 1; height: 100px;"><div class="vertical" style="gap: 0;"><b>${e[3]}</b><i>${e[4]}</i><span>...</span></div></div>`;
+    })
+}
+
+// DOM CONTENT LOADED
 var url_params;
 document.addEventListener("DOMContentLoaded", () => {
     url_params = new URLSearchParams(window.location.search);
@@ -52,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     siteType = document.documentElement.dataset.site;
     mini_melide = document.getElementById('mini_melide');
     cached_tracks = sessionStorage.getItem("tracks");
+    cached_blogs = sessionStorage.getItem("blogs");
 
     const setupMiniMelide = () => {
         let toggle_debug = -1;
@@ -72,8 +123,25 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const handleHome = (data) => {
+        setupMiniMelide();
+
+        if (!cached_blogs) {
+            fetch(fetchable_google_sheet + "?get=blogs")
+                .then(res => res.json())
+                .then(data => {
+                    blog_data = data;
+                    sessionStorage.setItem("blogs", JSON.stringify(data));
+                    loadBlogsContainer(data)
+                })
+                .catch(err => {
+                    notify("Erreur", "Une erreur s'est produite", "top", "center", "bad");
+                    console.error(err);
+                });
+        } else {
+            loadBlogsContainer(blog_data)
+        }
+
         if (!cached_tracks) {
-            setupMiniMelide();
             fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
@@ -86,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     console.error(err);
                 });
         } else {
-            setupMiniMelide();
             loadDashboard(song_data);
         }
     };
@@ -103,17 +170,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 loadTrack(track)
             } else {
                 const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
-                // search_argument[4] = capitalize(filter);
-                // search_argument[3] = capitalize(state);
-                // search_argument[6] = capitalize(type);
 
                 if (search !== "") {
                     loadTracksPanel();
                     sortPannel("text", 1, search.replace("_", " "));
                 } else {
-                    loadTracksPanel(3, capitalize(state));
-                    loadTracksPanel(6, capitalize(type));
-                    sortPannel("date", 4, capitalize(filter));
+                    loadTracksPanel(3, capitalize(state).replace("_", " "));
+                    loadTracksPanel(6, capitalize(type).replace("_", " "));
+                    sortPannel("date", 4, capitalize(filter).replace("_", " "));
                 }
             }
         }
@@ -135,13 +199,57 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const handleBlogs = () => {
+        const loadBlogs = () => {
+            const blog = url_params.get("blog");
+            const filter = !!url_params.get("filter") ? url_params.get("filter") : "Trier..."; // Trier..., Croissant, Decroissant
+            const pinned = !!url_params.get("pinned") ? url_params.get("pinned") : "Trier..."; // Trier..., Épingler, Non épingler
+            const type = !!url_params.get("type") ? url_params.get("type") : "Trier..."; // Trier..., Song, Beat/Instrumental, Remix, Cover, Soundtrack
+            const search = !!url_params.get("search") ? url_params.get("search") : ""; // Any search
+
+            if (blog) {
+                loadBlog(blog)
+            } else {
+                const capitalize = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+                if (search !== "") {
+                    loadBlogsPanel();
+                    sortPannel("text", 1, search.replace("_", " "));
+                } else {
+                    loadBlogsPanel(2, capitalize(pinned).replace("_", " "));
+                    loadBlogsPanel(5, capitalize(type).replace("_", " "));
+                    sortPannel("date", 8, capitalize(filter).replace("_", " "));
+                }
+            }
+        }
+
+        if (!cached_blogs) {
+            fetch(fetchable_google_sheet + "?get=blogs")
+                .then(res => res.json())
+                .then(data => {
+                    blog_data = data;
+                    sessionStorage.setItem("blogs", JSON.stringify(data));
+                    loadBlogs()
+                })
+                .catch(err => {
+                    notify("Erreur", "Une erreur s'est produite", "top", "center", "bad");
+                    console.error(err);
+                });
+        } else {
+            loadBlogs()
+        }
+    }
+
     song_data = cached_tracks ? JSON.parse(cached_tracks) : null;
+    blog_data = cached_blogs ? JSON.parse(cached_blogs) : null;
 
     // REDIRECTS
     if (siteType === "home") {
         handleHome();
     } else if (siteType === "tracks") {
         handleTracks();
+    } else if (siteType === "blogs") {
+        handleBlogs();
     }
 
 });
