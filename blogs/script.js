@@ -10,25 +10,65 @@ const blog_display = document.getElementById('blog_display');
 function parseMD(data) {
     const lines = data.split('\n');
     var output = "";
-    var break_conditionned = false;
+    let inList = false;
+    let inTable = false;
+    let tableRows = [];
+    
+
     for (let i=0; i<lines.length; i++) {
-        if (lines[i].match(/\-\s(.*)/gm)) {
-            break_conditionned = true;
-        } else {
-            break_conditionned = false;
+        let line = lines[i].trim();
+
+        var isListItem = /^(\-|\*|\d+\.)\s+/.test(line);
+        var isTable = /^\|(.+)\|/.test(line);
+
+        if (isTable && !inTable) {
+            output += "<table>";
+            inTable = true;
+        } else if (!isTable && inTable) {
+            output += "</table>";
+            inTable = false;
         }
-        output += lines[i]
-            .replace(/\#\#\s(.*)/gm, '<h2>$1</h2>')
+
+        if (isTable) {
+            const is_linebreak = line.split('|').slice(1, -1).map(v => v.trim()).filter(v => !/(^\-+)/.test(v));
+            if (is_linebreak.length === 0) continue;
+            const row = "<tr>" + line.split('|').slice(1, -1).map(v => `<td>${v.trim()}</td>`).join('') + "</tr>";
+            output += row; continue;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        if (isListItem && !inList) {
+            output += "<ul>";
+            inList = true;
+        } else if (!isListItem && inList) {
+            output += "</ul>";
+            inList = false;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        line = line
+            .replace(/\#\#\s\((.*?)\)\s(.*)/gm, '<h2 class="$1">$2</h2>')
             .replace(/\((.*?)\)\=\=(.*?)\=\=/gm, '<div style="display: inline;background: $1">$2</div>')
             .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
-            .replace(/\!\[image\]\((.*)\)\{(.*)\}/gm, '<img src="https://drive.google.com/thumbnail?sz=w1920&id=$1" $2>')
+            .replace(/\*(.*)\*/gm, '<i>$1</i>')
+            .replace(/\!\[image\]\((.*)\)\{(.*)\}/gm, '<img src="$1" $2>')
+            .replace(/\[\!(.*?)\s+([^\]]+?)\]\(([^)]+?)\)/gm, '<$1 onclick="$3">$2</$1>')
             .replace(/\[(.*)\]\((.*?)\)/gm, '<a target="_blank" href="$1">$2</a>')
-            .replace(/\-\-\-/gm, '<br><div class="break"></div>')
-            .replace(/\-\s(.*)/gm, "<li>$1</li>");
+            .replace("===", '<br><div class="break"></div>')
+            .replace(/^(\-|\*)\s+(.*)/gm, "<li>$2</li>")
+            .replace(/^\d+\.\s+(.*)/gm, '<li style="list-style: decimal;">$1</li>')
         
-        if (!break_conditionned) output += "<br>";
-        console.log(output)   
-    }
+        output += line;
+    };
+    if (!inList) output += "</ul>";
     blog_display.querySelector('[name="blog_container"]').innerHTML = output;
 }
 
@@ -227,7 +267,6 @@ function loadBlog(index) {
         .then(response => response.text())
         .then(data => {
             parseMD(data);
-            console.log(data);
         })
         .catch(err => {
             blog_display.querySelector('p').textContent = String(err);

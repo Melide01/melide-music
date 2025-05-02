@@ -433,7 +433,7 @@ header .logo {
 
 /* UTILS CUSTOM CLASSES */
 .break {
-  width: 100%; height: 2px; background-color: #555; margin: calc(var(--padding) * 2) 0;
+  width: 100%; height: 2px; background-color: #ccc; margin: calc(var(--padding) * 2) 0;
 }
 .disabled {
   opacity: .5;
