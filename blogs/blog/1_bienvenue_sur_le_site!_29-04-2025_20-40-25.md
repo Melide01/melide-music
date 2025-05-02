@@ -35,7 +35,7 @@ Il est important de ne pas se laisser abbattre bien que s'en plaindre est nature
 | Amuse.io              | Pour distribuer ma musique sur toutes les plateformes pendant 1 an | 49.99€ |
 | LogicPro              | Logiciel de musique professionnel                                  | 59.88€ |
 | iCloud+               | Stockage de fichiers                                               | 11.88€ |
-| Nom de domaine .MUSIC | Pour distribuer ma musique sur toutes les plateformes pendant 1 an | 61.05€ |
+| Nom de domaine .MUSIC | Le nom de domaine du site                                          | 61.05€ |
 
 ## () Finalement
 Cette vision a toujours été compliqué a cerner, même pour moi. Cependant, cette dernière ne risque pas de ternir. Merci infiniment pour tout le soutien que vous me donner, je compte bien vous le rendre encore plus à chaque projet. ![image](https://drive.google.com/thumbnail?sz=w1920&id=1TTneIg2l2nTtCcInK2Z8ReoFaViSxilY){style="width: 10em; float: right"}
