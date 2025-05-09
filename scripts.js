@@ -1,4 +1,23 @@
 // GLOBALS
+var info_rules = {
+    "header": {
+        "Accueil": {"href": "/index.html"},
+        "Contact": {"href": "/contact/index.html"},
+        "Merch": {},
+        "Connexion": {}
+    },
+    "footer": [
+        {
+            "Accueil": {"href": "/index.html"},
+            "Toutes les tracks": {"href": "/tracks/index.html"},
+            "Tout les blogs": {"href": "/blogs/index.html"},
+        },
+        {
+            "Contact": {"href": "/contact/index.html"},
+        }
+    ]
+}
+
 var siteType;
 
 var song_data;
@@ -95,8 +114,61 @@ function loadBlogsContainer(data) {
 
 // DOM CONTENT LOADED
 var url_params;
+const header_buttons = document.getElementById('header_buttons');
+const page_footer = document.getElementById('page_footer');
 document.addEventListener("DOMContentLoaded", () => {
     url_params = new URLSearchParams(window.location.search);
+
+    const load_header_buttons = () => {
+        const header_btn_list_key = Object.keys(info_rules.header);
+        
+        header_btn_list_key.forEach(e => {
+            const a_el = document.createElement('a');
+            a_el.textContent = e;
+            a_el.classList = "papernote sepia clickable";
+            if (!!info_rules.header[e].href) {
+                a_el.href = info_rules.header[e].href;
+                a_el.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    handleLoading(); 
+                    setTimeout(() => {
+                        window.location.href = event.target.href;
+                    }, 1000);
+                })
+            } else {
+                a_el.classList.add('disabled');
+            };
+            
+            header_buttons.appendChild(a_el);
+        });
+    }
+    load_header_buttons();
+
+    const load_footer = () => {
+        page_footer.style.gridTemplateColumns = `repeat(auto-fill, minmax(10em, auto))`
+
+        for (let group of info_rules.footer) {
+            const footer_list_keys = Object.keys(group);
+            const footer_group = document.createElement('ul');
+
+            footer_list_keys.forEach(e => {
+                const li_el = document.createElement('li');
+                var text_el = li_el;
+
+                if (!!group[e].href) {
+                    var a_el = document.createElement('a');
+                    a_el.href = group[e].href;
+                    text_el = a_el;
+                    li_el.appendChild(a_el);
+                };
+
+                text_el.textContent = e;
+                footer_group.appendChild(li_el);
+            })
+            page_footer.appendChild(footer_group);
+        }
+    }
+    load_footer();
 
     // VARS
     siteType = document.documentElement.dataset.site;
@@ -114,10 +186,11 @@ document.addEventListener("DOMContentLoaded", () => {
         // RANDOM MELIDE
         current_melide = Object.keys(mini_melide_anim)[Math.floor(Math.random() * Object.keys(mini_melide_anim).length)];
 
+        mini_melide_is_moving = true;
         mini_melide.src = mini_melide_anim[current_melide].greet;
-        moveMelide(0, false);
 
         setTimeout(() => {
+            mini_melide_is_moving = false;
             mini_melide.src = mini_melide_anim[current_melide].idle;
         }, 2800)
     };

@@ -50,18 +50,14 @@
 
       <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
 
-      <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
-        <a class="papernote sepia clickable disabled">Contact</a>
-        <a class="papernote sepia clickable disabled">Merch</a>
-      </div>
+      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
     </div>
   </header>
 
   <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_ps.webp')">
   </div>
   
-  <div id="mainContent">
+  <div class="mainContent">
     <div class="contentChild" id="search_panel">
       <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em; margin-bottom: .5em;">
         
@@ -130,9 +126,14 @@
         <p name="track_ui_genres" class="autofill"></p>
           
         <input name="track_ui_download" type="button" value="Télécharger">
+
       </div>
     </div>  
   </div>
   
+  <footer class="mainContent">
+    <div id="page_footer" class="contentChild"></div>
+  </footer>
+
 </body>
 </html>

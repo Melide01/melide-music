@@ -51,11 +51,7 @@
 
       <!-- <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a> -->
 
-      <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable" href="/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
-        <a class="papernote sepia clickable disabled">Contact</a>
-        <a class="papernote sepia clickable disabled">Merch</a>
-      </div>
+      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
     </div>
   </header>
 
@@ -64,7 +60,7 @@
   </div>
   
   <!-- MAIN CONTENT -->
-  <div id="mainContent">
+  <div class="mainContent">
     <div class="contentChild" id="search_panel">
       <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em; margin-bottom: .5em;">
         
@@ -122,6 +118,10 @@
       <div name="blog_container" style="padding: 0 .5em 5em .5em;"></div>  
     </div>  
   </div>
+
+  <footer class="mainContent">
+    <div id="page_footer" class="contentChild"></div>
+  </footer>
   
 </body>
 </html>

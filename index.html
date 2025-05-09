@@ -50,12 +50,7 @@
         <img src="assets/mld_logo_all_white.png" class="logo">
         <label>Melide</label>
       </div>
-      <div class="horizontal list" style="padding: 1em">
-        <a class="papernote sepia clickable disabled" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Maison</a>
-        <a class="papernote sepia clickable disabled" href="/contact/" onclick="event.preventDefault(); handleLoading(); setTimeout(() => {window.location.href = this.href;}, 1000);">Contact</a>
-        <a class="papernote sepia clickable disabled">Merch</a>
-        <a class="papernote sepia clickable disabled">Connexion</a>
-      </div>
+      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
     </div>
   </header>
 
@@ -63,67 +58,85 @@
     <img style="height: 100%;" src="assets/melides_untouched_2.webp">
   </div>
 
-  <img draggable="true" id="mini_melide">
-  
-  <div id="mainContent">
-    <div class="contentChild">
-      <div class="papernote autofill" style="padding: .1em">
-        <a class="papernote clickable" href="/tracks/?filter=croissant">Musiques</a>
-        <a class="papernote clickable" href="/tracks/?filter=croissant&type=beat%2Finstrumental">Prod</a>
-        <a class="papernote clickable disabled">Samples</a>
-        <a class="papernote clickable disabled">Autres...</a>
-      </div>
-    </div>
 
-    <div class="contentChild">
-      <div class="basicContainer">
-        <h3></h3>
-        <br>
-        <div class="papernote">
-          <b name="latest_song_announce"></b>
-          <img class="loading_balls" src="assets/loading gif.GIF">
-          <div name="latest_song_card" class="track_card" style="grid-template-columns: 150px auto;">
-            <img style="max-height: 150px" name="latest_song_cover" onload="this.style.opacity = '1'; this.parentElement.style.opacity = '1'; this.parentElement.parentElement.querySelector('.loading_balls').style.display = 'none';">
-            
-            <div class="vertical" style="gap: 0; background-color: #ffffffcc;">
-              <p name="latest_song_title"></p>
-              <p name="latest_song_artist" style="font-size: 70%; opacity: .7;"></p>
-              <div class="vertical" style="position: relative; margin-top: .5em;">
-                
-                <div style="width: 100%; display: flex; justify-content: center;">
-                  <div id="latest_action" class="vertical" style="max-width: 350px; margin-top: .5em; width: 80%; gap: .25em;"></div>
-                </div>
-                <label style="text-shadow: none; font-size: .9em; margin-top: 1em;" name="latest_song_timer"></label>
-                <div id="latest_song_progressbar"></div>
-                
-                
-                
-              </div>
+  <!-- MINI MELIDE-->
+  <img draggable="true" id="mini_melide" style="display: none;">
+  
+  <div id="page_split">
+    <div class="mainContent">
+      <div class="contentChild">
+        <div class="papernote autofill" style="padding: .1em">
+          <a class="papernote clickable" href="/tracks/?filter=croissant">Musiques</a>
+          <a class="papernote clickable" href="/tracks/?filter=croissant&type=beat%2Finstrumental">Prod</a>
+          <a class="papernote clickable disabled">Samples</a>
+          <a class="papernote clickable disabled">Autres...</a>
+        </div>
+      </div>
+  
+      <div class="contentChild">
+        <div class="basicContainer">
+          <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
+            <i name="dashboard_everytrack_number" style="grid-column: 1/3;"></i>
+            <div class="statistic_bar" style="grid-column: 1/3;" id="evermade_tracks"></div>
+          </div>
+
+          <br>
+
+          <div class="papernote">
+            <b name="latest_song_announce"></b>
+            <img class="loading_balls" src="assets/loading gif.GIF">
+            <div name="latest_song_card" class="track_card" style="grid-template-columns: 150px auto;">
+              <img style="max-height: 150px" name="latest_song_cover" onload="this.style.opacity = '1'; this.parentElement.style.opacity = '1'; this.parentElement.parentElement.querySelector('.loading_balls').style.display = 'none';">
               
+              <div class="vertical" style="gap: 0; background-color: #ffffffcc;">
+                <p name="latest_song_title"></p>
+                <p name="latest_song_artist" style="font-size: 70%; opacity: .7;"></p>
+                <div class="vertical" style="position: relative; margin-top: .5em;">
+                  
+                  <div style="width: 100%; display: flex; justify-content: center;">
+                    <div id="latest_action" class="vertical" style="max-width: 350px; margin-top: .5em; width: 80%; gap: .25em;"></div>
+                  </div>
+                  <label style="text-shadow: none; font-size: .9em; margin-top: 1em;" name="latest_song_timer"></label>
+                  <div id="latest_song_progressbar"></div>
+                </div>
+              </div>
             </div>
           </div>
+          <br>
+  
+          
+  
+          
+  
+          
+  
         </div>
-        <br>
-
-        
-
-        <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto;">
-          <i name="dashboard_everytrack_number" style="grid-column: 1/3;"></i>
-          <div class="statistic_bar" style="grid-column: 1/3;" id="evermade_tracks"></div>
+  
+        <div class="basicContainer" style="gap: .5em; margin-top: 1em; display: grid; grid-template-columns: 25% auto;">
+          <p style="font-size: .7em; color: #999; grid-column: 1/3;">Blogs</p>          
+          <div id="blog_container" class="basicContainer vertical" style="max-height: 10em; overflow: auto; grid-column: 1/3"></div>
         </div>
-
-        
-
       </div>
 
-      <div class="basicContainer" style="gap: .5em; margin-top: 1em; display: grid; grid-template-columns: 25% auto;">
-        <p style="font-size: .7em; color: #999; grid-column: 1/3;">Blogs</p>          
-        <div id="blog_container" class="basicContainer vertical" style="max-height: 10em; overflow: auto; grid-column: 1/3"></div>
-      </div>
+      <script type="text/javascript">
+        atOptions = {
+          'key': '529cff0f12dfc1c80a325318fdcfc96',
+          'format': 'iframe',
+          'height': '90',
+          'width': '728',
+          'params': {}
+        }
+      </script>
     </div>
 
+    <div class="vertical" style="position: relative; padding-right: .5em;">
+      <img style="position: absolute; height: 100%; max-width: 10em;" src="assets/sidebanner.png">
+    </div>
   </div>
 
-  <div class="beauty_icons_grid"></div>
+  <footer class="mainContent">
+    <div id="page_footer" class="contentChild"></div>
+  </footer>
+  
 </body>
 </html>
