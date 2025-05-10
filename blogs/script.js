@@ -264,11 +264,17 @@ function loadBlog(index) {
     // goBack_button.style.display = "block";
 
     fetch(data[10])
-        .then(response => response.text())
-        .then(data => {
+        .then((response) => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status : ${response.status}`)
+            }
+            return response.text();
+        })
+        .then((data) => {
             parseMD(data);
         })
-        .catch(err => {
+        .catch((err) => {
             blog_display.querySelector('p').textContent = String(err);
             console.error(err);
         });
