@@ -1,19 +1,19 @@
 // GLOBALS
 var info_rules = {
     "header": {
-        "Accueil": {"href": "/index.html"},
-        "Contact": {"href": "/contact/index.html"},
-        "Merch": {},
-        "Connexion": {}
+        "Accueil": {"href": "/"},
+        "Contact": {"href": "/contact/"},
+        "Merch": {}
     },
     "footer": [
         {
-            "Accueil": {"href": "/index.html"},
-            "Toutes les tracks": {"href": "/tracks/index.html"},
-            "Tout les blogs": {"href": "/blogs/index.html"},
+            "Accueil": {"href": "/"},
+            "Tout les sons": {"href": "/audios/"}
         },
         {
-            "Contact": {"href": "/contact/index.html"},
+            "Contact": {"href": "/contact/"},
+            "Mentions légales": {"href": "/page/?page=mentions-legales"},
+            "Politique de confidentialité": {"href": "/page/?page=politique-confidentialite"},
         }
     ]
 }
@@ -26,7 +26,6 @@ var blog_data;
 var cached_tracks;
 var cached_blogs;
 
-// https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec
 var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl6oTE0XKLbS9SnDb-IkkMeEp9iOTc7K9DFJPTyyRQSBFxlSjgPHc1V12ZMteQ9aglFQ/exec";
 
 // HTML ELEMENTS
@@ -110,6 +109,73 @@ function loadBlogsContainer(data) {
         }).forEach((e) => {
         blog_container.innerHTML += `<div onclick="window.location.href = '/blogs/?blog=${e[0]}'" class="track_card clickable" style="font-size: 70%; position: relative; opacity: 1; ${String(e[2]) === "true" ? "background: #ffffff55;" : ''}">${String(e[2]) === "true" ? '<img src="assets/icons/pinned.webp" style="position: absolute; top: .25em; left: 0; opacity: 1; grid-column: 1/3;">' : ""}<span style="text-align: right; grid-column: 1/3; font-size: .7em; color: #999">${new Date(e[8]).toLocaleDateString()}</span><img src="https://drive.google.com/thumbnail?sz=w1920&id=${e[11]}" style="opacity: 1; height: 100px;"><div class="vertical" style="gap: 0;"><b>${e[3]}</b><i>${e[4]}</i><span>...</span></div></div>`;
     })
+}
+
+// MD PARSER
+function gParseMD(data) {
+    const lines = data.split('\n');
+    var output = "";
+    let inList = false;
+    let inTable = false;
+
+    for (let i=0; i<lines.length; i++) {
+        let line = lines[i].trim();
+
+        var isListItem = /^(\-|\*|\d+\.)\s+/.test(line);
+        var isTable = /^\|(.+)\|/.test(line);
+
+        if (isTable && !inTable) {
+            output += "<table>";
+            inTable = true;
+        } else if (!isTable && inTable) {
+            output += "</table>";
+            inTable = false;
+        }
+
+        if (isTable) {
+            const is_linebreak = line.split('|').slice(1, -1).map(v => v.trim()).filter(v => !/(^\-+)/.test(v));
+            if (is_linebreak.length === 0) continue;
+            const row = "<tr>" + line.split('|').slice(1, -1).map(v => `<td>${v.trim()}</td>`).join('') + "</tr>";
+            output += row; continue;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        if (isListItem && !inList) {
+            output += "<ul>";
+            inList = true;
+        } else if (!isListItem && inList) {
+            output += "</ul>";
+            inList = false;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        line = line
+            .replace(/\#\#\s\((.*?)\)\s(.*)/gm, '<h2 class="$1">$2</h2>')
+            .replace(/\#\#\s(.*)/gm, '<h2>$1</h2>')
+            .replace(/\#\s(.*?)/gm, '<h1>$1</h1>')
+            .replace(/\((.*?)\)\=\=(.*?)\=\=/gm, '<div style="display: inline;background: $1">$2</div>')
+            .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
+            .replace(/\*(.*)\*/gm, '<i>$1</i>')
+            .replace(/\!\[image\]\((.*)\)\{(.*)\}/gm, '<img src="$1" $2>')
+            .replace(/\[\!(.*?)\s+([^\]]+?)\]\(([^)]+?)\)/gm, '<$1 onclick="$3">$2</$1>')
+            .replace(/\[(.*)\]\((.*?)\)/gm, '<a target="_blank" href="$1">$2</a>')
+            .replace("===", '<br><div class="break"></div>')
+            .replace(/^(\-|\*)\s+(.*)/gm, "<li>$2</li>")
+            
+            .replace(/^\d+\.\s+(.*)/gm, '<li style="list-style: decimal;">$1</li>')
+        
+        output += line;
+    };
+    if (!inList) output += "</ul>";
+    return output;
 }
 
 // DOM CONTENT LOADED
@@ -319,10 +385,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // REDIRECTS
     if (siteType === "home") {
         handleHome();
-    } else if (siteType === "tracks") {
+    } else if (siteType === "audios") {
         handleTracks();
     } else if (siteType === "blogs") {
         handleBlogs();
+    } else if (siteType === "pages") {
+        console.log(`/page/pages/${url_params.get('page')}.md`);
+        const docEl = document.getElementById('pageContent');
+        fetch(`/page/pages/${url_params.get('page')}.md`)
+            .then((response) => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status : ${response.status}`)
+                }
+                return response.text();
+            })
+            .then((data) => {
+                docEl.innerHTML = gParseMD(data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+
     }
 
 });

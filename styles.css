@@ -1,6 +1,6 @@
 /* UTILS */
 :root {
-  --max-width: 700px;
+  --max-width: 900px;
   --padding: .5em;
 
   --pure-white: #fff;
@@ -30,18 +30,17 @@
 body, html {
   font-size: 120%;
   padding: 0; margin: 0;
-  /* font-family: "Noto Sans", sans-serif; */
   overflow-x: hidden;
   min-height: 100vh;
-
-  font-optical-sizing: auto;
-  font-style: normal;
-  background: var(--pure-black); color: var(--pure-white);
+  font-size: 1rem;
+  line-height: 1.6;
+  background-image: url('assets/sidebannerbg.png'); background-size: 100% 400%; background-position: center;
+  /* background-color: var(--pure-white);*/  color: var(--pure-black);
   transition: background-color 1000ms;
 }
 
 * {
-  font-family: monospace;
+  font-family: 'Noto Sans', sans-serif;
   padding: 0; margin: 0;
   box-sizing: border-box;
 }
@@ -59,7 +58,7 @@ a {
 }
 
 footer {
-  background-color: #000; margin-top: 2em; height: 100vh;
+  background-color: #000; margin-top: 2em; /*height: 100vh;*/
 }
 #page_footer {
   display: grid; padding: var(--padding) 2em 5em 2em;
@@ -72,7 +71,7 @@ footer {
 header {
   z-index: 99;
   position: fixed; left: 0; top: 0;
-  padding: calc(var(--padding) * 2) 0;
+  padding: calc(var(--padding) * 4) 0;
   display: flex; flex-direction: row;
   height: 1.5em; width: 100%;
   font-weight: bold;
@@ -104,12 +103,14 @@ header.close {
   }
 }
 header .logo {
-  height: 1em; width: auto; 
+  height: 2em; width: auto; 
 }
-
+#header_banner.loading {
+  height: 100%; position: fixed;
+}
 #header_banner {
-  transition: height 500ms;
-  width: 100%; height: 150px; overflow: hidden;
+  transition: height 500ms; z-index: 222;
+  width: 100%; height: 120px; overflow: hidden;
   display: flex; flex-direction: row; justify-content: center;
   background-size: 100% auto; background-position: 50% 50%;
 }
@@ -119,9 +120,9 @@ header .logo {
 }
 
 #notification {
-  display: none; cursor: default;
+  display: none; cursor: default; 
   font-size: .7em; text-shadow: 0 0 1px #000, 0 0 3px #000;
-  position: fixed; background-color: #777; outline: #444 solid 1px;
+  position: fixed; background-color: #444; outline: #444 solid 1px; color: #fff;
   padding: calc(var(--padding) * 1) calc(var(--padding) * 4); border-radius: calc(var(--padding) / 2);
   z-index: 998;
 }
@@ -194,6 +195,7 @@ header .logo {
 
 #page_split {
   display: grid; grid-template-columns: auto 100px;
+  width: 100%;
   padding: 1em;
   justify-content: center;
 }
@@ -222,9 +224,13 @@ header .logo {
   text-align: end;
 }
 
+.mainContent >* {
+  max-width: var(--max-width);
+}
+
 .contentChild {
   width: 100%; padding: var(--padding);
-  max-width: var(--max-width);
+  max-width: var(--max-width); margin: 0 auto;
 }
 
 .clickable {
@@ -248,7 +254,7 @@ header .logo {
 }
 .capsule.minim {
   transition: background-color 50ms ease-out;
-  background: #eee; border: none; outline: none;
+  background: #ddd; border: 1px solid var(--pure-black); outline: none;
 }
 .capsule.minim.clickable:hover {
   background: #ddd;
@@ -274,7 +280,7 @@ header .logo {
 .papernote {
   word-break: keep-all;
   cursor: default;
-  border: var(--padding) solid #000; color: #000;
+  border: calc(var(--padding) + 5px) solid #000; color: #000;
   border-image: url("assets/borderimg_note_white.webp") 50 fill;
 }
 .papernote.sepia {
@@ -283,6 +289,7 @@ header .logo {
 
 /* TRACK CARDS */
 .track_card {
+  background-color: var(--pure-black); color: var(--pure-white);
   opacity: 0; transition: opacity .5s;
   outline: solid 1px #aaa;
   padding: var(--padding);
@@ -495,9 +502,12 @@ header .logo {
 }
 
 .basicContainer {
-  background: linear-gradient(to bottom, #000, #555); outline: 2px solid #777;
-  border-radius: calc(var(--padding) / 2);
-  padding: var(--padding);
+  background: var(--pure-white); color: var(--pure-black);
+  border-radius: var(--padding); margin-bottom: 2rem;
+  padding: var(--padding); border: 1px solid var(--accent-color-dark);
+}
+.basicContainer:has(>.track_card) {
+  background-color: #999;
 }
 
 .beauty_icons_grid {

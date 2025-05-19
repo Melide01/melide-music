@@ -1,0 +1,107 @@
+body, html {
+    background: #ddd;
+}
+
+.basicContainer {
+    background-color: #f00;
+}
+
+.track_card {
+    text-shadow: none;
+    background: #fff; color: #000;
+}
+
+#blog_display {
+    font-size: 75%; display: none;
+    background-color: var(--pure-white);
+    color: var(--pure-black);
+}
+
+#blog_display * {
+    font-family: sans-serif;
+    padding: 0;
+}
+
+#blog_display table {
+    width: 100%; border-collapse: collapse; margin: 1em 0;
+}
+#blog_display table th, #blog_display table td {
+    border: 1px solid #ccc; padding: 8px; text-align: left;
+}
+#blog_display table tr:first-of-type {
+    background-color: #eee;
+}
+
+#blog_display h1, #blog_display h2, #blog_display h3 {
+    font-weight: 200;
+}
+#blog_display h1 {
+    background: #eee;
+    color: var(--accent-color-dark);
+    padding-left: .18em;
+}
+
+#blog_display h2 {
+    color: #555; margin-bottom: .25em;
+    background-color: #eee; 
+    padding: 0 .25em;
+}
+
+#blog_display a, #blog_display b {
+    font-weight: 600;
+}
+
+#blog_display button {
+    all: unset;
+    font-size: 1.2em; padding: .2em .5em;
+    background-color: #eee; outline: solid 1px #444; border-radius: 3px;
+    transition: background-color 100ms;
+}
+#blog_display button:hover {
+    background-color: #ddd;
+    transform: scale(101%);
+}
+#blog_display button:active {
+    background-color: #ccc;
+    transform: scale(99%);
+}
+
+#blog_display a {
+    font-size: 100%;
+}
+
+#blog_display ul li {
+    transform: translateX(1em);
+    width: calc(100% - 1em);
+}
+
+
+/* SPECIALS COLORS */
+#blog_display .coffee {
+    color: var(--counter-color-dark);
+    background-color: var(--counter-color-light); 
+}
+#blog_display .mynth {
+    background-color: var(--accent-color-dark);
+    color: var(--accent-color-light);
+}
+#blog_display .blood {
+    color: var(--pure-white);
+    background-color: #a00;
+}
+#blog_display .honey {
+    color: #fe0;
+    background-color: #da0;
+}
+#blog_display .water {
+    color: #acf;
+    background-color: #05a;
+}
+#blog_display .violet {
+    color: #c7f;
+    background-color: #a07;
+}
+#blog_display .rose {
+    background-color: #f9c;
+    color: #d07;
+}

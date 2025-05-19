@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr" data-site="audios">
+<head>
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Melide : Audiothèque</title>
+  <link rel="stylesheet" href="../styles.css">
+  
+  <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+
+  <script src="../scripts.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <!-- MODAL -->
+  <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+    <div style="display: none;" id="preview_anything">
+      <iframe style="width: 100%;"></iframe>
+    </div>
+  
+    <div style="display: none;" id="custom_modal">
+      <div class="track_card" style="opacity: 1;">
+        <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
+        <p name="custom_modal_content" style="grid-column: 1/3;"></p>
+        <button name="custom_modal_btn1"></button>
+        <button name="custom_modal_btn2"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION BUUBLE -->
+  <div id="notification" class="">
+    <h2 name="notif_title">Title</h2>
+    <p name="notif_desc">Description</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="screen_loader">
+    <img src="../assets/loading_screen_layer3.webp">
+    <img src="../assets/loading_screen_layer2.webp">
+    <img src="../assets/loading_screen_layer1.webp">
+  </div>
+  <header>
+    <div class="contentChild horizontal" style="justify-content: space-between;">
+      <div class="horizontal" id="logo_icon">
+        <img src="../assets/mld_logo_all_white.png" class="logo">
+        <label>Melide</label>
+      </div>
+
+      <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
+
+      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
+    </div>
+  </header>
+
+  <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_ps.webp')">
+  </div>
+  
+  <div class="mainContent">
+    <div class="contentChild" id="search_panel">
+      <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em; margin-bottom: .5em;">
+        
+        <input oninput="updateURL('search', this.value); sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
+        
+        <select id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 4, this.value)" class="papernote">
+          <option>Trier...</option>
+          <option>Croissant</option>
+          <option>Décroissant</option>
+        </select>
+
+        <div class="autoFill">
+          <select id="state_filter" onchange="updateURL('state', this.value); loadTracksPanel(3, this.value)" class="capsule">
+            <option>Trier...</option>
+            <option>Released</option>
+            <option>Unreleased</option>
+            <option>Removed</option>
+          </select>
+  
+          <select id="type_filter" onchange="updateURL('type', this.value); loadTracksPanel(6, this.value)" class="capsule">
+            <option>Trier...</option>
+            <option>Song</option>
+            <option>Beat/instrumental</option>
+            <option>Remix</option>
+            <option>Cover</option>
+            <option>Soundtrack</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="basicContainer" style="gap: .5em; display: flex; flex-direction: column;">
+        <div id="track_container" class="basicContainer vertical" style="min-height: 60vh; max-height: 25em; overflow: auto; border-radius: 3px;">
+          <img src="../assets/loading gif.GIF" class="loading_balls">
+        </div>
+      </div>
+    </div>
+
+    <div class="contentChild" id="track_display" style="display: none;">
+      <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
+        <img name="track_ui_coverart" style="transform: translateY(-2.5em); width: 100%;">
+        <div class="vertical" name="track_ui_meta">
+          <h2 name="track_ui_title"></h2>
+          <p  name="track_ui_album"></p>
+          <p  name="track_ui_artists"></p>
+        </div>
+
+        <div class="vertical">
+          <input name="track_ui_listen_preview" type="button" value="Écouter l'extrait">
+          <input name="track_ui_presave" type="button" value="Pre-save">
+          <input name="track_ui_spotify" type="button" value="Écouter sur Spotify">
+          <input name="track_ui_youtube" type="button" value="Écouter sur YouTube">
+          <input name="track_ui_soundcloud" type="button" value="Écouter sur SoundCloud">
+          <input name="track_ui_other" type="button" value="Accéder au lien">
+        </div>
+      </div>
+
+      <div class="vertical">
+        <p name="track_ui_current_state" style="background-color: #ddd;"></p>
+        <p name="track_ui_release_date"></p>
+        <p name="track_ui_genres" class="autofill"></p>
+          
+        <input name="track_ui_download" type="button" value="Télécharger">
+      </div>
+
+      <div class="vertical" style=" margin-top: 1em; outline: 1px solid #000; background-color: #000000dd; min-height: 30em; color: #fff; padding: 0 .5em;">
+        <div></div>
+      </div>
+    </div>  
+  </div>
+  
+  <footer class="mainContent">
+    <div id="page_footer" class="contentChild"></div>
+  </footer>
+
+</body>
+</html>

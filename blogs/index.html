@@ -87,12 +87,7 @@
         </div>
       </div>
 
-      <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto; background: #ccc;">
-        <div class="basicContainer vertical" style="background: #ccc; color: #000;">
-          <p style="font-size: .7em; color: #999">Menu</p>
-          <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Nouveautés</a>
-          <a class="papernote clickable disabled" style="text-overflow: ellipsis; white-space: nowrap; text-wrap: nowrap; overflow: hidden;">Populaires</a>
-        </div>
+      <div class="basicContainer" style="gap: .5em; display: flex; flex-direction: column; background: #ccc;">
           
         <div id="blog_container" class="basicContainer vertical" style="background: #ddd; max-height: 25em; overflow: auto;">
           <img src="../assets/loading gif.GIF" class="loading_balls">
@@ -102,7 +97,7 @@
 
     
     <div class="contentChild" id="blog_display">
-      <div class="track_card" style="font-size: 1em; opacity: 1; display: grid; grid-template-columns: 4.2em auto 7em; outline: 1px #555 solid; background: #555; padding: .25em;">
+      <div class="track_card" style="font-size: 1em; opacity: 1; display: grid; grid-template-columns: auto auto 7em; outline: 1px #555 solid; background: #555; padding: .25em;">
         <a class="papernote clickable sepia" style="font-weight: bold; font-size: 100%;" onclick="goBack()">Retour</a>
         <span></span>
         <a style="display: none;" class="papernote clickable">Prochain</a>
@@ -115,7 +110,7 @@
         <p style="text-align: end; padding-right: .25em;" name="blog_author"></p>
       </div>
       <div class="break"></div>
-      <div name="blog_container" style="padding: 0 .5em 5em .5em;"></div>  
+      <div name="blog_container" style="padding: 0 .5em 5em .5em; font-size: 1.5em;"></div>  
     </div>  
   </div>
 
