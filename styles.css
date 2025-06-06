@@ -562,3 +562,23 @@ header .logo {
   display: flex; opacity: 1;
   pointer-events: all;
 }
+
+
+.windowstexts {
+  pointer-events: none; font-family: 'Noto Sans', monospace;
+  /*background-image: url("windowstexts.png");*/
+  transform: translateY(-1em) scale(250%); opacity: 0;
+  transition: transform 500ms, opacity 500ms;
+  border-image: url("windowstexts.png") fill 300 / 250px / 0px; padding: 4em 1em;
+  /* border-image: url("windowstexts.png") 30; border: 10px solid #000;*/
+}
+.windowstexts * {
+  font-family: 'Noto Sans', monospace;
+}
+
+.windowstexts.reveal {
+  pointer-events: all;
+  transform: translateY(0) scale(100%); opacity: 1;
+}
+
+ul { list-style-position: inside; }
