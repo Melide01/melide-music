@@ -1,0 +1,92 @@
+:root {
+  --max-width: 300px;
+  --padding: .5em;
+  --slider-height: 5em;
+  --blur: 20;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  min-width:100%;
+  min-height:100%;
+  overflow: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+.background {
+  position: fixed; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -1;
+  background-image: url("image.png"); background-position: center;
+  background-size: cover;
+  filter: blur(calc(var(--blur) * 1px)) brightness(.5);
+  transform: scale(calc(1 + ((var(--blur) * 2) / 100)));
+}
+
+.mainContent {
+  width: 100%;
+}
+.mainContent>* {
+  width: 100%; max-width: var(--max-width); margin: 0 auto;
+}
+
+.div-two {
+  display: grid; grid-template-columns: auto auto;
+  justify-items: center;
+}
+
+.slider {
+  height: var(--slider-height); width: 100%; background: #fff4;
+  border-radius: calc(var(--slider-height) * 2); padding: calc(var(--padding)/2);
+  position: relative;
+}
+
+.slider>.ball {
+  position: absolute;
+  display: flex; justify-content: center; align-items: center; padding: var(--padding);
+  height: calc(var(--slider-height) - var(--padding)); 
+  width: calc(var(--slider-height) - var(--padding)); 
+  border-radius: 50%; 
+  background: #ddda;
+  box-shadow: 0 0 40px #000;
+  animation: sineinfinite 2542ms infinite;
+  transition: left 250ms, transform 250ms;
+}
+.slider>.ball:hover { transform: scale(110%); }
+.slider>.ball:active { transform: scale(95%); transition: left 0; }
+
+.phone-icon {
+  width: calc(var(--slider-height));
+  height: calc(var(--slider-height)); background-color: #aaa; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; border-radius: 50%; padding: var(--padding);
+  animation: popinfinite 1s infinite;
+}
+.phone-icon:nth-child(2) { 
+  animation-delay: .25s;
+}
+
+.phone-icon>img, .ball>img {
+  width: 100%; pointer-events: none; user-select: none;
+}
+
+.phone-take {
+  transform: rotate(-135deg) translateY(-.25em);
+}
+
+@keyframes popinfinite {
+  0%, 100% { opacity: .9; }
+  20% { opacity: 1; }
+}
+@keyframes sineinfinite {
+  0%, 100% { opacity: .8; }
+  50% { opacity: 1; }
+}
