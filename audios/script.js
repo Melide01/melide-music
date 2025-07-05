@@ -153,13 +153,10 @@ function loadTrack(index) {
     track_ui_current_state.textContent = data[6] + " - " + data[3];
     track_ui_release_date.textContent = "Date de sortie : " + new Date(data[4]).toLocaleDateString();
     track_ui_genres.innerHTML = data[8].split(', ').map(v => `<a class="capsule minim">${v}</a>`).join("");
-
-    
 }
 
 function goBack() {
     header_banner.classList.remove('minim');
-
     updateURL("track");
     search_panel.style.display = "block";
     track_display.style.display = "none";
@@ -300,21 +297,21 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
 
         track_card_div.appendChild(tracks_meta);
 
-
         const action_div = document.createElement('div'); action_div.classList.add('vertical');
 
         // PEUT ETRE ECOUTER SUR UNE PLATEFORME
-        const platform_button = document.createElement('div');
-        platform_button.style = "display: grid; grid-template-columns: repeat(3, calc(100% / 3)); opacity: .7; gap: .25em"
-        platform_button.innerHTML = `<p>${e[21]} <img style="opacity: 1; height: .6em" src="../assets/icons/vues.png"></p><p>${e[22]} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e[23] !== "" ? '<p>' + (e[23] + ".00€" === "0.00€" ? "FREE" : e[23] + ".00€") + "</p>" : ""}`;
-        action_div.appendChild(platform_button);
-
-
+        if (e[21] && e[22]) {
+            const platform_button = document.createElement('div');
+            platform_button.style = "display: grid; grid-template-columns: repeat(3, calc(100% / 3)); opacity: .7; gap: .25em"
+            platform_button.innerHTML = `<p>${e[21]} <img style="opacity: 1; height: .6em" src="../assets/icons/vues.png"></p><p>${e[22]} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e[23] !== "" ? '<p>' + (e[23] + ".00€" === "0.00€" ? "FREE" : e[23] + ".00€") + "</p>" : ""}`;
+            action_div.appendChild(platform_button);
+        }
+        
         if (e[13] === "true") {
             const download_button = document.createElement('input'); download_button.type = "button"; download_button.value = "Download";
             action_div.appendChild(download_button);
         }
-
+        
         track_card_div.appendChild(action_div);
         
         if (e[9] !== "") {
