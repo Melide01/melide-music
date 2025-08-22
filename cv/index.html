@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - John Teuira</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Staatliches&display=swap');
+
+        :root {
+            --page-width: 794px;
+            --page-height: 1123px;
+            --font-size: 16px;
+            --page-gap: 1em;
+            --item-border-radius: 15px;
+        }
+
+        html,
+        body {
+            height: 100%;
+            font-size: var(--font-size);
+            font-family: "Outfit", sans-serif;
+            background: #eee;
+        }
+
+        #page {
+            position: relative;
+            /* margin: 100px auto;*/
+            width: var(--page-width);
+            height: var(--page-height);
+            background: #fff;
+            /* box-sizing: border-box; */
+        }
+
+        ul, ol {
+            list-style-position: inside;
+        }
+
+        a[href] { all: unset; cursor: pointer; margin-left: 1em; font-weight: 200; color: #555; }
+        a[href]:hover { margin-left: 1.2em; }
+
+        ul>summary, ol>summary {
+            font-weight: 800;
+            font-size: 70%;
+            background-color: #0551;
+            color: #055;
+            padding-left: 7px;
+            padding-top: .25em;
+            border-bottom: 4px solid #0555;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: calc(var(--page-gap) / 4) calc(var(--page-gap) / 1);
+            height: 1em;
+            max-width: 15.2em;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        th { letter-spacing: 2px; }
+
+        tr:has(>th) {
+            background-color: #0002;
+        }
+
+        tr:has(>td):nth-child(even) {
+            background: #00000009;
+        }
+
+        th:not(:last-of-type), td:not(:last-of-type) {
+            border-right: 1px solid #AAAA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        
+
+        .hor, .ver { display: flex; }
+        .hor { flex-direction: row; }
+        .ver { flex-direction: column; }
+
+        .padding { padding: var(--page-gap); }
+        .gap { gap: var(--page-gap); }
+
+        .ver.center, .hor.align { align-items: center; }
+        .ver.align, .hor.center { justify-content: center; }
+
+        .button {
+            border: solid 1px #fff5;
+            border-radius: var(--item-border-radius);
+            padding: calc(var(--page-gap) / 2);
+        }
+        .button.action {
+            background: linear-gradient(to top, transparent, #052D);
+            color: #FFF;
+            font-weight: 100;
+            text-shadow: 0 0 5px #0FD, 0 0 2px #0FD;
+            padding-left: 1em;
+            padding-right: 1em;
+        }
+
+        .fun.title {
+            border-bottom: solid .5em #0FD;
+            margin-bottom: calc(var(--page-gap) / 2);
+        }
+
+        .range_list {
+            list-style-type: none;
+        }
+
+        .range_list > li {
+            z-index: 2;
+            padding: calc(var(--page-gap) / 2);
+            position: relative;
+            padding-top: calc(var(--page-gap) / 2 + 5px);
+            background: linear-gradient(to bottom, #0003, transparent 20%);
+            margin-bottom: calc(var(--page-gap) / 2);
+        }
+        .range_list > li::before {
+            content: "";
+            z-index: -2;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: var(--per);
+            background: linear-gradient(to top, var(--bg) 20%, transparent 50%);
+            border-right: solid .5em var(--bg);
+            opacity: .1;
+        }
+        .range_list > li::after {
+            content: "";
+            z-index: -1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 5px;
+            width: var(--per);
+            background: linear-gradient(to top, var(--bg) 50%, #000);
+        }
+
+        .break {
+            position: relative;
+            list-style-type: none;
+            --gap: .5em;
+            padding: var(--gap);
+        }
+        .break::after {
+            position: absolute;
+            content: "";
+            top: var(var(--gap));
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #0001;
+        }
+
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            background: #000;
+            color: #FFF;
+            width: 100%;
+            text-align: end;
+        }
+
+        .font_staatliches, th, summary { font-weight: 100; font-family: "Staatliches", sans-serif; }
+
+        /* can break */
+        label { display: grid; grid-template-columns: 5em auto; align-items: center; }
+        label > input { all: unset; border-top: solid 2px #0001; border-bottom: solid 2px #0003; padding: calc(var(--page-gap) / 2); }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+      document.addEventListener("keydown", async (e) => {
+        if (e.ctrlKey && e.key === "s") {
+            e.preventDefault()
+            const page = document.getElementById("page");
+            const canvas = await html2canvas(page, { scale: 2, useCORS: true });
+            const url = canvas.toDataURL("image/png");
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "cv-john-teuira.png";
+            link.click();
+        }
+      });
+    </script>
+
+</head>
+
+<body>
+    <section id="page">
+        <div class="hor" style="position: relative; height: min-content; overflow: hidden; background: linear-gradient(to right, #000, #0FC); color: #FFF;">
+            <div class="ver padding">
+                <h4>John Teuira</h4>
+                <h2 class="font_staatliches" style="color: #0FD; font-weight: 300;">Curriculum Vitae</h2>
+            </div>
+            <img src="melide_logo_black.PNG" style="opacity: .2; position: absolute; right: 10em; top: 0; height: 100%; transform: scale(1000%);">
+            <img src="melide_logo_rich.PNG" style="position: absolute; height: 100%; opacity: .7; right: .5em; top: 0;">
+        </div>
+        <div class="hor gap padding center" style="background-color: #000; color: #FFF;">
+            <span class="button action">Sympa et sérieux</span>
+            <span class="button action">Art et technique</span>
+            <span class="button action">Faire grand, mais surtout bien faire</span>
+        </div>
+
+        <div class=" gap" style="display: grid; grid-template-columns: 20% auto;">
+            <div class="ver center align" style="position: relative;">
+                <img src="photo identite.jpeg" style="height: 100%; width: 100%;">
+            </div>
+            <div class="ver align" style="font-size: 100%; gap: calc(var(--page-gap) / 3.5);">
+                <label><p>Nom</p>       <input disabled type="text" value="TEUIRA"></label>
+                <label><p>Prénom</p>    <input disabled type="text" value="John"></label>
+                <label><p>Âge</p>       <input disabled type="text" value="22 ans"></label>
+                <label><p>Origine</p>   <input disabled type="text" value="Tahiti, Polynésie Française"></label>
+            </div>
+        </div>
+
+        <div class="ver padding" style="padding-bottom: 0; font-size: 150%;">
+            <h2 class="fun title">Statistiques</h2>
+            <div class="hor center gap" style="font-size: 70%;">
+                <ul class="range_list" style="flex-shrink: 1;">
+                    <summary>Expérience</summary>
+                    <li style="font-size: 70%; --per: 80%; --bg: #0A7">Programmation - HTML, CSS, JS, GDScript</li>
+                    <li style="font-size: 70%; --per: 90%; --bg: #50D">Audio & Musique - LogicPro, Audacity, FLStudio</li>
+                    <li style="font-size: 70%; --per: 65%; --bg: #D50">Modélisation  et animation 3D - Blender</li>
+                </ul>
+                <ul class="range_list" style="flex-grow: 1;">
+                    <summary>Expérience</summary>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Rôle</th>
+                                <th>Année</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Radio Hiti FM</td>
+                                <td>Stagiaire - Montage Audio</td>
+                                <td>2017</td>
+                            </tr>
+                            <tr>
+                                <td>Théo l'artichaut</td>
+                                <td>Monteur vidéo</td>
+                                <td>2020</td>
+                            </tr>
+                            <tr>
+                                <td>Crescent Café</td>
+                                <td>Compositeur, Musicien</td>
+                                <td>2022</td>
+                            </tr>
+                            <tr>
+                                <td>Radio LVDL</td>
+                                <td>Stagiaire - Montage Audio</td>
+                                <td>2023</td>
+                            </tr>
+                            <tr>
+                                <td>Association A Tauturu Ia Na Papara & Nouvelle-Zélande</td>
+                                <td>Développeur web, Graphiste</td>
+                                <td>2025</td>
+                            </tr>
+                            <tr>
+                                <td>Melide</td>
+                                <td>Compositeur, Musicien</td>
+                                <td>2025</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ver padding" style="font-size: 150%;">
+            <h2 class="fun title">Portfolio & Références</h2>
+            <div class="hor gap" style="font-size: 70%;">
+                
+                <ul style="width: 100%; list-style-position: outside; margin-left: 1.5em;">
+                    <li><p>Site Internet : <a href="https://www.melide.music/">www.melide.music</a></p></li>
+                    <li class="break"></li>
+                    <li><p>Portfolio : <a href="https://drive.google.com/drive/folders/1_8ILtHwiRB1mPBwWGemYmGA1dFZV8M23?usp=sharing">Modélisation et animation 3D</a></p></li>
+                    <li class="break"></li>
+                    <li><p>Référence : <a href="https://www.youtube.com/@crescentcafe">Crescent Café - YouTube</a></p></li>
+                    <li><p>Référence : <a href="https://www.youtube.com/@Thai-Haut">Théo Artichaut - YouTube</a></p></li>
+                    <li><p>Référence : <a href="https://random.melide.music/">Random Party - Site Internet</a></p></li>
+                    <li><p>Référence : <a href="https://www.hyperpad.com/users/xxwhitehearrxx">hyperPad - Jeux Vidéos</a></p></li>
+                    <li><p>Référence : <a href="https://www.facebook.com/p/Association-A-Tauturu-Ia-Na-de-Papara-Nouvelle-Z%C3%A9lande-100092676760542/">A Tauturu Ia Na - Page Facebook</a></p></li>
+                    <li class="break"></li>
+                    <li><p>E-mail : <a href="mailto:john.teuira.tahiti@gmail.com">john.teuira.tahiti@gmail.com</a></p></li>
+                    <li><p>Téléphone : <a href="tel:+68987303262">+689 87303262</a></p></li>
+                </ul>
+            </div>
+        </div>
+
+        <footer class="padding" style="position: relative;">
+            <a href="https://www.melide.music/cv/" style="color: #DDD; position: absolute; left: var(--page-gap);">< Lien du site internet de ce document ></a>
+            Melide, John Teuira, 2025
+        </footer>
+    </section>
+</body>
+
+</html>
