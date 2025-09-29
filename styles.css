@@ -124,7 +124,7 @@ header .logo {
   font-size: .7em; text-shadow: 0 0 1px #000, 0 0 3px #000;
   position: fixed; background-color: #444; outline: #444 solid 1px; color: #fff;
   padding: calc(var(--padding) * 1) calc(var(--padding) * 4); border-radius: calc(var(--padding) / 2);
-  z-index: 998;
+  z-index: 1000;
 }
 #notification:hover {
   opacity: .5;

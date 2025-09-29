@@ -23,6 +23,7 @@ const track_ui_youtube = track_display.querySelector('[name="track_ui_youtube"]'
 const track_ui_soundcloud = track_display.querySelector('[name="track_ui_soundcloud"]');
 const track_ui_other = track_display.querySelector('[name="track_ui_other"]');
 const track_ui_download = track_display.querySelector('[name="track_ui_download"]');
+const track_ui_content = track_display.querySelector('[name="track_ui_content"]')
 
 var preview_id;
 track_ui_listen_preview.addEventListener('click', () => {
@@ -56,8 +57,26 @@ track_ui_other.addEventListener('click', () => {
     
 });
 
+var current_track;
+
 track_ui_download.addEventListener('click', () => {
-    customModal("Désolé", "La fonctionnalité de téléchargement est bientôt prête", "Ok", () => {revealModal('custom_modal', true); notify('', 'Merci de votre patience', 'center', 'top', 'good')}, "Mince, pourquoi?", () => {revealModal('custom_modal', true); notify('', 'Un peu de patience.', 'center', 'top', 'neutral')})
+    // Download Track
+    notify('', 'Veuillez patienter. Votre téléchargement va débuter.', 'center', 'top', 'neutral');
+    fetch(fetchable_google_sheet + "?get=download_request&data=" + current_track[0])
+        .then(res => res.json())
+        .then(data => {
+            const a_download = document.createElement('a');
+            a_download.href = "https://drive.google.com/uc?export=download&id=" + data.download_id;
+            a_download.download;
+            a_download.click();
+            a_download.remove();
+            notify('Merci', 'Votre téléchargement va débuter.', 'center', 'top', 'good');
+            customModal("Merci !", "Merci d'avoir télécharger l'instru.", "Accueil", () => {location.href = "/"}, "Revenir au registre", () => {revealModal('custom_modal', true);})
+        })
+        .catch(err => console.error(err));
+    return;
+    
+    // customModal("Désolé", "La fonctionnalité de téléchargement est bientôt prête", "Ok", () => {revealModal('custom_modal', true); notify('', 'Merci de votre patience', 'center', 'top', 'good')}, "Mince, pourquoi?", () => {revealModal('custom_modal', true); notify('', 'Un peu de patience.', 'center', 'top', 'neutral')})
 });
 
 function loadTrack(index) {
@@ -66,6 +85,14 @@ function loadTrack(index) {
     const params = new URLSearchParams(window.location.search);
     const track = params.get("track");
     const data = song_data.tracks_data.filter(v => String(v[0]) === String(index))[0];
+    current_track = data;
+
+    if (data[20]) {
+        track_ui_content.innerHTML = parseMarkdown(data[20], '\\n');
+    } else {
+        track_ui_content.innerHTML = '<br><em style="color: #AAA">Contenu manquant.</em>';
+    }
+    
 
     search_panel.style.display = "none";
     track_display.style.display = "block";

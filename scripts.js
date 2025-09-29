@@ -3,7 +3,7 @@ var info_rules = {
     "header": {
         "Accueil": {"href": "/"},
         "Contact": {"href": "/contact/"},
-        "Merch": {}
+        "Shop": {}
     },
     "footer": [
         {
@@ -68,7 +68,6 @@ function customModal(title, content, btn1, btn1Callback = btn1cb, btn2, btn2Call
 var opened_modal;
 function revealModal(id = "", callback = false) {
     const modal = document.getElementById(id);
-    console.log(callback)
     
     if (id !== "" && !opened_modal?.parentElement.classList.contains("reveal") && !callback) {
         opened_modal = modal;
@@ -264,23 +263,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const handleHome = (data) => {
         setupMiniMelide();
 
-        if (!cached_blogs) {
-            fetch(fetchable_google_sheet + "?get=blogs")
-                .then(res => res.json())
-                .then(data => {
-                    blog_data = data;
-                    sessionStorage.setItem("blogs", JSON.stringify(data));
-                    loadBlogsContainer(data)
-                })
-                .catch(err => {
-                    notify("Erreur", "Une erreur s'est produite", "top", "center", "bad");
-                    console.error(err);
-                });
-        } else {
-            loadBlogsContainer(blog_data)
-        }
-
         if (!cached_tracks) {
+            notify('Bienvenue !', 'Faite comme chez vous.', "top", "center", "good")
             fetch(fetchable_google_sheet + "?get=tracks")
                 .then(res => res.json())
                 .then(data => {
@@ -488,7 +472,7 @@ function updateRemainingTime() {
 }
 
 function getLatestRelease(data) {
-    const latest_track = data.tracks_data.filter(a => a[3] === "Released").sort((a, b) => new Date(b[4])- new Date(a[4]));
+    const latest_track = data.tracks_data.filter(a => a[3] === "Released" && a[6] === "Song").sort((a, b) => new Date(b[4])- new Date(a[4]));
     const today_date = new Date();
  
     release_date = new Date(latest_track[0][4]);
@@ -515,7 +499,9 @@ function getLatestRelease(data) {
         ${latest_track[0][19] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: .8em; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][19] + '">Écouter le lien</a>' : ""}
         `;
     latest_action.innerHTML = latest_buttons;
-
+    document.querySelector('[name="latest_song_cover"]').title = "Ouvrir.";
+    document.querySelector('[name="latest_song_cover"]').style.cursor = "pointer";
+    document.querySelector('[name="latest_song_cover"]').addEventListener('click', () => location.href = "/audios/?track=" + latest_track[0][0])
     document.querySelector('[name="latest_song_title"]').textContent = latest_track[0][1];
     document.querySelector('[name="latest_song_artist"]').textContent = latest_track[0][7];
     document.querySelector('[name="latest_song_cover"]').src = `https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][10]}`;
@@ -588,3 +574,181 @@ function moveMelide(dir = 0.5, playanim = true, is_playerdriven = false) {
     mini_melide.style.left = direction;
     mini_melide.style.transform = `TranslateX(${counter_anchor})`;
 };
+
+function parseMD(data, separator = "\n") {
+    const lines = data.split(separator);
+    var output = "";
+    let inList = false;
+    let inTable = false;
+    let tableRows = [];
+
+    for (let i=0; i<lines.length; i++) {
+        let line = lines[i].trim();
+
+        var isListItem = /^(\-|\*|\d+\.)\s+/.test(line);
+        var isTable = /^\|(.+)\|/.test(line);
+
+        if (isTable && !inTable) {
+            output += "<table>";
+            inTable = true;
+        } else if (!isTable && inTable) {
+            output += "</table>";
+            inTable = false;
+        }
+
+        if (isTable) {
+            const is_linebreak = line.split('|').slice(1, -1).map(v => v.trim()).filter(v => !/(^\-+)/.test(v));
+            if (is_linebreak.length === 0) continue;
+            const row = "<tr>" + line.split('|').slice(1, -1).map(v => `<td>${v.trim()}</td>`).join('') + "</tr>";
+            output += row; continue;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        if (isListItem && !inList) {
+            output += "<ul>";
+            inList = true;
+        } else if (!isListItem && inList) {
+            output += "</ul>";
+            inList = false;
+        }
+
+        if (line === "") {
+            output += "<br/><br/>";
+            continue;
+        }
+
+        line = line
+            .replace(/\#\#\s\((.*?)\)\s(.*)/gm, '<h2 class="$1">$2</h2>')
+            .replace(/\((.*?)\)\=\=(.*?)\=\=/gm, '<div style="display: inline;background: $1">$2</div>')
+            .replace(/\*\*(.*)\*\*/gm, '<b>$1</b>')
+            .replace(/\*(.*)\*/gm, '<i>$1</i>')
+            .replace(/\!\[image\]\((.*)\)\{(.*)\}/gm, '<img src="$1" $2>')
+            .replace(/\[\!(.*?)\s+([^\]]+?)\]\(([^)]+?)\)/gm, '<$1 onclick="$3">$2</$1>')
+            .replace(/\[(.*)\]\((.*?)\)/gm, '<a target="_blank" href="$1">$2</a>')
+            .replace("===", '<br><div class="break"></div>')
+            .replace(/^(\-|\*)\s+(.*)/gm, "<li>$2</li>")
+            .replace(/^\d+\.\s+(.*)/gm, '<li style="list-style: decimal;">$1</li>')
+        
+        output += line;
+    };
+    if (!inList) output += "</ul>";
+
+    return output;
+    blog_display.querySelector('[name="blog_container"]').innerHTML = output;
+}
+
+function parseMarkdown(string, separator = "\n") {
+    const lines = string.replace(/\r/g, '').split(separator);
+    let output = "";
+    let buffer = [];
+    let currentBlock = null;
+
+    var structures = {
+        yaml: {
+            start: /^---$/,
+            end: /^---$/,
+            parse: lines => {
+                console.log('hey', lines)
+                const obj = {};
+                for (const line of lines) {
+                    const [key, ...rest] = line.split(':');
+                    if (!key || rest.length === 0) continue;
+                    obj[key.trim()] = rest.join(':').trim();
+                }
+                console.log('yaml', Object.entries(obj).map( ([k, v]) => `<p><strong>${k}</strong>:${v}</p>`).join('\n'))
+                return `<div class="pageinfo">${Object.entries(obj).map( ([k, v]) => `<p>${v}</p>`).join('\n')}</div>`
+            }
+        },
+        code:   { 
+            start: /^```/,
+            end: /^```/,
+            parse: lines => `<pre><code>${lines.join('\n')}</code></pre>`
+        },
+        table:  {
+            match: line => /^\|.*\|$/.test(line),
+            parse: lines => {
+                const [headerLine, separatorLine, ...bodyLines] = lines;
+                const isHeader = /^(\|\s:?-+:?\s*)+\|?$/.test(separatorLine);
+
+                const parseRow = (row, cellTag) => {
+                    const cols = row.replace(/^\||\|$/g, '').split('|')
+                        .map(col => `<${cellTag}>${parseInline(col.trim())}</${cellTag}>`)
+                        .join('');
+                    return `<tr>${cols}</tr>`;
+                }
+
+                let thead = '', tbody = '';
+                let targetLines = lines;
+                if (isHeader) {
+                    thead = `<thead>${parseRow(headerLine, 'th')}</thead>`;   
+                    targetLines = bodyLines;
+                }
+                const body = targetLines.map(row => parseRow(row, 'td')).join('');
+                tbody = `<tbody>${body}</tbody>`;
+                return `<table>${thead}${tbody}</table>`;
+            }
+        },
+        list:   { 
+            stateIn: false, 
+            match: line => /^(\*|\-|\d+\.)\s+(.*)/.test(line),
+            parse: lines => {
+                const isOrdered = /^\d+\./.test(lines[0]);
+                const tag = isOrdered ? 'ol' : 'ul';
+                const items = lines.map(line => {
+                    const content = line.replace(/^(\*|\-|\d+\.)\s+/, '');
+                    return `<li>${parseInline(content)}</li>`;
+                });
+                return `<${tag}>${items.join('')}</${tag}>`;
+            }
+        }
+    };
+
+    var inlineParsers = [
+        [/\b((https?:\/\/|www\.)[^\s<>()]+(?:\.[^\s<>()]+)*(?:\/[^\s<>()]*)?)/gi, (_, url) => {
+            const href = url.startsWith('http') ? url : 'https://' + url;
+            return `<a href="${href}">${url}</a>`;
+        }],
+        [/^(\#{1,6})\s+(.*)$/, (match, hashes, content) => { const level = hashes.length; return `<h${level}>${content}</h${level}>` } ],
+        [/(\*{1,2})(.+?)\1/g, (match, stars, content) => { const tag = stars.length === 2 ? 'b' : 'i'; return `<${tag}>${content}</${tag}>` } ],
+        [/(\_)(.+?)\1/g, (match, underscore, content) => { return `<em>${content}</em>` } ],
+        [/\[(.+?)\]\((https?:\/\/[^\s)]+)\)/g, (_, text, url) => `<a href="${url}">${text}</a>`],
+        [/!\[([^\]]*)\]\(([^)]+\.(png|jpe?g|gif|svg|webp))\)/gi, (_, alt, src) => { return `<img src="${src}" alt="${alt}" />`; }],
+        [/\[(.*?)\]\(([^)]+\.(mp3|ogg|wav))\)/gi, (_, label, src) => { return `<audio controls src="${src}">${label}</audio>`; }],
+        [/\[(.*?)\]\(([^)]+\.(mp4|webm|ogg))\)/gi, (_, label, src) => { return `<video controls src="${src}">${label}</video>`; }],
+        [ /^===$/, (_) => { return '<div class="pagebreak"></div>' } ]
+    ];
+
+    function parseInline(line) {
+        for (const [ regex, fn ] of inlineParsers) { line = line.replace(regex, fn); };
+        return line;
+    }
+
+    function flushBuffer() { if (!currentBlock) return; output += structures[currentBlock].parse(buffer); buffer = []; currentBlock = null; }
+
+    for (let line of lines) {
+        if (currentBlock === 'code' || currentBlock === 'yaml') { if (structures[currentBlock].end.test(line)) { flushBuffer(); } else { buffer.push(line); } continue; };
+        if (!currentBlock && structures.code.start.test(line)) { flushBuffer(); currentBlock = 'code'; buffer = []; continue; };
+        if (!currentBlock && structures.yaml.start.test(line)) { flushBuffer(); currentBlock = 'yaml'; buffer = []; continue; };
+
+        if (currentBlock && structures[currentBlock].match && structures[currentBlock].match(line)) { buffer.push(line); continue; };
+        if (!currentBlock) {
+            for (const key of [ 'table', 'list' ]) {
+                const s = structures[key];
+                if (s.match && s.match(line)) { flushBuffer(); currentBlock = key; buffer.push(line); break; }
+            }
+
+            if (currentBlock) continue;
+        }
+        flushBuffer();
+        let handled = false;
+        if (!handled && line.trim() !== '') { output += parseInline(line); } else if (handled) { output += line; }        
+        output += '<br/>';
+    }
+
+    flushBuffer();
+    return output;
+}
