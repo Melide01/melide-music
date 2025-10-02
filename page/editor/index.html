@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - Page Editor</title>
+    <script defer src="/scripts.js"></script>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
+      <div style="display: none;" id="preview_anything">
+        <iframe></iframe>
+      </div>
+    
+      <div style="display: none;" id="custom_modal">
+        <div class="track_card minim" style="opacity: 1;">
+          <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
+          <p name="custom_modal_content" style="grid-column: 1/3;"></p>
+          <button name="custom_modal_btn1"></button>
+          <button name="custom_modal_btn2"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATION BUUBLE -->
+    <div id="notification" class="">
+      <h2 name="notif_title">Title</h2>
+      <p name="notif_desc">Description</p>
+    </div>
+
+    <style>
+        .basicContainer {
+            margin: 0 !important;
+        }
+        textarea { padding: .5em; }
+        dialog {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            --gap: 1em;
+            width: calc(100% - var(--gap)); height: calc(100% - var(--gap));
+            padding: calc(var(--gap) / 2);
+            overflow-y: auto;
+        }
+    </style>
+    <dialog id="render_dialog">
+        <button onclick="render_dialog.open = false" style="position: absolute; top: calc(var(--gap) / 2); right: calc(var(--gap) / 2);">Close</button>
+        <h5>Rendu</h5>
+        <div id="render_container"></div>
+    </dialog>
+    <div class="contentChild">
+        <div class="basicContainer">
+            <h3>Éditeur de texte</h3>
+            <div style="display: flex; flex-direction: row; gap: .25em; margin-bottom: .25em;">
+                <button onclick="handle_render()">Voir le rendu</button>
+                <button onclick="output_text.value = generate_output()">Convertir</button>
+            </div>
+            <textarea id="input_text" style="width: 100%; height: 25em; resize: none; overflow: auto;"></textarea>
+        </div>
+    </div>
+    <div class="contentChild">
+        <div class="basicContainer">
+            <div style="display: flex; flex-direction: row; gap: .25em; margin-bottom: .25em;">
+                <button onclick="handle_copy()">Copier</button>
+                <button onclick="handle_revert()">Revert</button>
+            </div>
+            
+            <textarea id="output_text" style="font-family: monospace; width: 100%; height: 25em; resize: none; overflow: auto;">Votre texte...</textarea>
+        </div>
+    </div>
+</body>
+</html>

@@ -94,13 +94,13 @@
       </div>
     </div>
 
-    <div class="contentChild" id="track_display" style="display: none;">
+    <div class="contentChild" id="track_display" style="display: none; color: #FFF; background-color: #000A;">
       <div style="display: grid; grid-template-columns: 25% auto 35%; gap: .5em">
         <img name="track_ui_coverart" style="width: 100%;">
         <div class="vertical" name="track_ui_meta">
           <h2 name="track_ui_title"></h2>
-          <p  name="track_ui_album"></p>
-          <p  name="track_ui_artists"></p>
+          <p  name="track_ui_album" style="color: #0AAA"></p>
+          <p  name="track_ui_artists" style="color: #0AA"></p>
         </div>
 
         <div class="vertical">
@@ -114,16 +114,14 @@
       </div>
 
       <div class="vertical">
-        <p name="track_ui_current_state" style="background-color: #ddd;"></p>
+        <p name="track_ui_current_state" style="margin-top: 1em; background-color: #0005; color: #FFFA"></p>
         <p name="track_ui_release_date"></p>
         <p name="track_ui_genres" class="autofill"></p>
           
-        <input name="track_ui_download" type="button" value="Télécharger">
+        <input style="font-size: 1.25em; margin: .25em 0;" name="track_ui_download" type="button" value="Télécharger">
       </div>
 
-      <div name="track_ui_content" class="vertical" style=" margin-top: 1em; outline: 1px solid #000; background-color: #000000dd; min-height: 30em; color: #fff; padding: 0 .5em;">
-        <div></div>
-      </div>
+      <div name="track_ui_content" class="vertical papernote" style="filter: contrast(.9); margin-top: 1em; border-radius: .5em; min-height: 30em; color: #222; padding: 1em .5em;"></div>
     </div>  
   </div>
   

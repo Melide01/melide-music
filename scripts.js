@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
             header_buttons.appendChild(a_el);
         });
     }
-    load_header_buttons();
+    
 
     const load_footer = () => {
         page_footer.style.gridTemplateColumns = `repeat(auto-fill, minmax(10em, auto))`
@@ -233,7 +233,8 @@ document.addEventListener("DOMContentLoaded", () => {
             page_footer.appendChild(footer_group);
         }
     }
-    load_footer();
+
+    
 
     // VARS
     siteType = document.documentElement.dataset.site;
@@ -261,6 +262,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const handleHome = (data) => {
+        load_header_buttons();
+        load_footer();
+        
         setupMiniMelide();
 
         if (!cached_tracks) {
@@ -282,6 +286,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const handleTracks = (data) => {
+        load_header_buttons();
+        load_footer();
+        
         const loadTracks = () => {
             const track = url_params.get("track");
             const filter = !!url_params.get("filter") ? url_params.get("filter") : "Trier..."; // Trier..., Croissant, Decroissant
@@ -323,6 +330,9 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const handleBlogs = () => {
+        load_header_buttons();
+        load_footer();
+
         const loadBlogs = () => {
             const blog = url_params.get("blog");
             const filter = !!url_params.get("filter") ? url_params.get("filter") : "Trier..."; // Trier..., Croissant, Decroissant
@@ -374,7 +384,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (siteType === "blogs") {
         handleBlogs();
     } else if (siteType === "pages") {
-        console.log(`/page/pages/${url_params.get('page')}.md`);
+        load_header_buttons();
+        load_footer();
         const docEl = document.getElementById('pageContent');
         fetch(`/page/pages/${url_params.get('page')}.md`)
             .then((response) => {

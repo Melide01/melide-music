@@ -81,6 +81,7 @@ track_ui_download.addEventListener('click', () => {
 
 function loadTrack(index) {
     header_banner.classList.add('minim');
+    document.body.style.backgroundColor = "#222";
 
     const params = new URLSearchParams(window.location.search);
     const track = params.get("track");
@@ -90,10 +91,9 @@ function loadTrack(index) {
     if (data[20]) {
         track_ui_content.innerHTML = parseMarkdown(data[20], '\\n');
     } else {
-        track_ui_content.innerHTML = '<br><em style="color: #AAA">Contenu manquant.</em>';
+        track_ui_content.innerHTML = '<em style="color: #000A; background-color: #0001"><b>Contenu manquant.</b></em>';
     }
     
-
     search_panel.style.display = "none";
     track_display.style.display = "block";
     logo_icon.style.display = "none";
@@ -183,6 +183,7 @@ function loadTrack(index) {
 }
 
 function goBack() {
+    document.body.style.backgroundColor = "#FFF";
     header_banner.classList.remove('minim');
     updateURL("track");
     search_panel.style.display = "block";
@@ -326,16 +327,27 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
 
         const action_div = document.createElement('div'); action_div.classList.add('vertical');
 
-        // PEUT ETRE ECOUTER SUR UNE PLATEFORME
-        if (e[21] && e[22]) {
+        //  e[21] && e[22]
+        // Vues icons
+        // <p>${e[21]} <img style="opacity: 1; height: .6em" src="../assets/icons/vues.png">
+        if (String(e[13]).toLowerCase() === "true" && e[6] === "Beat/Instrumental") {
             const platform_button = document.createElement('div');
             platform_button.style = "display: grid; grid-template-columns: repeat(3, calc(100% / 3)); opacity: .7; gap: .25em"
-            platform_button.innerHTML = `<p>${e[21]} <img style="opacity: 1; height: .6em" src="../assets/icons/vues.png"></p><p>${e[22]} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e[23] !== "" ? '<p>' + (e[23] + ".00€" === "0.00€" ? "FREE" : e[23] + ".00€") + "</p>" : ""}`;
+            platform_button.innerHTML = `</p><p>${e[22]} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e[23] !== "" ? '<p>' + (e[23] + ".00€" === "0.00€" ? "FREE" : e[23] + ".00€") + "</p>" : ""}`;
             action_div.appendChild(platform_button);
         }
         
-        if (e[13] === "true") {
-            const download_button = document.createElement('input'); download_button.type = "button"; download_button.value = "Download";
+        // QUICK DOWNLOAD BUTTON
+        if (String(e[13]).toLowerCase() === "true") {
+            const download_button = document.createElement('a');
+            if (parseFloat(e[23]) <= 0.0) {
+                download_button.textContent = 'Télécharger';
+            } else {
+                download_button.textContent = 'Acheter';
+            }
+            
+            // download_button.type = "button"; download_button.value = "Télécharger";
+            download_button.style = 'font-size: 1em; text-align: center; background-color: #FFF2';
             action_div.appendChild(download_button);
         }
         
