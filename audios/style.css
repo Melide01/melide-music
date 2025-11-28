@@ -1,0 +1,66 @@
+:root {
+    interpolate-size: allow-keywords;
+}
+div[name="track_ui_content"] {
+    margin-top: var(--padding);
+    min-height: 20em;
+    color: #000;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(10em, auto));
+}
+div[name="track_ui_content"]:has(details[open]) {
+    display: flex;
+}
+div[name="track_ui_content"]:has(details[open]) details:not([open]) {
+    display: none;
+}
+div[name="track_ui_content"] details {
+    height: min-content;
+    border: solid 1em #000;
+    border-image: url('/assets/borderimg_note_white.webp') 50 fill;
+    overflow: hidden;
+}
+
+div[name="track_ui_content"] details summary {
+    position: relative;
+    cursor: pointer;
+    line-height: 1;
+    list-style-type: disc;
+}
+
+div[name="track_ui_content"] details[open] summary::after {
+    left: 0;
+    background-color: #EEE;
+    color: #777;
+}
+div[name="track_ui_content"] details summary::after {
+    content: "Retour";
+    position: absolute;
+    left: calc(var(--padding) * -2);
+    top: 0;
+    width: 100%;
+    font-weight: 800;
+    background-color: #EEE0;
+    color: #7770;
+    padding-left: calc(var(--padding) * 2);
+    transition: background-color 250ms, color 100ms, left 150ms;
+}
+/*
+div[name="track_ui_content"] details > *:not(summary) {
+    padding: calc(var(--padding) * 2);
+}
+*/
+div[name="track_ui_content"] details > *:nth-child(2) {
+    margin-top: var(--padding);
+}
+div[name="track_ui_content"] details::details-content {
+    transition: block-size 500ms, content-visibility 250ms ease;
+    transition-behavior: allow-discrete;
+    block-size: 0;
+}
+div[name="track_ui_content"] details[open]::details-content {
+    block-size: auto;
+}
+
+div[name="track_ui_content"] details>summary::marker {
+    color: #742;
+}

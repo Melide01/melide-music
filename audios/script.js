@@ -81,17 +81,19 @@ track_ui_download.addEventListener('click', () => {
 
 function loadTrack(index) {
     header_banner.classList.add('minim');
-    document.body.style.backgroundColor = "#222";
+    document.body.style.backgroundColor = "#111";
 
     const params = new URLSearchParams(window.location.search);
-    const track = params.get("track");
+    // const track = params.get("track");
     const data = song_data.tracks_data.filter(v => String(v[0]) === String(index))[0];
     current_track = data;
 
     if (data[20]) {
-        track_ui_content.innerHTML = parseMarkdown(data[20], '\\n');
+        track_ui_content.innerHTML = "";
+        parseMarkdown(data[20], '\\n').forEach(el => track_ui_content.appendChild(el));
+        // track_ui_content.innerHTML = parseMarkdown(data[20], '\\n');
     } else {
-        track_ui_content.innerHTML = '<em style="color: #000A; background-color: #0001"><b>Contenu manquant.</b></em>';
+        track_ui_content.innerHTML = '<em style="color: #777;"><b>Contenu manquant.</b></em>';
     }
     
     search_panel.style.display = "none";
@@ -108,20 +110,20 @@ function loadTrack(index) {
     const track_ui_release_date = track_display.querySelector('[name="track_ui_release_date"]');
     const track_ui_genres = track_display.querySelector('[name="track_ui_genres"]');
     
-
     if (data[10] !== "") {
         track_ui_coverart.src = `https://drive.google.com/thumbnail?sz=w1920&id=${data[10]}`;
-        track_ui_coverart.style.display = "block";
-        track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 2/2";
     } else {
-        track_ui_coverart.style.display = "none";
-        track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 1/3";
+        track_ui_coverart.src = "/assets/placeholder.webp";
+        // track_ui_coverart.style.display = "none";
+        // track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 1/3";
     }
+    track_ui_coverart.style.display = "block";
+    track_display.querySelector('[name="track_ui_meta"]').style = "grid-column: 2/2";
     // https://drive.google.com/uc?export=download&id=[YOUR_FILE_ID]
 
     // PREVIEW BUTTON
     if (data[14] !== "") {
-        track_ui_listen_preview.style.display = "block";
+        track_ui_listen_preview.style.display = "flex";
         preview_id = data[14];
     } else {
         track_ui_listen_preview.style.display = "none";
@@ -129,7 +131,7 @@ function loadTrack(index) {
 
     if (data[15] !== "") {
         presave_link = data[15];
-        track_ui_presave.style.display = "block";
+        track_ui_presave.style.display = "flex";
     } else {
         track_ui_presave.style.display = "none";
     };
@@ -137,7 +139,7 @@ function loadTrack(index) {
     // SPOTIFY BUTTON
     if (data[16] !== "") {
         spotify_link = data[16];
-        track_ui_spotify.style.display = "block";
+        track_ui_spotify.style.display = "flex";
     } else {
         track_ui_spotify.style.display = "none";
     }
@@ -145,7 +147,7 @@ function loadTrack(index) {
     // YOUTUBE BUTTON
     if (data[17] !== "") {
         youtube_link = data[17];
-        track_ui_youtube.style.display = "block";
+        track_ui_youtube.style.display = "flex";
     } else {
         track_ui_youtube.style.display = "none";
     }
@@ -153,7 +155,7 @@ function loadTrack(index) {
     // SOUNDCLOUD BUTTON
     if (data[18] !== "") {
         soundcloud_link = data[18];
-        track_ui_soundcloud.style.display = "block";
+        track_ui_soundcloud.style.display = "flex";
     } else {
         track_ui_soundcloud.style.display = "none";
     }
@@ -161,14 +163,14 @@ function loadTrack(index) {
     // OTHER BUTTON
     if (data[19] !== "") {
         other_link = data[19];
-        track_ui_other.style.display = "block";
+        track_ui_other.style.display = "flex";
     } else {
         track_ui_other.style.display = "none";
     }
 
     // DOWNLOAD BUTTON
     if (String(data[13]) === "true" && (data[23] === "" || parseInt(data[23]) === 0)) {
-        track_ui_download.style.display = "block";
+        track_ui_download.style.display = "flex";
     } else {
         track_ui_download.style.display = "none";
     }
@@ -188,7 +190,7 @@ function goBack() {
     updateURL("track");
     search_panel.style.display = "block";
     track_display.style.display = "none";
-    logo_icon.style.display = "block";
+    logo_icon.style.display = "flex";
     goBack_button.style.display = "none";
     loadTracksPanel();
 }
@@ -311,12 +313,13 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         track_element[i] = track_card_div;
 
         var conditional_style_coverart = "";
+        const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
+        track_card_div.appendChild(img_track_cover);
         if (e[10] !== "") {
-            const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
             img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e[10]}`;
-            track_card_div.appendChild(img_track_cover);
         } else {
-            conditional_style_coverart = "grid-column: 1/3;";
+            // conditional_style_coverart = "grid-column: 1/3;";
+            img_track_cover.src = "/assets/placeholder.webp";
         }
 
         const tracks_meta = document.createElement('div'); tracks_meta.classList.add('vertical');
@@ -327,9 +330,6 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
 
         const action_div = document.createElement('div'); action_div.classList.add('vertical');
 
-        //  e[21] && e[22]
-        // Vues icons
-        // <p>${e[21]} <img style="opacity: 1; height: .6em" src="../assets/icons/vues.png">
         if (String(e[13]).toLowerCase() === "true" && e[6] === "Beat/Instrumental") {
             const platform_button = document.createElement('div');
             platform_button.style = "display: grid; grid-template-columns: repeat(3, calc(100% / 3)); opacity: .7; gap: .25em"
@@ -340,14 +340,19 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         // QUICK DOWNLOAD BUTTON
         if (String(e[13]).toLowerCase() === "true") {
             const download_button = document.createElement('a');
+
             if (parseFloat(e[23]) <= 0.0) {
-                download_button.textContent = 'Télécharger';
+                const download_img_icon = document.createElement('img');
+                download_img_icon.src = '/assets/icons/download.png';
+                download_img_icon.style.opacity = '1';
+                download_button.appendChild(download_img_icon);
+                // download_button.textContent = 'Télécharger';
             } else {
                 download_button.textContent = 'Acheter';
             }
             
             // download_button.type = "button"; download_button.value = "Télécharger";
-            download_button.style = 'font-size: 1em; text-align: center; background-color: #FFF2';
+            download_button.style = 'font-size: 1em; text-align: end;';
             action_div.appendChild(download_button);
         }
         

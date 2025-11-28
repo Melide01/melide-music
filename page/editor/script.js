@@ -3,11 +3,14 @@ const output_text = document.getElementById('output_text');
 const render_container = document.getElementById('render_container');
 const render_dialog = document.getElementById('render_dialog');
 
+const editor_type = document.getElementById('editor_type');
+
 function handle_render() {
     var text = generate_output();
     render_dialog.open = true;
-    console.log(parseMarkdown(text, '\\n'))
-    render_container.innerHTML = parseMarkdown(text, '\\n');
+    render_container.innerHTML = "";
+    parseMarkdown(text, '\\n').forEach(el => render_container.appendChild(el));
+    // render_container.innerHTML = parseMarkdown(text, '\\n');
 }
 
 function generate_output() {

@@ -1,174 +1,324 @@
 <!DOCTYPE html>
-<html lang="fr" data-site="home">
+<html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Title</title>
+    <style>
+        :root {
+            --margin: .25em;
+            --gap: .5em;
 
-  <meta property="og:title" content="Melide" />
-  <meta property="og:description" content="Le meilleur site web artiste." />
-  <meta property="og:image" content="assets/web_thumbnail.png" />
-  <meta property="og:url" content="https://www.melide.music/" />
-  <meta property="og:type" content="website" />
+            --color-dark: #111;
+            --color-light: #EFEFFE;
+            --color-accent: #2C7;
+        }
 
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melide</title>
+        html {
+            background-color: #111;
+        }
 
-  
-  <link rel="stylesheet" href="styles.css">
-  <!-- <link rel="stylesheet" href="styles.restyled.css"> -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "url": "https://www.melide.music/",
-      "logo": "https://www.melide.music/assets/mld_logo_all_white.png"
-    }
-  </script>
+        html, body {
+            font-family: Arial, Helvetica, sans-serif;
+            width: 100%;
+            height: 100%;
+        }
 
-  <meta property="og:title" content="Melide" />
-  <meta property="og:description" content="Musiques, Audios et Jeux vidéo. Basé à Tahiti." />
-  <meta property="og:image" content="https://www.melide.music/assets/website_banner.jpg" />
-  <meta property="og:url" content="https://www.melide.music/" />
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-  <script src="scripts.js" defer></script>
+        section {
+            gap: var(--gap);
+            max-width: 500px;
+            width: 100%;
+            padding: var(--gap);
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title_card {
+            position: relative;
+            overflow: hidden;
+            border-radius: calc(var(--gap) + var(--margin));
+            text-shadow: -.7px -.7px 0 #7779, -.7px .7px 0 #7779, .7px -.7px 0 #7779, .7px .7px 0 #7779, 0 0 3px #111;
+            color: var(--color-light);
+            border: 2px solid #1119;
+            outline: 1px solid #EEE3;
+            padding: var(--margin);
+            width: 100%;
+        }
+        .title_card::before {
+            content: "";
+            position: absolute;
+            width: calc(100% + 10em);
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            animation: glint_patrol 9999ms infinite ease-in-out, glint_blink 5555ms infinite ease-in-out;
+            background: linear-gradient(to right, #0000 10%, #777 50%, #0000 90%);
+        }
+        .title_card::after {
+            content: "";
+            position: absolute;
+            width: calc(100% + 10em);
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            animation: glint_patrol 7777ms infinite ease-in-out, glint_blink 3333ms infinite ease-in-out;
+            background: linear-gradient(to right, #0000 10%, #557 50%, #0000 90%);
+        }
+        @keyframes glint_blink {
+            0%, 100% { opacity: .2;}
+            50% {opacity: 1;}
+            
+        }
+        @keyframes glint_patrol {
+            0%, 100% {
+                left: 0em;
+            }
+            50% {
+                left: -10em;
+            }
+        }
+
+        #lyrics_holder {
+            color: #FFFA;
+            transition: color 500ms;
+        }
+
+        #lyrics_holder:hover {
+            cursor: default;
+            color: #FFF;
+        }
+
+        #lyrics_holder::-webkit-scrollbar {
+            display: none;
+        }
+
+        img.track_icon {
+            width: 100%;
+            cursor: pointer;
+            border-radius: calc(var(--gap));
+            mix-blend-mode:overlay;
+            transition: opacity 200ms;
+        }
+        img.track_icon:hover {
+            mix-blend-mode:exclusion;
+            opacity: .3;
+        }
+
+        .listen {
+            cursor: pointer;
+            color: #FFF;
+            text-decoration: none;
+            width: 4em;
+            height: 2em;
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(to top, #0000, var(--fa-color) 60%);
+            background-size: 120% 120%; background-position: center;
+            border: .1em solid #1110;
+            border-radius: 50em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border 200ms, color 400ms, width 200ms ease-out, transform 100ms, padding 100ms, height 300ms;
+        }
+
+        .listen.large {
+            width: 100%;
+            height: 1.45em;
+        }
+
+        .listen:not(.large):hover, .listen:not(.large):focus {
+            aspect-ratio: unset;
+            width: 5em;
+            border-color: #111;
+            color: #111;
+        }
+
+        .listen.large:hover, .listen.large:focus {
+            padding-top: .2em;
+        }
+
+        .listen:active, .listen:focus {
+            transform: translateY(.25em);
+        }
+
+        .loading {
+            position: fixed;
+            z-index: 9;
+            background-color: #111;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            transition: opacity 500ms, transform 1000ms;
+        }
+        .loading > div {
+            height: auto;
+            aspect-ratio: 1/1;
+            opacity: 0;
+            animation: wing_rotate 9999ms infinite linear, wing_reveal 3s forwards ease-out .5s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loading.hide {
+            opacity: 0;
+            transform: scale(200%);
+            pointer-events: none;
+        }
+
+        .loading img {
+            height: 7em;
+            position: absolute;
+            transform: rotate(var(--deg)) translateY(1em);
+            animation: wing_loading 4444ms infinite ease-in-out, wing_blink 2222ms infinite linear var(--delay);
+        }
+        .loading img:nth-child(1) {
+            --deg: 0;
+            --delay: calc(2222ms / 3 * 1);
+        }
+        .loading img:nth-child(2) {
+            --deg: 120deg;
+            --delay: calc(2222ms / 3 * 2);
+        }
+        .loading img:nth-child(3) {
+            --deg: 240deg;
+            --delay: calc(2222ms);
+        }
+        @keyframes wing_rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes wing_loading {
+            0%, 100% { transform: rotate(var(--deg)) translateY(1em); }
+            50% { transform: rotate(var(--deg)) translateY(-3em); }
+        }
+        @keyframes wing_blink {
+            0%, 40%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+        @keyframes wing_reveal {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+    </style>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    
 </head>
 <body>
-  <!-- MODAL -->
-  <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
-    <div style="display: none;" id="preview_anything">
-      <iframe></iframe>
-    </div>
-  
-    <div style="display: none;" id="custom_modal">
-      <div class="track_card minim" style="opacity: 1;">
-        <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
-        <p name="custom_modal_content" style="grid-column: 1/3;"></p>
-        <button name="custom_modal_btn1"></button>
-        <button name="custom_modal_btn2"></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- NOTIFICATION BUUBLE -->
-  <div id="notification" class="">
-    <h2 name="notif_title">Title</h2>
-    <p name="notif_desc">Description</p>
-  </div>
-
-  <!-- CONTENT -->
-  <div id="screen_loader" class="loaded">
-    <img src="assets/loading_screen_layer3.webp">
-    <img src="assets/loading_screen_layer2.webp">
-    <img src="assets/loading_screen_layer1.webp">
-  </div>
-  <header>
-    <div class="contentChild horizontal" style="justify-content: space-between;">
-      <div class="horizontal">
-        <img src="assets/mld_logo_all_white.png" class="logo">
-        <label>Melide</label>
-      </div>
-      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
-    </div>
-  </header>
-
-  <div id="header_banner" class="header_img" style="background-color: #000; background-image: url('assets/bg_artistic_underwater_contrasted_with_logo.webp')">
-    <img src="assets/mld_logo_all_white.png" style="opacity: 0; transition: opacity 1s" onload="setTimeout(() => { this.style.opacity = '1'}, 100)">
-  </div>
-
-
-  <!-- MINI MELIDE-->
-  <img draggable="true" id="mini_melide" style="display: none;">
-  
-  <div id="page_split">
-    <div class="mainContent">
-      <div class="contentChild">
-
-        <div class="papernote autofill" style="padding: .1em">
-          <a class="papernote clickable" href="/audios/?filter=croissant">Musiques</a>
-          <a class="papernote clickable" href="/audios/?filter=croissant&type=beat%2Finstrumental">Prod</a>
-          <a class="papernote clickable disabled">Samples</a>
-          <a class="papernote clickable disabled">Jeux vidéo</a>
-          <a class="papernote clickable disabled">Autres...</a>
+    <div id="loading_pannel" class="loading">
+        <div>
+            <img class="wing_1" src="assets/mld_logo_bottom_white.png">
+            <img class="wing_2" src="assets/mld_logo_bottom_white.png">
+            <img class="wing_3" src="assets/mld_logo_bottom_white.png">
         </div>
-      </div>
-  
-      <div class="contentChild">
-        <div class="basicContainer">
-          <div class="papernote">
-            <b name="latest_song_announce"></b>
-            <img class="loading_balls" src="assets/loading gif.GIF">
-            <div name="latest_song_card" class="track_card" style="grid-template-columns: 150px auto;">
-              <img style="max-height: 150px" name="latest_song_cover" onload="this.style.opacity = '1'; this.parentElement.style.opacity = '1'; this.parentElement.parentElement.querySelector('.loading_balls').style.display = 'none';">
-              
-              <div class="vertical" style="gap: 0; background-color: #ffffffcc; color: #000;">
-                <p name="latest_song_title"></p>
-                <p name="latest_song_artist" style="font-size: 70%; opacity: .7;"></p>
-                <div class="vertical" style="position: relative; margin-top: .5em;">
-                  
-                  <div style="width: 100%; display: flex; justify-content: center;">
-                    <div id="latest_action" class="vertical" style="max-width: 350px; margin-top: .5em; width: 80%; gap: .25em;"></div>
-                  </div>
-                  <label style="text-shadow: none; font-size: .9em; margin-top: 1em;" name="latest_song_timer"></label>
-                  <div id="latest_song_progressbar"></div>
+        
+    </div>
+
+    <section style="border-top: 1em solid var(--color-accent);;">
+        <img src="assets/mld_logo_all_white.png" style="height: 2em; margin-bottom: 1em; opacity: .5;" onclick="location.href = '/home'">
+        <h5 style="color: #555; width: 100%;">Dernière sortie</h5>
+        <div class="title_card">
+            <div id="latest_song_card" style="display: grid; grid-template-columns: 40% auto; align-items: center;">
+                <img class="track_icon" src="assets/placeholder.webp">
+                <div style="padding: var(--gap); display: flex; flex-direction: column; justify-content: center;">
+                    <h1 style="font-size: 3em; font-weight: 200;">Title</h1>
+                    <h3 style="margin-bottom: 1em; font-size: 1em; font-weight: 100;">Author</h3>
+                    <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <a id="spotify_link" style="font-size: 2.5em; --fa-color: #2C5" class="listen spotify"><i class="fa-solid fa-play"></i></a>
+                    </div>
                 </div>
-              </div>
+                <div style="grid-column: 1/3; display: flex; flex-direction: column; align-items: center; gap: .5em; font-size: .7em;">
+                    <br><br>
+                    <h5>Lyrics</h5>
+                    <div id="lyrics_holder" style="overflow: auto; width: 100%; font-size: 2.5em; height: 10em; font-weight: 100;"></div>
+                    <br>
+                    <a id="youtube_link" style="font-size: 2.5em; --fa-color: #5675" class="listen large spotify"><i class="fa-brands fa-youtube"></i></a>
+                    <a id="soundcloud_link" style="font-size: 2.5em; --fa-color: #5675" class="listen large spotify"><i class="fa-brands fa-soundcloud"></i></a>
+                    <a id="deezer_link" style="font-size: 2.5em; --fa-color: #5675" class="listen large spotify"><i class="fa-brands fa-deezer"></i></a>
+                </div>
             </div>
-          </div>
-          <br>
-          <div class="basicContainer" style="gap: .5em; display: grid; grid-template-columns: 25% auto; margin: 0; border-radius: 3px;">
-            <i name="dashboard_everytrack_number" style="grid-column: 1/3;"></i>
-            <div class="statistic_bar" style="grid-column: 1/3;" id="evermade_tracks"></div>
-          </div>
         </div>
 
-  
-      <!-- BLOG -->
-        <div class="basicContainer" style="gap: .5em; margin-top: 1em; display: none; grid-template-columns: 25% auto;">
-          <p style="font-size: .7em; color: #999; grid-column: 1/3;">Blogs</p>          
-          <div id="blog_container" class="basicContainer vertical" style="max-height: 10em; overflow: auto; grid-column: 1/3;"></div>
+        <div class="title_card">
+            <div style="display: flex; width: 100%; flex-direction: row; justify-content: center; font-size: 1.3em; gap: 1em;">
+                <a class="listen spotify" style="--fa-color: #ee2a7b" href="https://www.instagram.com/le.melide/"><i class="fa-brands fa-instagram"></i></a>
+                <a class="listen spotify" style="--fa-color: #5675" href="https://www.youtube.com/@LeMelide"><i class="fa-brands fa-youtube"></i></a>
+                <a class="listen spotify" style="--fa-color: #5675" href="https://open.spotify.com/intl-fr/artist/6cQGzAGyhQlCR53kF5n8j8"><i class="fa-brands fa-spotify"></i></a>
+            </div>
+            
         </div>
 
-        <div>
-          <button style="width: 100%; height: 2em; font-size: larger; text-decoration: underline;" onclick="document.body.style.backgroundColor = '#222'; document.querySelector('.windowstexts').classList.add('reveal'); this.style.display = 'none'">Voir le message</button>
-        </div>
+        <footer style="color: #777; margin-top: 5em;">
+            <p>@Melide 2025</p>
+        </footer>
+    </section>
 
-        <div>
-          <div class="windowstexts">
-            <p>Re,</p>
-            <p>"You" est sortie, c'est la suite direct de <a href="https://www.youtube.com/watch?v=-gBxfV2OAX0">To Make The Pain Go Away</a>.</p>
-            <br>
-            <b>!! Le site a été mis à jour !!</b>
-            <br>
-            <p>Désormais vous pouvez <b>Télécharger les instrus gratuite</b>. Je pense vendre quelques instrus dans le temps, je vais prendre le temps de bien programmer le système pour que ça ne ressemble pas à de la piraterie 👀</p>
-            <a href="/audios/?filter=croissant&type=beat%2Finstrumental">J'ai mis en ligne quelque instrus pour vous.</a>
-            <br>
-            <b>Aussi!!</b>
-            <br>
-            <p>Vous aurez accès aux paroles en accédant à un morceau sur le site internet. Soit des paroles, soit des informations sur le son (timestamp pour les instrus).</p>
-            <br><br>
-            <p>Je vous tiens au courant ici et sur instagram : @le.melide</p>
-            <br>
-            <p style="color: #f9f9f9;">Franchement si vous trouver ce message je vous considère comme un espion professionnel</p><br>
-            <em style="color: #f9f9f9;">/page/editor/</em><br>
-            <em style="color: #f9f9f9;">/chats/</em><br>
-            <em style="color: #f9f9f9;">/books/</em><br>
-            <em style="color: #f9f9f9;">/ton-appel/</em><br>
-            <em style="color: #f9f9f9;">/cv/</em><br>
-            <em style="color: #f9f9f9;">https://random.melide.music/</em>
-          </div>
-        </div>
-      </div>
-    </div>
+    <script>
+        const youtube_link = document.getElementById('youtube_link');
+        const soundcloud_link = document.getElementById('soundcloud_link');
+        const deezer_link = document.getElementById('deezer_link');
+        const spotify_link = document.getElementById('spotify_link');
+        const lyrics_holder = document.getElementById('lyrics_holder');
 
-    <div class="vertical" style="position: relative; padding-right: .5em;">
-      <img style="position: absolute; height: 100%; max-width: 10em;" src="assets/sidebanner.png">
-    </div>
-  </div>
+        const loading_pannel = document.getElementById('loading_pannel');
+        const latest_song_card = document.getElementById('latest_song_card');
+        var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
+        
+        var cached_tracks;
+        document.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem("tracks")) {
+                cached_tracks = JSON.parse(sessionStorage.getItem("tracks"));
+                load_latest_song();
+            } else {
+                console.log(cached_tracks);
+                fetch(fetchable_google_sheet + "?get=tracks")
+                    .then(res => res.json())
+                    .then(data => {
+                        sessionStorage.setItem("tracks", JSON.stringify(data));
+                        cached_tracks = data;
+                        load_latest_song();
+                    })
+                    .catch(err => console.error(err));
+            }
+        });
 
-  <footer class="mainContent" style="margin-top: 10em;">
-    <div id="page_footer" class="contentChild"></div>
-  </footer>
-  
+        function load_latest_song() {
+            loading_pannel.classList.add('hide');
+            const latest_release = Object.fromEntries(cached_tracks.tracks_data.filter(v => v[3] === "Released" && v[6] === "Song").sort((a, b) => new Date(b[4]) - new Date(a[4]))[0].map((v, i) => [String(cached_tracks.tracks_data[0][i]).toLocaleLowerCase().replaceAll(' ', '_'), v]))
+            latest_song_card.querySelector('img').src = "https://drive.google.com/thumbnail?sz=w1920&id=" + latest_release.cover_art;
+            
+            let contents = Object.fromEntries(latest_release.content.split(/[\/]{2}\s+(.+?)[\/]{2}/g).filter(v => v && v !== "\\n").map(v => v.split(/^(.+?)\\n/).filter(v => v)));
+            lyrics_holder.innerHTML = contents.Paroles.replaceAll('\\n', '\n').replaceAll(/[\*|(]+(.+)[\*|)]+/g, '').replaceAll('\n', '<br>');
+            
+            latest_song_card.querySelector('h1').textContent = latest_release.track_name;
+            latest_song_card.querySelector('h3').textContent = latest_release.track_artists !== "Melide" ? latest_release.track_artists : "";
+            if (!latest_release.youtube_link) youtube_link.style.display = "none";
+            if (!latest_release.soundcloud_link) soundcloud_link.style.display = "none";
+            if (!latest_release.deezer_link) deezer_link.style.display = "none";
+            if (!latest_release.spotify_link) spotify_link.style.display = "none";
+            youtube_link.href = latest_release.youtube_link;
+            soundcloud_link.href = latest_release.soundcloud_link;
+            deezer_link.href = latest_release.deezer_link;
+            spotify_link.href = latest_release.spotify_link;
+        }
+        
+        
+    </script>
 </body>
 </html>
