@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Card Title</title>
+    <title>Melide</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        @font-face {
+          font-family: 'MelideSerif';
+          src: url("/assets/incomplete-MelideSansSerif.ttf") format("truetype");
+        }
+
         :root {
-            --margin: .25em;
-            --gap: .5em;
+            --margin: .5em;
+            --gap: 1em;
 
             --color-dark: #111;
             --color-light: #EFEFFE;
@@ -25,6 +32,7 @@
         }
 
         * {
+            font-family: "Montserrat", Arial, Helvetica, sans-serif;
             padding: 0;
             margin: 0;
             box-sizing: border-box;
@@ -216,12 +224,52 @@
             from {opacity: 0;}
             to {opacity: 1;}
         }
+
+        #title {
+            opacity: .5;
+            display: flex;
+            flex-direction: row;
+            color: #FFF;
+            font-size: 2em;
+            cursor: pointer;
+            transition: font-size 1000ms ease-in-out, opacity 100ms;
+        }
+        
+        #title>h1 {
+            font-family: 'MelideSerif';
+        }
+
+        #title:hover {
+            opacity: 1;
+        }
+
+        #logo_loaded {
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: unset;
+            height: 5em;
+        }
+
+        @keyframes loaded_appear {
+            50% {
+                opacity: 1;
+                height: 7em;
+            }
+            to {
+                opacity: .5;
+                height: 5em;
+            }
+        }
     </style>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
     
 </head>
 <body>
     <div id="loading_pannel" class="loading">
+        <img id="logo_loaded" src="/assets/mld_logo_all_white.png">
         <div>
             <img class="wing_1" src="assets/mld_logo_bottom_white.png">
             <img class="wing_2" src="assets/mld_logo_bottom_white.png">
@@ -231,7 +279,10 @@
     </div>
 
     <section style="border-top: 1em solid var(--color-accent);;">
-        <img src="assets/mld_logo_all_white.png" style="height: 2em; margin-bottom: 1em; opacity: .5;" onclick="location.href = '/home'">
+        <div id="title" onclick="location.href = '/home'">
+            <img src="assets/mld_logo_all_white.png" style="height: 2em; margin-bottom: 1em;">
+            <h1 style="font-weight: 100; font-size: 1.75em;">Melide</h1>
+        </div>
         <h5 style="color: #555; width: 100%;">Dernière sortie</h5>
         <div class="title_card">
             <div id="latest_song_card" style="display: grid; grid-template-columns: 40% auto; align-items: center;">
@@ -278,13 +329,20 @@
 
         const loading_pannel = document.getElementById('loading_pannel');
         const latest_song_card = document.getElementById('latest_song_card');
-        var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
+        var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbxUxJcHeYWkjr72cOEcu-IU91rOWLv6kX-Vtb8BK0eGPJpiwGK51S6EaEQOy3C99hSvyA/exec";
         
         var cached_tracks;
+        const title_el = document.getElementById('title');
+        const logo_loaded = document.getElementById('logo_loaded');
+
         document.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem("tracks")) {
                 cached_tracks = JSON.parse(sessionStorage.getItem("tracks"));
-                load_latest_song();
+
+                setTimeout(() => {    
+                    load_latest_song();    
+                }, 1000);
+                
             } else {
                 console.log(cached_tracks);
                 fetch(fetchable_google_sheet + "?get=tracks")
@@ -299,6 +357,8 @@
         });
 
         function load_latest_song() {
+            logo_loaded.style.animation = "loaded_appear 500ms forwards";
+
             loading_pannel.classList.add('hide');
             const latest_release = Object.fromEntries(cached_tracks.tracks_data.filter(v => v[3] === "Released" && v[6] === "Song").sort((a, b) => new Date(b[4]) - new Date(a[4]))[0].map((v, i) => [String(cached_tracks.tracks_data[0][i]).toLocaleLowerCase().replaceAll(' ', '_'), v]))
             latest_song_card.querySelector('img').src = "https://drive.google.com/thumbnail?sz=w1920&id=" + latest_release.cover_art;
@@ -316,6 +376,10 @@
             soundcloud_link.href = latest_release.soundcloud_link;
             deezer_link.href = latest_release.deezer_link;
             spotify_link.href = latest_release.spotify_link;
+
+            setTimeout(() => {
+                title_el.style.fontSize = "1em";
+            }, 2000);
         }
         
         

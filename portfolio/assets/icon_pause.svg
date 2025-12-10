@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="25.601562"
+   height="25.601562"
+   viewBox="0 0 25.601562 25.601562"
+   version="1.1"
+   id="svg1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <g
+     id="layer1"
+     style="display:none"
+     transform="translate(-3.1992188,-3.1992188)">
+    <circle
+       style="display:inline;fill:#f30035;fill-opacity:1;fill-rule:evenodd;stroke-width:5;stroke-linejoin:round;stroke-miterlimit:180;stroke-dashoffset:133.92;paint-order:stroke fill markers"
+       id="path1"
+       cx="16"
+       cy="16"
+       r="14.400001" />
+  </g>
+  <g
+     id="layer2"
+     style="display:none"
+     transform="translate(-3.1992188,-3.1992188)">
+    <path
+       style="fill:#ebebeb;fill-opacity:1;fill-rule:evenodd;stroke-width:5;stroke-linejoin:round;stroke-miterlimit:180;stroke-dashoffset:133.92;paint-order:stroke fill markers"
+       d="M 3.2,26.91046 V 5.0895398 A 1.1677998,1.1677998 148.28253 0 1 4.8900558,4.0450279 L 27.109944,15.154972 a 0.9447699,0.9447699 90 0 1 0,1.690056 L 4.8900558,27.954972 A 1.1677998,1.1677998 31.717474 0 1 3.2,26.91046 Z"
+       id="path2" />
+  </g>
+  <g
+     id="layer3"
+     transform="translate(-3.1992188,-3.1992188)">
+    <path
+       id="rect2"
+       style="fill:#ebebeb;fill-opacity:1;fill-rule:evenodd;stroke-width:5;stroke-linejoin:round;stroke-miterlimit:180;stroke-dashoffset:133.92;paint-order:stroke fill markers"
+       d="M 3.1992188,4.7999994 V 27.2 a 1.6007806,1.6007806 45 0 0 1.6007806,1.600781 H 11.2 A 1.6007806,1.6007806 135 0 0 12.800781,27.2 V 4.7999994 A 1.6007806,1.6007806 45 0 0 11.2,3.1992188 l -6.4000006,0 A 1.6007806,1.6007806 135 0 0 3.1992188,4.7999994 Z m 16.0000002,0 V 27.2 A 1.6007806,1.6007806 45 0 0 20.8,28.800781 h 6.4 A 1.6007806,1.6007806 135 0 0 28.800781,27.2 l 0,-22.4000006 A 1.6007806,1.6007806 45 0 0 27.2,3.1992188 h -6.4 a 1.6007806,1.6007806 135 0 0 -1.600781,1.6007806 z" />
+  </g>
+</svg>

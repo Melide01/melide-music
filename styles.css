@@ -13,9 +13,7 @@
   --pure-black: #222;
   --light-color: #fcfcfc;
   --dark-color: #222;
-} 
-
-@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
+}
 
 /* FONTS */
 @font-face {
@@ -26,6 +24,8 @@
   font-family: 'MelideSerif';
   src: url("/assets/incomplete-MelideSansSerif.ttf") format("truetype");
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 .MelideSerif {
   font-family: MelideSerif, serif;
@@ -39,9 +39,7 @@ body, html {
   min-height: 100vh;
   font-size: 1rem;
   line-height: 1.6;
-  /* background-image: url('assets/sidebannerbg.png');
-  background-size: 100% 400%; background-position: center;
-  /* background-color: var(--pure-white);*/  color: var(--pure-black);
+  color: var(--pure-black);
   transition: background-color 300ms;
 }
 
@@ -50,9 +48,9 @@ body {
 }
 
 * {
-  font-family: "Julius Sans One", sans-serif;
   padding: 0; margin: 0;
   box-sizing: border-box;
+  font-family: "Montserrat", Arial, Helvetica, sans-serif;
 }
 
 @media (max-width: 600px) {

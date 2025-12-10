@@ -2,7 +2,7 @@
 var games_data = [];
 
 // Import
-const google_sheet_script = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
+const google_sheet_script = "https://script.google.com/macros/s/AKfycbxUxJcHeYWkjr72cOEcu-IU91rOWLv6kX-Vtb8BK0eGPJpiwGK51S6EaEQOy3C99hSvyA/exec";
 
 const search_section = document.getElementById('search_section');
 const game_container = document.getElementById('game_container');

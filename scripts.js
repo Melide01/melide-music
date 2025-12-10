@@ -26,7 +26,7 @@ var blog_data;
 var cached_tracks;
 var cached_blogs;
 
-var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
+var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbxUxJcHeYWkjr72cOEcu-IU91rOWLv6kX-Vtb8BK0eGPJpiwGK51S6EaEQOy3C99hSvyA/exec";
 
 // HTML ELEMENTS
 var mini_melide;
@@ -165,21 +165,24 @@ document.addEventListener("DOMContentLoaded", () => {
     cached_blogs = sessionStorage.getItem("blogs");
 
     const setupMiniMelide = () => {
-        let toggle_debug = -1;
+        let toggle_debug = 1;
+        
         mini_melide.addEventListener('click', () => {
+            if (mini_melide_is_moving) return;
             toggle_debug = -toggle_debug;
             moveMelide(toggle_debug, true, true);
         });
         
         // RANDOM MELIDE
         current_melide = Object.keys(mini_melide_anim)[Math.floor(Math.random() * Object.keys(mini_melide_anim).length)];
-
+        moveMelide(0, true, false);
         mini_melide_is_moving = true;
         mini_melide.src = mini_melide_anim[current_melide].greet;
+        
 
         setTimeout(() => {
-            mini_melide_is_moving = false;
             mini_melide.src = mini_melide_anim[current_melide].idle;
+            moveMelide(1, true, false)
         }, 2800)
     };
 
@@ -402,32 +405,32 @@ var current_melide = "melide01";
 
 const mini_melide_anim = {
     "melide01": {
-        "walk_to_left": "assets/mini_melide/mini_melide_walk_to_left.gif",
-        "walk_to_right": "assets/mini_melide/mini_melide_walk_to_right.gif",
-        "run_to_left": "assets/mini_melide/mini_melide_run_to_left.gif",
-        "run_to_right": "assets/mini_melide/mini_melide_run_to_right.gif",
-        "idle": "assets/mini_melide/mini_melide_idle.gif",
-        "greet": "assets/mini_melide/mini_melide_greets.gif"
+        "walk_to_left":     "/assets/mini_melide/mini_melide_walk_to_left.gif",
+        "walk_to_right":    "/assets/mini_melide/mini_melide_walk_to_right.gif",
+        "run_to_left":      "/assets/mini_melide/mini_melide_run_to_left.gif",
+        "run_to_right":     "/assets/mini_melide/mini_melide_run_to_right.gif",
+        "idle":             "/assets/mini_melide/mini_melide_idle.gif",
+        "greet":            "/assets/mini_melide/mini_melide_greets.gif"
     },
     "melide_minecraft": {
-        "walk_to_left": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
-        "walk_to_right": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
-        "run_to_left": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
-        "run_to_right": "assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
-        "idle": "assets/mini_melide/minecraft/idle0000.png",
-        "greet": "assets/mini_melide/minecraft/mini_melide_minecraft_greet.gif"
+        "walk_to_left":     "/assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
+        "walk_to_right":    "/assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
+        "run_to_left":      "/assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_left.gif",
+        "run_to_right":     "/assets/mini_melide/minecraft/mini_melide_minecraft_walk_to_right.gif",
+        "idle":             "/assets/mini_melide/minecraft/idle0000.png",
+        "greet":            "/assets/mini_melide/minecraft/mini_melide_minecraft_greet.gif"
     }
 };
 
 function moveMelide(dir = 0.5, playanim = true, is_playerdriven = false) {
     if (mini_melide_is_moving) return;
 
-    if (is_playerdriven) {
-        // GET MINI MELIDES DATA 
-        notify("Mini-melide", "Mini-melide à marcher " + window.innerWidth + " pixels", "bottom", "right", "game");
-    }
-
     if (playanim) {
+        if (is_playerdriven) {
+            // GET MINI MELIDES DATA 
+            notify("Mini-melide", "Mini-melide à marcher " + window.innerWidth + " pixels", "bottom", "right", "game");
+        }
+
         mini_melide_is_moving = true;
         
         if (dir > mini_melide_last_position) {

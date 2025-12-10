@@ -1,10 +1,3 @@
-
-
-function sendChange(element, text) {
-
-}
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const slider = document.querySelector(".slider");
   const ball = document.querySelector(".ball");

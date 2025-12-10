@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+  font-family: 'MelideSerif';
+  src: url("/assets/incomplete-MelideSansSerif.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'FrenchDespair';
+  src: url("/assets/FrenchDespair.otf") format("opentype");
+}
+
+@font-face {
+  font-family: 'AuNomDuDesespoir';
+  src: url("/assets/au-nom-du-desespoir.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Fukdat';
+  src: url("/assets/fuckdat.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'MinimalMono';
+  src: url("/assets/minimal-mono.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'SeptCentSoixanteDixMono';
+  src: url("/assets/setp-cent-soixante-dix-mono.ttf") format("truetype");
+}
+
+.MelideSerif, .MelideSerif > * {
+    font-family: "MelideSerif", serif;
+}
+
+.FrenchDespair, .FrenchDespair > * {
+    font-family: "FrenchDespair", sans-serif;
+}
+
+.AuNomDuDesespoir, .AuNomDuDesespoir > * {
+    font-family: "AuNomDuDesespoir", sans-serif;
+}
+
+.Fukdat, .Fukdat > * {
+    font-family: "Fukdat", sans-serif;
+}
+
+.MinimalMono, .MinimalMono > * {
+    font-family: "MinimalMono", monospace;
+}
+
+.SeptCentSoixanteDixMono, .SeptCentSoixanteDixMono > * {
+    font-family: "SeptCentSoixanteDixMono", monospace;
+}
+
+:root {
+    /* Metrics */
+    --padding: 1em;
+    --margin: 2em;
+    --gap: 1em;
+    --max-width: 700px;
+}
+
+html {
+    background-color: #000;
+    position: relative;
+}
+
+body, html {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding-bottom: calc(10em + var(--margin));
+}
+
+footer {
+    width: 100%;
+    height: 10em;
+    display: flex;
+    flex-direction: row;
+    background-color: #222;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--padding);
+}
+
+footer > img {
+    height: 3em;
+}
+
+footer > div:nth-child(2) {
+    display: flex;
+    flex-direction: row;
+    gap: calc(var(--gap) / 2);
+}
+
+footer > div:nth-child(2) > a {
+    cursor: pointer;
+    background-color: #0002;
+    padding: var(--padding);
+    color: #fff;
+    text-decoration: unset;
+}
+
+footer > div:nth-child(2) > a:hover {
+    background-color: #0005;
+    color: #ddd;
+}
+
+body > *:not(footer) {
+    margin-bottom: var(--margin);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", Arial, Helvetica, sans-serif;
+}
+
+.title.original {
+    font-size: 1.7em;
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    align-content: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    background: linear-gradient(to bottom, #0007, #000 50%);
+}
+.title.original::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    background-image: url("assets/basic\ clothe\ texture.png");
+    background-size: 30%;
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    display: flex;
+    font-size: 2em;
+    margin-top: var(--margin);
+    width: 100%;
+    height: 5em;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.title > img {
+    height: 4em;
+}
+
+.title > h1 {
+    font-weight: 100;
+    font-size: 3.5em;
+    font-family: "MelideSerif", serif;
+}
+
+section {
+    max-width: var(--max-width);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    border-bottom: .23em solid #fff1;
+    padding: var(--padding);
+    
+}
+
+section {
+    animation: reveal 1s linear forwards;
+    animation-range: entry entry 15em;
+}
+
+section > * {
+    opacity: 0;
+    animation: revealChild 1s linear forwards;
+    animation-range: entry 10em cover 20em;
+}
+
+section, section > * {
+    animation-timeline: view();
+}
+
+section > h2 {
+    text-align: center;
+    font-size: 2em;
+    text-decoration: underline;
+    text-underline-offset: .3em;
+    margin-bottom: var(--padding);
+}
+
+@keyframes revealChild {
+    from {
+        transform: scale(.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+@keyframes reveal {
+    from {
+        transform: translateY(-200px);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.auto_grid {
+    display: grid;
+    grid-template-columns: repeat(8, minmax(auto, 6em));
+    align-items: center;
+    justify-items: center;
+    gap: var(--gap);
+}
+
+.auto_grid > h3 {
+    grid-column: 1/9;
+    color: #999;
+    height: .7em;
+}
+
+.auto_grid > img {
+    width: 100%;
+    height: min-content;
+}
+
+section > div {
+    padding: var(--padding);
+}
+
+.clickable:hover {
+    cursor: pointer;
+    background-color: #fff2;
+}
+
+.head_sections {
+    padding: var(--padding);
+    max-width: var(--max-width);
+    margin: auto;
+}
+
+.head_sections > h2 {
+    text-align: center;
+    font-size: 2em;
+    padding: .5em 0;
+    border-bottom: .25em solid #077;
+    position: relative;
+    color: #000;
+}
+
+.head_sections > h2::before, .head_sections > h2::after {
+    content: "";
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #DDD;
+    z-index: -1;
+}
+
+.head_sections > h2::after {
+    width: 0;
+    background-color: #0DA;
+    animation: loadHeader 1s linear forwards;
+    animation-timeline: view();
+    animation-range: entry 7em cover 20em;
+}
+
+.project {
+    padding: var(--padding);
+}
+
+.project > * {
+    margin-bottom: calc(var(--margin) / 2);
+}
+
+.project > p {
+    font-size: 1.8em;
+}
+
+.project > h3 {
+    text-align: right;
+    padding-right: var(--padding);
+    background-color: #fff2;
+    border-radius: 100vw;
+    width: 100%;
+    margin-bottom: calc(var(--margin) / 5);
+}
+
+.carousel {
+    background-color: #ccc;
+    border-radius: var(--padding);
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    overflow-x: hidden;
+    position: relative;
+    height: 10em;
+}
+.carousel > div {
+    padding: calc(var(--padding)/2);
+    gap: calc(var(--gap) / 2);
+    height: 100%;
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    animation: autoScroll 10s linear infinite;
+}
+
+.carousel > div > img {
+    border-radius: calc(var(--padding) / 2);
+}
+
+@keyframes autoScroll {
+    0%, 100% {
+        opacity: 0;
+    }
+    10%, 90% {
+        opacity: 1;
+    }
+    0%, 10% {
+        left: 0;
+        transform: translateX(0);
+    }
+    90%, 100% {
+        left: 100%;
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes loadHeader {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+
+
+.hit_proj {
+    padding: calc(var(--padding) / 2);
+    gap: calc(var(--gap) / 2);
+    display: grid;
+    grid-template-columns: minmax(1em, 10em) auto;
+}
+
+.hit_proj > *:nth-child(2) {
+    position: relative;
+    padding: var(--padding);
+}
+
+.hit_proj > *:nth-child(2)::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: .2em;
+    background: linear-gradient(45deg, #fff1, #fff5);
+    top: 0;
+    left: calc(var(--padding) / 4 - .1em);
+    border-radius: 100vw;
+}
+
+.hit_proj > div:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--gap) / 2);
+}
+
+.hit_proj > div:nth-child(1) > h3 {
+    overflow: hidden;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+}
+
+.grid_auto_dense {
+    display: grid;
+    width: 100%;
+}
+
+.grid_auto_dense > img {
+    width: 100%;
+}
+
