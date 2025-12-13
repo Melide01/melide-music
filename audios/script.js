@@ -71,11 +71,12 @@ track_ui_download.addEventListener('click', () => {
             a_download.click();
             a_download.remove();
             notify('Merci', 'Votre téléchargement va débuter.', 'center', 'top', 'good');
-            customModal("Merci !", "Merci d'avoir télécharger l'instru.", "Accueil", () => {location.href = "/"}, "Revenir au registre", () => {revealModal('custom_modal', true);})
+            customModal("Merci !", "Merci d'avoir télécharger l'instru.", "Accueil", () => {location.href = "/home/"}, "Revenir au registre", () => {revealModal('custom_modal', true);})
+            song_data.tracks_data[current_track[0]][22] += 1;
+            sessionStorage.setItem('tracks', JSON.stringify(song_data));
         })
         .catch(err => console.error(err));
     return;
-    
     // customModal("Désolé", "La fonctionnalité de téléchargement est bientôt prête", "Ok", () => {revealModal('custom_modal', true); notify('', 'Merci de votre patience', 'center', 'top', 'good')}, "Mince, pourquoi?", () => {revealModal('custom_modal', true); notify('', 'Un peu de patience.', 'center', 'top', 'neutral')})
 });
 
@@ -266,7 +267,6 @@ function sortPannel(type = "date", index = 4, filter = "Trier...") {
     });
 }
 
-// 0: (20) ['Track ID', 'Track Name', 'Album', 'Track State', 'Track Release Date', 'Track Creation Date', 'Track Type', 'Track Artists', 'Genres', 'Mood', 'Cover Art', 'Explicit', 'Is Up', 'Downloadable', 'Audio Preview', 'Spotify Link', 'YouTube Link', 'SoundCloud Link', 'Views', 'Downloads']
 var track_element = {};
 var search_argument = {};
 
@@ -318,7 +318,6 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         if (e[10] !== "") {
             img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e[10]}`;
         } else {
-            // conditional_style_coverart = "grid-column: 1/3;";
             img_track_cover.src = "/assets/placeholder.webp";
         }
 

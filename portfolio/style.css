@@ -405,3 +405,12 @@ section > div {
     width: 100%;
 }
 
+@keyframes arrowDown {
+    0%, 100% {
+        bottom: 20px;
+    }
+
+    50% {
+        bottom: 1px;
+    }
+}

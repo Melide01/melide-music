@@ -7,26 +7,38 @@ const timeleft_update_element = document.getElementById('update_notify').querySe
 document.addEventListener('DOMContentLoaded', () => {
     // SETUP
     document.getElementById('update_notify').addEventListener('click', () => {open_modal(_explain_countdown)});
+    updateTime();
 
-
+    // LOAD DATA
     if (sessionStorage.getItem('projects')) {
         projects_data = JSON.parse(sessionStorage.getItem('projects'));
-        handle_build_projects(projects_data);
+        // RESET
+        if (new Date(projects_data.savedDate) < date_left) {
+            handle_build_projects(projects_data);
+        } else {
+            load_and_build();    
+        }
     } else {
         open_modal(_bienvenue);
-        fetch(fetchable_google_sheet + "?get=projects")
-            .then(res => res.json())
-            .then(data => {
-                projects_data = data;
-                sessionStorage.setItem('projects', JSON.stringify(projects_data));
-                handle_build_projects(projects_data);
-            })
-            .catch(err => console.error(err));
+        load_and_build();
     };
-
-    updateTime();
 });
 
+function load_and_build() {
+    fetch(fetchable_google_sheet + "?get=projects")
+        .then(res => res.json())
+        .then(data => {
+            const date_now = new Date();
+            projects_data = data;
+            projects_data.savedDate = date_now.toISOString();
+            sessionStorage.setItem('projects', JSON.stringify(projects_data));
+            console.log(projects_data);
+            handle_build_projects(projects_data);
+        })
+        .catch(err => console.error(err));
+}
+
+let date_left;
 function updateTime() {
     const nowUTC10 = new Date(
         new Intl.DateTimeFormat("en-US", {
@@ -43,14 +55,15 @@ function updateTime() {
 
     const midnightUTC10 = new Date(nowUTC10);
     midnightUTC10.setHours(24, 0, 0, 0);
-
     const diff = midnightUTC10 - nowUTC10;
+    date_left = midnightUTC10;
 
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff / (1000 * 60)) % 60);
-    const seconds = Math.floor((diff / 1000) % 60);
+    let hours_left = Math.floor(diff / (1000 * 60 * 60));
+    let minutes_left = Math.floor((diff / (1000 * 60)) % 60);
+    let seconds_left = Math.floor((diff / 1000) % 60);
 
-    timeleft_update_element.textContent = `${hours} h ${minutes} m ${seconds}`;
+
+    timeleft_update_element.textContent = `${hours_left} h ${minutes_left} m ${seconds_left}`;
 
     setTimeout(() => {
         requestAnimationFrame(updateTime);    
@@ -129,17 +142,37 @@ function build_project(project) {
     const writing_bloc_div = document.createElement('div');
     const writing_p_info = document.createElement('p');
     const writing_span_progress = document.createElement('span');
-    const progress_bar_div = document.createElement('div');
+    const writing_progress_bar_div = document.createElement('div');
 
     writing_p_info.textContent = "Écriture";
     writing_span_progress.textContent = Math.round(project['Writing Progress'] * project['Writing Chapters']) + " / " + project['Writing Chapters'];
-    progress_bar_div.classList.add('progress_bar');
-    progress_bar_div.style.setProperty("--value", (parseFloat(project['Writing Progress']) * 100) + "%");
+    writing_progress_bar_div.classList.add('progress_bar');
+    writing_progress_bar_div.style.setProperty("--value", (parseFloat(project['Writing Progress']) * 100) + "%");
 
     writing_bloc_div.appendChild(writing_p_info);
     writing_bloc_div.appendChild(writing_span_progress);
-    writing_bloc_div.appendChild(progress_bar_div);
+    writing_bloc_div.appendChild(writing_progress_bar_div);
     p_div.appendChild(writing_bloc_div);
+
+    // PRODUCTION
+    if (project['Production Progress'] > 0) {
+        const production_bloc_div = document.createElement('div');
+        const production_p_info = document.createElement('p');
+        const production_span_progress = document.createElement('span');
+        const production_progress_bar_div = document.createElement('div');
+    
+        production_p_info.textContent = "Production";
+        production_span_progress.textContent = Math.round(project['Production Progress'] * project['Production Chapters']) + " / " + project['Production Chapters'];
+        production_progress_bar_div.classList.add('progress_bar');
+        production_progress_bar_div.style.setProperty("--value", (parseFloat(project['Production Progress']) * 100) + "%");
+
+        p_div.appendChild(add_trackdown());
+        production_bloc_div.appendChild(production_p_info);
+        production_bloc_div.appendChild(production_progress_bar_div);
+        production_bloc_div.appendChild(production_span_progress);
+        p_div.appendChild(production_bloc_div);
+    }
+    
 
     // Event Listeners
     p_div.addEventListener('click', (e) => {
