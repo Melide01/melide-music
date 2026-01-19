@@ -14,6 +14,12 @@
             --font-size: 16px;
             --page-gap: 1em;
             --item-border-radius: 15px;
+
+            --fg-color: #743;
+            --bg-color: #ffefbb;
+
+            --accent-color:         #d92;
+            --accent-color-dark:    #550;
         }
 
         html,
@@ -26,10 +32,10 @@
 
         #page {
             position: relative;
-            /* margin: 100px auto;*/
+            /* margin: 100px auto; */
             width: var(--page-width);
             height: var(--page-height);
-            background: #fff;
+            background: var(--bg-color);
             /* box-sizing: border-box; */
         }
 
@@ -37,17 +43,17 @@
             list-style-position: inside;
         }
 
-        a[href] { all: unset; cursor: pointer; margin-left: 1em; font-weight: 200; color: #555; }
+        a[href] { all: unset; cursor: pointer; margin-left: 1em; font-weight: 200; color: #000a; }
         a[href]:hover { margin-left: 1.2em; }
 
         ul>summary, ol>summary {
             font-weight: 800;
             font-size: 70%;
             background-color: #0551;
-            color: #055;
+            color: var(--accent-color-dark);
             padding-left: 7px;
             padding-top: .25em;
-            border-bottom: 4px solid #0555;
+            border-bottom: 4px solid #0001;
             margin-bottom: 10px;
             letter-spacing: 2px;
         }
@@ -75,7 +81,7 @@
         }
 
         th:not(:last-of-type), td:not(:last-of-type) {
-            border-right: 1px solid #AAAA;
+            border-right: 1px solid #0002;
         }
 
         * {
@@ -83,8 +89,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
-        
 
         .hor, .ver { display: flex; }
         .hor { flex-direction: row; }
@@ -100,19 +104,20 @@
             border: solid 1px #fff5;
             border-radius: var(--item-border-radius);
             padding: calc(var(--page-gap) / 2);
+            corner-shape: superellipse(1.5)
         }
         .button.action {
-            background: linear-gradient(to top, transparent, #052D);
-            color: #FFF;
+            /* background: linear-gradient(to top, transparent, var(--accent-color-dark));
+            */ color: var(--bg-color);
             font-weight: 100;
-            text-shadow: 0 0 5px #0FD, 0 0 2px #0FD;
+            text-shadow: 0 0 5px var(--accent-color), 0 0 2px var(--accent-color);
             padding-left: 1em;
             padding-right: 1em;
         }
 
         .fun.title {
-            border-bottom: solid .5em #0FD;
-            margin-bottom: calc(var(--page-gap) / 2);
+            border-bottom: solid .5em var(--accent-color);
+            margin-bottom: calc(var(--page-gap) / 7);
         }
 
         .range_list {
@@ -124,7 +129,8 @@
             padding: calc(var(--page-gap) / 2);
             position: relative;
             padding-top: calc(var(--page-gap) / 2 + 5px);
-            background: linear-gradient(to bottom, #0003, transparent 20%);
+            /* background: linear-gradient(to bottom, #0003, transparent 20%); */
+            background-color: var(--bg-color);
             margin-bottom: calc(var(--page-gap) / 2);
         }
         .range_list > li::before {
@@ -135,8 +141,9 @@
             top: 0;
             height: 100%;
             width: var(--per);
-            background: linear-gradient(to top, var(--bg) 20%, transparent 50%);
-            border-right: solid .5em var(--bg);
+            /* background: linear-gradient(to top, var(--bg) 20%, transparent 50%); */
+            background-color: var(--bg);
+            /* border-right: solid .5em var(--bg); */
             opacity: .1;
         }
         .range_list > li::after {
@@ -147,7 +154,8 @@
             top: 0;
             height: 5px;
             width: var(--per);
-            background: linear-gradient(to top, var(--bg) 50%, #000);
+            /* background: linear-gradient(to top, var(--bg) 50%, var(--fg-color)); */
+            background-color: var(--bg);
         }
 
         .break {
@@ -170,8 +178,8 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            background: #000;
-            color: #FFF;
+            background: linear-gradient(to top, var(--fg-color) -50%, var(--bg-color) 50%);
+            color: var(--fg-color);
             width: 100%;
             text-align: end;
         }
@@ -181,6 +189,46 @@
         /* can break */
         label { display: grid; grid-template-columns: 5em auto; align-items: center; }
         label > input { all: unset; border-top: solid 2px #0001; border-bottom: solid 2px #0003; padding: calc(var(--page-gap) / 2); }
+
+        .hor.center.gap {
+            gap: calc(var(--page-gap) / 2);
+        }
+
+        .hor.center.gap > * {
+            box-sizing: border-box;
+        }
+
+        .hor.center.gap .br {
+            all: unset;
+            content: "";
+            display: flex;
+            padding: 15% .3px;
+            background-color: #0001;
+            height: 100%;
+            width: 1px;
+            margin: auto;
+        }
+
+        span.christ {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 var(--page-gap);
+            font-weight: 100;
+        }
+
+        span.christ > p {
+            font-weight: 500;
+        }
+
+        span.christ > i {
+            font-size: 2em;
+            color: var(--accent-color);
+            transform: translate(-.2em, -.3em);
+        }
+        span.christ > i:nth-child(3) {
+            transform: translate(-6.22em, .7em);
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script>
@@ -202,18 +250,19 @@
 
 <body>
     <section id="page">
-        <div class="hor" style="position: relative; height: min-content; overflow: hidden; background: linear-gradient(to right, #000, #0FC); color: #FFF;">
+        <div class="hor" style="position: relative; height: min-content; overflow: hidden; background: linear-gradient(to right, #000, var(--accent-color)); color: #FFF;">
             <div class="ver padding">
                 <h4>John Teuira</h4>
-                <h2 class="font_staatliches" style="color: #0FD; font-weight: 300;">Curriculum Vitae</h2>
+                <h2 class="font_staatliches" style="color: var(--accent-color); font-weight: 300;">Curriculum Vitae</h2>
             </div>
             <img src="melide_logo_black.PNG" style="opacity: .2; position: absolute; right: 10em; top: 0; height: 100%; transform: scale(1000%);">
             <img src="melide_logo_rich.PNG" style="position: absolute; height: 100%; opacity: .7; right: .5em; top: 0;">
         </div>
         <div class="hor gap padding center" style="background-color: #000; color: #FFF;">
-            <span class="button action">Sympa et sérieux</span>
-            <span class="button action">Art et technique</span>
-            <span class="button action">Faire grand, mais surtout bien faire</span>
+            <span class="button action">Imaginatif</span>
+            <span class="button action">Autodidacte</span>
+            <span class="button action">Rigoureux</span>
+            <span class="christ">Exode 20:9<i>"</i><p style="color: #fff;">Tu travailleras six jours, et tu feras tout ton ouvrage.</p><i>"</i></span>
         </div>
 
         <div class=" gap" style="display: grid; grid-template-columns: 20% auto;">
@@ -229,22 +278,23 @@
         </div>
 
         <div class="ver padding" style="padding-bottom: 0; font-size: 150%;">
-            <h2 class="fun title">Statistiques</h2>
+            <h2 class="fun title">Parcours</h2>
             <div class="hor center gap" style="font-size: 70%;">
-                <ul class="range_list" style="flex-shrink: 1;">
-                    <summary>Expériences</summary>
+                <ul class="range_list" style="flex-shrink: 1; ;">
+                    <!-- <summary>Expériences</summary> -->
                     <li style="font-size: 70%; --per: 80%; --bg: #0A7">Développement Web</li>
-                    <li style="font-size: 70%; --per: 65%; --bg: #0AF">Design & Graphiste</li>
-                    <li style="font-size: 70%; --per: 60%; --bg: #D50">Modélisation  et animation 3D</li>
-                    <li style="font-size: 70%; --per: 90%; --bg: #50D">Audio & Musique</li>
-                    <li style="font-size: 70%; --per: 80%; --bg: #FA0">Montage vidéo</li>
+                    <li style="font-size: 70%; --per: 50%; --bg: #0AF">Design & Graphiste</li>
+                    <li style="font-size: 70%; --per: 40%; --bg: #D50">Modélisation  et animation 3D</li>
+                    <li style="font-size: 70%; --per: 100%; --bg: #50D">Audio & Musique</li>
+                    <li style="font-size: 70%; --per: 60%; --bg: #FA0">Montage vidéo</li>
                 </ul>
+                <span class="br"></span>
                 <ul class="range_list" style="flex-grow: 1;">
-                    <summary>Tableau</summary>
+                    <!-- <summary>Tableau</summary> -->
                     <table>
                         <thead>
                             <tr>
-                                <th>Nom</th>
+                                <th>Au sein de</th>
                                 <th>Rôle</th>
                                 <th>Année</th>
                             </tr>
@@ -288,12 +338,12 @@
 
         <div class="ver padding" style="font-size: 150%;">
             <h2 class="fun title">Portfolio & Références</h2>
-            <div class="hor gap" style="font-size: 70%;">
+            <div class="hor" style="font-size: 70%;">
                 
                 <ul style="width: 100%; list-style-position: outside; margin-left: 1.5em;">
                     <li><p>Site Internet : <a href="https://www.melide.music/">www.melide.music</a></p></li>
                     <li class="break"></li>
-                    <li><p>Portfolio : <a href="/portfolio/">Modélisation et animation 3D</a></p></li>
+                    <li><p>Portfolio : <a href="/portfolio/">Graphisme et Modélisation 3D</a></p></li>
                     <li class="break"></li>
                     <li><p>Référence : <a href="https://www.youtube.com/@crescentcafe">Crescent Café - YouTube</a></p></li>
                     <li><p>Référence : <a href="https://www.youtube.com/@Thai-Haut">Théo Artichaut - YouTube</a></p></li>
@@ -307,8 +357,8 @@
             </div>
         </div>
 
-        <footer class="padding" style="position: relative;">
-            <a href="https://www.melide.music/cv/" style="color: #DDD; position: absolute; left: var(--page-gap);">< Lien du site internet de ce document ></a>
+        <footer class="padding" style="position: absolute;">
+            <a href="https://www.melide.music/cv/" style="opacity: .7; font-weight: 500; position: absolute; left: var(--page-gap);">Lien vers ce document</a>
             Melide, John Teuira, 2025
         </footer>
     </section>
