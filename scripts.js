@@ -26,7 +26,7 @@ var blog_data;
 var cached_tracks;
 var cached_blogs;
 
-var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbxUxJcHeYWkjr72cOEcu-IU91rOWLv6kX-Vtb8BK0eGPJpiwGK51S6EaEQOy3C99hSvyA/exec";
+var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
 
 // HTML ELEMENTS
 var mini_melide;

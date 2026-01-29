@@ -1,0 +1,327 @@
+:root {
+    --max-width: 800px;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    padding-bottom: 8em;
+}
+
+.logo {
+    pointer-events: none;
+    --open: 1;
+    --radius: 1.7em;
+    z-index: 3;
+
+    position: fixed;
+    left: calc(50% - (var(--radius) * var(--open)) * .5);
+    top: calc(50% - (var(--radius) * var(--open)) * -.5);
+    
+    width: 10em;
+    aspect-ratio: 1;
+    
+    transform: translate(
+        -50%,
+        -50%
+    );
+    filter: invert(1);
+
+    animation: logo_boot 2s ease-in-out;
+    transition: left 500ms, top 500ms;
+}
+
+.logo.loaded {
+    animation: logo_loaded 500ms ease-in-out forwards;
+}
+
+.logo,
+.logo::before,
+.logo::after {
+    background: url('../assets/mld_logo_bottom_white.png') no-repeat center/contain;
+    transition: transform 500ms;
+}
+
+.logo::after,
+.logo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    opacity: 1;
+    transform-origin: center;
+    
+    /* animation: blink 5s infinite; */
+}
+
+/* piece #2 */
+.logo::before {
+    transform: 
+        rotate(120deg)
+        translate(
+            calc(var(--radius) * var(--open) * -1.15),
+            calc(var(--radius) * var(--open))
+        );
+    animation-delay: 1s;
+}
+
+
+/* piece #3 */
+.logo::after {
+    transform: 
+        rotate(240deg)
+        translate(
+            calc(var(--radius) * var(--open) * .25),
+            calc(var(--radius) * var(--open) * 1.5)
+        );
+    animation-delay: 2s;
+}
+
+@keyframes logo_boot {
+    from {
+        --open: .7; opacity: 0;
+        left: 50%;
+    }
+    to {
+        --open: 1; opacity: 1;
+        left: calc(50% - (var(--radius) * var(--open)) * .5);
+    }
+}
+
+@keyframes logo_loaded {
+    from {
+        --open: 2; opacity: 1;
+        left: calc(50% - (var(--radius) * var(--open)) * .5);
+    }
+    to {
+        --open: 2; opacity: 0;
+        left: calc(50% - (var(--radius) * var(--open)) * .5);
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+#code {
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    background-color: #fffd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    transition: opacity 150ms linear;
+}
+#code.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.close_button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    font-size: 2em;
+    cursor: pointer;
+    user-select: none;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), button, textarea {
+    all: unset;
+    cursor: pointer;
+    background: linear-gradient(to top, #aaa, #eee, #aaa, #eee) no-repeat;
+    background-size: 200% 200%;
+    background-position: center;
+    border: .15em solid #fff5;
+    padding: .5em;
+    border-radius: .25em;
+    outline: 1px solid #aaa;
+}
+input[type="text"], input[type="search"], textarea {
+    cursor: text !important;
+    background: linear-gradient(to top, #fff, #eee) !important;
+}
+textarea {
+    min-height: 5em;
+}
+
+section {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: auto;
+}
+
+#open_selection {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1em;
+}
+#open_selection > h3 {
+    width: 100%;
+    font-size: small;
+    color: #555;
+    padding: .25em;
+    border-bottom: .4em solid #eee;
+}
+#open_selection > div > h2 { flex: 2;}
+#open_selection > div {
+    width: 100%;
+    border-radius: .25em;
+    cursor: pointer;
+    padding: .5em;
+    outline: 1px solid #000;
+    background-color: #eee;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
+    border-top: .4em solid #ddd;
+    border-right: .2em solid #aaa;
+}
+
+#open_selection > div:hover {
+    background-color: #ddd;
+    border-top: .4em solid #aaa;
+    border-right: .2em solid #777;
+}
+#open_selection > div:active {
+    background-color: #ccc;
+    border-top: .4em solid #aaa;
+    border-right: .2em solid #777;
+}
+
+
+
+.navigation_bar {
+    width: 100%;
+    z-index: 1;
+    display: flex;
+    flex-direction: row;
+    background-color: #ddd;
+    padding: 2em 1em;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    gap: .5em;
+}
+.navigation_bar > * {
+    flex: 1;
+    cursor: pointer;
+    text-align: center;
+    background-color: #0001;
+    padding: 1em;
+    border-radius: .5em;
+    outline: 1px solid #aaa;
+    border: .15em solid #fff5;
+    transition: background-color 150ms;
+}
+.navigation_bar > button {
+    flex: 0;
+}
+.navigation_bar > i:hover {
+    background-color: #0003;
+}
+.navigation_bar > i:active {
+    background-color: #fff3;
+    transition: background-color 0ms;
+}
+
+.content_area {
+    padding: 1.5em;
+    display: none;
+    opacity: 0;
+    flex-direction: column;
+    gap: 1em;
+    transition: opacity 555ms;
+}
+
+.content_area > .content {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.content_area > .content > img {
+    max-height: 5em;
+    object-fit: cover;
+}
+
+.content_area > .inputs {
+    display: flex;
+    outline: 1px solid #aaa;
+    border: .1em solid #fffa;
+    background: #eee;
+    padding: .5em;
+    border-radius: .25em;
+    flex-direction: column;
+    gap: .5em;
+    font-size: 1.5em;
+}
+
+ul, ol {
+    list-style-position: inside;
+}
+
+.content_area > .inputs > li {
+    display: grid;
+    grid-template-columns: 1fr 5em;
+    gap: .5em;
+}
+.content_area > .inputs > li:has(>textarea) {
+    grid-template-columns: 1fr;
+    gap: .25em;
+}
+
+.star_input {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    gap: .25em;
+}
+
+.progress {
+    all: unset;
+    --progress: 0%;
+    padding: .5em 0;
+    background-color: #0af;
+    width: var(--progress);
+    transition: width 500ms;
+}
+
+#collaborate > .navigation_bar > .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#collaborate {
+    display: none;
+}
+
+.disabled {
+    opacity: .1;
+    pointer-events: none;
+}
+
+#collaborate > .back_bar {
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+}

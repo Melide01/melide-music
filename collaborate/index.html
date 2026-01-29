@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - Collaborate</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <section id="boot">
+        <i class="logo"></i>
+    </section>
+
+    <section id="code">
+        <i class="close_button fa-solid fa-close" onclick="this.parentElement.classList.toggle('visible')"></i>
+        <div>
+            <input type="text" placeholder="Entrez votre code" name="code_input">
+            <input type="button" value="Rejoindre" name="code_request_button">
+        </div>
+    </section>
+
+    <section id="open_selection">
+        <div>
+            <div>
+                <input type="search" placeholder="Rechercher..." name="search_bar">
+                <input type="button" value="Rechercher" name="search_button">
+            </div>
+            <input type="button" value="J'ai un code" name="code_button">
+        </div>
+        <br>
+        <h3>Open</h3>
+        <br>
+    </section>
+
+    <section id="collaborate">
+        <div class="back_bar">
+            <button id="back_button">Retour</button>
+        </div>
+
+        <form id="formulaire">
+
+        </form>
+
+        <div class="navigation_bar">
+            <div class="progress"></div>
+            <i name="left_nav" class="fa-solid fa-arrow-left" onclick="navigateTo(-1)"></i>
+            <i name="right_nav" class="fa-solid fa-arrow-right" onclick="navigateTo(1)"></i>
+            <button name="send_button">Envoyer</button>
+        </div>
+    </section>
+</body>
+</html>

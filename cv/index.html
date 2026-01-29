@@ -16,9 +16,9 @@
             --item-border-radius: 15px;
 
             --fg-color: #743;
-            --bg-color: #ffefbb;
+            --bg-color: #fffaee;
 
-            --accent-color:         #d92;
+            --accent-color:         #f0c000;
             --accent-color-dark:    #550;
         }
 
@@ -210,6 +210,9 @@
         }
 
         span.christ {
+            filter: blur(.5px);
+            opacity: .5;
+            font-family: serif;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -267,7 +270,7 @@
 
         <div class=" gap" style="display: grid; grid-template-columns: 20% auto;">
             <div class="ver center align" style="position: relative;">
-                <img src="photo identite.jpeg" style="height: 100%; width: 100%;">
+                <img src="new pdp.webp" style="height: 100%; width: 100%; object-fit: cover;">
             </div>
             <div class="ver align" style="font-size: 100%; gap: calc(var(--page-gap) / 3.5);">
                 <label><p>Nom</p>       <input disabled type="text" value="TEUIRA"></label>
