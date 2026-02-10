@@ -5,12 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melide - version 2 - PENDING</title>
     <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 </head>
 <body>
+    <!-- MODAL -->
+
+    <div id="modal">
+        <div>
+            <a class="close" onclick="reveal_modal()"><i class="fa-solid fa-close"></i></a>
+            <h1>Title</h1>
+            <img src="/assets/placeholder.webp">
+        </div>
+    </div>
+
+    <!-- CONTENT -->
     <div>
         <header>
-            <img alt="logo" src="/assets/mld_logo_all_white.png" style="filter: invert(1)">
+            <img alt="logo" src="/assets/mld_logo_all_white.png" style="filter: invert(1)" onclick="location.href = '/version/'">
             <div class="hor">
                 <a><i class="fa-solid fa-house"></i><p>Accueil</p></a>
                 <a><i class="fa-solid fa-file"></i><p>Canons</p></a>
@@ -28,7 +40,7 @@
             <h2>YOUNG AND FREE</h2>
             <h5>Melide</h5>
         </div>
-        <div class="ver">
+        <div class="ver lyrics">
             <ul>
                 <li>But you're always crying</li>
                 <li class="active">In my eyes you're flying</li>
@@ -40,44 +52,44 @@
 
     <div class="ver padding selection">
         <div class="hor align selection_header">
-            <label>Oeuvre<input name="type" value="piece" type="radio"></label>
+            <label>Œuvre<input name="type" value="piece" type="radio" onclick="toggle_selection(this.value)"></label>
             <span>/</span>
-            <label>Canon<input name="type" value="canon" type="radio"></label>
+            <label>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
             <span>/</span>
-            <label>Tout<input checked name="type" value="all" type="radio"></label>
+            <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
             
-            <label>Autres<input name="type" value="other" type="radio"></label>
+            <label>Autres<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_music">
             <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_artwork">
             <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
         </div>
-        <div class="hor padding choice">
-            <i class="fa-solid fa-gamepad"></i><a href="#">Jeux vidéo</a>
+        <div class="hor padding choice" name="selection_application">
+            <i class="fa-solid fa-gamepad"></i><a href="#">Application</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_book">
             <i class="fa-solid fa-book"></i><a href="#">Livres</a>
         </div>
 
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_indeterminate">
             <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_ongoing">
             <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_finished">
             <i class="fa-solid fa-check"></i><a href="#">Fini</a>
         </div>
 
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_font">
             <i class="fa-solid fa-font"></i><a href="#">Polices</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_beat">
             <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
         </div>
-        <div class="hor padding choice">
+        <div class="hor padding choice" name="selection_pack">
             <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
         </div>
     </div>
@@ -121,7 +133,7 @@
             <div class="card hor">
                 <img src="/assets/placeholder.webp">
                 <div class="ver align metadata">
-                    <h2>Game</h2>
+                    <h2>App</h2>
                     <span>Type</span>
                     <h5>Author</h5>
                 </div>
@@ -129,6 +141,7 @@
                     <a><i class="fa-brands fa-windows"></i></a>
                     <a><i class="fa-brands fa-apple"></i></a>
                     <a><i class="fa-brands fa-android"></i></a>
+                    <a><i class="fa-solid fa-globe"></i></a>
                 </div>
             </div>
             <div class="card hor">
@@ -156,16 +169,27 @@
         </div>
 
         <div class="auto_grid selectable">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
-            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/bg_artistic_underwater.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+        </div>
+    </div>
+
+    <div class="hor align padding page_navigation">
+        <div class="hor">
+            <label>1 <input checked name="page" type="radio"></label>
+            <label>2 <input name="page" type="radio"></label>
+            <label>3 <input name="page" type="radio"></label>
+            <label>4 <input name="page" type="radio"></label>
+            <label>5 <input name="page" type="radio"></label>
+        </div>
+        <div class="hor nogap">
+            <input type="button" value="<">
+            <input type="button" value=">">
         </div>
     </div>
 
@@ -175,7 +199,7 @@
             <ul>
                 <label>Pages</label>
                 <li><a href="#">Accueil</a></li>
-                <li><a href="#">Partitions</a></li>
+                <li><a href="#">Canons</a></li>
                 <li><a href="#">Contact</a></li>
             </ul>
             <ul>
