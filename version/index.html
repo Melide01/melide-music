@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - Versions</title>
+    <style>
+        table {
+            outline: 1px solid #000;
+            border-collapse: collapse;
+            margin: auto;
+        }
+        td, th {
+            border: 1px solid #aaa;
+            padding: .5em;
+        }
+        tr:has(>th) { background-color: #ddd; }
+        tr:has(>td) { cursor: default; }
+        tr:has(>td):hover { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Version</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr onclick="location.href = '/version/1';">
+                <td>Initial version</td>
+                <td>05/02/2025</td>
+                <td>1.0</td>
+            </tr>
+            <tr onclick="location.href = '/version/2';">
+                <td>New version</td>
+                <td>09/02/2026</td>
+                <td>2.0</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

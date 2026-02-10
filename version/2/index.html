@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - version 2 - PENDING</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div>
+        <header>
+            <img alt="logo" src="/assets/mld_logo_all_white.png" style="filter: invert(1)">
+            <div class="hor">
+                <a><i class="fa-solid fa-house"></i><p>Accueil</p></a>
+                <a><i class="fa-solid fa-file"></i><p>Canons</p></a>
+                <a><i class="fa-solid fa-paperclip"></i><p>Contact</p></a>
+            </div>
+        </header>
+    </div>
+    
+
+    <div><img src="/assets/BACK.png" style="height: 5em;"></div>
+    <div class="section" style="--bg: #0fd; --color: #079;"><label>Latest song</label></div>
+    <div class="header card fancy_gradient hor" style="color: #fff; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000;">
+        <img src="/assets/placeholder.webp">
+        <div class="ver align metadata">
+            <h2>YOUNG AND FREE</h2>
+            <h5>Melide</h5>
+        </div>
+        <div class="ver">
+            <ul>
+                <li>But you're always crying</li>
+                <li class="active">In my eyes you're flying</li>
+                <li>Waiting for the time</li>
+                <li>Waiting for the time</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="ver padding selection">
+        <div class="hor align selection_header">
+            <label>Oeuvre<input name="type" value="piece" type="radio"></label>
+            <span>/</span>
+            <label>Canon<input name="type" value="canon" type="radio"></label>
+            <span>/</span>
+            <label>Tout<input checked name="type" value="all" type="radio"></label>
+            
+            <label>Autres<input name="type" value="other" type="radio"></label>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-gamepad"></i><a href="#">Jeux vidéo</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-book"></i><a href="#">Livres</a>
+        </div>
+
+        <div class="hor padding choice">
+            <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-check"></i><a href="#">Fini</a>
+        </div>
+
+        <div class="hor padding choice">
+            <i class="fa-solid fa-font"></i><a href="#">Polices</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
+        </div>
+        <div class="hor padding choice">
+            <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
+        </div>
+    </div>
+
+    <div>
+        <div class="hor nogap search_panel">
+            <input type="search" placeholder="Rechercher...">
+            <input type="button" value="Rechercher">
+            <select>
+                <option>Récents</option>
+                <option>Vieux</option>
+            </select>
+        </div>
+        <div class="ver nogap">
+            <div class="card hor">
+                <img src="/assets/placeholder.webp">
+                <div class="ver align metadata">
+                    <h2>Song</h2>
+                    <span>Album</span>
+                    <h5>Author</h5>
+                </div>
+                <div class="hor align right info">
+                    <a><i class="fa-brands fa-youtube"></i></a>
+                    <a><i class="fa-brands fa-deezer"></i></a>
+                    <a><i class="fa-brands fa-spotify"></i></a>
+                    <a><i class="fa-brands fa-soundcloud"></i></a>
+                </div>
+            </div>
+            <div class="card hor">
+                <img src="/assets/placeholder.webp">
+                <div class="ver align metadata">
+                    <h2>Book</h2>
+                    <span>Type</span>
+                    <h5>Author</h5>
+                </div>
+                <div class="hor align right info">
+                    <a><i class="fa-solid fa-book"></i></a>
+                    <a><i class="fa-solid fa-file"></i></a>
+                </div>
+            </div>
+            <div class="card hor">
+                <img src="/assets/placeholder.webp">
+                <div class="ver align metadata">
+                    <h2>Game</h2>
+                    <span>Type</span>
+                    <h5>Author</h5>
+                </div>
+                <div class="hor align right info">
+                    <a><i class="fa-brands fa-windows"></i></a>
+                    <a><i class="fa-brands fa-apple"></i></a>
+                    <a><i class="fa-brands fa-android"></i></a>
+                </div>
+            </div>
+            <div class="card hor">
+                <div class="ver align metadata">
+                    <h2>Font</h2>
+                    <h5>Author</h5>
+                </div>
+                <div class="hor align right info">
+                    <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</span>
+                </div>
+            </div>
+            <div class="card hor canon">
+                <img src="/assets/placeholder.webp">
+                <div class="ver align metadata">
+                    <h2>Canon</h2>
+                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
+                </div>
+                <div class="hor align right info">
+                    <a><i class="fa-solid fa-music"></i></a>
+                    <a><i class="fa-solid fa-image"></i></a>
+                    <a><i class="fa-solid fa-gamepad"></i></a>
+                    <a><i class="fa-solid fa-book"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="auto_grid selectable">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+            <img src="/assets/placeholder.webp">
+        </div>
+    </div>
+
+    <div class="padding ver">
+        <footer class="hor align">
+            <img src="/assets/mld_logo_all_white.png" style="height: 3em; flex: 0;">
+            <ul>
+                <label>Pages</label>
+                <li><a href="#">Accueil</a></li>
+                <li><a href="#">Partitions</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <ul>
+                <label>Légales</label>
+                <li><a href="#">Politique sur la confidentialité des données</a></li>
+                <li><a href="#">Mentions légales</a></li>
+                <li><a href="#">Charte IA</a></li>
+            </ul>
+        </footer>
+    </div>
+    
+</body>
+</html>
