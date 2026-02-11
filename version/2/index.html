@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <script defer src="script.js"></script>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
     <!-- MODAL -->
 
@@ -22,19 +24,26 @@
     <!-- CONTENT -->
     <div>
         <header>
-            <img alt="logo" src="/assets/mld_logo_all_white.png" style="filter: invert(1)" onclick="location.href = '/version/'">
+            <img alt="logo" src="/assets/mld_logo_all_white.png" style="filter: invert(1)"
+                onclick="location.href = '/version/'">
             <div class="hor">
-                <a><i class="fa-solid fa-house"></i><p>Accueil</p></a>
-                <a><i class="fa-solid fa-file"></i><p>Canons</p></a>
-                <a><i class="fa-solid fa-paperclip"></i><p>Contact</p></a>
+                <a><i class="fa-solid fa-house"></i>
+                    <p>Accueil</p>
+                </a>
+                <a><i class="fa-solid fa-file"></i>
+                    <p>Canons</p>
+                </a>
+                <a><i class="fa-solid fa-paperclip"></i>
+                    <p>Contact</p>
+                </a>
             </div>
         </header>
     </div>
-    
 
-    <div><img src="/assets/BACK.png" style="height: 5em;"></div>
+
+    <div><img src="/assets/bg_artistic_underwater_contrasted.webp" style="height: 5em;"></div>
     <div class="section" style="--bg: #0fd; --color: #079;"><label>Latest song</label></div>
-    <div class="header card fancy_gradient hor" style="color: #fff; text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, -1px 1px 0 #000, 1px -1px 0 #000;">
+    <div class="header card fancy_gradient hor" style="--color: #ddd; --outline: #057; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #042; --duration: 25s">
         <img src="/assets/placeholder.webp">
         <div class="ver align metadata">
             <h2>YOUNG AND FREE</h2>
@@ -57,41 +66,43 @@
             <label>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
             <span>/</span>
             <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
-            
             <label>Autres<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
         </div>
-        <div class="hor padding choice" name="selection_music">
-            <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
-        </div>
-        <div class="hor padding choice" name="selection_artwork">
-            <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
-        </div>
-        <div class="hor padding choice" name="selection_application">
-            <i class="fa-solid fa-gamepad"></i><a href="#">Application</a>
-        </div>
-        <div class="hor padding choice" name="selection_book">
-            <i class="fa-solid fa-book"></i><a href="#">Livres</a>
+        <div class="ver" style="height: 7.5em; overflow-y: auto;">
+            <div class="hor padding choice" name="selection_music">
+                <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
+            </div>
+            <div class="hor padding choice" name="selection_artwork">
+                <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
+            </div>
+            <div class="hor padding choice" name="selection_application">
+                <i class="fa-solid fa-gamepad"></i><a href="#">Application</a>
+            </div>
+            <div class="hor padding choice" name="selection_book">
+                <i class="fa-solid fa-book"></i><a href="#">Livres</a>
+            </div>
+
+            <div class="hor padding choice" name="selection_indeterminate">
+                <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
+            </div>
+            <div class="hor padding choice" name="selection_ongoing">
+                <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
+            </div>
+            <div class="hor padding choice" name="selection_finished">
+                <i class="fa-solid fa-check"></i><a href="#">Fini</a>
+            </div>
+
+            <div class="hor padding choice" name="selection_font">
+                <i class="fa-solid fa-font"></i><a href="#">Polices</a>
+            </div>
+            <div class="hor padding choice" name="selection_beat">
+                <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
+            </div>
+            <div class="hor padding choice" name="selection_pack">
+                <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
+            </div>
         </div>
 
-        <div class="hor padding choice" name="selection_indeterminate">
-            <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
-        </div>
-        <div class="hor padding choice" name="selection_ongoing">
-            <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
-        </div>
-        <div class="hor padding choice" name="selection_finished">
-            <i class="fa-solid fa-check"></i><a href="#">Fini</a>
-        </div>
-
-        <div class="hor padding choice" name="selection_font">
-            <i class="fa-solid fa-font"></i><a href="#">Polices</a>
-        </div>
-        <div class="hor padding choice" name="selection_beat">
-            <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
-        </div>
-        <div class="hor padding choice" name="selection_pack">
-            <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
-        </div>
     </div>
 
     <div>
@@ -118,7 +129,7 @@
                     <a><i class="fa-brands fa-soundcloud"></i></a>
                 </div>
             </div>
-            <div class="card hor">
+            <div class="card hor book">
                 <img src="/assets/placeholder.webp">
                 <div class="ver align metadata">
                     <h2>Book</h2>
@@ -159,11 +170,11 @@
                     <h2>Canon</h2>
                     <span>Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
                 </div>
-                <div class="hor align right info">
+                <div class="square info">
                     <a><i class="fa-solid fa-music"></i></a>
                     <a><i class="fa-solid fa-image"></i></a>
                     <a><i class="fa-solid fa-gamepad"></i></a>
-                    <a><i class="fa-solid fa-book"></i></a>
+                    <a><i>+1</i>...</a>
                 </div>
             </div>
         </div>
@@ -210,6 +221,7 @@
             </ul>
         </footer>
     </div>
-    
+
 </body>
+
 </html>

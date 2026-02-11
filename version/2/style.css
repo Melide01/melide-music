@@ -122,12 +122,12 @@ header>.hor>a:active {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    font-size: 1em;
+    font-size: 1.5em;
 }
 .card h5 { font-weight: 100; }
 .card.header .ver:nth-child(2) { max-width: 30%; }
 .card.fancy_gradient {
-    background: linear-gradient(to top, #555, #777 7%, transparent 93%, #aaa);
+    background: linear-gradient(to top, var(--bg-4), var(--bg-3) 7%, transparent 93%, var(--bg-2));
 }
 .card {
     font-size: larger;
@@ -154,29 +154,27 @@ header>.hor>a:active {
     overflow: hidden;
     font-size: 1em;
 }
-.card.canon .metadata { max-width: 30%; }
-.card.canon .info { flex: 1; font-size: .8em; }
+.card.book img { aspect-ratio: 6/9; }
+
+.card .metadata { flex: 1; width: 0; min-width: 5em; }
 
 .card:has(.info) .metadata { transition: padding 100ms; }
 .card:has(.info):hover { background-color: #eee; }
 .card:has(.info):hover .metadata { padding-left: calc(var(--padding)*1.5); }
-/*
-*::-webkit-scrollbar { all: unset; width: .7em; height: .7em; }
-*::-webkit-scrollbar-thumb:hover { background-color: #bbb; }
-*::-webkit-scrollbar-thumb {
-    background-color: #aaa;
-    background: linear-gradient(to top, #aaa, transparent, #fff);
-    border: .1em solid #aaaa;
-    box-shadow: 0 0 2px #000;
-    border-radius: .2em;
-}*/
+.card:has(.info):active { background-color: #ddd; color: #444; }
+.card:has(.info):active .metadata { padding-left: var(--padding); }
 
 .fancy_gradient {
     --duration: 9.99s;
+    --color: #fff;
+    --outline: #000;
     --bg-1: #555;
     --bg-2: #ddd;
     --bg-3: #aaa;
     --bg-4: #777;
+
+    text-shadow: 1px 1px 0 var(--outline), -1px -1px 0 var(--outline), -1px 1px 0 var(--outline), 1px -1px 0 var(--outline), 0 -1px 0 var(--outline), -1px 0 0 var(--outline), 0 1px 0 var(--outline), 1px 0 0 var(--outline);
+    color: var(--color);
     overflow: hidden;
     position: relative;
 }
@@ -263,7 +261,7 @@ header>.hor>a:active {
 .search_panel input[type="button"] { background-color: #07f; color: #fff; }
 .search_panel input[type="button"]:hover { background-color: #06e; }
 .search_panel input[type="button"]:active { background-color: #05d; color: #ddd; }
-.search_panel select { background-color: #444; color: #fff; }
+.search_panel select { position: relative; background-color: #444; color: #fff; padding-right: calc(var(--padding)*2); }
 
 .auto_grid {
     display: grid;
@@ -331,3 +329,11 @@ header>.hor>a:active {
 
 #modal.open { background-color: #000a; pointer-events: all; }
 #modal.open > div { opacity: 1; }
+
+.square {
+    --num: 4;
+    display: grid;
+    flex: 0;
+    align-items: center;
+    grid-template-columns: repeat(calc(var(--num)/2), 2em);
+}
