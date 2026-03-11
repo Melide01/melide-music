@@ -187,8 +187,10 @@
         .font_staatliches, th, summary { font-weight: 100; font-family: "Staatliches", sans-serif; }
 
         /* can break */
-        label { display: grid; grid-template-columns: 5em auto; align-items: center; }
-        label > input { all: unset; border-top: solid 2px #0001; border-bottom: solid 2px #0003; padding: calc(var(--page-gap) / 2); }
+        /* label { display: grid; grid-template-columns: 5em auto; align-items: center; }
+        */
+        
+        label > input { all: unset; box-sizing: border-box; width: 100%; border-top: solid 2px #0001; border-bottom: solid 2px #0003; padding: calc(var(--page-gap) / 2); }
 
         .hor.center.gap {
             gap: calc(var(--page-gap) / 2);
@@ -265,7 +267,6 @@
             <span class="button action">Imaginatif</span>
             <span class="button action">Autodidacte</span>
             <span class="button action">Rigoureux</span>
-            <span class="christ">Exode 20:9<i>"</i><p style="color: #fff;">Tu travailleras six jours, et tu feras tout ton ouvrage.</p><i>"</i></span>
         </div>
 
         <div class=" gap" style="display: grid; grid-template-columns: 20% auto;">
@@ -273,10 +274,10 @@
                 <img src="new pdp.webp" style="height: 100%; width: 100%; object-fit: cover;">
             </div>
             <div class="ver align" style="font-size: 100%; gap: calc(var(--page-gap) / 3.5);">
-                <label><p>Nom</p>       <input disabled type="text" value="TEUIRA"></label>
-                <label><p>Prénom</p>    <input disabled type="text" value="John"></label>
-                <label><p>Âge</p>       <input disabled type="text" value="22 ans"></label>
-                <label><p>Origine</p>   <input disabled type="text" value="Tahiti, Polynésie Française"></label>
+                <label><!-- <p>Nom</p>     -->   <input disabled type="text" value="TEUIRA"></label>
+                <label><!-- <p>Prénom</p>  -->   <input disabled type="text" value="John"></label>
+                <label><!-- <p>Âge</p>     -->   <input disabled type="text" value="22 ans"></label>
+                <label><!-- <p>Origine</p> -->   <input disabled type="text" value="Tahiti, Polynésie Française"></label>
             </div>
         </div>
 
