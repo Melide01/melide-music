@@ -86,12 +86,12 @@ function loadTrack(index) {
 
     const params = new URLSearchParams(window.location.search);
     // const track = params.get("track");
-    const data = song_data.tracks_data.filter(v => String(v[0]) === String(index))[0];
+    const data = song_data.filter(v => String(v["Track ID"]) === String(index))[0];
     current_track = data;
 
-    if (data[20]) {
+    if (data["Content"]) {
         track_ui_content.innerHTML = "";
-        parseMarkdown(data[20], '\\n').forEach(el => track_ui_content.appendChild(el));
+        parseMarkdown(data["Content"], '\\n').forEach(el => track_ui_content.appendChild(el));
         // track_ui_content.innerHTML = parseMarkdown(data[20], '\\n');
     } else {
         track_ui_content.innerHTML = '<em style="color: #777;"><b>Contenu manquant.</b></em>';
@@ -111,8 +111,8 @@ function loadTrack(index) {
     const track_ui_release_date = track_display.querySelector('[name="track_ui_release_date"]');
     const track_ui_genres = track_display.querySelector('[name="track_ui_genres"]');
     
-    if (data[10] !== "") {
-        track_ui_coverart.src = `https://drive.google.com/thumbnail?sz=w1920&id=${data[10]}`;
+    if (data["Cover"] !== "") {
+        track_ui_coverart.src = `https://drive.google.com/thumbnail?sz=w1920&id=${data["Cover"]}`;
     } else {
         track_ui_coverart.src = "/assets/placeholder.webp";
         // track_ui_coverart.style.display = "none";
@@ -123,66 +123,66 @@ function loadTrack(index) {
     // https://drive.google.com/uc?export=download&id=[YOUR_FILE_ID]
 
     // PREVIEW BUTTON
-    if (data[14] !== "") {
+    if (data["Audio Preview"] !== "") {
         track_ui_listen_preview.style.display = "flex";
-        preview_id = data[14];
+        preview_id = data["Audio Preview"];
     } else {
         track_ui_listen_preview.style.display = "none";
     };
 
-    if (data[15] !== "") {
-        presave_link = data[15];
+    if (data["Pre-save Link"] !== "") {
+        presave_link = data["Pre-save Link"];
         track_ui_presave.style.display = "flex";
     } else {
         track_ui_presave.style.display = "none";
     };
 
     // SPOTIFY BUTTON
-    if (data[16] !== "") {
-        spotify_link = data[16];
+    if (data["Spotify Link"] !== "") {
+        spotify_link = data["Spotify Link"];
         track_ui_spotify.style.display = "flex";
     } else {
         track_ui_spotify.style.display = "none";
     }
 
     // YOUTUBE BUTTON
-    if (data[17] !== "") {
-        youtube_link = data[17];
+    if (data["YouTube Link"] !== "") {
+        youtube_link = data["YouTube Link"];
         track_ui_youtube.style.display = "flex";
     } else {
         track_ui_youtube.style.display = "none";
     }
 
     // SOUNDCLOUD BUTTON
-    if (data[18] !== "") {
-        soundcloud_link = data[18];
+    if (data["SoundCloud Link"] !== "") {
+        soundcloud_link = data["SoundCloud Link"];
         track_ui_soundcloud.style.display = "flex";
     } else {
         track_ui_soundcloud.style.display = "none";
     }
 
     // OTHER BUTTON
-    if (data[19] !== "") {
-        other_link = data[19];
+    if (data["Other Link"] !== "") {
+        other_link = data["Other Link"];
         track_ui_other.style.display = "flex";
     } else {
         track_ui_other.style.display = "none";
     }
 
     // DOWNLOAD BUTTON
-    if (String(data[13]) === "true" && (data[23] === "" || parseInt(data[23]) === 0)) {
+    if (String(data["Downloadable"]) === "true" && (data["Prod Price"] === "" || parseInt(data["Prod Price"]) === 0)) {
         track_ui_download.style.display = "flex";
     } else {
         track_ui_download.style.display = "none";
     }
 
-    track_ui_title.textContent = data[1];
-    track_ui_album.textContent = data[2];
-    track_ui_artists.textContent = data[7];
+    track_ui_title.textContent = data["Track Name"];
+    track_ui_album.textContent = data["Album"];
+    track_ui_artists.textContent = data["Track Artists"];
     
-    track_ui_current_state.textContent = data[6] + " - " + data[3];
-    track_ui_release_date.textContent = "Date de sortie : " + new Date(data[4]).toLocaleDateString();
-    track_ui_genres.innerHTML = data[8].split(', ').map(v => `<a class="capsule minim">${v}</a>`).join("");
+    track_ui_current_state.textContent = data["Track State"] + " - " + data["Track State"];
+    track_ui_release_date.textContent = "Date de sortie : " + new Date(data["Track Release Date"]).toLocaleDateString();
+    track_ui_genres.innerHTML = data["Genres"].split(', ').map(v => `<a class="capsule minim">${v}</a>`).join("");
 }
 
 function goBack() {
@@ -203,7 +203,6 @@ function sortPannel(type = "date", index = 4, filter = "Trier...") {
         document.getElementById(id_rules[index]).value = filter;
     }
     const track_container = document.getElementById('track_container');
-    const range = song_data.tracks_data.slice(1);
 
     // RESET
     if (filter === "Trier...") {
@@ -213,20 +212,19 @@ function sortPannel(type = "date", index = 4, filter = "Trier...") {
         return;
     }
 
-    const indexedRange = range.map((val, i) => ({ val, originalIndex: i }));
-
     if (type === "text") {
         const search = filter.toLowerCase();
 
-        const ranked = indexedRange
-            .map(({ val, originalIndex }) => {
+        const ranked = song_data
+            .map((val, originalIndex ) => {
                 // You can change which fields to search here
-                const matchCount = val.reduce((count, field) => {
-                    if (typeof field === "string" && field.toLowerCase().includes(search) || filter === "") {
-                        return count + 1;
-                    }
-                    return count;
-                }, 0);
+                
+                // const matchCount = val.reduce((count, field) => {
+                //     if (typeof field === "string" && field.toLowerCase().includes(search) || filter === "") {
+                //         return count + 1;
+                //     }
+                //     return count;
+                // }, 0);
 
                 return { val, originalIndex, matchCount };
             })
@@ -253,15 +251,17 @@ function sortPannel(type = "date", index = 4, filter = "Trier...") {
 
     if (type === "date") {
         const direction = filter === "Décroissant" ? -1 : 1;
-        indexedRange.sort((a, b) => {
-            const dateA = new Date(a.val[index]); 
-            const dateB = new Date(b.val[index]);
+
+        
+        song_data.sort((a, b) => {
+            const dateA = new Date(a['Track Release Date'][index]);
+            const dateB = new Date(b['Track Release Date'][index]);
             return (dateA - dateB) * direction;
         });
     }
 
     // RENDERS SORTED ELEMENTS
-    indexedRange.forEach(({ originalIndex }) => {
+    song_data.forEach(({ originalIndex }) => {
         const el = track_element[originalIndex];
         if (el) track_container.prepend(el);
     });
@@ -277,14 +277,14 @@ const id_rules = {
 }
 
 function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
-    search_argument[index] = filter;
+    // search_argument[index] = filter;
 
     if (!!id_rules[index]) {
         document.getElementById(id_rules[index]).value = filter;
     }
 
     const track_container = document.getElementById('track_container');
-    const range = song_data.tracks_data.slice(1);
+    const range = song_data.slice(1);
 
     const search_results = range.reduce((acc, val, idx) => {
         const is_match = Object.entries(search_argument).every(([key, expected]) => {
@@ -316,23 +316,23 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         const img_track_cover = document.createElement('img'); img_track_cover.style.opacity = "1";
         track_card_div.appendChild(img_track_cover);
         if (e[10] !== "") {
-            img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e[10]}`;
+            img_track_cover.src = `https://drive.google.com/thumbnail?sz=w1920&id=${e["Cover"]}`;
         } else {
             img_track_cover.src = "/assets/placeholder.webp";
         }
 
         const tracks_meta = document.createElement('div'); tracks_meta.classList.add('vertical');
         tracks_meta.style = "gap: 0;" + conditional_style_coverart;
-        tracks_meta.innerHTML = `<b>${e[1]}</b><i>${e[7]}</i>`;
+        tracks_meta.innerHTML = `<b>${e["Track Name"]}</b><i>${e["Track Artists"]}</i>`;
 
         track_card_div.appendChild(tracks_meta);
 
         const action_div = document.createElement('div'); action_div.classList.add('vertical');
 
-        if (String(e[13]).toLowerCase() === "true" && e[6] === "Beat/Instrumental") {
+        if (String(e["Downloadable"]).toLowerCase() === "true" && e["Track Type"] === "Beat/Instrumental") {
             const platform_button = document.createElement('div');
             platform_button.style = "display: grid; grid-template-columns: repeat(3, calc(100% / 3)); opacity: .7; gap: .25em"
-            platform_button.innerHTML = `</p><p>${e[22]} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e[23] !== "" ? '<p>' + (e[23] + ".00€" === "0.00€" ? "FREE" : e[23] + ".00€") + "</p>" : ""}`;
+            platform_button.innerHTML = `</p><p>${e['Views']} <img style="opacity: 1; height: .8em" src="../assets/icons/download.png"></p>${e["Views"] !== "" ? '<p>' + (e["Prod Price"] + ".00€" === "0.00€" ? "FREE" : e["Prod Price"] + ".00€") + "</p>" : ""}`;
             action_div.appendChild(platform_button);
         }
         
@@ -340,7 +340,7 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         if (String(e[13]).toLowerCase() === "true") {
             const download_button = document.createElement('a');
 
-            if (parseFloat(e[23]) <= 0.0) {
+            if (parseFloat(e["Prod Price"]) <= 0.0) {
                 const download_img_icon = document.createElement('img');
                 download_img_icon.src = '/assets/icons/download.png';
                 download_img_icon.style.opacity = '1';
@@ -357,9 +357,9 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         
         track_card_div.appendChild(action_div);
         
-        if (e[9] !== "") {
+        if (e["Mood"] !== "") {
             const mood_div = document.createElement('div'); mood_div.classList.add('horizontal'); mood_div.style = "grid-column: 1/4; gap: .5em; justify-content: end;"
-            const mood_list = e[9].split(', ').map(v => `<span class="capsule minim">${v}</span>`).join("");
+            const mood_list = e["Mood"].split(', ').map(v => `<span class="capsule minim">${v}</span>`).join("");
             mood_div.innerHTML = mood_list;
             track_card_div.appendChild(mood_div);
         }
@@ -369,9 +369,9 @@ function loadTracksPanel(index = 3, filter = "Trier...", type = "list") {
         // EVENT LISTENER
         track_card_div.addEventListener("click", (event) => {
             if (event.target.tagName !== "INPUT") {
-                url_params.set("track", e[0]);  
+                url_params.set("track", e["Track ID"]);  
                 window.history.replaceState({}, "", `${location.pathname}?${url_params}`)
-                loadTrack(e[0]);
+                loadTrack(e["Track ID"]);
             }
         })
     })

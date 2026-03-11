@@ -60,23 +60,23 @@
     <div class="contentChild" id="search_panel">
       <div class="papernote" style="padding: .1em; display: grid; grid-template-columns: auto 20%; gap: .25em; margin-bottom: .5em;">
         
-        <input oninput="updateURL('search', this.value); sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
+        <input disabled oninput="updateURL('search', this.value); sortPannel('text', 1, this.value)" class="papernote" type="text" placeholder="Rechercher...">
         
-        <select id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 4, this.value)" class="papernote">
+        <select disabled id="time_filter" onchange="updateURL('filter', this.value); sortPannel('date', 4, this.value)" class="papernote">
           <option>Trier...</option>
           <option>Croissant</option>
           <option>Décroissant</option>
         </select>
 
         <div class="autoFill">
-          <select id="state_filter" onchange="updateURL('state', this.value); loadTracksPanel(3, this.value)" class="capsule">
+          <select disabled id="state_filter" onchange="updateURL('state', this.value); loadTracksPanel(3, this.value)" class="capsule">
             <option>Trier...</option>
             <option>Released</option>
             <option>Unreleased</option>
             <option>Removed</option>
           </select>
   
-          <select id="type_filter" onchange="updateURL('type', this.value); loadTracksPanel(6, this.value)" class="capsule">
+          <select disabled id="type_filter" onchange="updateURL('type', this.value); loadTracksPanel(6, this.value)" class="capsule">
             <option>Trier...</option>
             <option>Song</option>
             <option>Beat/instrumental</option>

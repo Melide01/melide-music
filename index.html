@@ -329,7 +329,7 @@
 
         const loading_pannel = document.getElementById('loading_pannel');
         const latest_song_card = document.getElementById('latest_song_card');
-        var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbxUxJcHeYWkjr72cOEcu-IU91rOWLv6kX-Vtb8BK0eGPJpiwGK51S6EaEQOy3C99hSvyA/exec";
+        var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
         
         var cached_tracks;
         const title_el = document.getElementById('title');
@@ -360,14 +360,16 @@
             logo_loaded.style.animation = "loaded_appear 500ms forwards";
 
             loading_pannel.classList.add('hide');
-            const latest_release = Object.fromEntries(cached_tracks.tracks_data.filter(v => v[3] === "Released" && v[6] === "Song").sort((a, b) => new Date(b[4]) - new Date(a[4]))[0].map((v, i) => [String(cached_tracks.tracks_data[0][i]).toLocaleLowerCase().replaceAll(' ', '_'), v]))
-            latest_song_card.querySelector('img').src = "https://drive.google.com/thumbnail?sz=w1920&id=" + latest_release.cover_art;
+            console.log(cached_tracks);
+            const latest_release = cached_tracks.filter(v => v["Track State"] === "Released" && v["Track Type"] === "Song").sort((a, b) => new Date(b["Track Release Date"]) - new Date(a["Track Release Date"]))[0];
+            console.log(latest_release)
+            latest_song_card.querySelector('img').src = "https://drive.google.com/thumbnail?sz=w1920&id=" + latest_release['Cover Art'];
             
-            let contents = Object.fromEntries(latest_release.content.split(/[\/]{2}\s+(.+?)[\/]{2}/g).filter(v => v && v !== "\\n").map(v => v.split(/^(.+?)\\n/).filter(v => v)));
+            let contents = Object.fromEntries(latest_release['Content'].split(/[\/]{2}\s+(.+?)[\/]{2}/g).filter(v => v && v !== "\\n").map(v => v.split(/^(.+?)\\n/).filter(v => v)));
             lyrics_holder.innerHTML = contents.Paroles.replaceAll('\\n', '\n').replaceAll(/[\*|(]+(.+)[\*|)]+/g, '').replaceAll('\n', '<br>');
             
-            latest_song_card.querySelector('h1').textContent = latest_release.track_name;
-            latest_song_card.querySelector('h3').textContent = latest_release.track_artists !== "Melide" ? latest_release.track_artists : "";
+            latest_song_card.querySelector('h1').textContent = latest_release["Track Name"];
+            latest_song_card.querySelector('h3').textContent = latest_release["Track Artists"] !== "Melide" ? latest_release.track_artists : "";
             if (!latest_release.youtube_link) youtube_link.style.display = "none";
             if (!latest_release.soundcloud_link) soundcloud_link.style.display = "none";
             if (!latest_release.deezer_link) deezer_link.style.display = "none";

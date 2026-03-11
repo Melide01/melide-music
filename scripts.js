@@ -290,23 +290,23 @@ const random_colors = ['color1', 'color3', 'color3', 'color2']
 function loadDashboard(data) {
     // SETS DATA
     song_data = data;
-    document.querySelector('[name="dashboard_everytrack_number"]').textContent = `${data.tracks_data.length - 1} morceaux enregistrer`
+    document.querySelector('[name="dashboard_everytrack_number"]').textContent = `${data.length - 1} morceaux enregistrer`
 
     // PREPARE AND SET LATEST RELEASE INFO
     evermade_songs = {
         "Postés": {
-            "value": Math.round(data.tracks_data.filter(a => a[3] === "Released").length / data.tracks_data.length * 100) + "%",
+            "value": Math.round(data.filter(a => a["Track State"] === "Released").length / data.length * 100) + "%",
             "animation": "flicker2 2s infinite linear"
         },
         "Inaccessibles": {
-            "value": Math.round(data.tracks_data.filter(a => a[3] === "Unreleased").length / data.tracks_data.length * 100) + "%",
+            "value": Math.round(data.filter(a => a["Track State"] === "Unreleased").length / data.length * 100) + "%",
             "animation": "flicker1 2s infinite linear"
         },
         "En travaux": {
-            "value": Math.round(data.tracks_data.filter(a => a[3] === "Work").length / data.tracks_data.length * 100) + "%",
+            "value": Math.round(data.filter(a => a["Track State"] === "Work").length / data.length * 100) + "%",
         },
         "Retirés": {
-            "value": Math.round(data.tracks_data.filter(a => a[3] === "Removed").length / data.tracks_data.length * 100) + "%",
+            "value": Math.round(data.filter(a => a["Track State"] === "Removed").length / data.length * 100) + "%",
         }
     }
     getLatestRelease(data);
@@ -361,11 +361,11 @@ function updateRemainingTime() {
 }
 
 function getLatestRelease(data) {
-    const latest_track = data.tracks_data.filter(a => a[3] === "Released" && a[6] === "Song").sort((a, b) => new Date(b[4])- new Date(a[4]));
+    const latest_track = data.filter(a => a["Track State"] === "Released" && a["Track Type"] === "Song").sort((a, b) => new Date(b["Track Release Date"])- new Date(a["Track Release Date"]));
     const today_date = new Date();
  
-    release_date = new Date(latest_track[0][4]);
-    creation_date = new Date(latest_track[0][5]);
+    release_date = new Date(latest_track[0]["Track Release Date"]);
+    creation_date = new Date(latest_track[0]["Track Creation Date"]);
 
     // CHECK IF ITS RELEASED OR NOT YET
     if (release_date.getTime() < today_date.getTime()) {
@@ -381,20 +381,20 @@ function getLatestRelease(data) {
 
     const latest_action = document.getElementById('latest_action');
     var latest_buttons = `
-        ${latest_track[0][15] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][15] + '"><i class="fa-solid fa-bookmark"></i></a>' : ""}
-        ${latest_track[0][16] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][16] + '"><i class="fa-brands fa-spotify"></i></a>' : ""}
-        ${latest_track[0][17] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][17] + '"><i class="fa-brands fa-youtube"></i></a>' : ""}
-        ${latest_track[0][18] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][18] + '"><i class="fa-brands fa-soundcloud"></i></a>' : ""}
-        ${latest_track[0][19] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' + latest_track[0][19] + '"><i class="fa-solid fa-paperclip"></i></a>' : ""}
+        ${latest_track[0]["Pre-save"] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' +         latest_track[0]["Pre-save"] + '"><i class="fa-solid fa-bookmark"></i></a>' : ""}
+        ${latest_track[0]["Spotify Link"] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' +     latest_track[0]["Spotify Link"] + '"><i class="fa-brands fa-spotify"></i></a>' : ""}
+        ${latest_track[0]["YouTube Link"] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' +     latest_track[0]["YouTube Link"] + '"><i class="fa-brands fa-youtube"></i></a>' : ""}
+        ${latest_track[0]["SoundCloud Link"] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' +  latest_track[0]["SoundCloud Link"] + '"><i class="fa-brands fa-soundcloud"></i></a>' : ""}
+        ${latest_track[0]["Other Link"] !== "" ? '<a target="_blank" style="cursor: pointer; font-size: 1.2em; padding: 0; text-align: center; outline: 1px solid #222" class="capsule minim clickable" href="' +       latest_track[0]["Other Link"] + '"><i class="fa-solid fa-paperclip"></i></a>' : ""}
         `;
     latest_action.innerHTML = latest_buttons;
     document.querySelector('[name="latest_song_cover"]').title = "Ouvrir.";
     document.querySelector('[name="latest_song_cover"]').style.cursor = "pointer";
     document.querySelector('[name="latest_song_cover"]').addEventListener('click', () => location.href = "/audios/?track=" + latest_track[0][0])
-    document.querySelector('[name="latest_song_title"]').textContent = latest_track[0][1];
-    document.querySelector('[name="latest_song_artist"]').textContent = latest_track[0][7];
-    document.querySelector('[name="latest_song_cover"]').src = `https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][10]}`;
-    document.querySelector('[name="latest_song_card"]').style.backgroundImage = `url("https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0][10]}")`;
+    document.querySelector('[name="latest_song_title"]').textContent = latest_track[0]["Track Nam"];
+    document.querySelector('[name="latest_song_artist"]').textContent = latest_track[0]["Track Artists"];
+    document.querySelector('[name="latest_song_cover"]').src = `https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0]["Cover"]}`;
+    document.querySelector('[name="latest_song_card"]').style.backgroundImage = `url("https://drive.google.com/thumbnail?sz=w1920&id=${latest_track[0]["Cover"]}")`;
 }
 
 // MINI MELIDE RELATED
