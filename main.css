@@ -343,13 +343,23 @@ main .selection_header label a.question {
 .search_panel input[type="button"]:active { background-color: #05d; color: #ddd; }
 .search_panel select { position: relative; background-color: #444; color: #fff; padding-right: calc(var(--padding)*2); }
 
-.auto_grid {
+
+.auto_fill {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(auto, 9em));
+    --size: 9em;
+    grid-template-columns: repeat(auto-fill, minmax(var(--size), auto));
     gap: calc(var(--padding)/2);
     padding: calc(var(--padding)/2);
 }
-.auto_grid > * { width: 100%; aspect-ratio: 1; }
+.auto_grid {
+    display: grid;
+    --size: 9em;
+    grid-template-columns: repeat(auto-fill, minmax(auto, var(--size)));
+    gap: calc(var(--padding)/2);
+    padding: calc(var(--padding)/2);
+}
+.auto_grid > *,
+.auto_fill > * { width: 100%; aspect-ratio: 1; }
 .auto_grid.selectable > *:hover { filter: brightness(.9); }
 .auto_grid.selectable > *:active { filter: brightness(.8); }
 
@@ -419,6 +429,7 @@ main .selection_header label a.question {
     grid-template-columns: repeat(calc(var(--num)/2), 2em);
 }
 
+#loading_block { position: absolute; pointer-events: none; }
 #loading_block.load {
     width: auto;
     height: 2em;
@@ -442,7 +453,8 @@ main .selection_header label a.question {
     }
 }
 
-#project_container:has(>#loading_block.load) > .card {
+#project_container:has(>#loading_block.load) > .card,
+#project_container:has(>#loading_block.load) > .merch_card {
     opacity: .5;
     pointer-events: none;
     animation: loading_card 2000ms infinite;
@@ -571,4 +583,26 @@ dialog > .fa-close {
     left: 0;
     z-index: 10;
     background-color: #f005;
+}
+
+.merch_card {
+    cursor: pointer;
+    border: .2em solid #eee;
+    border-radius: calc(var(--padding) * 2);
+    background-color: #fff;
+    transition: transform 200ms;
+}
+.merch_card:hover {
+    border: .2em solid #000;
+}
+.merch_card:active {
+    transform: translateY(1em);
+    opacity: .5;
+}
+.merch_card > h2 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: .7em;
+    font-weight: 100;
 }
