@@ -1,10 +1,10 @@
-function parseMarkdown(string, separator = "\n", type = 'page') {
+export function parseMarkdown(string, separator = "\n", type = 'page') {
     const lines = string.replace(/\r/g, '').split(separator);
     let output = [];
     let buffer = [];
     let currentBlock = null;
 
-    var yaml_data;
+    // var yaml_data;
 
     var structures = { // HTML Structures
         details: {
@@ -303,7 +303,6 @@ function parseMarkdown(string, separator = "\n", type = 'page') {
 
                 regex.lastIndex = 0;
                 const matches = regex.flags.includes('g') ? Array.from(fragment.matchAll(regex)) : [];
-                // let match;
 
                 if (!regex.flags.includes('g')) {
                     const singleMatch = regex.exec(fragment);
@@ -338,13 +337,11 @@ function parseMarkdown(string, separator = "\n", type = 'page') {
             }
             return p;
         }
-
         return line;
     }
 
     function flushBuffer() { // Flush text content for structures
         if (!currentBlock) return;
-        // if (edit) edit_array_list.push(buffer.join('\n'));
         output.push(structures[currentBlock].parse(buffer));
         buffer = []; 
         currentBlock = null;
@@ -379,24 +376,63 @@ function parseMarkdown(string, separator = "\n", type = 'page') {
         }
         flushBuffer(); // Flushed inline if passed every non matched  structures
         
-        // if (edit) edit_array_list.push(line);
-        
         let handled = false;
         if (!handled && line.trim() !== '') {
             const parsed = parseInline(line);
             output.push(parseInline(line));
-        } else if (handled) { output += line; } // Meant to be called to not parse inside specific structure, maybe deprecated
-        // output += '<br/>'; // Escape with new line
-        // output.push(document.createElement('br'));
+        } else if (handled) { output += line; }
     }
 
     flushBuffer(); // Final flush
-    // var return_output = {
-    //     metadata: yaml_data, 
-    //     data: output
-    // };
-    // const yaml = edit_array_list.splice(0,1);
-    // edit_array_list.unshift(`---\n${yaml}\n---`);
-    // return_output["edit"] = edit_array_list.map((v, i) => { return { index: i, value: v } });
+    
     return output; // Return yaml metadata and page html data
 }
+
+var markdown_rules = [
+    // == INLINE == //
+    { type: "inline", reg: /(\*+)(.+?)(\*+)/, fn: (_, star1, text, star2) => {} },
+
+    // == BLOCKLINE == //
+    { type: "blockline", reg: /^(#{1,})\s?(.+)/, fn: (_, hash, text) => {
+        const title = document.createElement('h' + hash.split('').length);
+        title.textContent = text;
+        return title;
+    }},
+    { type: "blockline", reg: /^\!\[(.+)\]\((.+)\)/, fn: (_, alt, src) => {
+        const img = document.createElement('img');
+        img.alt = alt;
+        img.src = src;
+        return img;
+    }}
+];
+
+export function parseMarkdownLite(text) {
+    var output = typeof text === 'string' ? text.split('\n') : text;
+    
+    if (typeof output !== "object") return;
+
+    var inlines = markdown_rules.filter(v => v.type === "inline");
+    var blocklines = markdown_rules.filter(v => v.type === "blockline");
+
+    for (const index in output) {
+        var line = output[index];
+        
+        for (const inline of inlines) {
+            if (inline.reg.test(line)) { line = inline.fn(...line.match(inline.reg)) };
+        }
+
+        for (const blockline of blocklines) {
+            if (blockline.reg.test(line)) { line = blockline.fn(...line.match(blockline.reg)) };
+        }
+        
+        if (line === output[index]) {
+            const text_node = document.createTextNode(line);
+            output[index] = text_node;
+        } else {
+            output[index] = line;
+        }
+        
+    }
+
+    return output;
+};

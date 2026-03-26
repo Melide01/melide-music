@@ -1,80 +1,94 @@
 <!DOCTYPE html>
-<html lang="fr" data-site="blogs">
+<html lang="en">
+
 <head>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Melide : Les blogs</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
-  <script src="scripts.js" defer></script>
-
-  <style>
-    body, html {
-      color: #f00;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide</title>
+    <link rel="stylesheet" href="main.css">
+    <script defer type="module" src="main.js"></script>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-  <!-- MODAL -->
-  <div class="modal_backdrop" onclick="if (event.target === this) revealModal('', true)">
-    <div style="display: none;" id="preview_anything">
-      <iframe></iframe>
-    </div>
-  
-    <div style="display: none;" id="custom_modal">
-      <div class="track_card minim" style="opacity: 1;">
-        <h1 name="custom_modal_title" style="grid-column: 1/3;"></h1>
-        <p name="custom_modal_content" style="grid-column: 1/3;"></p>
-        <button name="custom_modal_btn1"></button>
-        <button name="custom_modal_btn2"></button>
-      </div>
-    </div>
-  </div>
+    <!-- MODAL -->
+    <main>
+        <dialog id="main_modal">
+            <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
+            <div class="hor align header">
+                <h2>Title</h2>
+            </div>
+            <div class="ver body align"></div>
+            <div class="hor footer"></div>
+        </dialog>
+    </main>
 
-  <!-- NOTIFICATION BUUBLE -->
-  <div id="notification" class="">
-    <h2 name="notif_title">Title</h2>
-    <p name="notif_desc">Description</p>
-  </div>
-
-  <!-- CONTENT -->
-  <div id="screen_loader">
-    <img src="assets/loading_screen_layer3.webp">
-    <img src="assets/loading_screen_layer2.webp">
-    <img src="assets/loading_screen_layer1.webp">
-  </div>
-  <header>
-    <div class="contentChild horizontal" style="justify-content: space-between;">
-      <div class="horizontal" id="logo_icon">
-        <img src="assets/mld_logo_all_white.png" class="logo">
-        <label>Melide</label>
-      </div>
-
-      <a id="goBack_button" style="display: none;" class="papernote sepia clickable" onclick="goBack()">Retour</a>
-
-      <div class="horizontal list" style="padding: 1em" id="header_buttons"></div>
-    </div>
-  </header>
-
-  <!-- SEARCH PANNEL -->
-  <div id="header_banner" class="header_img" style="background-image: url('../assets/bg_artistic_underwater.webp')">
-  </div>
-  
-  <!-- MAIN CONTENT -->
-  <div id="mainContent">
-    <div class="contentChild" id="search_panel">
-        <h1>Erreur 404</h1>
-        <p>Page introuvable.</p><p style="font-size: .5em; color: #ccc">( ou peut être je suis juste nul en programmation dsl ).</p>
-        <br><br>
-        <div class="vertical" style="align-items: center;">
-          <img style="max-width: 400px;" src="assets/melides_404.webp">
+    <!--
+    <main id="modal">
+        <div>
+            <a class="close" onclick="reveal_modal()"><i class="fa-solid fa-close"></i></a>
+            <h1>Title</h1>
+            <img src="/assets/placeholder.webp">
         </div>
-        
+    </main>
+    -->
+
+    <!-- CONTENT -->
+    <div>
+        <header>
+            <img alt="logo" src="/assets/mld_logo_all_white.png">
+            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
+            <div class="hor">
+                <a><i class="fa-solid fa-house"></i>
+                    <p>Accueil</p>
+                </a>
+                <a><i class="fa-solid fa-file"></i>
+                    <p>Canons</p>
+                </a>
+                <a><i class="fa-solid fa-paperclip"></i>
+                    <p>Contact</p>
+                </a>
+            </div>
+        </header>
     </div>
 
-    <div class="contentChild" id="blog_display" style="display: none;"></div>  
-  </div>
-  
+
+    <main><img src="/assets/bg_artistic_underwater_contrasted.webp" style="height: 5em;"></main>
+
+    <main class="open ver padding page">
+        
+      <h2>Erreur 404</h2>
+        <h1>Page Introuvable</h1>
+        <p>La page sélectionnée est Introuvable dans le système. Essayer un autre lien.</p>
+        <ul class="blocky">
+          <li><a href="#">«Les musiques»</a></li>
+          <li><a href="#">«Mentions légales»</a></li>
+          <li><a href="#">«Comment me contacter ?»</a></li>
+          <li><a href="#">«Retourner à l'accueil»</a></li>
+        </ul>
+
+    </main>
+
+    <div class="padding ver">
+        <footer class="hor align">
+            <img src="/assets/mld_logo_all_white.png" style="object-fit: contain; height: 3em; flex: 1;">
+            <div class="box_wrap">
+                <ul>
+                    <label>Pages</label>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">Canons</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <ul>
+                    <label>Légales</label>
+                    <li><a href="#">Politique sur la confidentialité des données</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">Charte IA</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
 </body>
+
 </html>

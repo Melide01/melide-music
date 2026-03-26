@@ -1,3 +1,5 @@
+import { parseMarkdown } from '/js/parseMarkdown.js';
+
 const input_text = document.getElementById('input_text');
 const output_text = document.getElementById('output_text');
 const render_container = document.getElementById('render_container');
@@ -30,3 +32,8 @@ function handle_revert() {
     var text = String(output_text.value).trim().replaceAll('\r', "").replaceAll('\\n', "\n");
     input_text.value = text;
 }
+
+window.generate_output = generate_output;
+window.handle_render = handle_render;
+window.handle_copy = handle_copy;
+window.handle_revert = handle_revert;
