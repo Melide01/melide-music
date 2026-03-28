@@ -16,7 +16,9 @@ import { toggle_selection, setup_selection, section_results } from '/js/searchLo
 import{ ProjectNode, TrackNode } from '/js/ProjectNode.js';
 import { ModalData, toggle_modal, open_modal } from '/js/modalManager.js';
 import { parseMarkdown, parseMarkdownLite } from '/js/parseMarkdown.js';
-import { handleSearchParam } from '/js/urlEngine.js';
+import { handleSearchParam, animateTransition } from '/js/urlEngine.js';
+
+window.animateTransition = animateTransition;
 
 // Data
 const canon_modal_info = new ModalData({
@@ -105,6 +107,7 @@ window.mouseY = mouseY;
 const project_container = document.getElementById('project_container');
 
 function return_home() {
+    document.querySelector('.page_navigation').classList.add('open');
     search_content.classList.add('open');
     page_content.classList.remove('open');
     handleSearchParam({delete_all: true})
@@ -112,6 +115,7 @@ function return_home() {
 window.return_home = return_home;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
     load(
         'tracks_data',
         fetchable_google_sheet + "?get=tracks",
@@ -216,21 +220,21 @@ document.addEventListener('mousemove', (e) => {
 animate();
 
 // Test Setup
-var renderer = new Renderer3D("Main");
-renderer.create();
-
-var camera = new Camera3D("Camera 1");
-camera.create();
-camera.camera.position.z = -3.0
-
-var scene = new Scene3D("Scene 1");
-scene.create();
-
-var melide = new Model3D({name: "Melide", file: "models/melide.glb"});
-melide.scene = scene;
-melide.create();
-
-objects_3d.push([melide, scene, camera, renderer]);
-for (const object of objects_3d) { console.log(object) }
-
+// var renderer = new Renderer3D("Main");
+// renderer.create();
+// 
+// var camera = new Camera3D("Camera 1");
+// camera.create();
+// camera.camera.position.z = -3.0
+// 
+// var scene = new Scene3D("Scene 1");
+// scene.create();
+// 
+// var melide = new Model3D({name: "Melide", file: "models/melide.glb"});
+// melide.scene = scene;
+// melide.create();
+// 
+// objects_3d.push([melide, scene, camera, renderer]);
+// for (const object of objects_3d) { console.log(object) }
+// 
 // document.getElementById('container_3d').appendChild(renderer.renderer.domElement)

@@ -12,7 +12,7 @@
 
 <body>
     <!-- MODAL -->
-    <main>
+    <main class="modal">
         <dialog id="main_modal">
             <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
             <div class="hor align header">
@@ -23,27 +23,17 @@
         </dialog>
     </main>
 
-    <!--
-    <main id="modal">
-        <div>
-            <a class="close" onclick="reveal_modal()"><i class="fa-solid fa-close"></i></a>
-            <h1>Title</h1>
-            <img src="/assets/placeholder.webp">
-        </div>
-    </main>
-    -->
-
     <!-- CONTENT -->
     <div>
         <header>
             <img alt="logo" src="/assets/mld_logo_all_white.png">
             <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
             <div class="hor">
-                <a><i class="fa-solid fa-house"></i>
+                <!--<a><i class="fa-solid fa-house"></i>
                     <p>Accueil</p>
-                </a>
-                <a><i class="fa-solid fa-file"></i>
-                    <p>Canons</p>
+                </a>-->
+                <a title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
+                    <p>Merch</p>
                 </a>
                 <a><i class="fa-solid fa-paperclip"></i>
                     <p>Contact</p>
@@ -57,7 +47,7 @@
     
     <main class="open section progress conditional" style="--bg: #0fd; --color: #079;"><label>Latest song</label></main>
     
-    <main class="open header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
+    <main class=" header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
         <img src="/assets/placeholder.webp">
         <div class="ver align metadata">
             <h2>YOUNG AND FREE</h2>
@@ -197,8 +187,8 @@
             <div class="box_wrap">
                 <ul>
                     <label>Pages</label>
-                    <li><a href="#">Accueil</a></li>
-                    <li><a href="#">Canons</a></li>
+                    <li class="disable"><a href="#">Accueil</a></li>
+                    <li><a href="#">Merch</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
                 <ul>

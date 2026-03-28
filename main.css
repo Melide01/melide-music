@@ -6,7 +6,7 @@
 
 :root {
     --padding: .5em;
-    --header-height: 4em;
+    --header-height: 04em;
     --footer-height: 200px;
     --max-width: 1000px;
     --font: "Didact Gothic", sans-serif;
@@ -16,15 +16,42 @@
     header a p, header > h2, .header.card .lyrics { display: none }
     .card.header .ver:nth-child(2) { max-width: 100% !important; }
     footer .box_wrap { font-size: large; flex-wrap: nowrap; flex-direction: column; overflow: auto; height: calc(var(--footer-height) - var(--padding) * 2); }
-    .track_display { flex-direction: column !important; }
+    .track_display, .shop_display { display: flex !important; flex-direction: column !important; }
     .track_display > img { width: 100% !important; }
 }
 
+body.changing > *:not(div):not(.modal):not(.fancy_gradient),
+body.changing > div:has(>header) > header > h2,
+body.changing > div:has(>header) > header > .hor > a {
+    opacity: 1;
+    animation: disappear 500ms forwards;
+    animation-delay: calc(sibling-index() * 50ms);
+    pointer-events: none;
+}
+
+body > main:not(.modal):not(.fancy_gradient),
+body > div:has(>header) > header > h2,
+body > div:has(>header) > header > .hor > a {
+    opacity: 0;
+    animation: appear 500ms forwards;
+    animation-delay: calc(sibling-index() * 50ms);
+}
+@keyframes appear {
+    from { opacity: 0; transform: translateX(-1em); }
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes disappear {
+    to { opacity: 0; transform: translateX(1em); }
+    from { opacity: 1; transform: translateX(0); }
+}
+
 body {
+    overflow-x: hidden;
     padding-top: var(--header-height);
     padding-bottom: var(--footer-height);
     position: relative;
     min-height: 100vh;
+    box-sizing: content-box;
 }
 
 * {
@@ -95,7 +122,7 @@ footer ul { list-style-position: inside; list-style-type: square; }
 img { object-fit: cover; }
 
 body > main {
-    display: flex; flex-direction: column; max-width: var(--max-width); margin: auto;
+    display: flex; flex-direction: column; max-width: var(--max-width); margin: 0 auto;
 }
 
 .hor, .ver, .box_wrap { display: flex; gap: calc(var(--padding)/2); }
@@ -605,4 +632,84 @@ dialog > .fa-close {
     text-overflow: ellipsis;
     font-size: .7em;
     font-weight: 100;
+}
+
+
+.shop_display .meta > .hor {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+}
+
+.shop_display {
+    display: grid;
+    grid-template-columns: minmax(auto, 20em) auto;
+    gap: calc(var(--padding) * 2);
+}
+.shop_display > img { width: 100%; outline: 1px solid #ddd; }
+
+.shop_display input {
+    all: unset;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: #eee;
+    padding: var(--padding);
+} 
+.shop_display select {
+    all: unset;
+    min-width: max-content;
+    background-color: #eee;
+    width: 100%;
+    padding: var(--padding);
+    box-sizing: border-box;
+    outline: 1px solid #ddd;
+    border-radius: calc(var(--padding) * 2);
+    text-align: center;
+}
+
+.scroll {
+    overflow: auto;
+    height: clamp(1px, 65vw, 25em);
+    position: relative;
+}
+.scroll > img {
+    aspect-ratio: 1; height: 100%;
+}
+
+.hor.extend > *, .ver.extend > * { flex: 1; }
+
+.hor.end, .ver.bottom { justify-content: end; }
+.hor.start, .ver.top { justify-content: start; }
+
+.ver.end, .hor.bottom { align-items: end; }
+.ver.start, .hor.top { align-items: start; }
+
+.shop_display button {
+    all: unset;
+    background-color: #5af; color: #fff;
+    padding: var(--padding);
+    font-size: 2em;
+    border-radius: var(--padding) calc(var(--padding)/3) calc(var(--padding)/3) var(--padding);
+    
+    --outline: .5em;
+    --color: #0000;
+    text-shadow: calc(var(--outline)*1) calc(var(--outline)*1) var(--color),
+        calc(var(--outline)*-1) calc(var(--outline)*-1) var(--color),
+        calc(var(--outline)*-1) calc(var(--outline)*1) var(--color),
+        calc(var(--outline)*1) calc(var(--outline)*-1) var(--color),
+        
+        calc(var(--outline)*-1) 0 var(--color),
+        0 calc(var(--outline)*-1) var(--color),
+        calc(var(--outline)*1) 0 var(--color),
+        0 calc(var(--outline)*1) var(--color);
+
+    transition: all 100ms;
+}
+.shop_display button:hover {
+    --outline: .07em;
+    background-color: #ccc;
+    --color: #000;
+}
+.shop_display button:active {
+    background-color: #eee;
+    transform: translateY(2px);
 }
