@@ -36,6 +36,7 @@ class TrackNode extends ProjectNode {
 
     open() {
         search_content.classList.remove('open');
+        document.querySelector('.page_navigation').classList.remove('open');
         page_content.classList.add('open');
         page_content.innerHTML = "";
         // console.log(this.data);
