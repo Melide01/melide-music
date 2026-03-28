@@ -1,13 +1,38 @@
+import { reveal_modal, fetch_json } from '/js/Utils.js';
+import { handleSearchParam, animateTransition } from '/js/urlEngine.js';
+window.animateTransition = animateTransition;
+
 const printful_worker = "https://merch.melide-s-account.workers.dev/";
 
+const search_content = document.getElementById('search_content');
 const project_container = document.getElementById('project_container');
 const loading_block = document.getElementById('loading_block');
+const page_content = document.getElementById('page_content');
+
+const shop_display = page_content.querySelector('.shop_display');
+const page_product_img = shop_display.querySelector('.product_img');
+const page_meta = shop_display.querySelector('.ver.meta');
+const product_select = page_meta.querySelector('.hor').querySelector('select[name="type"]');
 
 var merch_data = {};
 var merch_nodes = [];
 
+function return_home() {
+    search_content.classList.add('open');
+    page_content.classList.remove('open');
+    handleSearchParam({delete_all: true})
+}
+window.return_home = return_home;
+
 document.addEventListener('DOMContentLoaded', () => {
     load();
+})
+
+var current_product;
+product_select.addEventListener('change', () => {
+    var new_name = current_product.sync_product.name + " " + product_select.value;
+    var new_data = current_product.sync_variants.filter(v => v.name === new_name)[0];
+    update_product_info(new_data);
 })
 
 async function load() {
@@ -23,7 +48,7 @@ async function load() {
         localStorage.setItem('merch_data', JSON.stringify(merch_data));
     }
 
-    for (const node of merch_data['result']) merch_nodes.push(new MerchNode(node));
+    for (const node of merch_data['result']) { console.log(node); merch_nodes.push(new MerchNode(node))};
     for (const node of merch_nodes) project_container.appendChild(node.create());
 
     loading_block.classList.remove('load');
@@ -68,21 +93,72 @@ class MerchNode {
         this.card.appendChild(img);
         this.card.appendChild(title);
 
+        this.card.addEventListener('click', async () => {
+            
+            page_content.classList.add('open');
+            search_content.classList.remove('open');
+            
+            const cache = JSON.parse(localStorage.getItem('product_data'));
+            if (cache && [this.name] && cache[this.name]) {
+                console.log('Cache');
+                load_product_page(cache[this.name]);
+            } else {
+                unload_product_page();
+                const res = await fetch(printful_worker + 'store-product?id=' + this.id);
+                const data = await res.json();
+                update_product_cache({ "load": true, "action": "set", "name": this.name, "data": data.result });
+                
+            }
+        })
+
         return this.card;
     }
 }
 
-// {
-//     "code": 200,
-//     "result": [
-//         { "id": 425414830, "external_id": "69c49174a928c4", "name": "Sweatshirt Édition 1 Pain", "variants": 32, "synced": 32, "thumbnail_url": "https://files.cdn.printful.com/files/b80/b8004f3c570705123bf4a74f163d9448_preview.png", "is_ignored": false },
-//         { "id": 425414756, "external_id": "69c490e5db2184", "name": "Casquette Base", "variants": 3, "synced": 3, "thumbnail_url": "https://files.cdn.printful.com/files/ab3/ab34afd5185d0b2f6fe91ec28a51ae8e_preview.png", "is_ignored": false },
-//         { "id": 425414681, "external_id": "69c490759907f5", "name": "T-shirt Oversize Base Crème", "variants": 4, "synced": 4, "thumbnail_url": "https://files.cdn.printful.com/files/6ad/6ad7d2dad66f8ca900615233332b6667_preview.png", "is_ignored": false }
-//     ],
-//     "extra": [],
-//     "paging": {
-//         "total": 3,
-//         "limit": 20,
-//         "offset": 0
-//     }
-// }
+function update_product_cache({ action, name, data, load = false }) {
+    var product_data = localStorage.getItem('product_data');
+    if (!product_data) {
+        product_data = {};
+        localStorage.setItem('product_data', JSON.stringify(product_data));
+    } else {
+        product_data = JSON.parse(product_data);
+    };
+
+    switch (action) {
+        case "set":
+            product_data[name] = data;
+            break;
+        case "delete":
+            delete product_data[name];
+            break;
+    };
+
+    localStorage.setItem('product_data', JSON.stringify(product_data));
+    
+    if (load) load_product_page(JSON.parse(localStorage.getItem('product_data'))[name]);
+}
+
+function unload_product_page(data) {
+    page_product_img.src = "";
+    page_meta.querySelector('.ver').querySelector('h1').textContent = "";
+    page_meta.querySelector('.hor').querySelector('input[name="count"]').value = 1;
+    product_select.innerHTML = "";
+}
+function load_product_page(data) {
+    unload_product_page();
+    current_product = data;
+    var { sync_product, sync_variants } = data;
+    page_product_img.src = sync_product.thumbnail_url;
+    page_meta.querySelector('.ver').querySelector('h1').textContent = sync_product.name;
+    for (const variant of sync_variants) product_select.appendChild(new Option(variant.name.replace(sync_product.name, "")));
+    update_product_info(sync_variants[0])
+}
+
+function update_product_info(data) {
+    // page_product_img.src = data.product.image;
+    var cur = data.currency;
+    switch (cur) {
+        case 'EUR': cur = "€"; break;
+    }
+    page_meta.querySelector('.hor').querySelector('h1').textContent = data.retail_price + cur;
+}

@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Melide</title>
     <link rel="stylesheet" href="/main.css">
-    <script defer src="script.js"></script>
+    <script defer type="module" src="script.js"></script>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <!-- MODAL -->
-    <main>
+    <main class="modal">
         <dialog id="main_modal">
             <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
             <div class="hor align header">
@@ -23,101 +23,40 @@
         </dialog>
     </main>
 
-    <!--
-    <main id="modal">
-        <div>
-            <a class="close" onclick="reveal_modal()"><i class="fa-solid fa-close"></i></a>
-            <h1>Title</h1>
-            <img src="/assets/placeholder.webp">
-        </div>
-    </main>
-    -->
-
     <!-- CONTENT -->
-    <div>
+    <div style="background-color: #a02;">
         <header>
-            <img alt="logo" src="/assets/mld_logo_all_white.png">
-            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
+            <img alt="logo" src="/assets/mld_logo_all_white.png" title="Retourner à l'accueil" onclick="animateTransition('/')">
+            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Merch</h2>
             <div class="hor">
-                <a><i class="fa-solid fa-house"></i>
-                    <p>Accueil</p>
-                </a>
-                <a><i class="fa-solid fa-file"></i>
-                    <p>Canons</p>
-                </a>
                 <a><i class="fa-solid fa-paperclip"></i>
                     <p>Contact</p>
+                </a>
+                <a><i class="fa-solid fa-bag-shopping"></i>
+                    <p>Mon panier</p>
                 </a>
             </div>
         </header>
     </div>
 
 
-    <main><img src="/assets/BACK.png" style="height: 5em;"></main>
+    <main><img src="/assets/bg_ps.webp" style="height: 5em;"></main>
     
-    <main class="section progress conditional" style="--bg: #0fd; --color: #079;"><label>Latest song</label></main>
-    
-    <main class="header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
-        <img src="/assets/placeholder.webp">
-        <div class="ver align metadata">
-            <h2>YOUNG AND FREE</h2>
-            <h5>Melide</h5>
-        </div>
-        <div class="ver lyrics">
-            <ul>
-                <li>But you're always crying</li>
-                <li class="active">In my eyes you're flying</li>
-                <li>Waiting for the time</li>
-                <li>Waiting for the time</li>
-            </ul>
-        </div>
+    <main class="open section conditional" style="--bg: #a11; --color: #fff;">
+        <label>Merchandise</label>
     </main>
 
-    <main class="conditional ver padding selection">
+    <main class="open conditional ver padding selection">
         <button onclick="return_home()"><i class="fa-solid fa-arrow-left"></i></button>
 
         <div class="hor align selection_header">
-            <label>Œuvre<input name="type" value="piece" type="radio" onclick="toggle_selection(this.value)"></label>
+            <label>Nouveautés<input name="type" value="new" type="radio" onclick="console.log(this.value)"></label>
             <span>/</span>
-            <label><a href="#" class="question" onclick="canon_modal_info.open()">?</a>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
+            <label><a href="#" class="question" onclick="//canon_modal_info.open()">?</a>Édition limitée<input name="type" value="limited_edition" type="radio" onclick="console.log(this.value)"></label>
             <span>/</span>
-            <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
-            <label style="flex: 1; text-align: end;">Resources<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
+            <label>Tout<input checked name="type" value="all" type="radio" onclick="console.log(this.value)"></label>
         </div>
-        <div class="ver">
-            <div class="hor padding choice align" name="selection_music">
-                <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_artwork">
-                <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
-            </div>
-            <div class="hor padding choice align" name="selection_application">
-                <i class="fa-solid fa-gamepad"></i><a href="#">Application</a>
-            </div>
-            <div class="hor padding choice align" name="selection_book">
-                <i class="fa-solid fa-book"></i><a href="#">Livres</a>
-            </div>
-
-            <div class="disable hor padding choice align" name="selection_indeterminate">
-                <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_ongoing">
-                <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_finished">
-                <i class="fa-solid fa-check"></i><a href="#">Fini</a>
-            </div>
-
-            <div class="hor padding choice align" name="selection_font">
-                <i class="fa-solid fa-font"></i><a href="#">Polices</a>
-            </div>
-            <div class="hor padding choice align" name="selection_beat">
-                <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
-            </div>
-            <div class="hor padding choice align" name="selection_pack">
-                <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
-            </div>
-        </div>
+        
     </main>
 
     <main id="search_content" class="open conditional">
@@ -132,38 +71,35 @@
         </div>
         
         <div id="loading_block" class="load"></div>
-
         <div class="auto_fill padding" id="project_container" style="--size: 10em;"></div>
-
-        <!-- IMAGE GRID
-        <div class="auto_grid selectable">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/bg_artistic_underwater.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-        </div>
-        -->
     </main>
 
     <main id="page_content" class="ver padding page">
         
-        <div class="track_display">
-            <img >
-            <div class="hor">
+        <div class="shop_display">
+            <img class="product_img" src="/assets/placeholder.webp">
+            
+            
+            <div class="meta ver extend">
+                
                 <div class="ver align">
-                    <h1>Title</h1>
-                    <h3>Artists</h3>
-                    <span>Type</span>
+                    <h1>Shirt</h1>
+                    <h3>Édition</h3>
+                    <span>Description</span>
                 </div>
-                <div class="hor align links">
-                    <a><i class="fa-brands fa-deezer"></i></a>
-                    <a><i class="fa-brands fa-spotify"></i></a>
-                    <a><i class="fa-brands fa-youtube"></i></a>
-                    <a><i class="fa-brands fa-soundcloud"></i></a>
-                    <a><i class="fa-solid fa-download"></i></a>
+
+                <div class="hor end align extend" style="gap: calc(var(--padding)*2)">
+                    
+                    <div class="ver align center extend">
+                        <select name="type">
+                            <option>S</option>
+                            <option>M</option>
+                        </select>
+                    </div>
+                    
+                    <h1 style="text-align: end;" name="price">100 €</h1>
+                    <input type="number" value="1" min="1" max="10" name="count">
+                    <button style="text-align: center;"><i class="fa-solid fa-bag-shopping"></i></button>
                 </div>
             </div>
         </div>
@@ -197,8 +133,8 @@
             <div class="box_wrap">
                 <ul>
                     <label>Pages</label>
-                    <li><a href="#">Accueil</a></li>
-                    <li><a href="#">Canons</a></li>
+                    <li class="disable"><a href="#">Accueil</a></li>
+                    <li><a href="#">Merch</a></li>
                     <li><a href="#">Contact</a></li>
                 </ul>
                 <ul>
