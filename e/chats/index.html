@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <div id="userInfo">
+        <img class="pfp_icon" src="user1.png"><h1>Messagerie</h1>
+    </div>
+    <div id="message_feed">
+        <div class="thread right">
+            <div class="message_box send">
+                <img class="pfp_icon" src="user1.png">
+                <p>Je t'aime</p>
+                <img class="reaction" src="heart.png">
+            </div>
+        </div>
+
+        <div class="thread left" id="lastthread">
+            <div class="message_box receive">
+                <img class="pfp_icon" src="user2.png">
+                <p>Hihi</p>
+            </div>
+            <div class="message_box receive">
+                <img class="media" src="heart.png">
+            </div>
+        </div>
+    </div>
+
+    <div style="position: fixed; bottom: 1em; left: 0; width: 100%; display: flex; justify-content: center;">
+        <div id="user_input">
+            <img style="height: 1em; margin-right: .25em;" src="gallerie.png">
+            <input id="input_sender" type="text" placeholder="Votre message...">
+            <button onclick="sendMessage(users[Math.round(Math.random() * 2)], input_sender.value)">Envoyer</button>
+        </div>
+    </div>
+
+    
+</body>
+</html>

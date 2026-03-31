@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - Projects</title>
+
+    <link href="style.css" rel="stylesheet">
+    <script defer src="script.js"></script>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    <script defer src="/parse.js"></script>
+</head>
+<body>
+    <header>
+        <img src="/assets/mld_logo_all_white.png">
+        <a href="/home/">Accueil</a>
+        <div id="update_notify">
+            <i class="fa-regular fa-clock"></i>
+            <p>Prochaine mise à jour dans...</p>
+            <p></p>
+        </div>
+    </header>
+
+    <div id="project_container"></div>
+
+    <div id="modal_section" class="">
+        <div class="content">
+            <a class="close_modela" onclick="this.parentElement.parentElement.classList.remove('open');">
+                <i class="fa-solid fa-close"></i>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
