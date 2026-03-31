@@ -1,6 +1,19 @@
 import { reveal_modal, fetch_json } from '/js/Utils.js';
+import { ModalData, toggle_modal, open_modal } from '/js/modalManager.js';
 import { handleSearchParam, animateTransition } from '/js/urlEngine.js';
 window.animateTransition = animateTransition;
+
+const construction_alert_modal = new ModalData({
+    title: "Attention",
+    content: [
+        "Cette partie du site est encore en construction et ne fonctionne pas encore.",
+        "\nLes informations et les fonctionnalités présentes ne définissent pas le rendu final du site internet.",
+        "\nMerci pour votre compréhension !"
+    ],
+    actions: [
+
+    ]
+});
 
 const printful_worker = "https://merch.melide-s-account.workers.dev/";
 
@@ -25,6 +38,7 @@ function return_home() {
 window.return_home = return_home;
 
 document.addEventListener('DOMContentLoaded', () => {
+    construction_alert_modal.open();
     load();
 })
 
@@ -141,7 +155,7 @@ function update_product_cache({ action, name, data, load = false }) {
 function unload_product_page(data) {
     page_product_img.src = "";
     page_meta.querySelector('.ver').querySelector('h1').textContent = "";
-    page_meta.querySelector('.hor').querySelector('input[name="count"]').value = 1;
+    // page_meta.querySelector('.hor').querySelector('input[name="count"]').value = 1;
     product_select.innerHTML = "";
 }
 function load_product_page(data) {

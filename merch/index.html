@@ -32,7 +32,7 @@
                 <a><i class="fa-solid fa-paperclip"></i>
                     <p>Contact</p>
                 </a>
-                <a><i class="fa-solid fa-bag-shopping"></i>
+                <a class="except"><i class="fa-solid fa-bag-shopping"></i>
                     <p>Mon panier</p>
                 </a>
             </div>
@@ -43,7 +43,7 @@
     <main><img src="/assets/bg_ps.webp" style="height: 5em;"></main>
     
     <main class="open section conditional" style="--bg: #a11; --color: #fff;">
-        <label>Merchandise</label>
+        <label>Merch</label>
     </main>
 
     <main class="open conditional ver padding selection">
@@ -84,8 +84,8 @@
                 
                 <div class="ver align">
                     <h1>Shirt</h1>
-                    <h3>Édition</h3>
-                    <span>Description</span>
+                    <h3>Melide</h3>
+                    <span>...</span>
                 </div>
 
                 <div class="hor end align extend" style="gap: calc(var(--padding)*2)">
@@ -98,7 +98,7 @@
                     </div>
                     
                     <h1 style="text-align: end;" name="price">100 €</h1>
-                    <input type="number" value="1" min="1" max="10" name="count">
+                    <!-- <input type="number" value="1" min="1" max="10" name="count"> -->
                     <button style="text-align: center;"><i class="fa-solid fa-bag-shopping"></i></button>
                 </div>
             </div>
@@ -133,9 +133,10 @@
             <div class="box_wrap">
                 <ul>
                     <label>Pages</label>
-                    <li class="disable"><a href="#">Accueil</a></li>
-                    <li><a href="#">Merch</a></li>
+                    <li onclick="event.preventDefault(); animateTransition('/');"><a href="/">Accueil</a></li>
+                    <li class="disable"><a href="#">Merch</a></li>
                     <li><a href="#">Contact</a></li>
+                    <li><a href="/e/" onclick="event.preventDefault(); animateTransition('/e/');">Portals</a></li>
                 </ul>
                 <ul>
                     <label>Légales</label>
