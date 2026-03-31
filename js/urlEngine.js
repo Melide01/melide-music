@@ -26,6 +26,10 @@ const site_style_data = {
     "/merch/": {
         "background-color": "#a02",
         "color": "#fff"
+    },
+    "/e/": {
+        "background-color": "#077",
+        "color": "#fff"
     }
 }
 function animateTransition(direction = "") {

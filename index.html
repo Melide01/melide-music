@@ -29,10 +29,7 @@
             <img alt="logo" src="/assets/mld_logo_all_white.png">
             <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
             <div class="hor">
-                <!--<a><i class="fa-solid fa-house"></i>
-                    <p>Accueil</p>
-                </a>-->
-                <a title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
+                <a class="except" title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
                     <p>Merch</p>
                 </a>
                 <a><i class="fa-solid fa-paperclip"></i>
@@ -45,7 +42,7 @@
 
     <main><img src="/assets/bg_artistic_underwater_contrasted.webp" style="height: 5em;"></main>
     
-    <main class="open section progress conditional" style="--bg: #0fd; --color: #079;"><label>Latest song</label></main>
+    <main class="open section conditional" style="--bg: #0fd; --color: #079;"><label>Musique</label></main>
     
     <main class=" header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
         <img src="/assets/placeholder.webp">
@@ -69,10 +66,10 @@
         <div class="hor align selection_header">
             <label>Œuvre<input name="type" value="piece" type="radio" onclick="toggle_selection(this.value)"></label>
             <span>/</span>
-            <label><a href="#" class="question" onclick="canon_modal_info.open()">?</a>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
-            <span>/</span>
+            <!-- <label><a href="#" class="question" onclick="canon_modal_info.open()">?</a>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
+            <span>/</span> -->
             <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
-            <label style="flex: 1; text-align: end;">Resources<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
+            <label style="flex: 1; justify-content: end;">Resources<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
         </div>
         <div class="ver">
             <div class="hor padding choice align" name="selection_music">
@@ -88,6 +85,7 @@
                 <i class="fa-solid fa-book"></i><a href="#">Livres</a>
             </div>
 
+            <!--
             <div class="disable hor padding choice align" name="selection_indeterminate">
                 <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
             </div>
@@ -97,6 +95,7 @@
             <div class="disable hor padding choice align" name="selection_finished">
                 <i class="fa-solid fa-check"></i><a href="#">Fini</a>
             </div>
+            -->
 
             <div class="hor padding choice align" name="selection_font">
                 <i class="fa-solid fa-font"></i><a href="#">Polices</a>
@@ -188,8 +187,9 @@
                 <ul>
                     <label>Pages</label>
                     <li class="disable"><a href="#">Accueil</a></li>
-                    <li><a href="#">Merch</a></li>
+                    <li><a href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');">Merch</a></li>
                     <li><a href="#">Contact</a></li>
+                    <li><a href="/e/" onclick="event.preventDefault(); animateTransition('/e/');">Portals</a></li>
                 </ul>
                 <ul>
                     <label>Légales</label>

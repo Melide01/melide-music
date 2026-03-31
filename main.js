@@ -82,9 +82,9 @@ const selection_choice_name = [
     ["selection_application", "piece"],
     ["selection_book", "piece"],
 
-    ["selection_indeterminate", "canon"],
-    ["selection_ongoing", "canon"],
-    ["selection_finished", "canon"],
+    // ["selection_indeterminate", "canon"],
+    // ["selection_ongoing", "canon"],
+    // ["selection_finished", "canon"],
 
     ["selection_font", "other"],
     ["selection_beat", "other"],
