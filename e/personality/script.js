@@ -124,6 +124,7 @@ const personality = document.getElementById('personality');
 const welcome = document.getElementById('welcome');
 const page = document.getElementById('page');
 const page_meta = page.querySelector('.meta');
+const page_image = page_meta.querySelector('img');
 const page_title = page_meta.querySelector('h1');
 const page_code = page_meta.querySelector('h2');
 const page_locus = page_meta.querySelector('h5');
@@ -164,6 +165,9 @@ load_personalities();
 
 var currently_open = welcome;
 function go_to(node) {
+    progress.style = "--percentage: 0%";
+    node.style.display = "flex";
+    node.classList.remove('hide');
     currently_open.classList.add('close');
 
     setTimeout(() => {
@@ -182,10 +186,7 @@ function format_result_data(data) {
         for (const vec of other_vector) {
             result_data[key.name].other[vec.name] = {"value": []}
         }
-    
     }
-
-    console.log(result_data);
 }
 
 function start_test() {
@@ -235,7 +236,7 @@ function animate_typewriter() {
 
     setTimeout(() => {
         if (!disable_typewriter) requestAnimationFrame(animate_typewriter);    
-    }, Math.random() * 100);
+    }, 10);
 };
 
 function handle_send_answer(answer = null) {
@@ -299,6 +300,8 @@ function handle_send_answer(answer = null) {
 }
 
 async function load_result(data) {
+    currently_open = page;
+
     const res = await fetch('fr-archetypes.json');
     const d = await res.json();
 
@@ -306,6 +309,7 @@ async function load_result(data) {
     let mund = locus.variants.find(v => v.from_other === "mund-locu" && v.match.includes(data.summary.emotional_trait.other['mund-locu']));
     var archetype = locus.variants.find(v => v.match.includes(data.summary.character_axis.axis) && v.match.includes(data.summary.movement_caracteristic.axis))
 
+    page_image.src = archetype.image;
     page_title.textContent = archetype.name + " " + mund.suffix;
     page_description.textContent = locus.description + archetype.description;
     page_code.textContent = data.code;
