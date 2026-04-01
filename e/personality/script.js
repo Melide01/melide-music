@@ -120,6 +120,7 @@ var result_data = {};
 var test_data = [];
 var test_index = -1;
 
+const personality = document.getElementById('personality');
 const welcome = document.getElementById('welcome');
 const page = document.getElementById('page');
 const page_meta = page.querySelector('.meta');
@@ -133,6 +134,44 @@ const progress = document.getElementById('progress');
 const test_env = document.getElementById("test_env");
 const test_question_title = test_env.querySelector('h1');
 const test_answer_container = test_env.querySelector('div.ver');
+
+async function load_personalities() {
+    const res = await fetch('fr-archetypes.json');
+    const data = await res.json();
+
+    for (const category of data.main) {
+        const detail = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = category.name;
+        const ul = document.createElement('ul');
+
+        for (const axis of category.variants.filter(v => v.hasOwnProperty('name'))) {
+            const li = document.createElement('li');
+            li.textContent = axis.name;
+            ul.appendChild(li);
+        }
+        
+        detail.appendChild(summary);
+        detail.appendChild(ul);
+        personality.appendChild(detail);
+        detail.open = true;
+    }
+
+    console.log(data);
+}
+
+load_personalities();
+
+var currently_open = welcome;
+function go_to(node) {
+    currently_open.classList.add('close');
+
+    setTimeout(() => {
+        currently_open = node;
+        currently_open.classList.remove('close');
+        
+    }, 500);
+}
 
 function format_result_data(data) {
     
