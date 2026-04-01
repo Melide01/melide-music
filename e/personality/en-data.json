@@ -1,0 +1,167 @@
+{
+    "version": 1.0,
+    "result-map": [
+        {
+            "name": "character_axis",
+            "axis-map": [
+                { "name": "homan", "value": -2 },
+                { "name": "feli", "value": -1 },
+                { "name": "femon", "value": 1 },
+                { "name": "xenon", "value": 2 }
+            ]
+        },
+        {
+            "name": "emotional_trait",
+            "axis-map": [
+                { "name": "mori-locu", "value": -2 },
+                { "name": "cubil-locu", "value": -1 },
+                { "name": "pecuni-locu", "value": 1 },
+                { "name": "viva-locu", "value": 2 },
+
+                { "name": "mund-locu", "value": ["-", "+"], "type": "operator" }
+            ]
+        },
+        {
+            "name": "movement_caracteristic",
+            "axis-map": [
+                { "name": "pisces", "value": -2 },
+                { "name": "pistri", "value": -1 },
+                { "name": "avus", "value": 1 },
+                { "name": "akiu", "value": 2 },
+                
+                { "name": "temp", "value": ["-", "+"], "type": "operator" }
+            ]
+        },
+        {
+            "name": "tone_profile",
+            "axis-map": [
+                { "name": "umbra", "value": [false, true], "type": "boolean" },
+                { "name": "sang", "value": "de" },
+                { "name": "aur", "value": "li" },
+                { "name": "tech", "value": "me" }
+            ]
+        }
+    ],
+    "content": [
+        {
+            "from": "character_axis",
+            "questions": [
+                {
+                    "title": "Where does your mind go when everything is quiet?",
+                    "answers": [
+                        { "title": "Inside a familiar room", "trigger": "homan" },
+                        { "title": "Looking over things from above", "trigger": "feli" },
+                        { "title": "Wandering in open space", "trigger": "femon" },
+                        { "title": "Somewhere that doesn’t feel real", "trigger": "xenon" }
+                    ]
+                },
+                {
+                    "title": "How do you experience moments?",
+                    "answers": [
+                        { "title": "I’m fully inside them", "trigger": "homan" },
+                        { "title": "I observe them from a distance", "trigger": "feli" },
+                        { "title": "I feel them intensely", "trigger": "femon" },
+                        { "title": "I drift beyond them", "trigger": "xenon" }
+                    ]
+                },
+                {
+                    "title": "Which perspective feels the most natural?",
+                    "answers": [
+                        { "title": "Standing grounded", "trigger": "homan" },
+                        { "title": "Sitting above and watching", "trigger": "feli" },
+                        { "title": "Floating through everything", "trigger": "femon" },
+                        { "title": "Outside of everything", "trigger": "xenon" }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "emotional_trait",
+            "questions": [
+                {
+                    "title": "Which place feels the most meaningful to you?",
+                    "answers": [
+                        { "title": "A quiet place where things end", "trigger": "mori-locu" },
+                        { "title": "A place where you feel safe", "trigger": "cubil-locu" },
+                        { "title": "A place where things are happening", "trigger": "pecuni-locu" },
+                        { "title": "A place where people gather for something bigger", "trigger": "viva-locu" }
+                    ]
+                },
+                {
+                    "title": "How does life feel most of the time?",
+                    "answers": [
+                        { "title": "It passes by and I watch it", "trigger": "mori-locu" },
+                        { "title": "Something to protect and maintain", "trigger": "cubil-locu" },
+                        { "title": "Something to keep up with", "trigger": "pecuni-locu" },
+                        { "title": "Something to take part in fully", "trigger": "viva-locu" }
+                    ]
+                },
+                {
+                    "title": "What atmosphere feels closer to you?",
+                    "answers": [
+                        { "title": "Clean, calm, and put together", "trigger": "mund-locu", "type": 1 },
+                        { "title": "Messy, imperfect, but real", "trigger": "mund-locu", "type": 0 }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "movement_caracteristic",
+            "questions": [
+                {
+                    "title": "How should music move?",
+                    "answers": [
+                        { "title": "Slow and drifting", "trigger": "pisces" },
+                        { "title": "Steady and controlled", "trigger": "pistri" },
+                        { "title": "Balanced and adaptive", "trigger": "avus" },
+                        { "title": "Fast and intense", "trigger": "akiu" }
+                    ]
+                },
+                {
+                    "title": "What kind of rhythm feels right?",
+                    "answers": [
+                        { "title": "Soft and stretched", "trigger": "pisces" },
+                        { "title": "Tight and consistent", "trigger": "pistri" },
+                        { "title": "Flexible and changing", "trigger": "avus" },
+                        { "title": "Sharp and explosive", "trigger": "akiu" }
+                    ]
+                },
+                {
+                    "title": "Pick a sensation:",
+                    "answers": [
+                        { "title": "Cold, distant, controlled", "trigger": "temp", "type": 0 },
+                        { "title": "Warm, intense, alive", "trigger": "temp", "type": 1 }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "tone_profile",
+            "questions": [
+                {
+                    "title": "What kind of sound world attracts you?",
+                    "answers": [
+                        { "title": "Dark, minimal, almost empty", "trigger": "umbra", "type": 1 },
+                        { "title": "I don’t need darkness in sound", "trigger": "umbra", "type": 0 }
+                    ]
+                },
+                {
+                    "title": "What pulls your attention the most?",
+                    "answers": [
+                        { "title": "Emotion and tension", "trigger": "sang" },
+                        { "title": "Beauty and meaning", "trigger": "aur" },
+                        { "title": "Complexity and creativity", "trigger": "tech" }
+                    ]
+                },
+                {
+                    "title": "How do you relate to intensity?",
+                    "answers": [
+                        { "title": "It’s part of being alive", "trigger": "sang" },
+                        { "title": "It should lead somewhere meaningful", "trigger": "aur" },
+                        { "title": "It can be transformed into something new", "trigger": "tech" }
+                    ]
+                }
+            ]
+        }
+    ]
+}

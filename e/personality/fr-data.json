@@ -1,0 +1,391 @@
+{
+    "version": 1.0,
+    "result-map": [
+        {
+            "name": "character_axis",
+            "axis-map": [
+                {
+                    "name": "homan",
+                    "value": -2
+                },
+                {
+                    "name": "feli",
+                    "value": -1
+                },
+                {
+                    "name": "femon",
+                    "value": 1
+                },
+                {
+                    "name": "xenon",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "name": "emotional_trait",
+            "axis-map": [
+                {
+                    "name": "mori-locu",
+                    "value": -2
+                },
+                {
+                    "name": "cubil-locu",
+                    "value": -1
+                },
+                {
+                    "name": "pecuni-locu",
+                    "value": 1
+                },
+                {
+                    "name": "viva-locu",
+                    "value": 2
+                },
+                {
+                    "name": "mund-locu",
+                    "value": [
+                        "-",
+                        "+"
+                    ],
+                    "type": "operator"
+                }
+            ]
+        },
+        {
+            "name": "movement_caracteristic",
+            "axis-map": [
+                {
+                    "name": "pisces",
+                    "value": -2
+                },
+                {
+                    "name": "pistri",
+                    "value": -1
+                },
+                {
+                    "name": "avus",
+                    "value": 1
+                },
+                {
+                    "name": "akiu",
+                    "value": 2
+                },
+                {
+                    "name": "temp",
+                    "value": [
+                        "-",
+                        "+"
+                    ],
+                    "type": "operator"
+                }
+            ]
+        },
+        {
+            "name": "tone_profile",
+            "axis-map": [
+                {
+                    "name": "umbra",
+                    "value": [
+                        false,
+                        true
+                    ],
+                    "type": "invert"
+                },
+                {
+                    "name": "sang",
+                    "value": "de"
+                },
+                {
+                    "name": "aur",
+                    "value": "li"
+                },
+                {
+                    "name": "tech",
+                    "value": "me"
+                }
+            ]
+        }
+    ],
+    "content": [
+        {
+            "from": "character_axis",
+            "questions": [
+                {
+                    "title": "Où va ton esprit quand tout devient silencieux ?",
+                    "answers": [
+                        {
+                            "title": "À l’intérieur d’une pièce familière",
+                            "trigger": "homan"
+                        },
+                        {
+                            "title": "En observant les choses d’en haut",
+                            "trigger": "feli"
+                        },
+                        {
+                            "title": "En errant dans un espace ouvert",
+                            "trigger": "femon"
+                        },
+                        {
+                            "title": "Quelque part qui ne semble pas réel",
+                            "trigger": "xenon"
+                        }
+                    ]
+                },
+                {
+                    "title": "Comment vis-tu les moments ?",
+                    "answers": [
+                        {
+                            "title": "Je suis totalement dedans",
+                            "trigger": "homan"
+                        },
+                        {
+                            "title": "Je les observe à distance",
+                            "trigger": "feli"
+                        },
+                        {
+                            "title": "Je les ressens intensément",
+                            "trigger": "femon"
+                        },
+                        {
+                            "title": "Mon esprit dérive au-delà",
+                            "trigger": "xenon"
+                        }
+                    ]
+                },
+                {
+                    "title": "Qu'est ce qui te semble le plus naturelle ?",
+                    "answers": [
+                        {
+                            "title": "Être debout, bien ancré",
+                            "trigger": "homan"
+                        },
+                        {
+                            "title": "Être assis au-dessus de tout, à observer",
+                            "trigger": "feli"
+                        },
+                        {
+                            "title": "Flotter à travers tout",
+                            "trigger": "femon"
+                        },
+                        {
+                            "title": "Être en dehors de tout",
+                            "trigger": "xenon"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "emotional_trait",
+            "questions": [
+                {
+                    "title": "Quel lieu te semble le plus significatif ?",
+                    "answers": [
+                        {
+                            "title": "Un endroit calme où les choses prennent fin",
+                            "trigger": "mori-locu"
+                        },
+                        {
+                            "title": "Un endroit où tu te sens en sécurité",
+                            "trigger": "cubil-locu"
+                        },
+                        {
+                            "title": "Un endroit où il se passe des choses",
+                            "trigger": "pecuni-locu"
+                        },
+                        {
+                            "title": "Un endroit où les gens se rassemblent",
+                            "trigger": "viva-locu"
+                        }
+                    ]
+                },
+                {
+                    "title": "Comment ressens-tu la vie la plupart du temps ?",
+                    "answers": [
+                        {
+                            "title": "Elle passe et je la regarde",
+                            "trigger": "mori-locu"
+                        },
+                        {
+                            "title": "Quelque chose à suivre",
+                            "trigger": "cubil-locu"
+                        },
+                        {
+                            "title": "Quelque chose à protéger et maintenir",
+                            "trigger": "pecuni-locu"
+                        },
+                        {
+                            "title": "Quelque chose à vivre pleinement",
+                            "trigger": "viva-locu"
+                        }
+                    ]
+                },
+                {
+                    "title": "Quelle situation te correspond le plus ?",
+                    "answers": [
+                        {
+                            "title": "Propre, calme et contrôlée",
+                            "trigger": "mund-locu",
+                            "type": 1
+                        },
+                        {
+                            "title": "Imparfaite, désordonnée mais réelle",
+                            "trigger": "mund-locu",
+                            "type": 0
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "movement_caracteristic",
+            "questions": [
+                {
+                    "title": "Pour te déplacer, tu préfères y aller :",
+                    "answers": [
+                        {
+                            "title": "Lentement, comme une dérive",
+                            "trigger": "pisces"
+                        },
+                        {
+                            "title": "De manière stable et contrôlée",
+                            "trigger": "pistri"
+                        },
+                        {
+                            "title": "Équilibrée et adaptable",
+                            "trigger": "avus"
+                        },
+                        {
+                            "title": "Rapide et intense",
+                            "trigger": "akiu"
+                        }
+                    ]
+                },
+                {
+                    "title": "Quel type de rythme te paraît juste ?",
+                    "answers": [
+                        {
+                            "title": "Doux et étiré",
+                            "trigger": "pisces"
+                        },
+                        {
+                            "title": "Précis et constant",
+                            "trigger": "pistri"
+                        },
+                        {
+                            "title": "Flexible et changeant",
+                            "trigger": "avus"
+                        },
+                        {
+                            "title": "Brutal et explosif",
+                            "trigger": "akiu"
+                        }
+                    ]
+                },
+                {
+                    "title": "Tu es plutôt :",
+                    "answers": [
+                        {
+                            "title": "Froid, distant",
+                            "trigger": "temp",
+                            "type": 0
+                        },
+                        {
+                            "title": "Intense, vivant",
+                            "trigger": "temp",
+                            "type": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "from": "tone_profile",
+            "questions": [
+                {
+                    "title": "Quel es ton rapport à l'obscurité ?",
+                    "answers": [
+                        {
+                            "title": "Il n'y a pas d'obscurité sans lumière",
+                            "trigger": "umbra",
+                            "type": 1
+                        },
+                        {
+                            "title": "Il n'y a pas de lumière, que de l'obscurité",
+                            "trigger": "umbra",
+                            "type": 0
+                        }
+                    ]
+                },
+                {
+                    "title": "Qu’est-ce qui te touche le plus dans un son ?",
+                    "answers": [
+                        {
+                            "title": "La tension et les émotions brutes",
+                            "trigger": "sang"
+                        },
+                        {
+                            "title": "La beauté et la profondeur",
+                            "trigger": "aur"
+                        },
+                        {
+                            "title": "L’étrangeté et l’originalité",
+                            "trigger": "tech"
+                        }
+                    ]
+                },
+                {
+                    "title": "Comment réagis-tu à quelque chose de dur ou violent ?",
+                    "answers": [
+                        {
+                            "title": "C’est normal, ça fait partie de la vie",
+                            "trigger": "sang"
+                        },
+                        {
+                            "title": "Ça doit avoir un sens derrière",
+                            "trigger": "aur"
+                        },
+                        {
+                            "title": "Ça peut être transformé en autre chose",
+                            "trigger": "tech"
+                        }
+                    ]
+                },
+                {
+                    "title": "Quel type d’esthétique te parle le plus ?",
+                    "answers": [
+                        {
+                            "title": "Brut, imparfait, vivant",
+                            "trigger": "sang"
+                        },
+                        {
+                            "title": "Élégant, harmonieux, travaillé",
+                            "trigger": "aur"
+                        },
+                        {
+                            "title": "Abstrait, étrange, expérimental",
+                            "trigger": "tech"
+                        }
+                    ]
+                },
+                {
+                    "title": "Qu’est-ce que tu recherches dans la musique ?",
+                    "answers": [
+                        {
+                            "title": "Ressentir quelque chose de fort",
+                            "trigger": "sang"
+                        },
+                        {
+                            "title": "Me projeter dans quelque chose de beau",
+                            "trigger": "aur"
+                        },
+                        {
+                            "title": "Découvrir quelque chose de nouveau",
+                            "trigger": "tech"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

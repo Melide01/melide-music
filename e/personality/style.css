@@ -1,0 +1,173 @@
+:root {
+    --text-color: #0a9;
+    --max-width: 100ch;
+
+    --padding: 1em;
+}
+
+html { background-color: #000; }
+* { padding: 0; margin: 0; box-sizing: border-box; color: #fff; font-family: serif; font-weight: 100; }
+
+button, textarea, input {all: unset;}
+
+textarea {
+    font-family: monospace;
+    overflow: hidden;
+    z-index: -1;
+    color: var(--text-color);
+    text-shadow: 0 0 2px var(--text-color), 0 0 3px var(--text-color);
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    font-size: 2em;
+    text-wrap: unrestricted;
+    word-wrap: break-word;
+}
+
+button {
+    text-align: center;
+    cursor: pointer;
+    padding: calc(var(--padding)/4) calc(var(--padding)/2);
+    transition: transform 100ms;
+    background-color: #111;
+}
+
+button:hover { color: #ddd; background-color: #222; }
+button:active { color: #aaa; background-color: #000; transform: translateX(.1em); }
+
+body:has(main#page:not(.close)) main.progress { opacity: 0; }
+
+main.progress {
+    pointer-events: none;
+    transition: opacity 500ms;
+    position: fixed;
+    top: 0; left: 0;
+    background-color: #f001;
+    height: min-content;
+    max-width: 100%;
+
+    --percentage: 100%;
+}
+main.progress::after {
+    content: "";
+    background-color: #0f03;
+    box-sizing: border-box;
+    border: .3em solid #0aa7;
+    position: absolute;
+    z-index: 1;
+    width: var(--percentage);
+    height: 100%;
+    top: 0;
+    left: 0;
+    transition: width 1000ms;
+}
+main.progress::before {
+    content: "";
+    z-index: 2;
+    background-color: #444;
+    position: absolute;
+    left: var(--percentage);
+    top: 0;
+    height: 100%;
+    width: 1em;
+    opacity: 0;
+    transition: left 100ms;
+    animation: blink 500ms infinite;
+}
+@keyframes blink {
+    20%, 80% { opacity: 1; }
+}
+
+main {
+    font-size: 1.5em;
+    margin: auto;
+    background: linear-gradient(to right, transparent, #000d 10%, #000d 90%, transparent);
+    width: 100%;
+    height: 100vh;
+    max-width: var(--max-width);
+    padding: var(--padding);
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    font-family: serif;
+    opacity: 1;
+    transition: height 1000ms, opacity 1000ms;
+}
+
+main > * { width: 100%; }
+.ver, .hor { display: flex; }
+.ver { flex-direction: column; }
+.hor { flex-direction: row; }
+
+.grid {
+    display: grid;
+    --count: 2;
+    grid-template-columns: repeat(var(--count), auto);
+    justify-content: center;
+}
+.grid>button {
+    aspect-ratio: 1;
+    max-width: 7.7em;
+}
+
+#test_env h1 { text-align: center; margin-bottom: calc(var(--padding)/4); text-decoration: underline; text-underline-offset: 7px; }
+#test_env .ver button { padding: var(--padding); background: linear-gradient(to right, #000, #111 10%, #111 90%, #000); position: relative; }
+#test_env .ver button::after {
+    content: "";
+    background: linear-gradient(to right, transparent 50%, #777 80%);
+    height: 100%; width: 1.5em;
+    position: absolute;
+    right: .5em;
+    top: 0;
+    corner-shape: superellipse(0);
+    border-radius: 0 100% 100% 0;
+    transition: all 100ms;
+    opacity: 0;
+}
+#test_env .ver button:hover::after {
+    right: 0;
+    opacity: 1;
+}
+
+main#page {
+    z-index: 1;
+    /* padding-top: calc(var(--padding)*10);
+    padding-bottom: calc(var(--padding)*10);*/
+}
+#page .meta {
+    display: grid;
+    grid-template-columns: 7em auto;
+    gap: calc(var(--padding) / 2);
+}
+.meta img { width: 100%; }
+
+@media only screen and (max-width: 600px) {
+    #page .meta {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+main.close { height: 0; overflow: hidden; padding: 0 !important; opacity: 0; }
+
+main#page h2 {
+    font-family: monospace;
+    color: #0a9;
+    font-size: 1em;
+}
+
+main.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+a:active { background-color: #000; color: #aaa; }
+a {
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #111;
+    text-align: center;
+    padding: var(--padding);
+}

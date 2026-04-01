@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide - Test de personalité</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <textarea disabled autocorrect="off" autocapitalize="off" autocomplete="off"></textarea>
+
+    <main id="welcome" class="ver" style="gap: calc(var(--padding)/3);">
+        <h1>Melide Personalities</h1>
+        <a onclick="start_test()">Commencer</a>
+        <a href="/">Visiter le site internet</a>
+    </main>
+
+    <main id="test_env" class="ver close">
+        <h1></h1>
+        <div class="ver" style="gap: calc(var(--padding)/3);"></div>
+    </main>
+
+    <main id="page" class="ver close" style="gap: calc(var(--padding)/3);">
+        <div class="meta">
+            <img src="" alt="image">
+            <div class="ver">
+                <h2></h2>
+                <h5></h5>
+                <h1></h1>
+                <span></span>
+            </div>
+        </div>
+        <a onclick="start_test()">Recommencer</a>
+        <a href="/">Visiter le site internet</a>
+    </main>
+
+    <main id="progress" class="progress" style="--percentage: 0%"></main>
+</body>
+</html>

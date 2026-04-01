@@ -1,0 +1,120 @@
+{
+    "main": [
+        {
+            "name": "Le Cercueil",
+            "description": "Vous êtes sensible aux questions existentiels",
+            "match": [ "mori-locu" ],
+            "variants": [
+                { "name": "Le Défunt", "match": [ "homan", "pisces" ], "description": " et vous avez tendances à subir les évènements." },
+                { "name": "L'Embaumeur", "match": [ "homan", "pistri" ], "description": " et vous aimez le silence." },
+                { "name": "Le Témoin", "match": [ "homan", "avus" ], "description": "et votre présence se fait ressentir." },
+                { "name": "Le Boureau", "match": [ "homan", "akiu" ], "description": " et vous aimez imposé votre vision des choses à travers les silences." },
+
+                { "name": "Le Chat Noir", "match": [ "feli", "pisces" ], "description": " et vous observez sans jamais intervenir." },
+                { "name": "Le Gardien", "match": [ "feli", "pistri" ], "description": " et vous veillez dans le silence." },
+                { "name": "Le Spectre", "match": [ "feli", "avus" ], "description": " et vous traversez sans être vu." },
+                { "name": "Le Juge", "match": [ "feli", "akiu" ], "description": " et vous décidez sans être atteint." },
+
+                { "name": "Le Moine", "match": [ "femon", "pisces" ], "description": " et vous ressentez tout en silence." },
+                { "name": "Le Pleurnichard", "match": [ "femon", "pistri" ], "description": " et vous portez les émotions des autres." },
+                { "name": "L’Endeuillé", "match": [ "femon", "avus" ], "description": " et vous vivez dans le souvenir." },
+                { "name": "Le Martyr", "match": [ "femon", "akiu" ], "description": " et vous embrassez la douleur." },
+
+                { "name": "Le Visiteur", "match": [ "xenon", "pisces" ], "description": " et vous ne semblez pas appartenir à ce monde." },
+                { "name": "L’Entité", "match": [ "xenon", "pistri" ], "description": " et vous observez depuis ailleurs." },
+                { "name": "Le Fragment", "match": [ "xenon", "avus" ], "description": " et vous êtes entre plusieurs réalités." },
+                { "name": "L’Abstraction", "match": [ "xenon", "akiu" ], "description": " et vous dépassez toute compréhension." },
+
+                { "suffix": "Présent", "match": [ "+" ], "from_other": "mund-locu"},
+                { "suffix": "Absent", "match": [ "-" ], "from_other": "mund-locu"}
+            ]
+        },
+        {
+            "name": "Le Lit",
+            "description": "Vous aimez la stabilité",
+            "match": [ "cubil-locu" ],
+            "variants": [
+                { "name": "Le Bébé", "match": [ "homan", "pisces" ], "description": " et vous aimez en dépendre." },
+                { "name": "Le Parent", "match": [ "homan", "pistri" ], "description": " et vous n'avez aucun mal à l'invoquer." },
+                { "name": "L'Enfant", "match": [ "homan", "avus" ], "description": " et vous plâner à l'intérieur." },
+                { "name": "L'Animal de compagnie", "match": [ "homan", "akiu" ], "description": " et vous le vivez à fond." },
+
+                { "name": "Le Rêveur", "match": [ "feli", "pisces" ], "description": " et vous vous perdez dans vos pensées." },
+                { "name": "L’Observateur Nocturne", "match": [ "feli", "pistri" ], "description": " et vous restez éveillé quand tout dort." },
+                { "name": "Le Flottant", "match": [ "feli", "avus" ], "description": " et vous n’y êtes jamais vraiment." },
+                { "name": "L’Insomniaque", "match": [ "feli", "akiu" ], "description": " et votre esprit ne s’arrête jamais." },
+
+                { "name": "Le Dormeur", "match": [ "femon", "pisces" ], "description": " et vous vous abandonnez totalement." },
+                { "name": "Le Rassuré", "match": [ "femon", "pistri" ], "description": " et vous y trouvez du réconfort." },
+                { "name": "Le Rêvant", "match": [ "femon", "avus" ], "description": " et vous vivez ailleurs." },
+                { "name": "Le Passionné", "match": [ "femon", "akiu" ], "description": " et vous ressentez intensément." },
+
+                { "name": "Le Rêve Lucide", "match": [ "xenon", "pisces" ], "description": " mais rien n’est vraiment réel." },
+                { "name": "Le Dissocié", "match": [ "xenon", "pistri" ], "description": " et vous êtes présent sans l’être." },
+                { "name": "Le Voyageur", "match": [ "xenon", "avus" ], "description": " et vous passez d’un monde à l’autre." },
+                { "name": "Le Hors-Corps", "match": [ "xenon", "akiu" ], "description": " mais vous quittez tout." },
+
+                { "suffix": "Satisfait", "match": [ "+" ], "from_other": "mund-locu"},
+                { "suffix": "Insatisfait", "match": [ "-" ], "from_other": "mund-locu"}
+            ]
+        },
+        {
+            "name": "Le Poste",
+            "description": "Vous êtes travailleur",
+            "match": [ "pecuni-locu" ],
+            "variants": [
+                { "name": "Le Stagiaire", "match": [ "homan", "pisces" ], "description": " mais probablement exploité." },
+                { "name": "Le Manager", "match": [ "homan", "pistri" ], "description": ", engagé et direct." },
+                { "name": "L'Employé", "match": [ "homan", "avus" ], "description": " et vous aimez travailler." },
+                { "name": "Le Directeur", "match": [ "homan", "akiu" ], "description": ", impliqué et autoritaire." },
+
+                { "name": "L’Observateur", "match": [ "feli", "pisces" ], "description": " et vous apprenez en regardant." },
+                { "name": "Le Stratège", "match": [ "feli", "pistri" ], "description": " et vous anticipez tout." },
+                { "name": "L’Analyste", "match": [ "feli", "avus" ], "description": " et vous comprenez les systèmes." },
+                { "name": "Le Contrôleur", "match": [ "feli", "akiu" ], "description": " et rien ne vous échappe." },
+
+                { "name": "Le Dévoué", "match": [ "femon", "pisces" ], "description": " et vous donnez sans compter." },
+                { "name": "Le Loyal", "match": [ "femon", "pistri" ], "description": " et vous restez engagé." },
+                { "name": "L’Investi", "match": [ "femon", "avus" ], "description": " et vous aimez ce que vous faites." },
+                { "name": "L’Habité", "match": [ "femon", "akiu" ], "description": " et votre travail vous consume." },
+
+                { "name": "L’Exécutant", "match": [ "xenon", "pisces" ], "description": " et vous agissez sans attache." },
+                { "name": "L'Automate'", "match": [ "xenon", "pistri" ], "description": " et vous faites partie de la machine." },
+                { "name": "Le Décodeur", "match": [ "xenon", "avus" ], "description": " et vous comprenez les structures invisibles." },
+                { "name": "L’Architecte", "match": [ "xenon", "akiu" ], "description": " et vous redéfinissez les règles." },
+
+                { "suffix": "Méthodique", "match": [ "+" ], "from_other": "mund-locu"},
+                { "suffix": "Parésseux", "match": [ "-" ], "from_other": "mund-locu"}
+            ]
+        },
+        {
+            "name": "Le Culte",
+            "description": "Vous aimez la vie, ses mystères",
+            "match": [ "viva-locu" ],
+            "variants": [
+                { "name": "Le Fidèle", "match": [ "homan", "pisces" ], "description": " en l'appréciant de loin." },
+                { "name": "Le Pieux", "match": [ "homan", "pistri" ], "description": " et vous voulez laisser votre marque." },
+                { "name": "Le Conseiller", "match": [ "homan", "avus" ], "description": " et vous savez naviguer au travers." },
+                { "name": "Le Prêtre", "match": [ "homan", "akiu" ], "description": " et vous savez diriger au travers." },
+
+                { "name": "Le Témoin", "match": [ "feli", "pisces" ], "description": " et vous regardez sans participer." },
+                { "name": "Le Silencieux", "match": [ "feli", "pistri" ], "description": " et vous suivez sans bruit." },
+                { "name": "L’Interprète", "match": [ "feli", "avus" ], "description": " et vous donnez du sens." },
+                { "name": "L’Oracle", "match": [ "feli", "akiu" ], "description": " et vos mots façonnent les autres." },
+
+                { "name": "Le Croyant", "match": [ "femon", "pisces" ], "description": " et vous suivez avec le cœur." },
+                { "name": "Le Mari", "match": [ "femon", "pistri" ], "description": " et vous vous engagez profondément." },
+                { "name": "La Mariée", "match": [ "femon", "avus" ], "description": " et vous partagez ce que vous ressentez." },
+                { "name": "Le Prophète", "match": [ "femon", "akiu" ], "description": " et vous guidez par l’émotion." },
+
+                { "name": "L’Égaré", "match": [ "xenon", "pisces" ], "description": " et vous cherchez sans trouver." },
+                { "name": "Le Canal", "match": [ "xenon", "pistri" ], "description": " et quelque chose passe à travers vous." },
+                { "name": "Le Traducteur", "match": [ "xenon", "avus" ], "description": " et vous reliez les mondes." },
+                { "name": "L'Être", "match": [ "xenon", "akiu" ], "description": " et vous créez votre propre réalité." },
+
+                { "suffix": "Joyeux", "match": [ "+" ], "from_other": "mund-locu"},
+                { "suffix": "Solitaire", "match": [ "-" ], "from_other": "mund-locu"}
+            ]
+        }
+    ]
+}
