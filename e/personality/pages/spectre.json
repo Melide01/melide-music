@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# As-tu déjà disparu sans partir ?",
+        "Les Spectres traversent le monde sans y laisser de trace. Présents, mais jamais vraiment perçus."
+    ],
+    "quotes": [
+        "Personne ne me voit vraiment.",
+        "Je passe entre les choses.",
+        "Je n’ai pas d’impact.",
+        "Je suis déjà parti."
+    ],
+    "personnages": [
+        { "name": "K (Blade Runner 2049)", "image": "" },
+        { "name": "Ghost (COD)", "image": "" },
+        { "name": "Ryan Gosling (Drive)", "image": "" },
+        { "name": "Burial", "image": "" }
+    ]
+}

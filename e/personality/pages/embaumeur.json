@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# Que fais-tu de ce qui ne vit plus ?",
+        "Les Embaumeurs cherchent à préserver ce qui disparaît. Ils figent le temps, refusent l’oubli et trouvent du sens dans ce qui reste."
+    ],
+    "quotes": [
+        "Rien ne doit vraiment disparaître.",
+        "Ce qui est mort peut encore exister.",
+        "Je garde ce que les autres laissent partir.",
+        "Le passé respire encore."
+    ],
+    "personnages": [
+        { "name": "Franz Kafka", "image": "" },
+        { "name": "Dracula", "image": "" },
+        { "name": "Blade Runner (Deckard)", "image": "" },
+        { "name": "Nine Inch Nails", "image": "" }
+    ]
+}

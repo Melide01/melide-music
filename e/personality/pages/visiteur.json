@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# Es-tu vraiment d’ici ?",
+        "Les Visiteurs donnent l’impression de venir d’ailleurs. Ils observent le monde comme une anomalie."
+    ],
+    "quotes": [
+        "Je ne viens pas d’ici.",
+        "Tout semble étrange.",
+        "Je découvre encore.",
+        "Rien n’est familier."
+    ],
+    "personnages": [
+        { "name": "Neo", "image": "" },
+        { "name": "Doctor Manhattan", "image": "" },
+        { "name": "David Bowie", "image": "" },
+        { "name": "Grimes", "image": "" }
+    ]
+}

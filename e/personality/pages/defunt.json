@@ -1,0 +1,38 @@
+{
+    "content": [
+        "# Vous êtes vous déjà senti en vie ?",
+        "Les Défunts sont en général des personnes en dehors du commun des vivants. Ils tendent à rechercher des choses, des expériences inédites pouvant les faire sentir en vie mais souvent sans succès."
+    ],
+    "quotes": [
+        "Je pense, alors je suis.",
+        "Tout passe, même moi.",
+        "L'enfer, c'est les autres.",
+        "Je regarde la vie me traverser."
+    ],
+    "personnages": [
+        { "name": "René Descartes", "image": "" },
+        { "name": "Radiohead (Thom Yorke)", "image": "" },
+        { "name": "Albert Camus", "image": "" },
+        { "name": "BoJack Horseman", "image": "" }
+    ],
+    "compatibilities": [
+        { "route": ["mori-locu", "homan", "pisces"], "title": "Déjà vu", "description": "" },
+        { "route": ["cubil-locu", "homan", "pisces"], "title": "Une porte se ferme, une autre s'ouvre", "description": "" },
+        { "route": ["pecuni-locu", "homan", "pisces"], "title": "Qui se ressemble s'assemble", "description": "" },
+        { "route": ["viva-locu", "homan", "pisces"], "title": "Gêne occasionnelle", "description": "" }
+    ],
+    "compatibility-score": [
+        { "axis": "mori-locu",   "factor": 1.5 },
+        { "axis": "cubil-locu",  "factor": -1 },
+        { "axis": "pecuni-locu", "factor": -2 },
+        { "axis": "viva-locu",   "factor": -4 },
+        { "axis": "homan", "factor": 1 },
+        { "axis": "feli",  "factor": 3 },
+        { "axis": "femon", "factor": -4 },
+        { "axis": "xenon", "factor": 0.5 },
+        { "axis": "pisces", "factor": 2 },
+        { "axis": "pistri", "factor": -1 },
+        { "axis": "avus",   "factor": -2 },
+        { "axis": "akiu",   "factor": -4 }
+    ]
+}

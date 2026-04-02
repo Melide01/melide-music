@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# Es-tu acteur ou spectateur ?",
+        "Les Témoins sont présents sans intervenir. Ils voient, comprennent, mais choisissent de ne pas altérer le cours des choses."
+    ],
+    "quotes": [
+        "Voir suffit parfois.",
+        "Je suis là pour observer.",
+        "Tout se passe sans moi.",
+        "Je regarde sans toucher."
+    ],
+    "personnages": [
+        { "name": "Morgan Freeman (narrateur)", "image": "" },
+        { "name": "Uatu (The Watcher)", "image": "" },
+        { "name": "Sherlock Holmes", "image": "" },
+        { "name": "David Attenborough", "image": "" }
+    ]
+}

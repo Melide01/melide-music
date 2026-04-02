@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# Jusqu’où peux-tu aller ?",
+        "Les Bourreaux imposent leur vision. Le silence est une arme, et leur présence transforme les autres."
+    ],
+    "quotes": [
+        "Je décide.",
+        "Le silence parle pour moi.",
+        "Tout a un prix.",
+        "Je tranche sans hésiter."
+    ],
+    "personnages": [
+        { "name": "Tyler Durden", "image": "" },
+        { "name": "Walter White", "image": "" },
+        { "name": "Light Yagami", "image": "" },
+        { "name": "Trent Reznor", "image": "" }
+    ]
+}

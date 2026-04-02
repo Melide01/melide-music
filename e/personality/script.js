@@ -129,6 +129,9 @@ const page_title = page_meta.querySelector('h1');
 const page_code = page_meta.querySelector('h2');
 const page_locus = page_meta.querySelector('h5');
 const page_description = page_meta.querySelector('span');
+const more_content = document.getElementById('more_content');
+const page_table = page.querySelector('table');
+const page_tbody = page_table.querySelector('tbody');
 
 const terminal = document.querySelector('textarea');
 const progress = document.getElementById('progress');
@@ -136,20 +139,35 @@ const test_env = document.getElementById("test_env");
 const test_question_title = test_env.querySelector('h1');
 const test_answer_container = test_env.querySelector('div.ver');
 
+var raw_archetypes;
+
 async function load_personalities() {
     const res = await fetch('fr-archetypes.json');
     const data = await res.json();
+    raw_archetypes = data;
 
-    for (const category of data.main) {
+    for (const category of raw_archetypes.main) {
         const detail = document.createElement('details');
         const summary = document.createElement('summary');
         summary.textContent = category.name;
         const ul = document.createElement('ul');
 
         for (const axis of category.variants.filter(v => v.hasOwnProperty('name'))) {
+            
             const li = document.createElement('li');
             li.textContent = axis.name;
             ul.appendChild(li);
+
+            li.addEventListener('click', () => {
+                let n_data = { code: axis.code, summary: {
+                    character_axis:         { "axis": axis.match[0],        "other": {}},
+                    emotional_trait:        { "axis": category.match[0],    "other": {}},
+                    movement_caracteristic: { "axis": axis.match[1],        "other": {}}
+                } }
+                currently_open = personality;
+                load_result(n_data);
+                go_to(page);
+            })
         }
         
         detail.appendChild(summary);
@@ -157,8 +175,6 @@ async function load_personalities() {
         personality.appendChild(detail);
         detail.open = true;
     }
-
-    console.log(data);
 }
 
 load_personalities();
@@ -252,6 +268,7 @@ function handle_send_answer(answer = null) {
         disable_typewriter = true;
         typewriter_i = -1;
         terminal.textContent = "";
+        currently_open = page;
         load_result(resolve_results(result_data, full_data["result-map"]));
     
     } else if (answer) {
@@ -299,8 +316,17 @@ function handle_send_answer(answer = null) {
 
 }
 
+document.addEventListener('scroll', (e) => {
+    if (more_content.checkVisibility()) { more_content.classList.add('look');
+    } else { more_content.classList.remove('look'); }
+})
+
 async function load_result(data) {
-    currently_open = page;
+    more_content.classList.remove('look');
+    // currently_open = page;
+
+    more_content.innerHTML = "";
+    page_tbody.innerHTML = "";
 
     const res = await fetch('fr-archetypes.json');
     const d = await res.json();
@@ -310,15 +336,104 @@ async function load_result(data) {
     var archetype = locus.variants.find(v => v.match.includes(data.summary.character_axis.axis) && v.match.includes(data.summary.movement_caracteristic.axis))
 
     page_image.src = archetype.image;
-    page_title.textContent = archetype.name + " " + mund.suffix;
+    page_title.textContent = archetype.name + " " + (mund?.suffix ?? "");
     page_description.textContent = locus.description + archetype.description;
     page_code.textContent = data.code;
     page_locus.textContent = "Vous êtes dans " + locus.name;
 
-    console.log(mund);
+    const more_res = await fetch(archetype.page);
+    const more_d = await more_res.json();
+
+    more_content.innerHTML = small_markdown([...more_d.content, ...more_d.quotes.map(v => "> " + v)]);
+    load_compatibilities(archetype, more_d);
+}
+
+function load_compatibilities(result, data) {
+    // page_tbody.innerHTML = "";
+
+    const weights = {};
+    let max_score = 0;
+
+    // Build weight map
+    for (const w of data["compatibility-score"]) {
+        weights[w.axis] = w.factor;
+        max_score += Math.abs(w.factor);
+    }
+
+    // Helper: compute score
+    function compute_score(target_match) {
+        let score = 0;
+
+        for (const axis of target_match) {
+            if (result.match.includes(axis)) {
+                score += weights[axis] || 0;
+            }
+        }
+
+        return score;
+    }
+
+    // Loop all archetypes
+    for (const axis of raw_archetypes.main) {
+
+        for (const variant of axis.variants.filter(v => v.hasOwnProperty('name'))) {
+
+            // Combine base + variant
+            const full_match = [
+                ...(axis.match || []),
+                ...(variant.match || [])
+            ];
+
+            const score = compute_score(full_match);
+
+            // Normalize between 0–100
+            // let percentage = ((score + max_score) / (2 * max_score)) * 100;
+            let percentage = score * Math.PI * 10.0;
+            percentage = Math.round(percentage);
+            percentage = Math.max(0, Math.min(100, percentage)).toFixed(0);
+
+            page_tbody.innerHTML += `
+                <tr>
+                    <td>${variant.name}</td>
+                    <td>${percentage}%</td>
+                </tr>
+            `;
+        }
+    }
+}
+
+const markdown_rules = [
+    { "regexp": /^(#{1,6})\s+(.+)/, "fn": (_, hash, text) => { return `<h${hash.length}>${text}</h${hash.length}>`; } },
+    { "regexp": /\*(.+)\*/, "fn": (_, text) => { { return `<i>${text}</i>`; } } },
+    { "regexp": /\*\*(.+)\*\*/, "fn": (_, text) => { { return `<b>${text}</b>`; } } },
+    { "regexp": /^>\s+(.+)/, "fn": (_, text) => { { return `<blockquote>${text}</blockquote>`; } } },
+]
+function small_markdown(arr) {
+    var output = [];
+
+    for (const line of arr) {
+
+        let l;
+
+        for (const rule of markdown_rules) {
+            let regexp = rule.regexp;
+            let fn = rule.fn;
+
+            console.log(l, line);
+            if (!l && regexp.test(line)) l = fn(...line.match(regexp));
+        }
+
+        if (!l) l = `<p>${line}</p>`;
+
+        output.push(l);
+    }
+
+    console.log(output);
+    return output.join('\n');
 }
 
 function resolve_results(result_data, result_map) {
+    console.log(result_data);
 
     function sum(arr) {
         return arr.reduce((a, b) => a + b, 0);

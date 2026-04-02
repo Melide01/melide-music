@@ -1,0 +1,18 @@
+{
+    "content": [
+        "# Et si le silence était la réponse ?",
+        "Les Moines se retirent du monde pour mieux le comprendre. Ils trouvent dans le calme une forme de vérité."
+    ],
+    "quotes": [
+        "Le silence est plein.",
+        "Je me retire pour voir.",
+        "Moins est plus.",
+        "Tout est déjà là."
+    ],
+    "personnages": [
+        { "name": "Bouddha", "image": "" },
+        { "name": "Tenzin Gyatso", "image": "" },
+        { "name": "Thich Nhat Hanh", "image": "" },
+        { "name": "Jóhann Jóhannsson", "image": "" }
+    ]
+}

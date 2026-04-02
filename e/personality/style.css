@@ -153,6 +153,8 @@ main#page {
         display: flex;
         flex-direction: column;
     }
+    blockquote { padding: calc(var(--padding)) !important; }
+    blockquote::after, blockquote::before { opacity: .2; }
 }
 
 main.close { height: 0; overflow: hidden; padding: 0 !important; opacity: 0; }
@@ -175,4 +177,53 @@ a {
     background-color: #111;
     text-align: center;
     padding: var(--padding);
+}
+
+#more_content {
+    margin-top: var(--padding);
+    background-color: #111; padding: var(--padding);
+}
+
+#more_content > * {
+    opacity: 0;
+    transform: translateY(-1em);
+    
+}
+#more_content.look > * {
+    animation: appear 1s forwards;
+    animation-delay: calc(sibling-index() * 300ms);
+}
+
+@keyframes appear {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+blockquote {
+    padding: calc(var(--padding)*2);
+    background-color: #222;
+    margin: calc(var(--padding)/7) 0;
+    position: relative;
+    text-align: center;
+    border-radius: calc(var(--padding)/2);
+    border: .1em solid #555;
+}
+blockquote::before,
+blockquote::after { position: absolute; font-size: calc(var(--padding)*4); color: #aaa; height: calc(var(--padding)/2); }
+blockquote::before { content: "“"; left: 0; top: 0; }
+blockquote::after { content: "”"; right: 0; bottom: 0; }
+
+
+#personality details ul {
+    display: flex; flex-direction: column; gap: calc(var(--padding)/7);
+}
+#personality details li {
+    cursor: pointer;
+    font-size: 1em;
+    padding: calc(var(--padding)/2);
+    background-color: #222;
+    transition: all 100ms;
+}
+#personality details li:hover {
+    padding-left: var(--padding);
+    background-color: #000;
 }
