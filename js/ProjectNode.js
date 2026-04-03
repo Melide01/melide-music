@@ -1,5 +1,6 @@
 export { ProjectNode, TrackNode, BookNode, AppNode, FontNode }
 import { handleSearchParam } from '/js/urlEngine.js';
+import { parseMarkdownLite } from '/js/parseMarkdown.js';
 
 class ProjectNode {
     constructor({
@@ -40,7 +41,7 @@ class TrackNode extends ProjectNode {
         page_content.classList.add('open');
         page_content.innerHTML = "";
         // console.log(this.data);
-        page_content.appendChild(create_track_page(this));
+        for (const e of create_track_page(this)) page_content.appendChild(e);
     }
 
     create() {
@@ -220,8 +221,7 @@ class CanonNode extends ProjectNode {
 }
 
 
-function create_track_page(node) {
-    var data = node.data;
+function create_track_display(data, node) {
     var platforms = [];
     var actions = [];
 
@@ -233,7 +233,6 @@ function create_track_page(node) {
     if (data['Downloadable']) actions.push(['download', (e) => { e.preventDefault(); console.log('Download') } ]);
 
     const track_display = document.createElement('div'); track_display.classList.add('track_display');
-
     const img_icon = document.createElement('img');
     const main_metadata = document.createElement('div'); main_metadata.classList.add('hor');
     const meta_title = document.createElement('div'); meta_title.classList = 'ver align'
@@ -278,6 +277,63 @@ function create_track_page(node) {
     meta_title.appendChild(type);
 
     return track_display;
+}
+
+function create_text_page(text) {
+    const div = document.createElement('div');
+    div.classList = "ver text_page";
+    for(const el of parseMarkdownLite(text)) div.appendChild(el);
+    return div;
+}
+
+function create_basic_details(title = "") {
+    if (title) {
+        const details = document.createElement('details');
+        const summary = document.createElement('summary');
+        summary.textContent = title;
+        details.appendChild(summary);
+        details.open = true;
+        return details;
+    }
+}
+
+function create_paroles(paroles = []) {
+    console.log(paroles)
+    const details = create_basic_details("Paroles");
+    const ul = document.createElement('ul');
+    for (const line of paroles) ul.innerHTML += `<li>${line}</li>`;
+    details.appendChild(ul);
+    return details;
+}
+
+function create_meta(bpm = "", chord_progression = []) {
+    console.log(chord_progression);
+    const details = create_basic_details("Meta");
+    const global_div = document.createElement('div');
+    global_div.classList = "hor align extend padding";
+    const p_bpm = document.createElement('p'); p_bpm.classList = 'except'; p_bpm.textContent = bpm;
+    const chord_progression_div = document.createElement('div');
+    chord_progression_div.classList = "hor progression";
+    for (const chord of chord_progression) chord_progression_div.innerHTML += `<span>${chord}</span>`;
+
+    details.appendChild(global_div);
+    global_div.appendChild(p_bpm);
+    global_div.appendChild(chord_progression_div);
+
+    return global_div;
+}
+
+function create_track_page(node) {
+    var data = node.data;
+    var output = [];
+    output.push(create_track_display(data, node)) ;
+    
+    if (data['Histoire']) output.push(create_text_page(data['Histoire'].split("\\n")));
+    if (data['Chord Progression'] && data['BPM']) output.push(create_meta(data['BPM'], data['Chord Progression'].split(/\,\s+/g).map(v => v.trim())));
+    if (data['Paroles']) output.push(create_paroles(data['Paroles'].split('\\n').map(v => v.trim())));
+    // if (data['Liens']);
+
+    return output;
 }
 
 // <div class="track_display">
