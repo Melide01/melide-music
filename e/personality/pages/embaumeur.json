@@ -12,7 +12,23 @@
     "personnages": [
         { "name": "Franz Kafka", "image": "" },
         { "name": "Dracula", "image": "" },
-        { "name": "Blade Runner (Deckard)", "image": "" },
+        { "name": "Deckard (Blade Runner)", "image": "" },
         { "name": "Nine Inch Nails", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 3 },
+    { "axis": "cubil-locu",  "factor": 0 },
+    { "axis": "pecuni-locu", "factor": 0 },
+    { "axis": "viva-locu",   "factor": 1 },
+
+    { "axis": "homan", "factor": 3 },
+    { "axis": "feli",  "factor": 1 },
+    { "axis": "femon", "factor": 1 },
+    { "axis": "xenon", "factor": 0 },
+
+    { "axis": "pisces", "factor": 2 },
+    { "axis": "pistri", "factor": 2 },
+    { "axis": "avus",   "factor": 0 },
+    { "axis": "akiu",   "factor": 0 }
+]
 }

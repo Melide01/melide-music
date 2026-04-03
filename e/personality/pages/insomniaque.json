@@ -1,0 +1,32 @@
+{
+    "content": [
+        "# À quel heure vous êtes vous endormi hier?",
+        "Les insomniaques, dans cet univers, sont averti, sur leur garde, et veilles à l'écoute de leur environnement."
+    ],
+    "quotes": [
+        "*Il se sert du café.*",
+        "...",
+        "Salut internet, aujourd'hui nous allons parler de...",
+        "J'ai entendu du bruit au grenier."
+    ],
+    "personnages": [
+        { "name": "", "image": "" },
+        { "name": "CHARACTER_2", "image": "" },
+        { "name": "Feldup", "image": "" },
+        { "name": "CHARACTER_4", "image": "" }
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",      "factor": 0 },
+    { "axis": "cubil-locu",     "factor": 0 },
+    { "axis": "pecuni-locu",    "factor": 0 },
+    { "axis": "viva-locu",      "factor": 0 },
+    { "axis": "homan",          "factor": 0 },
+    { "axis": "feli",           "factor": 0 },
+    { "axis": "femon",          "factor": 0 },
+    { "axis": "xenon",          "factor": 0 },
+    { "axis": "pisces",         "factor": 0 },
+    { "axis": "pistri",         "factor": 0 },
+    { "axis": "avus",           "factor": 0 },
+    { "axis": "akiu",           "factor": 0 }
+]
+}

@@ -1,18 +1,34 @@
 {
     "content": [
-        "# Es-tu vraiment d’ici ?",
+        "# D'où viens-tu ?",
         "Les Visiteurs donnent l’impression de venir d’ailleurs. Ils observent le monde comme une anomalie."
     ],
     "quotes": [
-        "Je ne viens pas d’ici.",
-        "Tout semble étrange.",
-        "Je découvre encore.",
+        "C'est faux.",
+        "Rien ne m'est familier.",
+        "J'ai encore des choses à apprendre.",
         "Rien n’est familier."
     ],
     "personnages": [
-        { "name": "Neo", "image": "" },
-        { "name": "Doctor Manhattan", "image": "" },
+        { "name": "Neo (Matrix)", "image": "" },
+        { "name": "Doctor Manhattan (X-Men)", "image": "" },
         { "name": "David Bowie", "image": "" },
         { "name": "Grimes", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 0 },
+    { "axis": "cubil-locu",  "factor": -2 },
+    { "axis": "pecuni-locu", "factor": -1 },
+    { "axis": "viva-locu",   "factor": 1 },
+
+    { "axis": "homan", "factor": -2 },
+    { "axis": "feli",  "factor": 1 },
+    { "axis": "femon", "factor": 0 },
+    { "axis": "xenon", "factor": 4 },
+
+    { "axis": "pisces", "factor": 1 },
+    { "axis": "pistri", "factor": -1 },
+    { "axis": "avus",   "factor": 2 },
+    { "axis": "akiu",   "factor": 0 }
+]
 }

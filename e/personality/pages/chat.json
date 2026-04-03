@@ -14,5 +14,21 @@
         { "name": "Batman", "image": "" },
         { "name": "Mr Robot", "image": "" },
         { "name": "Massive Attack", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 2 },
+    { "axis": "cubil-locu",  "factor": 1.25 },
+    { "axis": "pecuni-locu", "factor": -1.5 },
+    { "axis": "viva-locu",   "factor": -3 },
+
+    { "axis": "homan", "factor": 2 },
+    { "axis": "feli",  "factor": 2 },
+    { "axis": "femon", "factor": 0 },
+    { "axis": "xenon", "factor": 2 },
+
+    { "axis": "pisces", "factor": 3 },
+    { "axis": "pistri", "factor": 1 },
+    { "axis": "avus",   "factor": 0 },
+    { "axis": "akiu",   "factor": -2 }
+]
 }

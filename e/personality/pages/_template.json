@@ -1,0 +1,32 @@
+{
+    "content": [
+        "# TITLE",
+        "CONTENT"
+    ],
+    "quotes": [
+        "QUOTE_1",
+        "QUOTE_2",
+        "QUOTE_3",
+        "QUOTE_4"
+    ],
+    "personnages": [
+        { "name": "CHARACTER_1", "image": "" },
+        { "name": "CHARACTER_2", "image": "" },
+        { "name": "CHARACTER_3", "image": "" },
+        { "name": "CHARACTER_4", "image": "" }
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",      "factor": 0 },
+    { "axis": "cubil-locu",     "factor": 0 },
+    { "axis": "pecuni-locu",    "factor": 0 },
+    { "axis": "viva-locu",      "factor": 0 },
+    { "axis": "homan",          "factor": 0 },
+    { "axis": "feli",           "factor": 0 },
+    { "axis": "femon",          "factor": 0 },
+    { "axis": "xenon",          "factor": 0 },
+    { "axis": "pisces",         "factor": 0 },
+    { "axis": "pistri",         "factor": 0 },
+    { "axis": "avus",           "factor": 0 },
+    { "axis": "akiu",           "factor": 0 }
+]
+}

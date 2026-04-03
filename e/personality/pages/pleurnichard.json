@@ -4,15 +4,31 @@
         "Les Pleurnichards ressentent tout trop fort. Chaque expérience devient émotion."
     ],
     "quotes": [
-        "Tout me touche.",
-        "Je ressens trop.",
+        "La souffrance, c'est ma vie.",
+        "On se sent en vie.",
         "Même le silence fait du bruit.",
-        "Rien n’est léger."
+        "Rien n’est réellement léger."
     ],
     "personnages": [
         { "name": "Shinji Ikari", "image": "" },
         { "name": "Elliot (Mr Robot)", "image": "" },
         { "name": "Billie Eilish", "image": "" },
         { "name": "Juice WRLD", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 4 },
+    { "axis": "cubil-locu",  "factor": 3 },
+    { "axis": "pecuni-locu", "factor": -4 },
+    { "axis": "viva-locu",   "factor": 0 },
+
+    { "axis": "homan", "factor": 4 },
+    { "axis": "feli",  "factor": 1 },
+    { "axis": "femon", "factor": 4 },
+    { "axis": "xenon", "factor": 1 },
+
+    { "axis": "pisces", "factor": 4 },
+    { "axis": "pistri", "factor": -7 },
+    { "axis": "avus",   "factor": 7 },
+    { "axis": "akiu",   "factor": -7 }
+]
 }

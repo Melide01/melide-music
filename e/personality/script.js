@@ -155,7 +155,11 @@ async function load_personalities() {
         for (const axis of category.variants.filter(v => v.hasOwnProperty('name'))) {
             
             const li = document.createElement('li');
-            li.textContent = axis.name;
+            const img = document.createElement('img');
+            img.alt = axis.name;
+            if (axis.image && axis.image !== "assets/.JPEG") img.src = axis.image;
+            li.appendChild(img);
+            // li.textContent = axis.name;
             ul.appendChild(li);
 
             li.addEventListener('click', () => {
@@ -173,7 +177,7 @@ async function load_personalities() {
         detail.appendChild(summary);
         detail.appendChild(ul);
         personality.appendChild(detail);
-        detail.open = true;
+        detail.open = false;
     }
 }
 
@@ -344,7 +348,7 @@ async function load_result(data) {
     const more_res = await fetch(archetype.page);
     const more_d = await more_res.json();
 
-    more_content.innerHTML = small_markdown([...more_d.content, ...more_d.quotes.map(v => "> " + v)]);
+    more_content.innerHTML = small_markdown([...more_d.content, ...small_markdown(more_d.quotes).map(v => "> " + v)]).join('\n');
     load_compatibilities(archetype, more_d);
 }
 
@@ -429,7 +433,7 @@ function small_markdown(arr) {
     }
 
     console.log(output);
-    return output.join('\n');
+    return output;
 }
 
 function resolve_results(result_data, result_map) {

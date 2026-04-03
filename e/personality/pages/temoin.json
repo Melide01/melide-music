@@ -14,5 +14,21 @@
         { "name": "Uatu (The Watcher)", "image": "" },
         { "name": "Sherlock Holmes", "image": "" },
         { "name": "David Attenborough", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 1 },
+    { "axis": "cubil-locu",  "factor": 0.5 },
+    { "axis": "pecuni-locu", "factor": -1 },
+    { "axis": "viva-locu",   "factor": -2 },
+
+    { "axis": "homan", "factor": 2 },
+    { "axis": "feli",  "factor": 3 },
+    { "axis": "femon", "factor": -2 },
+    { "axis": "xenon", "factor": 1 },
+
+    { "axis": "pisces", "factor": 1 },
+    { "axis": "pistri", "factor": 2 },
+    { "axis": "avus",   "factor": 0 },
+    { "axis": "akiu",   "factor": -3 }
+]
 }

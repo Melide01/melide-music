@@ -4,15 +4,31 @@
         "Les Spectres traversent le monde sans y laisser de trace. Présents, mais jamais vraiment perçus."
     ],
     "quotes": [
-        "Personne ne me voit vraiment.",
-        "Je passe entre les choses.",
-        "Je n’ai pas d’impact.",
-        "Je suis déjà parti."
+        "Je suis là, je ne suis plus là.",
+        "Est-ce qu'on m'écoute?",
+        "Vivre pour laissez une trace, ça m'est égale.",
+        "Toutes choses est subjectives."
     ],
     "personnages": [
         { "name": "K (Blade Runner 2049)", "image": "" },
-        { "name": "Ghost (COD)", "image": "" },
+        { "name": "Ghost (Call Of Duty)", "image": "" },
         { "name": "Ryan Gosling (Drive)", "image": "" },
         { "name": "Burial", "image": "" }
-    ]
+    ],
+    "compatibility-score": [
+    { "axis": "mori-locu",   "factor": 1 },
+    { "axis": "cubil-locu",  "factor": 0 },
+    { "axis": "pecuni-locu", "factor": -4 },
+    { "axis": "viva-locu",   "factor": 0 },
+
+    { "axis": "homan", "factor": -1 },
+    { "axis": "feli",  "factor": 1 },
+    { "axis": "femon", "factor": -2 },
+    { "axis": "xenon", "factor": 1 },
+
+    { "axis": "pisces", "factor": 1 },
+    { "axis": "pistri", "factor": 2 },
+    { "axis": "avus",   "factor": -4 },
+    { "axis": "akiu",   "factor": -4 }
+]
 }
