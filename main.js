@@ -57,24 +57,24 @@ window.page_content = page_content;
 var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
 var img_url_fetch = "https://img.melide.music/";
 
-var info_rules = {
-    "header": {
-        "Accueil": { "sitetype": "home", "href": "/home/" },
-        "Musiques": { "sitetype": "audios", "href": "/audios/?type=song&state=released&filter=croissant" },
-        "Contact": { "sitetype": "contact", "href": "/contact/" }
-    },
-    "footer": [
-        {
-            "Accueil": { "href": "/home/" },
-            "Tout les sons": { "href": "/audios/" }
-        },
-        {
-            "Contact": { "href": "/contact/" },
-            "Mentions légales": { "href": "/page/?page=mentions-legales" },
-            "Politique de confidentialité": { "href": "/page/?page=politique-confidentialite" },
-        }
-    ]
-};
+// var info_rules = {
+//     "header": {
+//         "Accueil": { "sitetype": "home", "href": "/home/" },
+//         "Musiques": { "sitetype": "audios", "href": "/audios/?type=song&state=released&filter=croissant" },
+//         "Contact": { "sitetype": "contact", "href": "/contact/" }
+//     },
+//     "footer": [
+//         {
+//             "Accueil": { "href": "/home/" },
+//             "Tout les sons": { "href": "/audios/" }
+//         },
+//         {
+//             "Contact": { "href": "/contact/" },
+//             "Mentions légales": { "href": "/page/?page=mentions-legales" },
+//             "Politique de confidentialité": { "href": "/page/?page=politique-confidentialite" },
+//         }
+//     ]
+// };
 
 const selection_choice_name = [
     ["selection_music", "piece"],
@@ -159,13 +159,14 @@ function handleTracksLoader() {
 }
 
 async function load(name, fetch, cb = () => {}) {
-    var cached = localStorage.getItem(name);
-    
+    var cached = sessionStorage.getItem(name);
+    if (localStorage.getItem(name)) localStorage.removeItem(name); // Remove old persistent data
+
     if (cached) { global_data[name] = JSON.parse(cached) }
     else {
         var data = await fetch_json(fetch);
         global_data[name] = data;
-        if (data) localStorage.setItem(name, JSON.stringify(data));
+        if (data) sessionStorage.setItem(name, JSON.stringify(data));
     }
 
     cb();
@@ -238,3 +239,13 @@ animate();
 // for (const object of objects_3d) { console.log(object) }
 // 
 // document.getElementById('container_3d').appendChild(renderer.renderer.domElement)
+
+async function download_track(track_id) {
+    var data = global_data.tracks_data.find(v => v['Track ID'] === track_id);
+    if (data['Downloadable']) {
+        var res = await fetch(fetchable_google_sheet + "?get=download_request&id=" + track_id);
+        var d = await res.json();
+        location.href = "drive.google.com/file/d/" + d;
+    }
+}
+window.download_track = download_track;

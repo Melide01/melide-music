@@ -390,49 +390,118 @@ export function parseMarkdown(string, separator = "\n", type = 'page') {
 
 var markdown_rules = [
     // == INLINE == //
-    { type: "inline", reg: /(\*+)(.+?)(\*+)/, fn: (_, star1, text, star2) => {} },
+    {
+        type: "inline",
+        reg: /(\*+)(.+?)\1/g,
+        fn: (match, stars, text) => {
+            const el = document.createElement(stars.length === 1 ? 'em' : 'strong');
+            el.textContent = text;
+            return el;
+        }
+    },
 
     // == BLOCKLINE == //
-    { type: "blockline", reg: /^(#{1,})\s?(.+)/, fn: (_, hash, text) => {
-        const title = document.createElement('h' + hash.split('').length);
-        title.textContent = text;
-        return title;
-    }},
-    { type: "blockline", reg: /^\!\[(.+)\]\((.+)\)/, fn: (_, alt, src) => {
-        const img = document.createElement('img');
-        img.alt = alt;
-        img.src = src;
-        return img;
-    }}
+    {
+        type: "blockline",
+        reg: /^(#{1,})\s+(.+)/,
+        fn: (_, hash, text) => {
+            const el = document.createElement('h' + hash.length);
+            el.textContent = text;
+            return el;
+        }
+    },
+    {
+        type: "blockline",
+        reg: /^\!\[(.+)\]\((.+)\)/,
+        fn: (_, alt, src) => {
+            const img = document.createElement('img');
+            img.alt = alt;
+            img.src = src;
+            return img;
+        }
+    },
+    {
+        type: "blockline",
+        parent: "ul",
+        reg: /^([*\-])\s+(.+)/,
+        fn: (_, bullet, text) => {
+            const li = document.createElement('li');
+            li.textContent = text;
+            return li;
+        }
+    }
 ];
 
-export function parseMarkdownLite(text) {
-    var output = typeof text === 'string' ? text.split('\n') : text;
-    
-    if (typeof output !== "object") return;
+export function parseMarkdownLite(text, default_element = "p") {
+    const lines = typeof text === 'string' ? text.split('\n') : text;
+    const result = [];
 
-    var inlines = markdown_rules.filter(v => v.type === "inline");
-    var blocklines = markdown_rules.filter(v => v.type === "blockline");
+    const inlines = markdown_rules.filter(r => r.type === "inline");
+    const blocks = markdown_rules.filter(r => r.type === "blockline");
 
-    for (const index in output) {
-        var line = output[index];
-        
-        for (const inline of inlines) {
-            if (inline.reg.test(line)) { line = inline.fn(...line.match(inline.reg)) };
+    let currentList = null;
+
+    for (let raw of lines) {
+        let matched = false;
+
+        for (const rule of blocks) {
+            const m = raw.match(rule.reg);
+            if (!m) continue;
+
+            matched = true;
+            const el = rule.fn(...m);
+
+            // Handle lists
+            if (rule.parent === "ul") {
+                if (!currentList) {
+                    currentList = document.createElement("ul");
+                    result.push(currentList);
+                }
+                currentList.appendChild(el);
+            } else {
+                currentList = null;
+                result.push(el);
+            }
+
+            break;
         }
 
-        for (const blockline of blocklines) {
-            if (blockline.reg.test(line)) { line = blockline.fn(...line.match(blockline.reg)) };
+        if (!matched) {
+            currentList = null;
+
+            // inline parsing
+            let container = document.createElement(default_element);
+            let text = raw;
+
+            // apply inline replacements
+            let parts = [];
+            let lastIndex = 0;
+
+            for (const rule of inlines) {
+                text.replace(rule.reg, (match, ...args) => {
+                    const index = args[args.length - 2];
+
+                    if (index > lastIndex) {
+                        parts.push(document.createTextNode(text.slice(lastIndex, index)));
+                    }
+
+                    parts.push(rule.fn(match, ...args));
+                    lastIndex = index + match.length;
+                });
+            }
+
+            if (lastIndex === 0) {
+                container.textContent = text;
+            } else {
+                if (lastIndex < text.length) {
+                    parts.push(document.createTextNode(text.slice(lastIndex)));
+                }
+                parts.forEach(p => container.appendChild(p));
+            }
+
+            result.push(container);
         }
-        
-        if (line === output[index]) {
-            const text_node = document.createTextNode(line);
-            output[index] = text_node;
-        } else {
-            output[index] = line;
-        }
-        
     }
 
-    return output;
-};
+    return result;
+}

@@ -54,7 +54,7 @@ class TrackNode extends ProjectNode {
         if (this.data['SoundCloud Link']) platforms.push(['soundcloud', this.data['SoundCloud Link']])
         if (this.data['Deezer Link']) platforms.push(['deezer', this.data['Deezer Link']])
         
-        if (this.data['Downloadable']) actions.push(['download', "console.log('Download')" ])
+        if (this.data['Downloadable']) actions.push(['download', `download_track(${this.data['Track ID']})` ])
 
         if (this.data['Track Release Date']) this.date = new Date(this.data['Track Release Date']);
         
@@ -230,7 +230,7 @@ function create_track_display(data, node) {
     if (data['SoundCloud Link']) platforms.push(['soundcloud', data['SoundCloud Link']]);
     if (data['Deezer Link']) platforms.push(['deezer', data['Deezer Link']]);
     
-    if (data['Downloadable']) actions.push(['download', (e) => { e.preventDefault(); console.log('Download') } ]);
+    if (data['Downloadable']) actions.push(['download', (e) => { e.preventDefault(); download_track(data['Track ID']) } ]);
 
     const track_display = document.createElement('div'); track_display.classList.add('track_display');
     const img_icon = document.createElement('img');
@@ -280,9 +280,13 @@ function create_track_display(data, node) {
 }
 
 function create_text_page(text) {
+    console.log(text);
     const div = document.createElement('div');
     div.classList = "ver text_page";
-    for(const el of parseMarkdownLite(text)) div.appendChild(el);
+    for(const el of parseMarkdownLite(text)) {
+        div.appendChild(el);
+        // div.appendChild(document.createElement('br'));
+    }
     return div;
 }
 
@@ -298,10 +302,11 @@ function create_basic_details(title = "") {
 }
 
 function create_paroles(paroles = []) {
-    console.log(paroles)
     const details = create_basic_details("Paroles");
     const ul = document.createElement('ul');
-    for (const line of paroles) ul.innerHTML += `<li>${line}</li>`;
+    for (const line of parseMarkdownLite(paroles, "li")) {
+        ul.appendChild(line);
+    }
     details.appendChild(ul);
     return details;
 }
