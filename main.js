@@ -29,6 +29,14 @@ const canon_modal_info = new ModalData({
         "Un Canon regroupe différents média entre eux, créant un univers connecté."
     ],
     actions: []
+});
+const dataupdate_modal_info = new ModalData({
+    title: "Information générale !",
+    content: [
+        "Le site est actuellement en train de migrer sa base de donnée publique vers un autre service. Nous sommes désolé pour les problèmes technique rencontrés ultérieurement ainsi que pour ceux à venir.",
+        "Nous vous remercions sincèrement de votre compréhension !"
+    ],
+    actions: []
 })
 window.canon_modal_info = canon_modal_info;
 
@@ -55,6 +63,7 @@ window.page_content = page_content;
 
 // Helpers
 var fetchable_google_sheet = "https://script.google.com/macros/s/AKfycbzl5D0Oo1pQvXCLXUQlCpWgEOmibb9iaM4_pe-tXWsSl_ImUu2gTXqPR8ZvYEstjFZ8cA/exec";
+var tracks_fetch = "https://tracks.melide-s-account.workers.dev/tracks";
 var img_url_fetch = "https://img.melide.music/";
 
 // var info_rules = {
@@ -114,16 +123,32 @@ function return_home() {
 }
 window.return_home = return_home;
 
+var tracks_version;
+
 document.addEventListener('DOMContentLoaded', async () => {
+    tracks_version = localStorage.getItem('tracks_version');
+    var res_new_version = (await fetch(tracks_fetch + '/version'));
+    var new_version = await res_new_version.json();
+    var refetch = false;
+
+    if (!tracks_version) { tracks_version = new_version.version; localStorage.setItem('tracks_version', tracks_version);
+    } else if (parseInt(new_version.version) > parseInt(tracks_version)) { refetch = true; }
+
+    const first_time = localStorage.getItem('first_time');
+    if (!first_time) {
+        open_modal(dataupdate_modal_info);
+        localStorage.setItem('first_time', true);
+    }
     
     load(
         'tracks_data',
-        fetchable_google_sheet + "?get=tracks",
+        tracks_fetch,
         () => {
             setup_selection();
             toggle_selection();
             handleTracksLoader();
-        }
+        },
+        refetch
     );
 
     project_container.appendChild(loading_block);
@@ -137,13 +162,13 @@ function handleTracksLoader() {
     for (const track of global_data['tracks_data']) {
 
         var param = {
-            title: track["Track Name"],
-            subtitle: track["Album"],
-            author: track["Track Artists"],
+            title: track["trackName"],
+            subtitle: track["album"],
+            author: track["trackArtists"],
             data: track
         };
 
-        if (track["Cover Art"]) param['image'] = img_url_fetch + track["Cover Art"];
+        if (track["coverArt"]) param['image'] = img_url_fetch + track["coverArt"];
 
         if (!global_nodes['tracks_data']) global_nodes['tracks_data'] = [];
         global_nodes['tracks_data'].push(new TrackNode(param));
@@ -158,15 +183,17 @@ function handleTracksLoader() {
     loading_block.classList.remove('load');
 }
 
-async function load(name, fetch, cb = () => {}) {
+async function load(name, fetch, cb = () => {}, force_fetch = false) {
     var cached = sessionStorage.getItem(name);
     if (localStorage.getItem(name)) localStorage.removeItem(name); // Remove old persistent data
 
-    if (cached) { global_data[name] = JSON.parse(cached) }
+    if (cached && !force_fetch) { global_data[name] = JSON.parse(cached) }
     else {
         var data = await fetch_json(fetch);
-        global_data[name] = data;
-        if (data) sessionStorage.setItem(name, JSON.stringify(data));
+        if (data) {
+            global_data[name] = data;
+            sessionStorage.setItem(name, JSON.stringify(data));
+        }
     }
 
     cb();

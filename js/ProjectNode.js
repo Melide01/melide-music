@@ -49,14 +49,14 @@ class TrackNode extends ProjectNode {
         var platforms = [];
         var actions = [];
 
-        if (this.data['Spotify Link']) platforms.push(['spotify', this.data['Spotify Link']])
-        if (this.data['YouTube Link']) platforms.push(['youtube', this.data['YouTube Link']])
-        if (this.data['SoundCloud Link']) platforms.push(['soundcloud', this.data['SoundCloud Link']])
-        if (this.data['Deezer Link']) platforms.push(['deezer', this.data['Deezer Link']])
+        if (this.data['spotifyLink']) platforms.push(['spotify', this.data['spotifyLink']])
+        if (this.data['youTubeLink']) platforms.push(['youtube', this.data['youTubeLink']])
+        if (this.data['soundCloudLink']) platforms.push(['soundcloud', this.data['soundCloudLink']])
+        if (this.data['deezerLink']) platforms.push(['deezer', this.data['deezerLink']])
         
-        if (this.data['Downloadable']) actions.push(['download', `download_track(${this.data['Track ID']})` ])
+        if (this.data['downloadable']) actions.push(['download', `download_track(${this.data['trackID']})` ])
 
-        if (this.data['Track Release Date']) this.date = new Date(this.data['Track Release Date']);
+        if (this.data['trackReleaseDate']) this.date = new Date(this.data['trackReleaseDate']);
         
         card.innerHTML = `
             <img src="${this.image}">
@@ -69,15 +69,12 @@ class TrackNode extends ProjectNode {
         `;
 
         card.addEventListener('click', (e) => {
-            handleSearchParam({delete_all: true, to_set: [ ["track", this.data['Track ID']] ]})
+            handleSearchParam({delete_all: true, to_set: [ ["track", this.data['trackID']] ]})
             this.open();
         })
 
         return card;
     }
-
-    
-
 }
 
 class BookNode extends ProjectNode {
@@ -225,12 +222,12 @@ function create_track_display(data, node) {
     var platforms = [];
     var actions = [];
 
-    if (data['Spotify Link']) platforms.push(['spotify', data['Spotify Link']]);
-    if (data['YouTube Link']) platforms.push(['youtube', data['YouTube Link']]);
-    if (data['SoundCloud Link']) platforms.push(['soundcloud', data['SoundCloud Link']]);
-    if (data['Deezer Link']) platforms.push(['deezer', data['Deezer Link']]);
+    if (data['spotifyLink']) platforms.push(['spotify', data['spotifyLink']]);
+    if (data['youTubeLink']) platforms.push(['youtube', data['youTubeLink']]);
+    if (data['soundCloudLink']) platforms.push(['soundcloud', data['soundCloudLink']]);
+    if (data['deezerLink']) platforms.push(['deezer', data['deezerLink']]);
     
-    if (data['Downloadable']) actions.push(['download', (e) => { e.preventDefault(); download_track(data['Track ID']) } ]);
+    if (data['downloadable']) actions.push(['download', (e) => { e.preventDefault(); download_track(data['trackID']) } ]);
 
     const track_display = document.createElement('div'); track_display.classList.add('track_display');
     const img_icon = document.createElement('img');
@@ -261,10 +258,10 @@ function create_track_display(data, node) {
         meta_link.appendChild(a_link);
     };
 
-    img_icon.src = data['Cover Art'] ? node.image : '/assets/placeholder.webp';
-    title.textContent = data['Track Name'];
-    artists.textContent = data['Track Artists'];
-    type.textContent = data['Track Type']
+    img_icon.src = data['coverArt'] ? node.image : '/assets/placeholder.webp';
+    title.textContent = node.title;
+    artists.textContent = node.author;
+    type.textContent = node.type;
 
     track_display.appendChild(img_icon);
     track_display.appendChild(main_metadata);
@@ -333,9 +330,9 @@ function create_track_page(node) {
     var output = [];
     output.push(create_track_display(data, node)) ;
     
-    if (data['Histoire']) output.push(create_text_page(data['Histoire'].split("\\n")));
-    if (data['Chord Progression'] && data['BPM']) output.push(create_meta(data['BPM'], data['Chord Progression'].split(/\,\s+/g).map(v => v.trim())));
-    if (data['Paroles']) output.push(create_paroles(data['Paroles'].split('\\n').map(v => v.trim())));
+    if (data['histoire']) output.push(create_text_page(data['histoire'].split("\\n")));
+    if (data['chordProgression'] && data['bpm']) output.push(create_meta(data['bpm'], data['chordProgression'].split(/\,\s+/g).map(v => v.trim())));
+    if (data['paroles']) output.push(create_paroles(data['paroles'].split('\\n').map(v => v.trim())));
     // if (data['Liens']);
 
     return output;
