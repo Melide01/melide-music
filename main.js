@@ -159,7 +159,7 @@ function handleTracksLoader() {
     loading_block.classList.add('load');
     project_container.innerHTML = "";
 
-    for (const track of global_data['tracks_data']) {
+    for (const track of global_data['tracks_data'].filter(v => ["Released"].includes(v.trackState) && ["Song"].includes(v.trackType)).sort((a,b) => parseInt(a.trackID) - parseInt(b.trackID)).sort((a,b) => new Date(a['trackReleaseDate']) - new Date(b['trackReleaseDate']))) {
 
         var param = {
             title: track["trackName"],
@@ -268,11 +268,12 @@ animate();
 // document.getElementById('container_3d').appendChild(renderer.renderer.domElement)
 
 async function download_track(track_id) {
-    var data = global_data.tracks_data.find(v => v['Track ID'] === track_id);
-    if (data['Downloadable']) {
-        var res = await fetch(fetchable_google_sheet + "?get=download_request&id=" + track_id);
-        var d = await res.json();
-        location.href = "drive.google.com/file/d/" + d;
+    var data = global_data.tracks_data.find(v => v['trackID'] === track_id);
+    if (data['downloadable']) {
+        console.log(data['downloadable'])
+        //var res = await fetch(fetchable_google_sheet + "?get=download_request&id=" + track_id);
+        //var d = await res.json();
+        //location.href = "drive.google.com/file/d/" + d;
     }
 }
 window.download_track = download_track;
