@@ -29,9 +29,9 @@
             <img alt="logo" src="/assets/mld_logo_all_white.png">
             <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
             <div class="hor">
-                <a class="except" title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
+                <!-- <a class="except" title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
                     <p>Merch</p>
-                </a>
+                </a> -->
                 <a><i class="fa-solid fa-paperclip"></i>
                     <p>Contact</p>
                 </a>
@@ -245,8 +245,8 @@
                 </ul>
                 <ul>
                     <label>Légales</label>
-                    <li><a href="#">Politique sur la confidentialité des données</a></li>
-                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="/page/?page=politique-confidentialite.md" onclick="event.preventDefault(); animateTransition(this.href);">Politique sur la confidentialité des données</a></li>
+                    <li><a href="/page/?page=mentions-legales.md" onclick="event.preventDefault(); animateTransition(this.href);">Mentions légales</a></li>
                     <li><a href="#">Charte IA</a></li>
                 </ul>
             </div>

@@ -412,13 +412,20 @@ main .selection_header label a.question {
 .page_navigation > div:nth-child(2) > input {
     all: unset;
     text-align: center;
-    background-color: #ccc;
+    background-color: #aaa;
+    background: linear-gradient(to right, transparent, #ccc);
     padding: var(--padding);
     flex: 1;
+    transition: all 100ms;
+}
+.page_navigation > div:nth-child(2) > input:last-of-type {
+    background: linear-gradient(to left, transparent, #ccc);
 }
 .page_navigation > div:nth-child(2) > input:hover { background-color: #bbb; }
 .page_navigation > div:nth-child(2) > input:active { background-color: #aaa; }
 
+.page_navigation > div:nth-child(2) > input.disable { opacity: 1 !important; background-size: 50% 100%; background-repeat: no-repeat; background-position: 101% 50%; }
+.page_navigation > div:nth-child(2) > input.disable:last-of-type { background-position: 0% 50%; }
 /*
 #modal {
     position: fixed;
