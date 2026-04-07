@@ -9,36 +9,35 @@ import { SynthInstrument } from '/js/instruments/SynthInstrument.js'
 import { SamplerInstrument } from '/js/instruments/SamplerInstrument.js'
 import { DrumKitInstrument } from '/js/instruments/DrumKitInstrument.js'
 
-import { PianoRoll } from '/js/ui/PianoRoll.js'
-
 export class AudioProject {
     constructor(data) {
         this.engine = new AudioEngine()
         this.instrumentManager = new InstrumentManager(this.engine.context)
         this.data = data
 
-        // Build dependencies first
-        const instrument = this._buildInstruments()
+        // Support both new { meta: { bpm } } and legacy { tempo } shapes
+        const bpm = data.meta?.bpm ?? data.tempo ?? 120
+
+        const instruments = this._buildInstruments()
 
         this.sequencer = new Sequencer(
             this.engine.context,
-            data.tempo || 120,
-            instrument,
-            data.sections
+            bpm,
+            instruments,
+            data.sections,
+            data.patterns || []
         )
-
-
-        // this._load()
     }
 
     _buildInstruments() {
         const map = {}
 
         if (!this.data.instruments) {
-            console.warn("No instruments defined in project")
+            console.warn('No instruments defined in project')
             return map
         }
 
+        // instruments can be an object map { name: def } (both old and new format)
         Object.entries(this.data.instruments).forEach(([name, def]) => {
             let instrument
 
@@ -56,6 +55,7 @@ export class AudioProject {
                     break
 
                 default:
+                    console.warn(`Unknown instrument type "${def.type}", defaulting to synth`)
                     instrument = new SynthInstrument(this.engine.context, {})
             }
 
@@ -65,44 +65,17 @@ export class AudioProject {
         return map
     }
 
-    _buildTracksForSection(startBeat, length) {
-        const tracks = {}
-
-        this.data.tracks.forEach(track => {
-            const name = track._instrumentName
-
-            tracks[name] = track.notes.filter(n =>
-                n.time >= startBeat &&
-                n.time < startBeat + length
-            )
-        })
-
-        return tracks
-    }
-
-    _load() {
-        if (!this.data || !this.data.tracks) return
-
-        this.data.tracks.forEach(track => {
-            const instrument = this._createInstrument(track.instrument)
-
-            this.sequencer.addTrack({
-                instrument,
-                notes: track.notes || []
-            })
-        })
-
-        if (this.data.tempo) {
-            this.sequencer.setTempo(this.data.tempo)
-        }
-    }
-
     play() {
         this.sequencer.play()
     }
 
     stop() {
         this.sequencer.stop()
+    }
+
+    // Jump to a specific section by name or index
+    goTo(nameOrIndex) {
+        this.sequencer.setSection(nameOrIndex)
     }
 
     updateTrack(index, notes) {

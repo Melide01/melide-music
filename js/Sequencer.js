@@ -1,11 +1,12 @@
 export class Sequencer {
-    constructor(context, bpm, instruments, sections) {
+    constructor(context, bpm, instruments, sections, patterns = []) {
         this.c = context;
         this.bpm = bpm;
         this.secondsPerBeat = 60 / bpm;
 
         this.instruments = instruments;
         this.sections = sections;
+        this.patterns = patterns;
         this.currentSection = sections[0].name;
 
         this.isPlaying = false;
@@ -17,8 +18,7 @@ export class Sequencer {
         this.sectionStartTime = 0;
         this.sectionStartBeat = 0;
         this.lastScheduledBeat = -1;
-        this.loopCounts = {}; // Track loop iterations per section
-
+        this.loopCounts = {};
     }
 
     play({ lockSection = false, goToSection = null } = {}) {
@@ -33,7 +33,6 @@ export class Sequencer {
         this.isPlaying = true;
         this._scheduleLoop();
     }
-
 
     stop() {
         this.isPlaying = false;
@@ -52,24 +51,21 @@ export class Sequencer {
         this.currentSection = this.sections[this.currentSectionIndex].name;
         this.sectionStartTime = this.c.currentTime;
         this.lastScheduledBeat = -1;
-        this.loopCounts[this.currentSectionIndex] = 0; // Reset loop count
+        this.loopCounts[this.currentSectionIndex] = 0;
     }
 
-    _nextSection() { // HERE
+    _nextSection() {
         this._onSectionChange(this.currentSectionIndex + 1);
     }
 
     _shouldLoopSection(section) {
-        // If loop is true (boolean), loop infinitely
         if (section.loop === true) return true;
 
-        // If loop is an integer > 0, check loop count
         if (typeof section.loop === 'number' && section.loop > 0) {
             const loopKey = this.currentSectionIndex;
             const currentCount = this.loopCounts[loopKey] || 0;
             const nextCount = currentCount + 1;
 
-            // If we haven't reached the loop limit, loop once more
             if (nextCount < section.loop) {
                 this.loopCounts[loopKey] = nextCount;
                 return true;
@@ -94,9 +90,11 @@ export class Sequencer {
         const section = this.sections[this.currentSectionIndex];
         const now = this.c.currentTime;
 
+        // Section length: explicit or computed from patterns
+        const sectionLength = section.length ?? computeSectionLength(section, this.patterns);
+
         const elapsedSec = now - this.sectionStartTime;
         const elapsedBeats = elapsedSec / this.secondsPerBeat;
-        const sectionLength = section.length;
 
         // SECTION END
         if (elapsedBeats >= sectionLength) {
@@ -106,7 +104,6 @@ export class Sequencer {
             } else {
                 this._nextSection();
             }
-            // Immediately reschedule for the new section to avoid audio gaps
             this._scheduleNotes(lookaheadTime);
             return;
         }
@@ -115,48 +112,85 @@ export class Sequencer {
             (lookaheadTime - this.sectionStartTime) / this.secondsPerBeat +
             this.sectionStartBeat;
 
-        for (const trackName in section.tracks) {
-            const instrument = this.instruments[trackName];
-            const notes = section.tracks[trackName];
+        const tracks = section.tracks;
 
-            notes.forEach(note => {
-                const beats = expandNoteBeats(note, sectionLength);
-                const transpose = (section.transpose || 0) + (note.transpose || 0);
+        for (const track of tracks) {
+            // Support single instrument string OR array of instruments
+            const instrNames = Array.isArray(track.instrument)
+                ? track.instrument
+                : [track.instrument];
 
-                beats.forEach(sectionBeat => {
-                    const globalBeat = sectionBeat + this.sectionStartBeat;
+            // Support single pattern index OR array of sequential patterns
+            const patternIndices = Array.isArray(track.pattern)
+                ? track.pattern
+                : [track.pattern];
 
-                    if (
-                        globalBeat >= this.sectionStartBeat &&
-                        globalBeat >= this.lastScheduledBeat &&
-                        globalBeat < lookaheadBeats
-                    ) {
-                        const time =
-                            this.sectionStartTime +
-                            (globalBeat - this.sectionStartBeat) *
-                            this.secondsPerBeat;
-                        
-                        const durationBeats = 
-                            typeof note.duration === "number"
-                                ? note.duration
-                                : 1;
-                        
-                        instrument.playNote(
-                            note,
-                            time,
-                            durationBeats,
-                            transpose,
-                            this.secondsPerBeat,
-                            this.sectionStartBeat
-                        );
+            // Play patterns sequentially: accumulate time offset per pattern
+            let patternOffset = 0;
+
+            for (const patIdx of patternIndices) {
+                const rawPattern = this.patterns[patIdx];
+                if (!rawPattern) {
+                    console.warn(`Pattern index ${patIdx} not found`);
+                    continue;
+                }
+
+                // Pattern can be a plain notes array OR { notes, length }
+                const notes = Array.isArray(rawPattern) ? rawPattern : rawPattern.notes;
+                const patternLength = Array.isArray(rawPattern)
+                    ? computePatternLength(notes)
+                    : (rawPattern.length ?? computePatternLength(notes));
+
+                // Apply this pattern to every instrument in the track
+                for (const instrName of instrNames) {
+                    const instrument = this.instruments[instrName];
+                    if (!instrument) {
+                        console.warn(`Instrument "${instrName}" not found`);
+                        continue;
                     }
-                });
-            });
+
+                    notes.forEach(note => {
+                        // Expand repeats relative to pattern length, then shift by offset
+                        const beats = expandNoteBeats(note, patternLength, patternOffset);
+                        const transpose = (section.transpose || 0) + (note.transpose || 0);
+
+                        beats.forEach(sectionBeat => {
+                            const globalBeat = sectionBeat + this.sectionStartBeat;
+
+                            if (
+                                globalBeat >= this.sectionStartBeat &&
+                                globalBeat >= this.lastScheduledBeat &&
+                                globalBeat < lookaheadBeats
+                            ) {
+                                const time =
+                                    this.sectionStartTime +
+                                    (globalBeat - this.sectionStartBeat) *
+                                    this.secondsPerBeat;
+
+                                const durationBeats =
+                                    typeof note.duration === 'number'
+                                        ? note.duration
+                                        : 1;
+
+                                instrument.playNote(
+                                    note,
+                                    time,
+                                    durationBeats,
+                                    transpose,
+                                    this.secondsPerBeat,
+                                    this.sectionStartBeat
+                                );
+                            }
+                        });
+                    });
+                }
+
+                patternOffset += patternLength;
+            }
         }
 
         this.lastScheduledBeat = lookaheadBeats;
     }
-
 
     getVisualBar(num) {
         const buffer = new Uint8Array(this.analyser.frequencyBinCount);
@@ -186,9 +220,8 @@ export class Sequencer {
         this.sectionStartTime = this.c.currentTime;
         this.sectionStartBeat = 0;
         this.lastScheduledBeat = -1;
-        this.loopCounts[this.currentSectionIndex] = 0; // Reset loop count for new section
+        this.loopCounts[this.currentSectionIndex] = 0;
 
-        // 🔄 HARD RESYNC AUDIO TRACKS
         for (const inst of Object.values(this.instruments)) {
             if (typeof inst.resyncAll === 'function') {
                 inst.resyncAll();
@@ -197,24 +230,26 @@ export class Sequencer {
     }
 }
 
-export function noteToFrequency(note) {
-    const midi = typeof note === 'number'
-        ? note
-        : noteStringToMidi(note);
+// ─── Helpers ────────────────────────────────────────────────────────────────
 
-    return 440 * Math.pow(2, (midi - 69) / 12);
-}
-
-function expandNoteBeats(note, sectionLength) {
+/**
+ * Expand a note's beat times, applying repeat logic within the pattern's
+ * local length, then shifting by patternOffset so they land correctly in
+ * the section timeline.
+ *
+ * @param {object} note
+ * @param {number} patternLength - length of the containing pattern in beats
+ * @param {number} patternOffset - beat offset of this pattern within the section
+ */
+function expandNoteBeats(note, patternLength, patternOffset = 0) {
     const times = Array.isArray(note.time) ? note.time : [note.time];
     const repeat = typeof note.repeat === 'number' ? note.repeat : null;
 
     const beats = [];
 
     for (const baseTime of times) {
-        // No repeat → single hit
         if (!repeat) {
-            beats.push(baseTime);
+            beats.push(baseTime + patternOffset);
             continue;
         }
 
@@ -223,21 +258,87 @@ function expandNoteBeats(note, sectionLength) {
                 ? note.repeatStart
                 : baseTime;
 
+        // repeatEnd is relative to the pattern, not the section
         const end =
             typeof note.repeatEnd === 'number'
                 ? note.repeatEnd
-                : sectionLength;
+                : patternLength;
 
-        // Ensure sane bounds
         let b = Math.max(baseTime, start);
 
         while (b < end) {
-            beats.push(b);
+            beats.push(b + patternOffset);
             b += repeat;
         }
     }
 
     return beats;
+}
+
+/**
+ * Compute the natural length of a pattern from its notes.
+ * Uses the highest effective end-beat (repeatEnd or time + duration).
+ */
+function computePatternLength(notes) {
+    let max = 0;
+    for (const note of notes) {
+        const times = Array.isArray(note.time) ? note.time : [note.time];
+        const baseMax = Math.max(...times);
+
+        let end;
+        if (typeof note.repeatEnd === 'number') {
+            end = note.repeatEnd;
+        } else if (typeof note.repeat === 'number') {
+            end = baseMax + note.repeat;
+        } else {
+            end = baseMax + (note.duration ?? 1);
+        }
+
+        max = Math.max(max, end);
+    }
+    return max;
+}
+
+/**
+ * Compute a section's total length from the sum of its longest track's
+ * sequential patterns. Used when section.length is omitted.
+ */
+function computeSectionLength(section, patterns) {
+    if (!section.tracks || !section.tracks.length) return 0;
+
+    let maxLength = 0;
+
+    for (const track of section.tracks) {
+        const patternIndices = Array.isArray(track.pattern)
+            ? track.pattern
+            : [track.pattern];
+
+        let totalLength = 0;
+
+        for (const idx of patternIndices) {
+            const raw = patterns[idx];
+            if (!raw) continue;
+            const notes = Array.isArray(raw) ? raw : raw.notes;
+            const len = Array.isArray(raw)
+                ? computePatternLength(notes)
+                : (raw.length ?? computePatternLength(notes));
+            totalLength += len;
+        }
+
+        maxLength = Math.max(maxLength, totalLength);
+    }
+
+    return maxLength;
+}
+
+// ─── Note utilities (exported for instruments) ──────────────────────────────
+
+export function noteToFrequency(note) {
+    const midi = typeof note === 'number'
+        ? note
+        : noteStringToMidi(note);
+
+    return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
 export function normalizeNote(note) {
