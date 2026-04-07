@@ -20,22 +20,70 @@ function handleSearchParam(
 
 const site_style_data = {
     
-    "/merch/": {
-        "background-color": "#a02",
-        "color": "#fff"
-    },
-    "/e/": {
-        "background-color": "#077",
-        "color": "#fff"
-    },
-    "/page/": {
-        "background-color": "#a73",
-        "color": "#fff"
-    },
-    "/": {
-        "background-color": "#000",
-        "color": "#fff"
-    },
+    "/merch/": [
+        {
+            "selector": "header",
+            "styles": {
+                "background-color": "#a02",
+                "color": "#fff"
+            }
+        }
+        
+    ],
+    "/page/": [
+        {
+            "selector": "div:has(header)",
+            "styles": {
+                "background-color": "#a73",
+                "color": "#fff"
+            }
+        }
+    ],
+    "/lide/": [
+        {
+            "selector": "div:has(header)",
+            "styles": {
+                "background-color": "#000",
+                "color": "#fff"
+            }
+        },
+        {
+            "selector": "body",
+            "styles": {
+                "background-color": "#111"
+            }
+        },
+        {
+            "selector": "header>img",
+            "styles": {
+                "opacity": "0"
+            }
+        }
+    ],
+    "/e/": [
+        {
+            "selector": "div:has(header)",
+            "styles": {
+                "background-color": "#077",
+                "color": "#fff"
+            }
+        }
+    ],
+    "/": [
+        {
+            "selector": "div:has(header)",
+            "styles": {
+                "background-color": "#000",
+                "color": "#fff"
+            }
+        },
+        {
+            "selector": "body",
+            "styles": {
+                "background-color": "#fff"
+            }
+        }
+    ]
 }
 function animateTransition(direction = "") {
     
@@ -46,7 +94,15 @@ function animateTransition(direction = "") {
     console.log(Object.keys(site_style_data).filter(v => direction.startsWith(v)));
     if (!dir) return;
     
-    document.body.querySelector('header').parentElement.style = "transition: all 500ms;" + Object.entries(site_style_data[dir]).map(v => v[0]+": "+v[1]).join("; ");
+    for (const item of site_style_data[dir]) {
+        console.log(item.selector)
+        console.log(document.body.querySelector(item.selector));
+        document.querySelector(item.selector).style = "transition: all 500ms;" + Object.entries(item.styles).map(v => v[0]+": "+v[1]).join("; ");
+    }
+
+    
+
+    // document.body.querySelector('header').parentElement.style = "transition: all 500ms;" + Object.entries(site_style_data[dir]).map(v => v[0]+": "+v[1]).join("; ");
     document.body.classList.add('changing');
     setTimeout(() => {
         location.href = direction;
