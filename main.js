@@ -1,7 +1,7 @@
 // Three.js Import
-import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js";
-import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
+import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js"
+import { OrbitControls } from "https://cdn.jsdelivr.net/npm/three@0.124/examples/jsm/controls/OrbitControls.js"
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js"
 window.THREE = THREE;
 window.OrbitControls = OrbitControls;
 window.GLTFLoader = GLTFLoader;
@@ -9,14 +9,16 @@ window.GLTFLoader = GLTFLoader;
 var objects_3d = [];
 
 // Local Import
-import { Model3D, Camera3D, Scene3D, Renderer3D, Light3D } from '/js/3dLogic.js';
+import { Model3D, Camera3D, Scene3D, Renderer3D, Light3D } from '/js/3dLogic.js'
+
+import { AudioProject } from '/js/AudioProject.js'
 
 import { reveal_modal, fetch_json } from '/js/Utils.js';
 import { toggle_selection, setup_selection, section_results } from '/js/searchLogic.js'
-import{ ProjectNode, TrackNode } from '/js/ProjectNode.js';
-import { ModalData, toggle_modal, open_modal } from '/js/modalManager.js';
-import { parseMarkdown, parseMarkdownLite } from '/js/parseMarkdown.js';
-import { handleSearchParam, animateTransition } from '/js/urlEngine.js';
+import{ ProjectNode, TrackNode } from '/js/ProjectNode.js'
+import { ModalData, toggle_modal, open_modal } from '/js/modalManager.js'
+import { parseMarkdown, parseMarkdownLite } from '/js/parseMarkdown.js'
+import { handleSearchParam, animateTransition } from '/js/urlEngine.js'
 
 window.animateTransition = animateTransition;
 
@@ -125,7 +127,11 @@ window.return_home = return_home;
 
 var tracks_version;
 
+// const audio_sequence = await loadProject('/data/audio_template.json');
+// document.addEventListener('click', () => { audio_sequence.play(); })
+
 document.addEventListener('DOMContentLoaded', async () => {
+
     tracks_version = localStorage.getItem('tracks_version');
     var res_new_version = (await fetch(tracks_fetch + '/version'));
     var new_version = await res_new_version.json();
@@ -153,6 +159,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     project_container.appendChild(loading_block);
 })
+
+export async function loadProject(url) {
+  const res = await fetch(url)
+  const json = await res.json()
+  return new AudioProject(json)
+}
 
 function handleTracksLoader() {
     if (!global_data['tracks_data']) return;
