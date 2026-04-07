@@ -6,7 +6,7 @@
 
 :root {
     --padding: .5em;
-    --header-height: 04em;
+    --header-height: 4em;
     --footer-height: 200px;
     --max-width: 1000px;
     --font: "Didact Gothic", sans-serif;
@@ -35,7 +35,8 @@ body > div:has(footer) { transition: transform 500ms; }
 
 body > main:not(.modal):not(.fancy_gradient),
 body > div:has(>header) > header > h2,
-body > div:has(>header) > header > .hor > a {
+body > div:has(>header) > header > .hor > a,
+body > div:has(>header) > header > label {
     opacity: 0;
     animation: appear 500ms forwards;
     animation-delay: calc(sibling-index() * 50ms);
@@ -68,6 +69,7 @@ body {
 ul, ol { list-style-position: inside; }
 
 div:has(>header) {
+    color: #fff;
     position: fixed;
     top: 0;
     left: 0;
@@ -416,7 +418,7 @@ main .selection_header label a.question {
     background: linear-gradient(to right, transparent, #ccc);
     padding: var(--padding);
     flex: 1;
-    transition: all 100ms;
+    transition: background-color 100ms;
 }
 .page_navigation > div:nth-child(2) > input:last-of-type {
     background: linear-gradient(to left, transparent, #ccc);
@@ -424,7 +426,7 @@ main .selection_header label a.question {
 .page_navigation > div:nth-child(2) > input:hover { background-color: #bbb; }
 .page_navigation > div:nth-child(2) > input:active { background-color: #aaa; }
 
-.page_navigation > div:nth-child(2) > input.disable { opacity: 1 !important; background-size: 50% 100%; background-repeat: no-repeat; background-position: 101% 50%; }
+.page_navigation > div:nth-child(2) > input.disable { color: #ddd; opacity: 1 !important; background-size: 10% 100%; background-repeat: no-repeat; background-position: 101% 50%; }
 .page_navigation > div:nth-child(2) > input.disable:last-of-type { background-position: 0% 50%; }
 /*
 #modal {
