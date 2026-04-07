@@ -33,7 +33,7 @@
                 },
                 "fx": {
                     "reverb": {
-                        "wet": 0.2,
+                        "wet": 0.1,
                         "length": 10,
                         "damp": 3000,
                         "feedback": 0.5
@@ -60,6 +60,7 @@
                     "36": "/assets/sounds/NGTN - Kick Tight Candy.mp3",
                     "38": "/assets/sounds/825374__tboneaudio__snare-to-god.mp3",
                     "42": "/assets/sounds/NGTN - Hat Ciao.mp3",
+                    "50": "/assets/sounds/104210__minorr__crash-paiste-pst5-17-left-ff.ogg",
                     "43": "/assets/sounds/829439__bassimat__lucia-drum-kit-011-4.mp3"
                 }
             }
@@ -103,6 +104,38 @@
                     }
                 ],
                 "synthTop": [
+                    {
+                        "time": 0,
+                        "duration": 0.2,
+                        "note": "C4",
+                        "velocity": 0.1,
+                        "repeat": 0.5,
+                        "repeatEnd": 4
+                    },
+                    {
+                        "time": 8,
+                        "duration": 0.2,
+                        "note": "C4",
+                        "velocity": 0.1,
+                        "repeat": 0.5,
+                        "repeatEnd": 12
+                    },
+                    {
+                        "time": 4,
+                        "duration": 0.2,
+                        "note": "D4",
+                        "velocity": 0.1,
+                        "repeat": 0.5,
+                        "repeatEnd": 8
+                    },
+                    {
+                        "time": 12,
+                        "duration": 0.2,
+                        "note": "B3",
+                        "velocity": 0.1,
+                        "repeat": 0.5,
+                        "repeatEnd": 16
+                    },
                     {
                         "time": [
                             0.5,
@@ -209,6 +242,26 @@
                         "velocity": 0.1,
                         "repeat": 0.25,
                         "repeatEnd": 28
+                    },
+                    {
+                        "time": 31.25,
+                        "duration": 1,
+                        "note": 38,
+                        "velocity": 0.2,
+                        "repeat": 0.25
+                    },
+
+                    {
+                        "time": 0,
+                        "duration": 1,
+                        "note": 50,
+                        "velocity": 0.2
+                    },
+                    {
+                        "time": 16,
+                        "duration": 1,
+                        "note": 50,
+                        "velocity": 0.1
                     }
                 ]
             }
@@ -366,11 +419,18 @@
                         "repeat": 2
                     },
                     {
-                        "time": 0,
+                        "time": 15.5,
+                        "duration": 1,
+                        "note": 38,
+                        "velocity": 0.25,
+                        "repeat": 0.25
+                    },
+                    {
+                        "time": 3,
                         "duration": 1,
                         "note": 42,
-                        "velocity": 0.2,
-                        "repeat": 0.5
+                        "velocity": 0.15,
+                        "repeat": 0.25
                     }
                 ]
             }
@@ -478,6 +538,50 @@
                         "velocity": 0.4
                     }
                 ],
+                "synthTop": [
+                    {
+                        "time": 0,
+                        "transpose": 0,
+                        "duration": 0.5,
+                        "note": "A4",
+                        "velocity": 0.1,
+                        "repeat": 1,
+                        "repeatEnd": 3
+                    },
+                    {
+                        "time": 4,
+                        "transpose": 0,
+                        "duration": 0.5,
+                        "note": "F4",
+                        "velocity": 0.1,
+                        "repeat": 1,
+                        "repeatEnd": 8
+                    },
+                    {
+                        "time": 8,
+                        "transpose": 0,
+                        "duration": 0.5,
+                        "note": "E4",
+                        "velocity": 0.1,
+                        "repeat": 1,
+                        "repeatEnd": 14
+                    },
+
+                    {
+                        "time": 3,
+                        "transpose": 0,
+                        "duration": 0.45,
+                        "note": "A4",
+                        "velocity": 0.1
+                    },
+                    {
+                        "time": 3.5,
+                        "transpose": 0,
+                        "duration": 0.45,
+                        "note": "E4",
+                        "velocity": 0.1
+                    }
+                ],
                 "bass": [
                     {
                         "time": 0,
@@ -485,7 +589,7 @@
                         "note": "A1",
                         "velocity": 0.2,
                         "repeat": 0.5,
-                        "repeatEnd": 3.5
+                        "repeatEnd": 3
                     },
                     {
                         "time": 4,
@@ -536,6 +640,13 @@
                         "repeat": 2
                     },
                     {
+                        "time": 15.25,
+                        "duration": 1,
+                        "note": 38,
+                        "velocity": 0.25,
+                        "repeat": 0.25
+                    },
+                    {
                         "time": 0,
                         "duration": 1,
                         "note": 42,
@@ -548,6 +659,13 @@
                         "note": 42,
                         "velocity": 0.2,
                         "repeat": 0.25
+                    },
+
+                    {
+                        "time": 0,
+                        "duration": 1,
+                        "note": 50,
+                        "velocity": 0.2
                     }
                 ]
             }
