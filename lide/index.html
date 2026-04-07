@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiDe</title>
+    <link rel="stylesheet" href="/main.css">
+    <script defer type="module" src="script.js"></script>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style>
+        body.changing header > label { opacity: 0 !important; }
+        body.changing header > img { width: auto;}
+        header > img { width: 0; overflow: hidden; }
+        
+        body { color: #fff; padding-top: calc(var(--header-height)*1.2) !important; background-color: #111; }
+        body:has(input[name="side_menu"]:checked) #side_menu { pointer-events: all; background-color: #222a; }
+        body:has(input[name="side_menu"]:checked) #side_menu > .ver { transform: translateX(0); }
+        
+        #side_menu { color: #000; transition: background-color 100ms; pointer-events: none; font-size: 120%; max-width: 100%; position: fixed; top: 0; left: 0; background-color: #2220; width: 100%; height: 100%; z-index: 100; }
+        #side_menu > .ver { transition: transform 500ms; transform: translateX(-100%); gap: 0; background: linear-gradient(to left, #afd, #afda); padding: var(--padding); height: 100%; width: min-content; }
+        #side_menu > .ver > * { white-space: nowrap; }
+        #side_menu > .ver > span { transform: translateY(-.5em); }
+        #side_menu ul { list-style-type: none; }
+        #side_menu ul > li { transition: background-color 100ms; display: flex; }
+        #side_menu ul a { cursor: pointer; width: 100%; padding: var(--padding); }
+        #side_menu ul li:hover { background-color: #2222; }
+
+        div header > label:has(>i) {
+            transition: opacity 500ms;
+            background-color: #222;
+            font-size: 150%;
+            aspect-ratio: 1;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        input[name="side_menu"] {
+            all: unset;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        button { all: unset; border: 1px solid #777; border-radius: var(--padding); padding: var(--padding); cursor: pointer; color: #fff; text-align: center; }
+        button:hover { background-color: #222; }
+        .space { margin-bottom: calc(var(--padding)*2); }
+        .nopadding { padding: 0 !important; }
+        .options { width: 0; }
+        .options > input[type="range"]::after {
+            content: "";
+            box-sizing: border-box;
+            border: .5em solid #eee;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0; top: 0;
+            border-radius: 50%;
+        }
+        .options > input[type="range"] { -webkit-appearance: none; position: relative; border-radius: 50%; background-color: transparent; max-width: calc(var(--padding)*7); aspect-ratio: 1; }
+        .options > input[type="range"]::-webkit-slider-runnable-track { height: 100%; border: none; border-radius: 0; }
+        .options > input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; }
+
+        .card .meta { white-space: nowrap; overflow: hidden; transition: all 300ms; }
+        .card>img, .card>.melody_section { transition: flex 300ms; width: 3em; background-color: #333; flex: 0 !important; }
+        .card>.melody_section { pointer-events: none; overflow-x: scroll; }
+        .card select { all: unset; background-color: #fff; color: #000; display: block; line-height: 2.2em; padding: 0 calc(var(--padding)/2); }
+        
+        .card:has(input[name="melody_section"]:checked) .melody_section { pointer-events: all; flex: 1 !important; }
+        .card:has(input[name="melody_section"]:checked) .meta { padding-left: 0; padding-right: 0; width: 0; flex: 0 !important; }
+        .melody_section > .block { cursor: pointer; background-color: #fff; border-radius: var(--padding); aspect-ratio: 4/5; }
+    </style>
+
+    <input style="display: none;" id="project_loader" type="file" accept=".json,application/json,application/JSON">
+
+    <main id="side_menu">
+        <div class="ver" style="padding-top: calc(var(--padding)*4);">
+            <h1>LiDe</h1>
+            <span class="space">by Melide</span>
+            <ul>
+                <li><a>Nouveau</a></li>
+                <li><a onclick="project_loader.click()">Charger le fichier</a></li>
+                <li class="space"><a>Sauvegarder</a></li>
+                <li class="space"><a>Contact</a></li>
+                <li class="space"><a href="/" onclick="event.preventDefault(); animateTransition(this.href);">Quitter</a></li>
+
+            </ul>
+        </div>
+        <input type="button" onclick="document.querySelector('header>label>i>input').checked = false" style="position: absolute; width: 100%; top: 0; left: 0; height: 100%; opacity: 0; z-index: -1;">
+    </main>
+
+    <!-- CONTENT -->
+    <div>
+        <header class="hor">
+            <img alt="logo" src="/assets/mld_logo_all_white.png">
+            <label for="side_menu">
+                <i class="fa-solid fa-bars">
+                    <input name="side_menu" type="checkbox">
+                </i>
+            </label>
+            <h2 class="ver align" style="flex: 1;">LiDe</h2>
+        </header>
+    </div>
+
+    <main class="ver nogap" id="intrument_container">
+
+        <div class="hor card nogap">
+            <img src="/assets/placeholder.webp" onclick="this.parentElement.querySelector('.meta>.hor>.hor>input').checked = false">
+            
+            <div class="ver meta extend nogap">
+                <div class="hor align nopadding" style="justify-content: space-between;">
+                    <span>Instrument Name</span>
+                    <div class="hor align right nopadding">
+                        <input style="display: none;" type="checkbox" name="melody_section">
+                        <a><i class="fa-solid fa-file-pen" onclick="this.parentElement.parentElement.querySelector('input').checked = true"></i></a>
+                        <a><i class="fa-solid fa-plug"></i></a>
+                        <a><i class="fa-solid fa-trash"></i></a>
+                    </div>
+                </div>
+                
+                <div class="hor extend nopadding">
+                    <select class="except">
+                        <option selected value="synth">DrumKit</option>
+                        <option value="synth">Sampler</option>
+                        <option value="synth">Synth</option>
+                    </select>
+                    <div class="options hor nopadding nogap align">
+                        <input type="range">
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="hor melody_section except">
+                <div class="block"></div>
+                <div class="block"></div>
+                <div class="block"></div>
+            </div>
+        </div>
+
+    </main>
+
+
+    <main class="ver padding">
+        <button><i class="fa-solid fa-add"></i></button>
+    </main>
+</body>
+</html>
