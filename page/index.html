@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide</title>
+    <script defer type="module" src="script.js"></script>
+    <link rel="stylesheet" href="/main.css">
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- MODAL -->
+    <main class="modal">
+        <dialog id="main_modal">
+            <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
+            <div class="hor align header">
+                <h2>Title</h2>
+            </div>
+            <div class="ver body align"></div>
+            <div class="hor footer"></div>
+        </dialog>
+    </main>
+
+    <!-- CONTENT -->
+    <div style="background-color: #a73;">
+        <header>
+            <img alt="logo" src="/assets/mld_logo_all_white.png" title="Retourner à l'accueil" onclick="animateTransition('/')">
+            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Page</h2>
+            <div class="hor">
+                <a class="except" title="Accueil" href="/" onclick="event.preventDefault(); animateTransition('/');"><i class="fa-solid fa-shop"></i>
+                    <p>Accueil</p>
+                </a>
+                <a><i class="fa-solid fa-paperclip"></i>
+                    <p>Contact</p>
+                </a>
+            </div>
+        </header>
+    </div>
+
+
+    <main><img src="/assets/bg_weird_place.webp" style="height: 5em;"></main>
+    
+    <main class="section conditional" style="--bg: #0fd; --color: #079;"><label>Musique</label></main>
+    
+    <!-- <main class="open header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
+        <img src="/assets/placeholder.webp">
+        <div class="ver align metadata">
+            <h2>YOUNG AND FREE</h2>
+            <h5>Melide</h5>
+        </div>
+        <div class="ver lyrics">
+            <ul>
+                <li>But you're always crying</li>
+                <li class="active">In my eyes you're flying</li>
+                <li>Waiting for the time</li>
+                <li>Waiting for the time</li>
+            </ul>
+        </div>
+    </main> -->
+
+    <main id="search_content" class="open conditional">
+        
+        <div id="search_panel" class="hor nogap search_panel">
+            <input type="search" placeholder="Rechercher...">
+            <input type="button" value="Rechercher">
+            <select>
+                <option>Récents</option>
+                <option>Vieux</option>
+            </select>
+        </div>
+        
+        <div id="loading_block" class=""></div>
+
+        <div class="ver nogap" id="project_container">
+
+            
+
+            <!--
+            <div class="hor card" onclick="location.href = '/e/projects/'">
+                <img src="/assets/placeholder.webp">
+                <div class="ver metadata align">
+                    <h2>Projects</h2>
+                    <span>Entrer dans mon intimité à travers mes messages privés.</span>
+                </div>
+                <div class="hor align info"><i class="fa-solid fa-link"></i></div>
+            </div>
+            -->
+
+        </div>
+
+        <!-- IMAGE GRID
+        <div class="auto_grid selectable">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/bg_artistic_underwater.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
+        </div>
+        -->
+    </main>
+
+    <!-- <main id="page_content" class="ver padding page">
+        
+        <div class="track_display">
+            <img src="assets/placeholder.webp">
+            <div class="hor">
+                <div class="ver align">
+                    <h1>Title</h1>
+                    <h3>Artists</h3>
+                    <span>Type</span>
+                </div>
+                <div class="hor align links">
+                    <a><i class="fa-brands fa-deezer"></i></a>
+                    <a><i class="fa-brands fa-spotify"></i></a>
+                    <a><i class="fa-brands fa-youtube"></i></a>
+                    <a><i class="fa-brands fa-soundcloud"></i></a>
+                    <a><i class="fa-solid fa-download"></i></a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    -->
+
+    <main class="hor align padding page_navigation conditional">
+        <div class="hor" id="page_index" >
+
+            <label>1 <input checked name="page" type="radio"></label>
+            <label>2 <input name="page" type="radio"></label>
+            <label>3 <input name="page" type="radio"></label>
+            <label>4 <input name="page" type="radio"></label>
+            <label>5 <input name="page" type="radio"></label>
+
+        </div>
+        <div class="hor nogap">
+            <input name="page_arrow" type="button" value="<" onclick="section_results(-1)">
+            <input name="page_arrow" type="button" value=">" onclick="section_results(1)">
+        </div>
+    </main>
+
+    <!--
+    <main id="container_3d" class="open container_3d">
+    </main>
+    -->
+
+    <div class="padding ver">
+        <footer class="hor align">
+            <img src="/assets/mld_logo_all_white.png" style="object-fit: contain; height: 3em; flex: 1;">
+            <div class="box_wrap">
+                <ul>
+                    <label>Pages</label>
+                    <li><a href="/" onclick="event.preventDefault(); animateTransition('/');">Accueil</a></li>
+                    <li><a href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');">Merch</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="/e/" onclick="event.preventDefault(); animateTransition('/e/');">Portals</a></li>
+                </ul>
+                <ul>
+                    <label>Légales</label>
+                    <li><a href="#">Politique sur la confidentialité des données</a></li>
+                    <li><a href="#">Mentions légales</a></li>
+                    <li><a href="#">Charte IA</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
