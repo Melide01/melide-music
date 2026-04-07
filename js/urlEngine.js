@@ -19,10 +19,7 @@ function handleSearchParam(
 }
 
 const site_style_data = {
-    "/": {
-        "background-color": "#000",
-        "color": "#fff"
-    },
+    
     "/merch/": {
         "background-color": "#a02",
         "color": "#fff"
@@ -30,12 +27,26 @@ const site_style_data = {
     "/e/": {
         "background-color": "#077",
         "color": "#fff"
-    }
+    },
+    "/page/": {
+        "background-color": "#a73",
+        "color": "#fff"
+    },
+    "/": {
+        "background-color": "#000",
+        "color": "#fff"
+    },
 }
 function animateTransition(direction = "") {
-    if (!direction) return;
-    console.log(Object.entries(site_style_data[direction]).map(v => v[0]+v[1]).join("; "))
-    document.body.querySelector('header').parentElement.style = "transition: all 500ms;" + Object.entries(site_style_data[direction]).map(v => v[0]+": "+v[1]).join("; ");
+    
+    if (direction.startsWith('http')) direction = direction.replace(/^(.+?)\/\//, "/");
+    if (/^(.+?)\./.test(direction)) direction = direction.replace(/^(.+?)\//, "/");
+    let dir = Object.keys(site_style_data).find(v => direction.startsWith(v));
+    console.log(direction)
+    console.log(Object.keys(site_style_data).filter(v => direction.startsWith(v)));
+    if (!dir) return;
+    
+    document.body.querySelector('header').parentElement.style = "transition: all 500ms;" + Object.entries(site_style_data[dir]).map(v => v[0]+": "+v[1]).join("; ");
     document.body.classList.add('changing');
     setTimeout(() => {
         location.href = direction;
