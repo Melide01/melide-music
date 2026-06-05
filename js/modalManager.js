@@ -41,10 +41,7 @@ function open_modal({
         "Un texte",
         "Puis un autre"
     ],
-    actions = [
-        { "text": "Action 1", "fn": () => { console.log('Activé 1') } },
-        { "text": "Action 2", "fn": () => { console.log('Activé 2') } }
-    ]
+    actions = []
 }) {
     modal = document.getElementById(modal) ?? modal;
     modal.querySelector('.header>h2').textContent = title;
@@ -75,3 +72,9 @@ function open_modal({
 }
 
 window.open_modal = open_modal;
+
+export function open_file_modal(node, modal) {
+    if (node.alt) { modal.title = node.alt; } else { modal.title = ""; };
+    if (node.src) { modal.content = [ `![img](${node.src})` ] }; 
+    modal.open();
+}

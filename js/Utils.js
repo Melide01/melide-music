@@ -1,6 +1,7 @@
 export function reveal_modal() {
-    const modal = document.getElementById('modal');
-    modal.classList.toggle('open');
+    // const modal = document.getElementById('modal');
+    image_modal_template.open()
+    // modal.classList.toggle('open');
 }
 
 export async function fetch_json(url = "") {

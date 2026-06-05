@@ -1,11 +1,36 @@
 export function setup_selection() {
-    for (const choice of selection_choice_name) {
+    for (const choice of Object.keys(selection_choice_data)) {
+        const data = selection_choice_data[choice];
+
         // Setup the search selection filters
-        if (!!!choice_map[choice[1]]) choice_map[choice[1]] = [];
-        choice_map[choice[1]].push(document.querySelector(`[name="${choice[0]}"]`))
-        choice_map["all"].push(document.querySelector(`[name="${choice[0]}"]`))
-    }
-}
+        if (!!!choice_map[data.from]) choice_map[data.from] = [];
+
+        // Push on selection filters
+        choice_map[data.from].push(document.querySelector(`[name="${choice}"]`));
+        choice_map["all"].push(document.querySelector(`[name="${choice}"]`));
+        
+        // Ref
+        const element = document.querySelector(`[name="${choice}"]`);
+        const input = element.querySelector('input[name="select_category_filter"]');
+        
+        // On element clicked
+        element.addEventListener('click', () => {
+            input.checked = true;
+            
+            if (data.section_name) {
+                var section_nodes = document.querySelectorAll(`[name="${data.section_name}"]`);
+                for (const c of current_open) c.classList.remove("open");
+                current_open = [];
+                for (const s of section_nodes) {
+                    current_open.push(s);
+                    s.classList.add("open");
+                }
+            }
+            data.onclick();
+        });
+    };
+};
+var current_open = [];
 
 export function toggle_selection(name = "all") {
     if (!choice_map[name]) return;

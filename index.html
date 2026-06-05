@@ -1,258 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Melide</title>
-    <link rel="stylesheet" href="main.css">
-    <script defer type="module" src="main.js"></script>
+    <title>Home</title>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
 </head>
-
 <body>
-    <!-- MODAL -->
-    <main class="modal">
-        <dialog id="main_modal">
-            <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
-            <div class="hor align header">
-                <h2>Title</h2>
-            </div>
-            <div class="ver body align"></div>
-            <div class="hor footer"></div>
-        </dialog>
-    </main>
+    <style>
+        body { background-color: #222; color: #acb;}
+        a[href] { color: #acb; text-decoration: none; }
+         a[href]:hover { color: #acbd; text-decoration: underline; }
+        header, main, footer { margin: 2em; }
+        main { display: none; }
+        h1 { margin: 0; }
+        table thead { visibility: hidden; }
+        table td img { height: 2.5em; aspect-ratio: 1; }
+        ul li { cursor: pointer; }
+        ul li:hover { background-color: #acb1; }
+    </style>
 
-    <!-- CONTENT -->
-    <div>
-        <header>
-            <img alt="logo" src="/assets/mld_logo_all_white.png">
-            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">Melide</h2>
-            <div class="hor">
-                <!-- <a class="except" title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
-                    <p>Merch</p>
-                </a> -->
-                <a><i class="fa-solid fa-paperclip"></i>
-                    <p>Contact</p>
-                </a>
-            </div>
-        </header>
-    </div>
-
-
-    <main><img src="/assets/bg_artistic_underwater_contrasted.webp" style="height: 5em;"></main>
-    
-    <main class="open section conditional" style="--bg: #0fd; --color: #079;"><label>Musique</label></main>
-    
-    <main class=" header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
-        <img src="/assets/placeholder.webp">
-        <div class="ver align metadata">
-            <h2>YOUNG AND FREE</h2>
-            <h5>Melide</h5>
-        </div>
-        <div class="ver lyrics">
-            <ul>
-                <li>But you're always crying</li>
-                <li class="active">In my eyes you're flying</li>
-                <li>Waiting for the time</li>
-                <li>Waiting for the time</li>
-            </ul>
-        </div>
-    </main>
-
-    <main class="ver padding selection">
-        <button onclick="return_home()"><i class="fa-solid fa-arrow-left"></i></button>
-
-        <div class="hor align selection_header">
-            <label>Œuvre<input name="type" value="piece" type="radio" onclick="toggle_selection(this.value)"></label>
-            <span>/</span>
-            <!-- <label><a href="#" class="question" onclick="canon_modal_info.open()">?</a>Canon<input name="type" value="canon" type="radio" onclick="toggle_selection(this.value)"></label>
-            <span>/</span> -->
-            <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
-            <label style="flex: 1; justify-content: end;">Resources<input name="type" value="other" type="radio" onclick="toggle_selection(this.value)"></label>
-        </div>
-        <div class="ver">
-            <div class="hor padding choice align" name="selection_music">
-                <i class="fa-solid fa-music"></i><a href="#">Musiques</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_artwork">
-                <i class="fa-solid fa-image"></i><a href="#">Artworks</a>
-            </div>
-            <div class="hor padding choice align" name="selection_application">
-                <i class="fa-solid fa-gamepad"></i><a href="#">Application</a>
-            </div>
-            <div class="hor padding choice align" name="selection_book">
-                <i class="fa-solid fa-book"></i><a href="#">Livres</a>
-            </div>
-
-            <!--
-            <div class="disable hor padding choice align" name="selection_indeterminate">
-                <i class="fa-solid fa-file"></i><a href="#">Indéterminé</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_ongoing">
-                <i class="fa-solid fa-clock"></i><a href="#">En cours</a>
-            </div>
-            <div class="disable hor padding choice align" name="selection_finished">
-                <i class="fa-solid fa-check"></i><a href="#">Fini</a>
-            </div>
-            -->
-
-            <div class="hor padding choice align" name="selection_font">
-                <i class="fa-solid fa-font"></i><a href="#">Polices</a>
-            </div>
-            <div class="hor padding choice align" name="selection_beat">
-                <i class="fa-solid fa-record-vinyl"></i><a href="#">Instrumentales</a>
-            </div>
-            <div class="hor padding choice align" name="selection_pack">
-                <i class="fa-solid fa-folder"></i><a href="#">Packs</a>
-            </div>
-        </div>
-    </main>
-
-    <main id="search_content" class="open conditional">
-        
-        <div id="search_panel" class="hor nogap search_panel">
-            <input type="search" placeholder="Rechercher...">
-            <input type="button" value="Rechercher">
-            <select>
-                <option>Récents</option>
-                <option>Vieux</option>
-            </select>
+    <header>
+        <div style="display: flex; flex-direction: row;">
+            <img src="assets/signed melide.png" style="width: 2em;">
+            <h1 style="color: #fff;">elide</h1>
         </div>
         
-        <div id="loading_block" class="load"></div>
+        
+        <span>Souviens toi, je t'en supplie.</span>
+        <ul class="nav">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Musique</a></li>
+            <li><a href="#">@Contact</a></li>
+        </ul>
+    </header>
+    
+    <main id="music_section">
+        <table id="music_repertoire">
+            <thead>
+                <tr><th></th><th>Artistes</th><th>Titre</th><th>Liens</th></tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
 
-        <div class="ver nogap" id="project_container"></div>
-
-        <!-- IMAGE GRID
-        <div class="auto_grid selectable">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/bg_artistic_underwater.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-            <img src="/assets/placeholder.webp" onclick="reveal_modal()">
-        </div>
+        <!--
+        <button><</button>
+        <button>></button>
         -->
     </main>
 
-    <main id="page_content" class="ver padding page">
-        
-        <div class="track_display">
-            <img src="assets/placeholder.webp">
-            <div class="hor">
-                <div class="ver align">
-                    <h1>Title</h1>
-                    <h3>Artists</h3>
-                    <span>Type</span>
-                </div>
-                <div class="hor align links">
-                    <a><i class="fa-brands fa-deezer"></i></a>
-                    <a><i class="fa-brands fa-spotify"></i></a>
-                    <a><i class="fa-brands fa-youtube"></i></a>
-                    <a><i class="fa-brands fa-soundcloud"></i></a>
-                    <a><i class="fa-solid fa-download"></i></a>
-                </div>
-            </div>
-        </div>
+    <main id="contact_section">
+        <ul style="list-style-type: none;">
+            <li>@le.melide</li>
+            <li>john.teuira@melide.music</li>
+        </ul>
+    </main>
+    
+    <footer>
+        <ul class="nav">
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Musique</a></li>
+            <li><a href="#">@Contact</a></li>
+        </ul>
+    </footer>
 
-        <div class="ver text_page">
-            <h1>Something</h1>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae deleniti odio laboriosam aliquam vitae dolores tempore commodi quos, ea veniam alias minus cumque quas molestias deserunt harum qui! Sit, ab!</p>
-        </div>
+    <script>
+        const sections = {
+            "music_section": document.getElementById('music_section'),
+            "contact_section": document.getElementById('contact_section')
+        }
 
-        <details open>
-            <summary>Meta</summary>
+        const nav_buttons = {
+            "Accueil": { "onclick": () => {open_home()} },
+            "Musique": { "onclick": () => {open_section(sections.music_section); load_fetch("tracks", tracks_fetch, tracks_cb);} },
+            "@Contact": { "onclick": () => {open_section(sections.contact_section)} },
+        };
+        const tracks_cb = (data) => {music_repertoire.querySelector('tbody').innerHTML = ""; for (const t of data.filter(v => v.trackState === "Released" && v.trackType === "Song").sort((a,b) => new Date(b.trackReleaseDate) - new Date(a.trackReleaseDate))) music_repertoire.querySelector('tbody').appendChild(create_track(t))};
 
-            <div class="hor align extend padding">
-                
-                <p class="except">123</p>
-                
-                <div class="hor progression">
-                        <span>A</span>
-                        <span>A</span>
-                        <span>A</span>
-                        <span>A</span>
-                        <span>A</span>
-                </div>
+        var tracks_fetch = "https://tracks.melide-s-account.workers.dev/tracks";
+        var img_url_fetch = "https://img.melide.music/";
 
-            </div>
+        const music_repertoire = document.getElementById('music_repertoire');
+
+        function load_fetch(key, f, cb) {
+            const get = sessionStorage.getItem(key);
+            if (get) {
+                cb(JSON.parse(get));
+            }
+            else {
+                fetch(f)
+                    .then(res => res.json())
+                    .then(data => {cb(data); sessionStorage.setItem(key, JSON.stringify(data))})
+                    .catch(err => console.error(err))
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            open_home();
+            for (const nav  of document.querySelectorAll(".nav")) {
+                nav.innerHTML = "";
+
+                for (const b of Object.keys(nav_buttons)) {
+                    const li = document.createElement('li');
+                    li.textContent = b;
+                    li.addEventListener('click', nav_buttons[b].onclick);
+                    nav.appendChild(li);
+                }
+            }
+        });
+
+        var current_section;
+        function open_section(section) {
+            if (current_section) current_section.style.display = "none";
+            current_section = section;
+            current_section.style.display = "block";
+            document.querySelector('footer').style.display = "block";
+        };
+
+        function open_home() {
+            var openned_main = document.querySelectorAll("main");
+            for (const m of openned_main) m.style.display = "none";
+            document.querySelector('footer').style.display = "none";
+        }
+
+        function create_track(track) {
+            const map = ["coverArt", "trackArtists", "trackName", ["youtubeLink", "spotifyLink", "soundCloudLink", "preSaveLink", "deezerLink"]]
+            const tr_element = document.createElement('tr');
             
-        </details>
+            const process_content = (parent, text) => {
+                
+                if (text && text.endsWith(".webp")) {
 
-        <details open>
-            <summary>Paroles</summary>
-            <ul>
-                <li>Paroles</li>
-                <li>Paroles</li>
-                <li>Paroles</li>
-                <li>Paroles</li>
-                <li>Paroles</li>
-            </ul>
-        </details>
+                    const img = document.createElement('img');
+                    img.src = img_url_fetch + text;
+                    parent.appendChild(img);
+                
+                } else if (text && text.startsWith("https://")) {
 
-        <div class="ver padding">
-            <h5>Voir aussi...</h5>
-            <div class="article_card">
-                <h3>Title</h3>
-                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
-            </div>
-            <div class="article_card">
-                <h3>Title</h3>
-                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
-            </div>
-            <div class="article_card">
-                <h3>Title</h3>
-                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
-            </div>
+                    const icon_map = {
+                        "open.spotify": "fa-brands fa-spotify",
+                        "soundcloud": "fa-brands fa-soundcloud"
+                    }
+                    
+                    const a = document.createElement('a');
+                    const i = document.createElement('i');
+                    for (const icon of Object.keys(icon_map)) if (text.startsWith("https://" + icon)) i.classList = icon_map[icon];
+                    a.appendChild(i);
+                    a.href = text;
+                    parent.appendChild(a);
+                
+                } else if (/^\d{4}-\d{2}-\d{2}/.test(text)) {
+
+                    const d = new Date(text);
+                    const parse_date = (date) => `${d.getDate()}/${String(d.getMonth()+1).padStart(2,0)}/${d.getFullYear()}`
+                    parent.textContent = parse_date(d);
+
+                } else { 
+                    
+                    parent.textContent = text;
+                
+                }
+            }
+
+            for (const m of map) {
+                const td_element = document.createElement('td');
+
+                if (typeof m === "object") {
+                    for (let t of m) {
+                        if (track[t]) process_content(td_element, track[t]);
+                    }
+                } else {
+                    if (track[m]) process_content(td_element, track[m]);
+                }
+                
+                tr_element.appendChild(td_element);
+            }
             
-        </div>
-
-    </main>
-
-    <main class="open hor align padding page_navigation conditional">
-        <div class="hor" id="page_index" >
-
-            <label>1 <input checked name="page" type="radio"></label>
-            <label>2 <input name="page" type="radio"></label>
-            <label>3 <input name="page" type="radio"></label>
-            <label>4 <input name="page" type="radio"></label>
-            <label>5 <input name="page" type="radio"></label>
-
-        </div>
-        <div class="hor nogap">
-            <input name="page_arrow" type="button" value="<" onclick="section_results(-1)">
-            <input name="page_arrow" type="button" value=">" onclick="section_results(1)">
-        </div>
-    </main>
-
-    <!--
-    <main id="container_3d" class="open container_3d">
-    </main>
-    -->
-
-    <div class="padding ver">
-        <footer class="hor align">
-            <img src="/assets/mld_logo_all_white.png" style="object-fit: contain; height: 3em; flex: 1;">
-            <div class="box_wrap">
-                <ul>
-                    <label>Pages</label>
-                    <li class="disable"><a href="#">Accueil</a></li>
-                    <li><a href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');">Merch</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="/e/" onclick="event.preventDefault(); animateTransition('/e/');">Portals</a></li>
-                </ul>
-                <ul>
-                    <label>Légales</label>
-                    <li><a href="/page/?page=politique-confidentialite.md" onclick="event.preventDefault(); animateTransition(this.href);">Politique sur la confidentialité des données</a></li>
-                    <li><a href="/page/?page=mentions-legales.md" onclick="event.preventDefault(); animateTransition(this.href);">Mentions légales</a></li>
-                    <li><a href="#">Charte IA</a></li>
-                </ul>
-            </div>
-        </footer>
-    </div>
-
+            return tr_element;
+        }
+    </script>
 </body>
-
 </html>

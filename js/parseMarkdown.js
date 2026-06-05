@@ -413,11 +413,10 @@ var markdown_rules = [
     {
         type: "blockline",
         reg: /^\!\[(.+)\]\((.+)\)/,
-        fn: (_, alt, src) => {
-            const img = document.createElement('img');
-            img.alt = alt;
-            img.src = src;
-            return img;
+        fn: (_, type, src) => {
+            const node = document.createElement(type);
+            node.src = src;
+            return node;
         }
     },
     {

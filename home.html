@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melide</title>
+    <link rel="stylesheet" href="main.css">
+    <script defer type="module" src="main.js"></script>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <style>
+        @media only screen and (max-width: 700px) {
+            #news_container { grid-template-columns: auto !important; font-size: large !important; }
+            #news_container .search_panel { font-size: large !important; }
+            
+            #news_container .category_container { flex-direction: row !important; }
+            #news_container .category_container details { display: none; }
+            #news_container .category_container > div > button { display: block !important; }
+            /* #news_container > .ver:first-of-type > *:not(.search_panel) { display: none; }*/
+            
+            #news_container .card { flex-direction: column !important; }
+            #news_container .card > img { width: 100%; max-height: 5em; }
+            #news_container .card > span { padding: calc(var(--padding)*2) !important; width: 100% !important; margin-top: var(--padding); }
+        }
+
+        body:has(#selection_filter > .ver > .grid input:checked) .home_page { display: none; }
+        body:has(#selection_filter > .ver > .grid input:checked) .hero { height: calc(var(--padding)*5); }
+        body:has(#selection_filter > .ver > .grid input:checked) .hero > .container { opacity: 0; }
+
+        #news_container .category_container { display: flex; flex-direction: column; gap: calc(var(--padding)/2); overflow-x: auto; }
+        
+        #news_container .category_container details summary { cursor: pointer; background-color: #eee7; color: #777; font-weight: bold; }
+        #news_container .category_container details ul { list-style-type: none; }
+        #news_container .category_container details ul>li { transition: padding 250ms, background-color 100ms; cursor: pointer; padding: calc(var(--padding)/2); border-radius: calc(var(--padding)/2); }
+        #news_container .category_container details ul>li:hover { background-color: #eee; padding-left: var(--padding); }
+        #news_container .category_container > div > button { all: unset; display: none; background-color: #eee; padding: var(--padding); cursor: pointer; color: #777; font-weight: bold; }
+
+        .home_page { flex-direction: row; flex-wrap: wrap; width: 100%; margin-bottom: calc(var(--padding)*3); gap: var(--padding); }
+        .home_page>.ver { flex: 1; margin-bottom: var(--padding); }
+        .home_page>.ver>img { flex: 1; }
+        .home_page>.ver>.ver { padding: calc(var(--padding)*1); gap: calc(var(--padding)*2); }
+        .home_page img { --height: 5em; height: var(--height); }
+        .home_page b { border-radius: calc(var(--padding)/3); padding: var(--padding) calc(var(--padding)/2); padding-bottom: calc(var(--padding)/2); background-color: #def; color: #247; line-height: .8em; font-size: 2em; font-weight: 100; font-family: monospace !important; }
+        .hero { transition: height 500ms; max-width: none; position: relative; width: 100%; height: 20em; color: #fff; }
+        .hero h1 { font-size: 5em; font-family: "Melide", serif; font-weight: 100; }
+        .hero>* { position: absolute; width: 100%; height: 100%; }
+        .hero>.container { transition: opacity 200ms; background: linear-gradient(to top, #222, #222a 30%, #2220 50%); }
+        .hero .info { max-width: var(--max-width); width: 100%; }
+
+        #search_content { max-width: none; background-color: #222; }
+        #search_content > #search_panel { max-width: var(--max-width); width: 100%; padding: var(--padding) calc(var(--padding)*3); }
+        #search_content > #search_panel input[type="search"] { background-color: #fff; }
+        
+        #news_container {
+            width: 100%;
+            overflow: hidden;
+            gap: var(--padding);
+            padding: var(--padding) calc(var(--padding)*3);
+            grid-template-columns: 30% 70%;
+        }
+        #news_container.open { display: grid; }
+        #news_container > .ver { padding: 0 var(--padding); }
+        #news_container .card {
+            all: unset;
+            text-wrap-mode: revert;
+            text-wrap-style: balance;
+            transition: background-color 500ms, color 100ms, padding 250ms;
+            cursor: pointer;
+            position: relative;
+            padding: var(--padding);
+            background-color: #eee;
+            border: 1px solid #ccc;
+            color: #222;
+            border-radius: var(--padding);
+            display: flex;
+            flex-direction: row;
+            overflow: hidden;
+            align-items: center;
+            gap: var(--padding);
+        }
+        #news_container .card>.ver { width: 100%; }
+        #news_container .card>.ver>span { width: 15em; overflow: hidden; text-overflow: ellipsis; }
+        #news_container .card:hover > span { padding: calc(var(--padding)*2); }
+        #news_container .card>span { transition: padding 300ms; overflow: hidden; width: 0; padding: 0; flex: 0; margin-left: calc(var(--padding)/2); background-color: #7772; height: 10em; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: calc(var(--padding)/2); }
+        #news_container img { aspect-ratio: unset; height: 100%; width: 7em; flex: 0; border-radius: calc(var(--padding)/2); }
+    </style>
+    <!-- MODAL -->
+    <main class="modal">
+        <dialog id="main_modal">
+            <i class="fa-solid fa-close" onclick="toggle_modal(this.parentElement)"></i>
+            <div class="hor align header">
+                <h2>Title</h2>
+            </div>
+            <div class="ver body align"></div>
+            <div class="hor footer"></div>
+        </dialog>
+    </main>
+
+    <!-- CONTENT -->
+    <div>
+        <header>
+            <img alt="logo" src="/assets/signed melide.png">
+            <h2 style="font-family: Melide; font-weight: 100; font-size: 2.6em; color: #fff; flex: 1;">elide</h2>
+            <div class="hor">
+                <!-- <a class="except" title="Merch" href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');"><i class="fa-solid fa-shop"></i>
+                    <p>Merch</p>
+                </a> -->
+                
+                <a><i class="fa-solid fa-music"></i><p>Musique</p></a>
+                <a class="except"><i class="fa-solid fa-record-vinyl"></i><p>Instrus</p></a>
+                <a class="except"><i class="fa-solid fa-folder"></i><p>Packs</p></a>
+                
+            </div>
+        </header>
+    </div>
+
+
+    <!-- <main><img src="/assets/bg_artistic_underwater_contrasted.webp" style="height: 5em;"></main> -->
+
+    <main class="open hero">
+        <img src="assets/NEW PDP.JPG">
+        <div class="container ver bottom center">
+            <div class="hor align info padding" style="color: var(--fg-color); margin-bottom: var(--padding);">
+                <span>signé</span>
+                <h1>Melide</h1>
+                
+            </div>
+        </div>
+    </main>
+
+    <main class="ver padding selection center" id="selection_filter">
+        <div class="ver">
+            <button onclick="return_home()"><i class="fa-solid fa-arrow-left"></i></button>
+    
+            <div class="hor align selection_header">
+                <label>Œuvre<input name="type" value="piece" type="radio" onclick="toggle_selection(this.value)"></label>
+                <span>/</span>
+                <label>Blog<input name="type" value="blog" type="radio" onclick="toggle_selection(this.value)"></label>
+                <span>/</span>
+                <label>Tout<input checked name="type" value="all" type="radio" onclick="toggle_selection(this.value)"></label>
+                <label style="flex: 1; justify-content: end;">Resources<input name="type" value="resources" type="radio" onclick="toggle_selection(this.value)"></label>
+            </div>
+            <div class="grid">
+                <div class="hor padding choice align" name="selection_article">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-file"></i><label href="#">Article</label>
+                </div>
+                <div class="hor padding choice align" name="selection_doc">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-file"></i><label href="#">Documentation</label>
+                </div>
+                <div class="hor padding choice align" name="selection_course">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-file"></i><label href="#">Cours</label>
+                </div>
+
+                <div class="hor padding choice align" name="selection_music">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-music"></i><label href="#">Musiques</label>
+                </div>
+                <div class="hor padding choice align" name="selection_artwork">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-image"></i><label href="#">Artworks</label>
+                </div>
+                <div class="disable hor padding choice align" name="selection_application">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-gamepad"></i><label href="#">Application</label>
+                </div>
+                <div class="disable hor padding choice align" name="selection_book">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-book"></i><label href="#">Livres</label>
+                </div>
+    
+                <div class="disable hor padding choice align" name="selection_font">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-font"></i><label  href="#">Polices</label>
+                </div>
+                <div class="disable hor padding choice align" name="selection_beat">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-record-vinyl"></i><label  href="#">Instrumentales</label>
+                </div>
+                <div class="disable hor padding choice align" name="selection_pack">
+                    <input type="radio" name="select_category_filter">
+                    <i class="fa-solid fa-folder"></i><label  href="#">Packs</label>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="search_content" class="open conditional ver center">
+        
+        <div id="search_panel" class="hor nogap search_panel">
+            <input type="search" placeholder="Rechercher...">
+            <input type="button" value="Rechercher">
+
+            <select>
+                <option>Récents</option>
+                <option>Vieux</option>
+            </select>
+
+        </div>
+        
+        <div id="loading_block"></div>
+
+    </main>
+    
+    <main class="open home_page padding">
+        <div class="ver" style="background-color: #f5fafa; outline: 2px solid #eee">
+            <img style="--height: 12em" src="assets/NEW PDP.JPG">
+            <div class="ver">
+                <b>Auteur, Compositeur, Interprète...+</b>
+                <p>La réalité dans sa douceur.</p>
+                <p>C'est ce qui m'anime au quotidien, chaques jours. Parler de ce que je voit avec douceur et vérité.</p>
+            </div>
+            
+        </div>
+
+        <div class="ver">
+            <img src="assets/final_pdp.png">
+            <div class="ver">
+                <b>Pop Alternatif et Électrique</b>
+                <p>C'est la façon dont j'exprime mes mots, c'est la forme qui me convient.</p>
+                <p>Je me permet de mêler les genres entre eux afin de créer un univers varié.</p>
+            </div>
+            
+        </div>
+
+        <div class="ver">
+            <img src="assets/BACK.png">
+            <div class="ver">
+                <b>Musique et Conte intéractif</b>
+                <p>J'aime raconter mes histoires à travers un média où l'on peut intéragir. J'ai la chance de pouvoir produire sur plusieurs média, alors il m'est évident de devoir donner le meilleur de moi à travers ce que je propose.</p>
+            </div>
+            
+        </div>
+    </main>
+
+    <main name="blog" class="section conditional" style="--bg: #eee; --color: #222;"><label>Blog</label></main>
+    <main name="blog" class="conditional" id="news_container">
+
+        <div class="ver">
+            <div class="hor nogap search_panel" style="font-size: small; border-bottom: .3em solid #eee;">
+                <input type="search" placeholder="Rechercher..." style="padding: 0;">
+                <input type="button" value="Rechercher">
+            </div>
+
+            <div class="category_container">
+                <div>
+                    <button>Title</button>
+                    <details>
+                        <summary>Title</summary>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                        </ul>
+                    </details>
+                </div>
+                <div>
+                    <button>Title</button>
+                    <details>
+                        <summary>Title</summary>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                        </ul>
+                    </details>
+                </div>
+                <div>
+                    <button>Title</button>
+                    <details>
+                        <summary>Title</summary>
+                        <ul>
+                            <li>Item 1</li>
+                            <li>Item 2</li>
+                            <li>Item 3</li>
+                        </ul>
+                    </details>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="ver">
+
+            <div class="card">
+                <img src="assets/placeholder.webp">
+                <div class="ver">
+                    <div class="hor right align nopadding" style="height: min-content;">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h2>Title</h2>
+                    <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi, saepe! Magnam unde et veritatis a sed voluptatum tenetur dignissimos quis qui rem quod, ratione repudiandae voluptas minus similique laudantium illum?</span>
+                </div>
+                <span>></span>
+            </div>
+            
+            
+        </div>
+
+        
+    </main>
+
+    <main name="music" class="section conditional" style="--bg: #0fd; --color: #079;"><label>Musique</label></main>
+    
+    <main name="music" class="header card fancy_gradient hor conditional" style="--color: #fff; --outline: #aaa5; --bg-1: #0a4; --bg-2: #0da; --bg-3: #0da; --bg-4: #000; --duration: 25s">
+        <img src="/assets/placeholder.webp">
+        <div class="ver align metadata">
+            <h2>YOUNG AND FREE</h2>
+            <h5>Melide</h5>
+        </div>
+        <div class="ver lyrics">
+            <ul>
+                <li>But you're always crying</li>
+                <li class="active">In my eyes you're flying</li>
+                <li>Waiting for the time</li>
+                <li>Waiting for the time</li>
+            </ul>
+        </div>
+    </main>
+    
+    <main name="music" class="ver page"><div class="ver nogap" id="project_container"></div></main>
+    
+    <main name="artwork" class="section conditional" style="--bg: #f45; --color: #725;"><label>Artwork</label></main>
+    <main name="artwork" class="conditional padding">
+        <div class="auto_grid selectable">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/bg_artistic_underwater.webp"  onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+            <img loading="lazy" src="/assets/placeholder.webp"             onclick="open_file_modal(this, image_modal_template)">
+        </div>
+    </main>
+
+    <main id="page_content" class="ver padding page">
+        
+        <div class="track_display">
+            <img src="assets/placeholder.webp">
+            <div class="hor">
+                <div class="ver align">
+                    <h1>Title</h1>
+                    <h3>Artists</h3>
+                    <span>Type</span>
+                </div>
+                <div class="hor align links">
+                    <a><i class="fa-brands fa-deezer"></i></a>
+                    <a><i class="fa-brands fa-spotify"></i></a>
+                    <a><i class="fa-brands fa-youtube"></i></a>
+                    <a><i class="fa-brands fa-soundcloud"></i></a>
+                    <a><i class="fa-solid fa-download"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ver text_page">
+            <h1>Something</h1>
+            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repudiandae deleniti odio laboriosam aliquam vitae dolores tempore commodi quos, ea veniam alias minus cumque quas molestias deserunt harum qui! Sit, ab!</p>
+        </div>
+
+        <details open>
+            <summary>Meta</summary>
+
+            <div class="hor align extend padding">
+                
+                <p class="except">123</p>
+                
+                <div class="hor progression">
+                        <span>A</span>
+                        <span>A</span>
+                        <span>A</span>
+                        <span>A</span>
+                        <span>A</span>
+                </div>
+
+            </div>
+            
+        </details>
+
+        <details open>
+            <summary>Paroles</summary>
+            <ul>
+                <li>Paroles</li>
+                <li>Paroles</li>
+                <li>Paroles</li>
+                <li>Paroles</li>
+                <li>Paroles</li>
+            </ul>
+        </details>
+
+        <div class="ver padding">
+            <h5>Voir aussi...</h5>
+            <div class="article_card">
+                <h3>Title</h3>
+                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
+            </div>
+            <div class="article_card">
+                <h3>Title</h3>
+                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
+            </div>
+            <div class="article_card">
+                <h3>Title</h3>
+                <span>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Qui laborum consectetur voluptas nesciunt libero non cumque, necessitatibus harum cum labore consequatur dolorem, rem ducimus magni delectus voluptate sed officia adipisci?</span>
+            </div>
+            
+        </div>
+
+    </main>
+
+    <main class="open hor align padding page_navigation conditional">
+        <div class="hor" id="page_index" >
+
+            <label>1 <input checked name="page" type="radio"></label>
+            <label>2 <input name="page" type="radio"></label>
+            <label>3 <input name="page" type="radio"></label>
+            <label>4 <input name="page" type="radio"></label>
+            <label>5 <input name="page" type="radio"></label>
+
+        </div>
+        <div class="hor nogap">
+            <input name="page_arrow" type="button" value="<" onclick="section_results(-1)">
+            <input name="page_arrow" type="button" value=">" onclick="section_results(1)">
+        </div>
+    </main>
+
+    <!--
+    <main id="container_3d" class="open container_3d">
+    </main>
+    -->
+
+    <div class="padding ver">
+        <footer class="hor align">
+            <img src="/assets/mld_logo_all_white.png" style="object-fit: contain; height: 3em; flex: 1;">
+            <div class="box_wrap">
+                <ul>
+                    <label>Pages</label>
+                    <li class="disable"><a href="#">Accueil</a></li>
+                    <li><a href="/merch/" onclick="event.preventDefault(); animateTransition('/merch/');">Merch</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="/e/" onclick="event.preventDefault(); animateTransition('/e/');">Portals</a></li>
+                </ul>
+                <ul>
+                    <label>Légales</label>
+                    <li><a href="/page/?page=politique-confidentialite.md" onclick="event.preventDefault(); animateTransition(this.href);">Politique sur la confidentialité des données</a></li>
+                    <li><a href="/page/?page=mentions-legales.md" onclick="event.preventDefault(); animateTransition(this.href);">Mentions légales</a></li>
+                    <li><a href="#">Charte IA</a></li>
+                </ul>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>
