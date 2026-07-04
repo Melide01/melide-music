@@ -145,12 +145,12 @@ table td img {
     list-style-type: none;
 }
 
-li.separator {
+li.separator, .separator {
     height: .5em;
     position: relative;
 }
 
-li.separator::after {
+li.separator::after, .separator::after {
     content: "";
     position: absolute;
     height: 1px;
@@ -268,4 +268,50 @@ img.autocolor {
 
 img.autocolor:hover {
     filter: saturate(1) contrast(1) sepia(0) hue-rotate(0deg) brightness(1)
+}
+
+.book:hover {
+    background-color: #111;
+    color: #fff;
+    outline: 2px solid var(--body-bg);
+    cursor: pointer;
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    min-width: 9em;
+    max-width: 11.5em;
+    width: 42%;
+    /* height: 20em; */
+    background-color: #0a0a11;
+    padding: calc(var(--margin) / 4);
+    outline: 2px solid var(--bg);
+    transition: background-color 500ms, outline 100ms, color 100ms;
+}
+.book > h2,
+.book > span {
+    text-wrap: nowrap;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.book > h2 {
+    margin: 0;
+    margin-top: calc(var(--margin) / 4);
+}
+.book > span {
+    margin-bottom: calc(var(--margin) / 4);
+}
+
+.book > img {
+    aspect-ratio: 3/4;
+    width: 100%;
+    object-fit: cover;
+}
+
+#book_section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--margin) / 4);
 }
