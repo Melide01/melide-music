@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Antic+Didone&family=Italiana&display=swap');
+
+@font-face {
+    font-family: AuNomDuDesespoir;
+    src: url(assets/au-nom-du-desespoir.ttf);
+}
+
+@font-face {
+    font-family: MinimalMono;
+    src: url(assets/minimal-mono.ttf);
+}
+
+@font-face {
+    font-family: SeptCentSoixanteDix;
+    src: url(assets/setp-cent-soixante-dix-mono.ttf);
+}
+
+@font-face {
+    font-family: Fukdat;
+    src: url(assets/fuckdat.ttf);
+}
+
+@font-face {
+    font-family: Melide;
+    src: url(assets/MelideSerif.ttf);
+}
+
+
+:root {
+    --body-bg: #687;
+    --bg: #0a0a11;
+    --fg: #8acaba;
+    --bg-2: #2b6ec5;
+    --fg-2: #6deeff;
+    --margin: 2em;
+    --font: "Antic Didone", sans-serif;
+    --font-size: 18px;
+    --max-width: 700px;
+}
+
+.despair-regular {
+  font-family: AuNomDuDesespoir, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 270% !important;
+  line-height: 1em;
+}
+
+.minimal-mono {
+  font-family: MinimalMono, monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 120% !important;
+}
+
+.septcent-regular {
+  font-family: SeptCentSoixanteDix, serif;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.8em;
+}
+
+.fukdat-regular {
+  font-family: Fukdat, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 250% !important;
+}
+
+.melide-regular {
+  font-family: Melide, serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 250% !important;
+}
+
+body {
+    font-family: var(--font);
+    font-size: var(--font-size);
+    background-color: var(--body-bg);
+    color: var(--fg);
+    background-image: url(assets/oop_cover\ -\ Copie.png);
+    background-position: center center;
+    background-size: 100% auto;
+    background-attachment: fixed;
+    background-blend-mode: multiply;
+}
+
+a[href] {
+    color: var(--fg);
+    text-decoration: none;
+}
+
+a[href]:hover {
+    color: var(--fg);
+    text-decoration: underline;
+}
+
+header,
+main,
+footer {
+    max-width: var(--max-width);
+    margin: auto;
+    margin-bottom: calc(var(--margin) / 4);
+    background-color: #111a;
+    backdrop-filter: blur(20px);
+    padding: var(--margin);
+    border-radius: calc(var(--margin) / 4);
+}
+
+#music_section, #story_section {
+    padding: calc(var(--margin) / 2);
+}
+
+main:not(.open) {
+    display: none;
+}
+
+h1 {
+    margin: 0;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table thead {
+    visibility: hidden;
+}
+
+table td:first-of-type {
+    height: 2em;
+    aspect-ratio: 1;
+}
+
+table td {
+    padding-left: calc(var(--margin) / 7); padding-right: calc(var(--margin) / 7);
+}
+
+table td img {
+    height: 100%;
+}
+
+.nav {
+    list-style-type: none;
+}
+
+li.separator {
+    height: .5em;
+    position: relative;
+}
+
+li.separator::after {
+    content: "";
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    background-color: var(--body-bg);
+    top: 50%;
+    opacity: .2;
+}
+
+ul li {
+    font-weight: bold;
+}
+
+table tr:hover,
+ul li:hover {
+    cursor: pointer;
+    background-color: #acb1;
+}
+
+table tr:active,
+ul li:active {
+    background-color: #222;
+    outline: solid 2px var(--fg);
+}
+
+header .logo {
+    display: flex;
+    flex-direction: row;
+    filter: contrast(0) sepia(1) saturate(1.5) hue-rotate(110deg);
+}
+
+.mood_grid {
+    display: flex; flex-wrap: wrap;
+    flex-direction: row;
+    gap: calc(var(--margin) / 8);
+}
+
+.mood_grid > img {
+    border-radius: calc(var(--margin) / 8);
+    flex: 1;
+    object-fit: cover;
+    max-width: 100%;
+    height: 10em;
+}
+
+.auto_horizontal > * {
+    flex: 1;
+}
+
+.auto_horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: calc(var(--margin) / 4);
+}
+
+.gradient {
+    background-color: #fff;
+    padding: calc(var(--margin) / 2);
+}
+
+.gradient.bg {
+    background: linear-gradient(to right, var(--bg), var(--body-bg));
+}
+
+.gradient.fg {
+    background: linear-gradient(to right, var(--fg), var(--fg));
+}
+
+.gradient.sg {
+    background: linear-gradient(to right, var(--bg-2), var(--fg-2));
+}
+
+.fontdisplay {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: calc(var(--margin) / 4);
+    overflow: hidden;
+} 
+
+.fontdisplay > label {
+    width: min-content;
+    font-size: 2em;
+    color: var(--fg-2);
+    flex: 1;
+    text-align: center;
+    text-wrap: nowrap;
+}
+
+.button, button {
+    all: unset;
+    font-family: SeptCentSoixanteDix;
+    font-size: 1.2em;
+    line-height: 2.8em;
+    background-color: #0a0a11;
+    padding: .2em calc(var(--margin) / 2) 0 calc(var(--margin) / 2);
+}
+
+.button:hover, button:hover {
+    background-color: #0a0a11aa;
+    cursor: pointer;
+}
+
+.button:active, button:active {
+    background-color: #0a0a11;
+    color: var(--body-bg);
+    outline: 2px solid var(--body-bg);
+}
+
+img.autocolor {
+    filter: saturate(0) contrast(.9) sepia(1) hue-rotate(70deg) brightness(.7);
+    -webkit-transition : -webkit-filter 500ms linear;
+    translate: filter 700ms;
+}
+
+img.autocolor:hover {
+    filter: saturate(1) contrast(1) sepia(0) hue-rotate(0deg) brightness(1)
+}

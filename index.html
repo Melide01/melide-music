@@ -5,35 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <script defer type="module" src="script.js"></script>
 </head>
 <body>
-    <style>
-        body { background-color: #222; color: #acb;}
-        a[href] { color: #acb; text-decoration: none; }
-         a[href]:hover { color: #acbd; text-decoration: underline; }
-        header, main, footer { margin: 2em; }
-        main { display: none; }
-        h1 { margin: 0; }
-        table thead { visibility: hidden; }
-        table td img { height: 2.5em; aspect-ratio: 1; }
-        ul li { cursor: pointer; }
-        ul li:hover { background-color: #acb1; }
-    </style>
-
     <header>
-        <div style="display: flex; flex-direction: row;">
+        <div class="logo">
             <img src="assets/signed melide.png" style="width: 2em;">
             <h1 style="color: #fff;">elide</h1>
         </div>
         
+        <span>Tu t'en souviendras <3 </span>
         
-        <span>Souviens toi, je t'en supplie.</span>
-        <ul class="nav">
-            <li><a href="#">Accueil</a></li>
-            <li><a href="#">Musique</a></li>
-            <li><a href="#">@Contact</a></li>
-        </ul>
+        <ul class="nav"></ul>
     </header>
+
+    <main id="story_section">
+        <img src="assets/pdp_black.jpg" class="autocolor" style="width: 70%; max-height: 15em; object-fit: cover; margin-left: 15%;">
+        <h1 class="melide-regular" style="text-align: start;">"Melide... c'est qui ?'"</h1>
+        <br>
+        <span>C'est un artiste de Tahiti inspiré par la nostalgie des anciennes technologie. Il aime l'ordre et le chaos, la nature lui paraît absolument parfait sous tous ses angles.</span>
+        <br><br>
+
+        <img src="assets/IMG_20260704_010421_869 copy.jpg" class="autocolor" style="width: 50%; max-height: 15em; object-fit: cover;">
+        <h1 class="septcent-regular" style="text-align: end;">"C'est pour qui'"</h1>
+        <br>
+        <span class="septcent-regular">Si vous aimez les vieilles références mélangés aux nouvelles, les chansons produite maladroitement dans un mélange de si et de ça.</span>
+        <br><br>
+
+        <img src="assets/backroom.png" class="autocolor" style="width: 100%; max-height: 10em; object-fit: cover;">
+        <h1 class="fukdat-regular" style="text-align: center;">"Souviens toi, je t'en supplie."</h1>
+        <br>
+        <span class="fukdat-regular">Ces mots sont gravés dans ma mémoire, comme si quelqu'un m'appelait et me demander de me souvenir d'elle. Je la revoie dans mes rêves, dans mes pensées, dans mes souvenirs sans savoir qui elle est ni d'où elle vient.</span>
+        <br><br><br>
+        <span class="fukdat-regular">Je la cherche et un jour peut-être je la trouverai. En attendant je fais des musiques pour l'appeler, comme elle m'appelle de là où elle est.</span>
+    </main>
     
     <main id="music_section">
         <table id="music_repertoire">
@@ -52,133 +58,14 @@
 
     <main id="contact_section">
         <ul style="list-style-type: none;">
-            <li>@le.melide</li>
-            <li>john.teuira@melide.music</li>
+            <li>ig : @le.melide</li>
+            <li>mail : john.teuira@melide.music</li>
+            <li><a href="/moodboard/">Voir le Moodboard</a></li>
         </ul>
     </main>
     
     <footer>
-        <ul class="nav">
-            <li><a href="#">Accueil</a></li>
-            <li><a href="#">Musique</a></li>
-            <li><a href="#">@Contact</a></li>
-        </ul>
+        <ul class="nav"></ul>
     </footer>
-
-    <script>
-        const sections = {
-            "music_section": document.getElementById('music_section'),
-            "contact_section": document.getElementById('contact_section')
-        }
-
-        const nav_buttons = {
-            "Accueil": { "onclick": () => {open_home()} },
-            "Musique": { "onclick": () => {open_section(sections.music_section); load_fetch("tracks", tracks_fetch, tracks_cb);} },
-            "@Contact": { "onclick": () => {open_section(sections.contact_section)} },
-        };
-        const tracks_cb = (data) => {music_repertoire.querySelector('tbody').innerHTML = ""; for (const t of data.filter(v => v.trackState === "Released" && v.trackType === "Song").sort((a,b) => new Date(b.trackReleaseDate) - new Date(a.trackReleaseDate))) music_repertoire.querySelector('tbody').appendChild(create_track(t))};
-
-        var tracks_fetch = "https://tracks.melide-s-account.workers.dev/tracks";
-        var img_url_fetch = "https://img.melide.music/";
-
-        const music_repertoire = document.getElementById('music_repertoire');
-
-        function load_fetch(key, f, cb) {
-            const get = sessionStorage.getItem(key);
-            if (get) {
-                cb(JSON.parse(get));
-            }
-            else {
-                fetch(f)
-                    .then(res => res.json())
-                    .then(data => {cb(data); sessionStorage.setItem(key, JSON.stringify(data))})
-                    .catch(err => console.error(err))
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            open_home();
-            for (const nav  of document.querySelectorAll(".nav")) {
-                nav.innerHTML = "";
-
-                for (const b of Object.keys(nav_buttons)) {
-                    const li = document.createElement('li');
-                    li.textContent = b;
-                    li.addEventListener('click', nav_buttons[b].onclick);
-                    nav.appendChild(li);
-                }
-            }
-        });
-
-        var current_section;
-        function open_section(section) {
-            if (current_section) current_section.style.display = "none";
-            current_section = section;
-            current_section.style.display = "block";
-            document.querySelector('footer').style.display = "block";
-        };
-
-        function open_home() {
-            var openned_main = document.querySelectorAll("main");
-            for (const m of openned_main) m.style.display = "none";
-            document.querySelector('footer').style.display = "none";
-        }
-
-        function create_track(track) {
-            const map = ["coverArt", "trackArtists", "trackName", ["youtubeLink", "spotifyLink", "soundCloudLink", "preSaveLink", "deezerLink"]]
-            const tr_element = document.createElement('tr');
-            
-            const process_content = (parent, text) => {
-                
-                if (text && text.endsWith(".webp")) {
-
-                    const img = document.createElement('img');
-                    img.src = img_url_fetch + text;
-                    parent.appendChild(img);
-                
-                } else if (text && text.startsWith("https://")) {
-
-                    const icon_map = {
-                        "open.spotify": "fa-brands fa-spotify",
-                        "soundcloud": "fa-brands fa-soundcloud"
-                    }
-                    
-                    const a = document.createElement('a');
-                    const i = document.createElement('i');
-                    for (const icon of Object.keys(icon_map)) if (text.startsWith("https://" + icon)) i.classList = icon_map[icon];
-                    a.appendChild(i);
-                    a.href = text;
-                    parent.appendChild(a);
-                
-                } else if (/^\d{4}-\d{2}-\d{2}/.test(text)) {
-
-                    const d = new Date(text);
-                    const parse_date = (date) => `${d.getDate()}/${String(d.getMonth()+1).padStart(2,0)}/${d.getFullYear()}`
-                    parent.textContent = parse_date(d);
-
-                } else { 
-                    
-                    parent.textContent = text;
-                
-                }
-            }
-
-            for (const m of map) {
-                const td_element = document.createElement('td');
-
-                if (typeof m === "object") {
-                    for (let t of m) {
-                        if (track[t]) process_content(td_element, track[t]);
-                    }
-                } else {
-                    if (track[m]) process_content(td_element, track[m]);
-                }
-                
-                tr_element.appendChild(td_element);
-            }
-            
-            return tr_element;
-        }
-    </script>
 </body>
 </html>
