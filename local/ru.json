@@ -1,0 +1,24 @@
+{
+  "TITLE": {
+    "MELIDE": "MELIDE",
+    "TU_TEN_SOUVIENDRAS": "Ты это запомнишь <3"
+  },
+  "MENU": {
+    "BACK": "Назад",
+    "CONTINUE": "Продолжить",
+    "ACCUEIL": "Главная",
+    "MUSIQUE": "Музыка",
+    "MERCH": "Мерч",
+    "HISTOIRES": "Истории",
+    "HISTOIRE": "История",
+    "CONTACT": "Контакты",
+    "LANGUE": "Язык"
+  },
+  "CONTACT": {
+    "SEE_MOODBOARD": "Посмотреть мудборд"
+  },
+  "ERROR": {
+    "WORKING_ON_IT": "Эта страница находится в разработке ⚙️",
+    "GO_BACK": "Назад"
+  }
+}

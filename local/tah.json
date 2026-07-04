@@ -1,0 +1,24 @@
+{
+  "TITLE": {
+    "MELIDE": "MELIDE",
+    "TU_TEN_SOUVIENDRAS": "E ha'amana'o noa oe <3"
+  },
+  "MENU": {
+    "BACK": "Ho'i",
+    "CONTINUE": "Tamau",
+    "ACCUEIL": "Fa'aea'a",
+    "MUSIQUE": "Mūtē",
+    "MERCH": "Merch",
+    "HISTOIRES": "Mau 'ā'amu",
+    "HISTOIRE": "'Ā'amu",
+    "CONTACT": "Fa'a'itera'a",
+    "LANGUE": "Reo"
+  },
+  "CONTACT": {
+    "SEE_MOODBOARD": "Hi'o i te Moodboard"
+  },
+  "ERROR": {
+    "WORKING_ON_IT": "Te fa'aineinehia nei teie 'api ⚙️",
+    "GO_BACK": "Ho'i"
+  }
+}

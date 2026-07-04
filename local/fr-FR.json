@@ -1,0 +1,24 @@
+{
+    "TITLE": {
+        "MELIDE": "MELIDE",
+        "TU_TEN_SOUVIENDRAS": "Tu t'en souviendras <3"
+    },
+    "MENU": {
+        "BACK": "Retour",
+        "CONTINUE": "Continuer",
+        "ACCUEIL": "Accueil",
+        "MUSIQUE": "Musique",
+        "MERCH": "Merch",
+        "HISTOIRES": "Histoires",
+        "HISTOIRE": "Histoire",
+        "CONTACT": "Contact",
+        "LANGUE": "Langue"
+    },
+    "CONTACT": {
+        "SEE_MOODBOARD": "Voir le Moodboard"
+    },
+    "ERROR": {
+        "WORKING_ON_IT": "Cette page est en construction ⚙️",
+        "GO_BACK": "Revenir en arrière"
+    }
+}

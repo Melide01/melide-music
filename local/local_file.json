@@ -1,0 +1,100 @@
+[
+  {
+    "code": "fr-FR",
+    "title": "Français",
+    "local_title": {
+      "fr-FR": "Français",
+      "en-EN": "French",
+      "es-ES": "Francés",
+      "ja": "フランス語",
+      "zh-CN": "法语",
+      "ru": "Французский",
+      "TAH": "Reo farani"
+    },
+    "file": "fr-FR.json"
+  },
+  {
+    "code": "en-EN",
+    "title": "English",
+    "local_title": {
+      "fr-FR": "Anglais",
+      "en-EN": "English",
+      "es-ES": "Inglés",
+      "ja": "英語",
+      "zh-CN": "英语",
+      "ru": "Английский",
+      "TAH": "Reo peretāne"
+    },
+    "file": "en-EN.json"
+  },
+  {
+    "code": "es-ES",
+    "title": "Español",
+    "local_title": {
+      "fr-FR": "Espagnol",
+      "en-EN": "Spanish",
+      "es-ES": "Español",
+      "ja": "スペイン語",
+      "zh-CN": "西班牙语",
+      "ru": "Испанский",
+      "TAH": "Reo paniora"
+    },
+    "file": "es-ES.json"
+  },
+  {
+    "code": "ja",
+    "title": "日本語",
+    "local_title": {
+      "fr-FR": "Japonais",
+      "en-EN": "Japanese",
+      "es-ES": "Japonés",
+      "ja": "日本語",
+      "zh-CN": "日语",
+      "ru": "Японский",
+      "TAH": "Reo Tapone"
+    },
+    "file": "ja.json"
+  },
+  {
+    "code": "zh-CN",
+    "title": "简体中文",
+    "local_title": {
+      "fr-FR": "Chinois (simplifié)",
+      "en-EN": "Chinese (Simplified)",
+      "es-ES": "Chino (simplificado)",
+      "ja": "中国語（簡体字）",
+      "zh-CN": "简体中文",
+      "ru": "Китайский (упрощённый)",
+      "TAH": "Reo Tinito"
+    },
+    "file": "zh-CN.json"
+  },
+  {
+    "code": "ru",
+    "title": "Русский",
+    "local_title": {
+      "fr-FR": "Russe",
+      "en-EN": "Russian",
+      "es-ES": "Ruso",
+      "ja": "ロシア語",
+      "zh-CN": "俄语",
+      "ru": "Русский",
+      "TAH": "Reo Rūsia"
+    },
+    "file": "ru.json"
+  },
+  {
+    "code": "TAH",
+    "title": "Reo Tahiti",
+    "local_title": {
+      "fr-FR": "Tahitien",
+      "en-EN": "Tahitian",
+      "es-ES": "Tahitiano",
+      "ja": "タヒチ語",
+      "zh-CN": "塔希提语",
+      "ru": "Таитянский",
+      "TAH": "Reo Tahiti"
+    },
+    "file": "tah.json"
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "TITLE": {
+    "MELIDE": "MELIDE",
+    "TU_TEN_SOUVIENDRAS": "你会记住的 <3"
+  },
+  "MENU": {
+    "BACK": "返回",
+    "CONTINUE": "继续",
+    "ACCUEIL": "首页",
+    "MUSIQUE": "音乐",
+    "MERCH": "周边",
+    "HISTOIRES": "故事",
+    "HISTOIRE": "故事",
+    "CONTACT": "联系",
+    "LANGUE": "语言"
+  },
+  "CONTACT": {
+    "SEE_MOODBOARD": "查看灵感板"
+  },
+  "ERROR": {
+    "WORKING_ON_IT": "此页面正在建设中 ⚙️",
+    "GO_BACK": "返回"
+  }
+}

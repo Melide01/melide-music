@@ -1,0 +1,24 @@
+{
+  "TITLE": {
+    "MELIDE": "MELIDE",
+    "TU_TEN_SOUVIENDRAS": "きっと忘れられないよ <3"
+  },
+  "MENU": {
+    "BACK": "戻る",
+    "CONTINUE": "続ける",
+    "ACCUEIL": "ホーム",
+    "MUSIQUE": "音楽",
+    "MERCH": "グッズ",
+    "HISTOIRES": "ストーリー",
+    "HISTOIRE": "ストーリー",
+    "CONTACT": "お問い合わせ",
+    "LANGUE": "言語"
+  },
+  "CONTACT": {
+    "SEE_MOODBOARD": "ムードボードを見る"
+  },
+  "ERROR": {
+    "WORKING_ON_IT": "このページは現在準備中です ⚙️",
+    "GO_BACK": "戻る"
+  }
+}
