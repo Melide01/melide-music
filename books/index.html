@@ -6,39 +6,38 @@
     <title>Books</title>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/style.css">
-    <script defer src="script.js"></script>
+    <script defer type="module" src="script.js"></script>
 </head>
 <body>
     <header style="display: flex; gap: calc(var(--margin) / 3); flex-direction: row; align-items: center;">
         <div class="logo">
             <img src="/assets/mld_logo_all_white.png" style="height: 3em;">
         </div>
-        <a class="button" href="/">Retour</a>
+        <a class="button local" id="return_button">MENU/BACK</a>
+        <i class="info_button" id="info_button">i</i>
     </header>
 
-    <main class="open" id="book_section">
-        
-        <div class="book">
-            <img src="/assets/backroom.png" class="autocolor">
-            <h2>Title</h2>
-            <span>Description</span>
-            <a href="#">Lire l'histoire</a>
-        </div>
+    <main id="search_section" class="open">
+        <input class="local" type="search" placeholder="Rechercher..." id="search_text_input">
+        <input class="local" type="button" value="Rechercher" id="search_button">
+        <select id="search_genre">
+            <option class="local">GENRES/AVENTURE</option>
+            <option class="local">GENRES/THRILLER</option>
+            <option class="local">GENRES/TRAGEDIE</option>
+        </select>
+    </main>
+    <main class="open" id="book_section"></main>
+    <main id="book_page"></main>
 
-        <div class="book">
-            <img src="/assets/backroom.png" class="autocolor">
-            <h2>Title</h2>
-            <span>Description</span>
-            <a href="#">Lire l'histoire</a>
-        </div>
-        
-        <div class="book">
-            <img src="/assets/backroom.png" class="autocolor">
-            <h2>Title</h2>
-            <span>Description</span>
-            <a href="#">Lire l'histoire</a>
-        </div>
-    
+    <dialog id="info_modal">
+        <i class="close_button" id="close_modal_button">X</i>
+        <img src="/assets/backroom.png">
+        <h1>Title</h1>
+        <span>Description</span>
+    </dialog>
+
+    <main id="langage_section" class="open septcent-regular">
+        <ul style="list-style-type: none; text-align: center;"></ul>
     </main>
 
 </body>

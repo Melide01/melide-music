@@ -1,0 +1,31 @@
+{
+    "lang": "fr-FR",
+
+    "title": "Proche de la couronne",
+    "local_title": {
+        "en-EN": "Near the crown"
+    },
+
+    "description": "Elle n'a pas eu le choix, elle devait survivre dans un monde où le danger est omniprésent. Elle comptera sur son père qui la poussera à rejoindre le Club de chasse de sa région. Qui aurait pu prédire le nombre de décès, lorsqu'ils ont atteint la couronne.",
+    "local_description": {},
+
+    "authors": [ "John Teuira, Melide" ],
+    "genres": [ "Free" ],
+
+    "chapters": [
+
+        {
+            "chapter_local_title": {"fr-FR": "Chapitre 1"},
+            "chapter_local_description": {"fr-FR": "..."},
+            "collaborators": [ { "name": "John Teuira", "role": "author" } ],
+            "local_content": {
+                "fr-FR": [
+
+                    ""
+
+                ]
+            }
+        }
+
+    ]
+}
