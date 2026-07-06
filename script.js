@@ -1,7 +1,3 @@
-import { load_fetch } from "./js/utils.js";
-import { create_track } from "./js/tracks.js";
-import { get_current_language, load_local_file, translate, load_lang_section } from "./js/local.js";
-
 const sections = {
     "music_section": document.getElementById('music_section'),
     "contact_section": document.getElementById('contact_section'),
@@ -10,6 +6,14 @@ const sections = {
 }
 
 window.sections = sections;
+var userLang = "";
+var localFile;
+window.userLang = userLang;
+window.localFile = localFile;
+
+import { load_fetch } from "./js/utils.js";
+import { create_track } from "./js/tracks.js";
+import { get_current_language, load_local_file, translate, load_lang_section } from "./js/local.js";
 
 const nav_buttons = [
     { "title": "MENU/ACCUEIL", "onclick": () => { open_home() } },
@@ -50,10 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 var current_section;
-var userLang = "";
-var localFile;
-window.userLang = userLang;
-window.localFile = localFile;
 
 function open_section(section) {
     if (current_section) current_section.style.display = "none";

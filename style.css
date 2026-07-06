@@ -74,6 +74,12 @@
   font-size: 250% !important;
 }
 
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
 body {
     font-family: var(--font);
     font-size: var(--font-size);
@@ -314,4 +320,90 @@ img.autocolor:hover {
     display: flex;
     flex-wrap: wrap;
     gap: calc(var(--margin) / 4);
+}
+
+
+.info_button:hover {
+    color: var(--fg);
+    border-color: var(--fg);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+body:has(#book_page.open) .info_button { display: flex; }
+
+.close_button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: var(--bg-2);
+    padding: calc(var(--margin) / 4) calc(var(--margin) / 3);
+    color: var(--fg-2);
+    font-family: SeptCentSoixanteDix;
+    font-size: 1.5em;
+    border-bottom: .1em solid #0000;
+    transition: border 100ms;
+}
+.close_button:hover {
+    cursor: pointer;
+    border-bottom: .1em solid #000;
+    text-shadow: 0 .15em #000;
+}
+
+.close_button:active {
+    transform: translateY(1px);
+}
+
+.info_button {
+    display: none;
+
+    color: var(--body-bg);
+    border: .2em solid var(--body-bg);
+    aspect-ratio: 1;
+    height: 2.5em;
+    border-radius: 50%;
+    padding-right: calc(var(--margin)*.1);
+    
+    justify-content: center; align-items: center;
+    font-weight: 800;
+    position: absolute;
+    right: var(--margin);
+}
+
+li, .local {
+    visibility: hidden;
+}
+
+
+dialog:open {
+    display: flex;
+}
+
+dialog > img {
+    margin-bottom: calc(var(--margin) / 2);
+    max-width: 5em;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+dialog {
+    all: unset;
+    display: none;
+    flex-direction: column;
+
+    z-index: 100;
+    background-color: #acb;
+    position: fixed;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    
+    width: calc(100% - var(--margin) * 4);
+    max-width: calc(var(--max-width) - var(--margin) * 4);
+    height: 50%;
+
+    overflow: auto;
+
+    padding: calc(var(--margin) / 3);
+    padding-top: calc(var(--margin) * 1.8);
+    color: var(--bg);
 }
