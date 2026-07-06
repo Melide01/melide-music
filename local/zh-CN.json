@@ -20,5 +20,16 @@
   "ERROR": {
     "WORKING_ON_IT": "此页面正在建设中 ⚙️",
     "GO_BACK": "返回"
+  },
+
+  "GENRES": {
+      "AVENTURE": "冒险",
+      "TRAGEDIE": "悲剧",
+      "THRILLER": "惊悚",
+      "HORREUR": "恐怖",
+      "MYSTERE": "悬疑",
+      "THEATRE": "戏剧",
+      "EPOPEE": "史诗"
   }
 }
+

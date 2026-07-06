@@ -20,5 +20,15 @@
   "ERROR": {
     "WORKING_ON_IT": "Esta página está en construcción ⚙️",
     "GO_BACK": "Volver"
+  },
+
+  "GENRES": {
+      "AVENTURE": "Aventura",
+      "TRAGEDIE": "Tragedia",
+      "THRILLER": "Thriller",
+      "HORREUR": "Terror",
+      "MYSTERE": "Misterio",
+      "THEATRE": "Teatro",
+      "EPOPEE": "Epopeya"
   }
 }

@@ -20,5 +20,15 @@
   "ERROR": {
     "WORKING_ON_IT": "このページは現在準備中です ⚙️",
     "GO_BACK": "戻る"
+  },
+
+  "GENRES": {
+      "AVENTURE": "冒険",
+      "TRAGEDIE": "悲劇",
+      "THRILLER": "スリラー",
+      "HORREUR": "ホラー",
+      "MYSTERE": "ミステリー",
+      "THEATRE": "演劇",
+      "EPOPEE": "叙事詩"
   }
 }

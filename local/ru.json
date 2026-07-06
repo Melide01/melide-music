@@ -20,5 +20,15 @@
   "ERROR": {
     "WORKING_ON_IT": "Эта страница находится в разработке ⚙️",
     "GO_BACK": "Назад"
+  },
+
+  "GENRES": {
+      "AVENTURE": "Приключения",
+      "TRAGEDIE": "Трагедия",
+      "THRILLER": "Триллер",
+      "HORREUR": "Ужасы",
+      "MYSTERE": "Мистика",
+      "THEATRE": "Театр",
+      "EPOPEE": "Эпос"
   }
 }

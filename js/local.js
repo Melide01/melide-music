@@ -1,17 +1,28 @@
+import { UrlParams } from "../js/url.js";
 import { load_fetch } from "./utils.js";
 
 const local_file = "/local/local_file.json";
 
 export function set_current_language(code) {
     userLang = code;
+    UrlParams.set("lang", userLang);
     translate_page();
 }
 
 export function get_current_language() {
-    userLang = navigator.language || navigator.userLanguage;
+    var lang_catch = UrlParams.get("lang");
+
+    if (lang_catch) {
+        userLang = lang_catch;
+        UrlParams.set("lang", lang_catch);
+    } else {
+        userLang = navigator.language || navigator.userLanguage;
+        UrlParams.set("lang", userLang);
+    }
 }
 
 export async function load_local_file() {
+
     const create_langage_button = (l) => {
         const li_el = document.createElement('li');
         li_el.setAttribute("code", l.code);
@@ -46,6 +57,7 @@ export async function translate_page() {
             e.setAttribute("local_key", key + "/" + word);
             e.textContent = t;
         }
+        e.style.visibility = "visible";
     }
 
     
@@ -60,7 +72,7 @@ export async function translate_page() {
 
 export function translate(key, word) {
     if (!key || !word) return;
-    return local_map[key][word];
+    if (Object.keys(local_map).includes(key) && Object.keys(local_map[key]).includes(word)) return local_map[key][word];
 }
 
 export async function load_lang_section() {

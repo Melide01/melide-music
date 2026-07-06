@@ -20,5 +20,15 @@
   "ERROR": {
     "WORKING_ON_IT": "Te fa'aineinehia nei teie 'api ⚙️",
     "GO_BACK": "Ho'i"
+  },
+
+  "GENRES": {
+      "AVENTURE": "Mau tere",
+      "TRAGEDIE": "Fifi",
+      "THRILLER": "Thriller",
+      "HORREUR": "Mata'u",
+      "MYSTERE": "Mea huna",
+      "THEATRE": "Fa'ari'ira'a",
+      "EPOPEE": "Pūrākau rahi"
   }
 }
