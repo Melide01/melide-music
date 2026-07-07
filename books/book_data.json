@@ -1,31 +1,143 @@
 {
     "lang": "fr-FR",
-
-    "title": "Proche de la couronne",
-    "local_title": {
-        "en-EN": "Near the crown"
-    },
-
-    "description": "Elle n'a pas eu le choix, elle devait survivre dans un monde où le danger est omniprésent. Elle comptera sur son père qui la poussera à rejoindre le Club de chasse de sa région. Qui aurait pu prédire le nombre de décès, lorsqu'ils ont atteint la couronne.",
-    "local_description": {},
-
-    "authors": [ "John Teuira, Melide" ],
-    "genres": [ "Free" ],
-
     "chapters": [
-
         {
-            "chapter_local_title": {"fr-FR": "Chapitre 1"},
-            "chapter_local_description": {"fr-FR": "..."},
-            "collaborators": [ { "name": "John Teuira", "role": "author" } ],
+            "chapter_local_title": {
+                "fr-FR": "Chapitre 1"
+            },
             "local_content": {
                 "fr-FR": [
-
-                    ""
-
+                    {
+                        "type": "title",
+                        "text": "Le point de non retour"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Au matin, au bord de la route, sur un terrain reculé de la ville, une petite cabane se tient, pancarte dressée sur la porte d'entrée, sur laquelle est inscrit « Bienvenue » Ce n'est qu’une simple porte d’entrée mais certaines personnes, notamment certains activistes, la surnomment la porte de l’abatoire. Ce matin-ci, personne encore ne se trouve à l’intérieur de la cabane. Pourtant, une adolescente se tient à la porte et attend patiemment."
+                    },
+                    {
+                        "type": "text",
+                        "text": "La fille regarde sa montre à son poignet gauche, il est six heures moins le quart. C’est à huit heures et demie qu’une voiture s’arrête près de la cabane devant la fille. L’homme dans la voiture étonné lui demande si elle est perdue, elle répond « Non, j’attends quelqu’un. » sans vraiment s'adresser à lui, la tête un peu dans les nuages. L’homme enclenche la troisième, dévisage l’adolescente et s’éloigne le plus vite de la cabane. C’est cinq minutes après qu’une personne arrive pour ouvrir la porte, un homme d’une soixantaine d’années aux cheveux gris soyeux. L’adolescente attend qu’on l’invite à l’intérieur. L’homme rentre dans la cabane et n’en sort plus. Au bout de cinq minutes la fille décide d’entrer, c’est ouvert de toute façon. Elle ouvre et entend au bout de la pièce « Bienvenue au Club de chasse de Sinet, que puis-je faire pour vous? », la fille, un peu hésitante, « J’aimerai rejoindre votre Club en tant que chasseuse. » L’homme surpris de la requête se met à changer de ton, il prend une voix intéressée presque déplacée « Ah bon? Tu as des aptitudes en chasse pour ton jeune âge? » La fille se tait mais se tient ferme, le regard vif et elle observe les yeux de l’homme âgé. L’homme répond enfin « Bien, j’ai un formulaire pour toi. Tu tombes bien, nous sélectionnons en ce moment même de jeunes chasseurs de la région pour rejoindre le Club au sein d’un tout nouveau groupe de jeunes membres sélectionnés. Tu peux m’appeler Steve, je suis uniquement à l’accueil. » La fille apaise son regard, saisit la feuille puis part."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Ce matin-là, Agnès a pris le bus sous les conseils de son père qui organise la plupart de ses sorties. Elle prend le bus pour retourner en ville voir son père, justement prévu par lui-même."
+                    },
+                    {
+                        "type": "text",
+                        "text": "En retournant en ville, la fille entre dans un bar et rejoint ses parents en train de servir des boissons à la clientèle. Son père l’appelle « Agnès! T’étais passée où? On ne t’as pas vue depuis l’aube. On t’attend pour la tournée de midi. » Sa mère reste silencieuse mais elle observe sévèrement sa fille. En parcourant le bar, elle aperçoit l’homme dans la voiture qu’elle a précédemment rencontré, qui la fixe avec déception. Agnès contourne le bar pour rejoindre ses parents, elle les embrasse puis elle entre dans le vestiaire pour se changer. Sa mère se tient à la porte : « Tu faisais quoi ce matin? » mais Agnès reste silencieuse. « Un client m’a dit avoir aperçu une fille près de l'abattoir, pull-over gris, pantalon beige et bottes noires. » dit la mère d’un ton presque sarcastique. Agnès répond « C’est pas un abattoir. » ce à quoi la mère répond « Tu sais, Club ou Abattoir je m’en fiche. Ils tuent des animaux pour le fun, c’est quand même pas comme ça qu’on t’as éduquée avec Philippe. C’est donc ça ton nouveau passe temps? Si ça n’en tenait qu’à moi, ça ne me dérangerait pas que tu aies des passions aussi morbides tant que tu ramènes un peu de viande à la maison. Mais là c’est pas pour la viande Agnès, c’est pour s'amuser. Tu sais ce que pense Papa. Je ne pourrais pas te couvrir éternellement Agnès, on se débrouille ici au bar avec ton père. Fais pas de bêtises, je t’en prie. » avant de retourner au bar. Agnès maintenant habillée se dirige au bar quand son père l’interrompt en murmurant « On se voit après. »"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Dans la chambre parentale, assis sur le lit, un homme d’une quarantaine d'années. Il semble avoir été roué de coups par le temps. Il a l’air dur et fort d’apparence, son visage ne laisse rien transparaître. Aucun tic, mais une expression maîtrisée, presque photographiée. Debout en face de lui, sa fille. Il murmure : « T’es allée au Club? », sa fille répond sur le même ton « Oui » Il continue : « Ils t’ont dit quoi? », elle répond « J’ai attendu longtemps… puis un homme est passé en voiture avant que quelqu’un arrive et me laisse dehors- » son père lui coupe net sur un ton plus agacé « Ils t’ont dit quoi ? » Frêle, elle répond le souffle coupé : « Un vieil homme m’a accueillie, et m’a remis un formulaire. Ils recrutent des membres pour rejoindre leur club, dans un groupe constitué uniquement de jeunes. » Son père : « Fait-moi voir le formulaire. », il saisit le formulaire des mains de sa fille puis il lit ce qui est écrit. Il ne peut contenir sa joie sur le coin des lèvres. Il pose de nouveau son regard sur sa fille d’un ton nouveau, sérieux : « Je suis fier de toi ma fille, maintenant tu vas rejoindre ce groupe. Fais-toi le plus de connaissances possibles, forme des amitiés si t’y arrives. Ne me déçois pas. Et continue d’aller au grenier pour t’entraîner à l’arc et aux armes, j’ai acheté de nouvelles cibles mouvantes et de nouvelles flèches. » Bien qu’elle ait réussi, elle se sentit horrifiée par le discours de son père. La peur, le dégoût et la solitude pouvaient se ressentir sur son visage jusque dans ses jambes. Avant de dormir, elle ne peut s’empêcher d’anticiper le plan de son père. Elle s’imagine dans le Club avec d’autres jeunes chasseurs, probablement assez riches pour avoir des activités aussi absurdes durant leur temps libre. Elle est horrifiée de s’imaginer tuer un animal et dans un coin de son esprit elle reconnaît tout de même ce sentiment d’assurance une fois avoir touché juste, une fois avoir touché la cible à l’endroit voulu, ce sentiment de force et de confiance. Puis elle repense à l’idée d’échouer, de ne pas réussir ce que lui demande son père. Elle s’imagine partir de la maison, son père qui la jette à la porte et sa mère qui la regarde partir indifférente. Elle s’imagine probablement vivre dans le Club en tant que dernier recours ou vivre à la merci de tous dans la rue. Elle s’imagine décevoir ses parents. C’est sur ce film qu’Agnès s’endort et cauchemarde."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Le lendemain matin, elle se dirige vers la cabane, le formulaire rempli à la main. Il est neuf heures du matin, elle veut éviter d’arriver trop tôt cette fois-ci. Elle entre et Steve l’accueille de nouveau « Bienvenue au Club de Chasse de Sinet… », il observe le formulaire entre les doigts d’Agnès."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Elle lui donne le papier ainsi que des documents joints par une agrafe. Il le saisit et lis : « Hmm… Agnès c’est ça? », elle attend, il continue : « ... Je ne vois aucun problème dans les informations que tu m’as fournies, tes parents sont au courant que tu rejoins le Club? », elle attend encore et il continue : « C’est vrai, il y a la signature de tes parents en bas du formulaire. Tu as même pensé à photocopier les pièces d’identité de tes parents. », elle répond : « C’est mes parents qui les ont photocopiées pour moi, j’ai seulement rempli les informations sur le formulaire et on a revu ensemble. » Steve l’observe, il finit : « Bon Agnès, je vais faire monter ta candidature aux membres en charge de la sélection des jeunes chasseurs mais au vu du formulaire que tu as rempli, je ne vois pas pourquoi tu ne serais pas sélectionnée. » Elle s’empresse de quitter l’endroit comme si rester ici pouvait ruiner cet accomplissement. À la porte avant qu’Agnès ne sorte, Steve l’arrête : « Au fait, si tout se passe bien, tu passeras un examen pour évaluer tes aptitudes. Ce serait bien de rencontrer tes parents pour que je m’assure que tu ne t’es pas inscrite dans leur dos. On se voit demain soir vers dix-huit heures, avant que l’on ferme. Rentre bien. », elle quitte abruptement étant presque impressionnée et écoeurée de ce qui venait de se passer."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Elle se presse de rentrer pour raconter à son père. Il pleut des cordes et à l'entrée du bar elle aperçoit le même homme dans la voiture d’hier sous le hall d’entrée, une clope à la main. Leurs regards se croisent et l’homme paraît toujours aussi déçu, il préfère cependant continuer sa cigarette. Agnès entre dans le bar et rejoint son père. Sa mère tente de l’interpeller mais elle ne s’arrête pas. Elle rejoint son père dans la chambre parentale, il est en train d'enfiler sa tenue de travail. Déterminée, elle annonce : « J’ai besoin de vous deux maman. Ils m’ont dit qu’ils ont besoin de voir mes parents pour confirmer ma candidature. », aucun mot ne sort de la bouche de son père, il continue d’enfiler sa tenue. Elle est désespérée mais elle continue « Ils ont regardé le formulaire et ils ne voient aucun problème. », son père surjoue : « Bah c’est génial! Qu’est-ce que tu attends? » Mais Agnès répond : « J’ai besoin de vous deux maman. » Son père répond : « Moi je pense que tu mens. », il observe les réactions de sa fille, il voit qu’elle désespère, elle se hâte à parler, elle qui pourtant n’est pas bavarde. Il conclut : « Ne me déçois pas Agnès. » avant d’aller servir des verres."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Agnès se tient au pied du lit de ses parents. Elle ne comprend pas pourquoi son père ne souhaite pas l’aider. Elle se sent utilisée, injustifiée et elle ne comprend pas quelles sont les raisons à cela. Elle sort du bar le regard ancré dans le sol, il pleut toujours à torrent et l’homme se tient encore à l’entrée du bar, la même cigarette, réduite de taille depuis leur précédente rencontre. Elle se tient de l’autre côté de la porte espérant éviter l’homme. Il demande presque désintéressé : « Tu chasses? » Elle ne répond pas, elle regarde les flaques d’eau pendant que des larmes tombent de ses joues : « Désolé », appuie-t-il sous le son des cordes. Il demande : « Tu veux en parler? » Elle aimerait en discuter mais elle préfère ne pas y penser pour le moment, elle fixe les milliers de gouttes qui défilent. Il dit : « J’ai toujours détesté ce Club de chasse, pas que je déteste la chasse - je suis éleveur dans les pâturages vierges du Mont des mûres d’hiver. J’élève des brebis, des chèvres ainsi que quelques vaches. Il m’arrive de chasser du cochon, du buffle ou du lièvre pour éviter de tuer mes bêtes. J’utilise mes bêtes pour récolter leur lait, leur laine ou leur viande. », interpellée, Agnès écoute l’homme. « C’est l’hiver dernier durant la saison des mûres d’hiver qu’ils sont venus dans les pâturages. Ils étaient une vingtaine et ils ont pris une partie de mes bêtes pendant mon absence. Je suis revenu et, alors qu’ils allaient prendre la totalité de mes bêtes, j’ai sorti ma carabine et je les ai chassés. J’en ai blessé quelques-uns mais je ne me permettrai jamais de tuer. Pas comme eux. Aujourd’hui je n’ai plus de bêtes, ils sont tous morts peu après la disparition des autres animaux. », il termine sur cette phrase puis demande : « Et toi? » Il voit qu’elle pleure encore malgré son récit personnel. Elle répond : « Mon père veut que je rejoigne ce Club et ils m’ont demandé de me présenter avec mes parents. », le regard de l’homme est mélangé d’émotion vaste, tant surpris que dégoûté. Il lui demande : « Pourquoi toi? », elle répond : « Ils sont en train de former un groupe formé uniquement de jeunes. » Il lui demande ensuite : « Pourquoi est-ce que ton père souhaite que tu rejoignes ce groupe? », elle répond de nouveau : « Je ne sais pas, j’en sais rien. Je pige que dalle. Enfin bref, j’ai fait comme mon père me l’a demandé et ils me soupçonnent d’avoir démarcher dans le dos de mes parents. Donc ils me demandent de me présenter avec eux pour que je passe un examen et mon père me soupçonne de mentir. Du coup je dois me débrouiller. » Il est plus ou moins bouleversé mais il n’est pas étonné que le Club ait des soupçons sur Agnès. L’opinion populaire est plutôt négative à l’égard du Club. L’homme réfléchit dans le silence, le regard dans la pluie qui s’intensifie. Il sait que cette conversation n’est pas anodine et il voit bien que cette fille à côté de lui n’est pas soutenue. Bien que ce soit fortement déplacé, il préfère en prendre la responsabilité plutôt qu’une autre personne mal intentionnée. Fichtre, il pourrait même en profiter pour se venger du Club. Il lui dit : « Je peux t’accompagner et faire semblant d’être ton père. » Elle se doutait que l’homme lui dirait ça, mais elle s’est tue. Elle ne veut pas prendre la responsabilité de faire échouer le plan de son père. Malgré la peur de décevoir, elle décide de se surpasser car c’est ça ou rien. Elle laisse l’homme seul un moment et se précipite dans le bar. Elle atteint sa chambre où elle ramasse un stylo et un papier puis elle s’empresse de sortir mais l’homme est déjà parti. Son regard se pose à l'endroit où s’est tenu l’homme et elle y trouve une boîte de cigarettes avec écrit au feutre : "
+                    },
+                    {
+                        "type": "text",
+                        "text": "« Victor, 86 86 42 01 52 »"
+                    }
+                ]
+            }
+        },
+        {
+            "chapter_local_title": {
+                "fr-FR": "Chapitre 2"
+            },
+            "local_content": {
+                "fr-FR": [
+                    {
+                        "type": "title",
+                        "text": "Père de substitution"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Au réveil, Victor prend son café et réfléchit encore à ce que la fille de la cabane lui a dit. Il se souvient à peine de son prénom après même l'appel de son père au bar (que son père l’ai appelé au bar ?). Il se trouve à vouloir l’aider."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Il se dit que pour rendre ça crédible il faudrait être deux : un père et une mère. Pris de zèle, il fait fonctionner ses contacts."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Il commence par sa grande sœur qui vit plus loin dans la ville, elle travaille dans l’un des grands bâtiments de la ville mais Victor ne sait pas véritablement quel est son métier. Ils se parlent occasionnellement tous les six mois pendant les vacances et les fêtes mais ils n’arrivent pas à se coordonner. Cependant, c’est la femme avec qui il est le plus à l’aise. Il l’appelle cinq fois mais elle ne répond pas, elle est probablement déjà au travail. Il pense alors à une collègue de travail. Depuis la disparition de ses bêtes il y a quelques mois, Victor enchaîne quelques petits boulots en lien avec son ancien travail. Il a travaillé dans la pêche maritime en tant que soutien, aidant au maintien du bateau, à la prise des poissons ainsi qu'à l’accostage. Sa collègue est marin pêcheur et c’est aussi sa patronne, ils maintiennent une relation entre collègues plus qu’autre chose. Elle répond, mais elle annonce qu’elle n’est pas disponible la semaine, uniquement le week-end. Elle lui demande si c’est pour un rencard, il dit que non et lui raccroche au nez. Il cherche, un peu désespéré."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Il ne voit personne en dehors du travail, c’est d’autant plus compliqué. Il reçoit néanmoins un appel entrant, une amie de longue date bien avant qu’il n'ait été éleveur en montagne."
+                    },
+                    {
+                        "type": "text",
+                        "text": "« Oui allô? » Il demande : « Coucou Victor, c’est Louise, comment vas-tu ? Ça fait longtemps. Je voulais savoir si t’étais disponible aujourd’hui. »"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Il est étonné d’entendre la voix de sa vieille amie, il en avait même oublié son numéro de téléphone."
+                    },
+                    {
+                        "type": "text",
+                        "text": "« Je suis désolé louloute, c’est un peu compliqué en ce moment. », louloute qui est le surnom affectif que lui a donné Victor."
+                    },
+                    {
+                        "type": "text",
+                        "text": "« C’est pas grave, tu me fais signe si t’as besoin ? » puis ils raccrochent presque en même temps. Après réflexion c’était peut être la réponse de Dieu à sa prière. Victor recontacte Louise et lui demande ses conseils."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Plus tard dans la journée."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Cet échange redonne un élan de motivation dans le cœur de Victor. Ce n’est pas évident au premier abord mais Victor est un homme qui a pour moteur l’espoir et la charité."
+                    },
+                    {
+                        "type": "text",
+                        "text": "L'après-midi il attend dans un restaurant près du bar où résident Agnès et ses parents. Une jeune femme entre dans le bar. Elle a dans la vingtaine d’année, une brune, un peu réservée, qui a l’air de travailler dans l’administration ou dans ce qui s'en rapproche. Elle aperçoit Victor en train d’attendre à une table. Leurs regards se croisent et un sourire sincère, bien que gênant, est échangé entre les deux. Ils sont surpris du changement physique de chacun : Victor autrefois était plus ou moins maigre et un peu geek. Aujourd’hui c’est un homme barbu dont l’odeur de la nature a marqué ses poings, de la paume, jusqu’aux doigts. Tandis que Louise autrefois était une jeune adulte qui sortait beaucoup avec ses copines. Une fille normale qui vivait sa jeunesse de manière décontractée. Aujourd’hui c’est une femme qui s’habille uniquement pour aller au travail et qui semble se réserver par habitude, histoire de paraître sérieuse en tout temps. Ils discutent comme pour rattraper les vieilles habitudes mais les temps ont bel est bien changés, ce ne sont plus les mêmes personnes. Malgré les échanges cordiaux, une pensée commune émane des deux adultes : Suis-je encore ami avec cette personne?"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Puis Agnès entre dans le restaurant, toujours d’un air incertain. Elle aperçoit Victor à une table accompagné d’une femme. Cependant, elle reste immobile au lieu de les rejoindre. Elle ne souhaite pas impliquer une inconnue dans cette histoire. Il  lui fait signe de les rejoindre quand un serveur interpelle l’adolescente : « Vous désirez quelque-chose? » Immobilisée, elle ne sait quoi répondre. Pour elle c’est une question absurde qui n’a pas été posée pour elle. Le serveur s'impatiente : « Vous n’avez rien à faire ici, sortez. », ras le bol des jeunes et de leurs tendances à amener des ennuis dans des milieux conviviaux. Elle pointe du doigt Victor qui s’exclame : « Elle est avec nous. » Ni Victor, ni le serveur, n’ont compris ce qu’il venait de se passer. Le serveur agacé retourne à la caisse, il veut clairement coller son poing dans une mâchoire. Bien que, d’apparence, il semble n’avoir jamais été en colère de sa vie."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Agnès, avec une hésitation constante, se décide à rejoindre Victor et Louise à leur table. Elle s’assoit à côté de Victor, infiniment gênée et mal à l’aise, puis se tait. Il présente Louise et explique le plan « Louise et moi feront semblant d’être tes parents lors du rendez-vous. », elle a été mise au courant par texto avant d’accepter et de les rejoindre au restaurant."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Évidemment c’était un choix difficile à faire. Avant de venir, elle se demandait déjà si c’était un risque qu’elle pouvait assumer de prendre pour quelqu’un qu’elle n’avait pas vu depuis plusieurs années. Car grâce aux rumeurs, elle était au courant de la mauvaise réputation du Club. Bien qu’aujourd’hui elle n’en ai pas l’air, lorsqu’elle fréquentait Victor, elle était partante pour faire les cent coups avec lui. Se balader tard la nuit, entrer par effraction chez des inconnus jusqu’à dérober de la nourriture dans des supérettes, de multiples fois. Elle s’en souvient et en devient même nostalgique."
+                    },
+                    {
+                        "type": "text",
+                        "text": "C’est un choix qu’elle regrette timidement à table. Ce n’était plus cette femme qui pouvait s’amuser sans conséquences. Aujourd’hui, Louise est une femme intégrée dans la société. Elle mène une vie stable qu’elle a bâtie à travers des sacrifices personnels. Elle a sacrifié son temps et son argent, elle a abandonné sa famille pour vivre sa vie dans une ville voisine. Mais au fond, il y a comme un éternuement qui n’attend que de sortir ou un mot qui n’attend que d’être prononcé. Elle rêve du danger et de l’incertitude, de ne plus savoir se projeter. Mais elle se contient, elle se retient de faire paraître ce désir du risque. Elle le transforme en désir d’aider."
+                    },
+                    {
+                        "type": "text",
+                        "text": "À table, alors qu’ils continuent de manger ce qu’ils ont commandé depuis bien une dizaine de minutes, elle demande : « Du coup, t’es chasseuse? »"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Agnès était un peu perdue dans les conversations entre Victor et Louise qui tentaient tant bien que mal de se rapprocher et cette incompréhension générale de vouloir rejoindre le Club de chasse de Sinet. Elle trouve les mots pour expliquer : « Depuis petite, mon père m'encourage à savoir utiliser les armes. C'est dans le grenier du bar où mes parents travaillent que mon père a mis en place une installation contenant diverses types de cibles et d'armes. Petite j'ai reçu une éducation avancée sur l'utilisation de celles-ci. Mon père m'apprenait à me servir de chacune d'elles. C'était honnêtement fatigant, et ça demandait beaucoup d'efforts. Je pleurais souvent sous la pression et sous le ton de mon père. Il m’a fait quitter l'école assez tôt pour me consacrer à cette activité . Maintenant je ne pense pas être une chasseuse mais je peux me servir d'un arc, d'un couteau ou de pièges. J'aime personnellement me servir d'un couteau : je peux le lancer, le récupérer et l'utiliser pour autre chose que faire du mal. Sous ces déclarations, Victor comprend qu'Agnès n'est pas une fille abandonnée par ses parents. Ça aurait tout expliqué dans la situation actuelle mais la vérité semble bien plus sordide. Comme par compassion, la jeune adulte Louise approche ses mains du bout de la table vers celles d’Agnès : « Je ne sais pas dans quels délires tu te trouves vraiment mais on est là Victor et moi. Est-ce-que tu connais la raison pour laquelle ton père veut que tu rejoignes ce Club? » Elle voulait s'assurer des motivations d'Agnès au travers de celle de son père. Un peu perdue comme à son habitude, Agnès n’arrive pas à se sentir concernée par la question mais elle répond : « Je ne sais pas ce que je ferai sans mes parents. », cette phrase prend tout son sens dans l'esprit de Louise."
+                    },
+                    {
+                        "type": "text",
+                        "text": "Il est plus ou moins l'heure de partir, une heure moins le quart avant le rendez-vous au Club. Ils sortent de table et Victor s'en va payer le repas. De loin, son amie Louise l’aperçoit sortir un billet de 500 qu’il donne au caissier avant de revenir vers elles. C’est étonnant lui qui autrefois n’avait pas un rond. Ils se dirigent ensemble vers la voiture de Victor, une vieille Porsche négligée: de la poussière à l'arrière, une odeur légère de renfermé mais la voiture n'est pas pour autant sale. Ils s'installent, la voiture démarre en direction de la cabane du Club de chasse."
+                    }
                 ]
             }
         }
-
     ]
 }
