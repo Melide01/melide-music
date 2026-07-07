@@ -33,7 +33,7 @@
     --bg-2: #2b6ec5;
     --fg-2: #6deeff;
     --margin: 2em;
-    --font: "Antic Didone", sans-serif;
+    --font: SeptCentSoixanteDix;
     --font-size: 18px;
     --max-width: 700px;
 }
@@ -186,7 +186,10 @@ header .logo {
     display: flex;
     flex-direction: row;
     filter: contrast(0) sepia(1) saturate(1.5) hue-rotate(110deg);
+    font-family: Melide;
 }
+
+.logo h1 { font-weight: 100 !important; }
 
 .mood_grid {
     display: flex; flex-wrap: wrap;
@@ -251,7 +254,7 @@ header .logo {
     font-family: SeptCentSoixanteDix;
     font-size: 1.2em;
     line-height: 2.8em;
-    background-color: #0a0a11;
+    background-color: var(--bg);
     padding: .2em calc(var(--margin) / 2) 0 calc(var(--margin) / 2);
 }
 
@@ -392,7 +395,7 @@ dialog {
     flex-direction: column;
 
     z-index: 100;
-    background-color: #acb;
+    background-color: var(--fg);
     position: fixed;
     left: 50%; top: 50%;
     transform: translate(-50%, -50%);
