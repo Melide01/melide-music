@@ -10,6 +10,10 @@
 </head>
 <body>
     <style>
+        body {
+            overflow-x: hidden;
+            anchor-name: --body;
+        }
         body:has(#book_page.open) header {
             position: fixed;
             z-index: 1;
@@ -18,8 +22,7 @@
             top: 0;
             max-width: none;
         }
-        #book_page > h2, #book_page > p { text-align: justify; }
-        #book_page > h1, #book_page > h2 { text-transform: uppercase; }
+        #book_page > h1, #book_page > h2 { text-transform: uppercase; transition: background-color 200ms; }
         #book_page > h1 {
             color: var(--fg-2);
             font-size: .7em; background-color: var(--bg);
@@ -27,30 +30,53 @@
         }
 
         #book_page {
-            padding-top: calc(var(--margin) * 2.5) !important;
+            
+            padding: calc(var(--margin) / 3);
+            margin-top: calc(var(--margin) * 3.25) !important;
             font-family: 'Times New Roman', Times, serif;
             color: var(--fg);
             background-color: var(--bg);
-            border-radius: 0;
-            font-size: 1.5em;
+            
+            border-radius: .5emem;
+            corner-shape: superellipse(-.5);
+            font-size: 1.3em;
+        }
+
+        #book_page p {
+            widows: 3;
+            orphans: 3;
         }
 
         @keyframes scroll_show {
-            from { transform: translateY(-10em); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            from {
+                transform:
+                    translateY( calc(var(--animation-height) * -1) )
+                    perspective(100px)
+                    rotateX(-5deg)
+                    ;
+                opacity: 0; }
+            to {
+                transform:
+                    translateX(0)
+                    perspective(100px)
+                    rotateX(0)
+                ;
+                opacity: 1; }
         }
 
         #book_page > p {
-            margin-bottom: calc(var(--margin) * 2);
+            margin-bottom: calc(var(--margin) * 1);
         }
 
         #book_page > * {
+            transform-origin: 50% 0;
+            --animation-height: 5em;
             animation-name: scroll_show;
             animation-duration: 1s;
             animation-timing-function: linear;
             animation-fill-mode: both;
             animation-timeline: view(y);
-            animation-range: entry cover 10em;
+            animation-range: entry cover var(--animation-height);
         }
 
         #book_page > img {
@@ -112,6 +138,88 @@
         input.style_read:checked::after {
             transform: scale(.8);
         }
+
+        #info_modal > ul > li {
+            font-weight: 100;
+            background-color: #0001;
+            padding: calc(var(--margin) / 4);
+            transition: padding 100ms;
+            position: relative;
+        }
+
+        #info_modal > ul > li:active {
+            background-color: #0000 !important;
+            padding-left: 0 !important;
+        }
+
+        #info_modal > ul > li:hover {
+            background-color: #0004;
+            padding-left: calc(var(--margin) / 3);
+        }
+
+        #info_modal > ul > li:hover::after {
+            animation: blink 500ms infinite linear;
+        }
+
+        #info_modal > ul > li::after {
+            content: "";
+            opacity: 0;
+            height: 100%; width: .5em;
+            background-color: #353;
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: -1.25em;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0;}
+            50% { opacity: 1; }
+        }
+
+        @keyframes blink_notify {
+            100% {
+                transform: translateX(0);
+            }
+            5%, 10%, 20%, 40%, 60% {
+                transform: translateX(1em);
+            }
+        }
+
+        h1.notify {
+            background-color: var(--fg-2) !important;
+        }
+
+        #info_modal > ul {
+            display: flex;
+            list-style-type: none;
+            flex-direction: column;
+            gap: calc(var(--margin) / 8);
+            font-size: 1.25em;
+            border: solid 1px var(--bg);
+            border-top: solid 2px var(--bg);
+            border-bottom: solid 8px var(--bg);
+            padding: calc(var(--margin) / 2) calc(var(--margin) * 1);
+            
+        }
+
+        body:has(#info_modal:open) .backdrop {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .backdrop {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #222a;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            transition: opacity 250ms;
+        }
     </style>
     <header style="display: flex; gap: calc(var(--margin) / 3); flex-direction: row; align-items: center;">
         <div class="logo">
@@ -134,11 +242,14 @@
     <main class="open" id="book_section"></main>
     <main id="book_page"></main>
 
+    <div class="backdrop"></div>
+
     <dialog id="info_modal">
         <i class="close_button" id="close_modal_button">X</i>
         <img src="/assets/backroom.png">
         <h1>Title</h1>
         <span>Description</span>
+        <ul></ul>
     </dialog>
 
     <main id="langage_section" class="open septcent-regular">

@@ -51,6 +51,7 @@ function load_books(books) {
     }
 }
 
+var current_book_chapters = [];
 async function load_book(link_code) {
     sections.search_section.classList.remove("open");
 
@@ -61,26 +62,35 @@ async function load_book(link_code) {
         location.href = book.link_code;
     
     } else {
+        
         book_section.style.display = "none";
         book_page.classList.add("open");
 
         if (!book.book_data) {
+
             sections.book_page.innerHTML = "<a>Le contenu de cette page est pour le moment indisponible.</a>";
             return;
+        
         };
+
         const res = await fetch(book.book_data);
         const data = await res.json();
 
         userLang = UrlParams.get("lang", "fr-FR");
         sections.book_page.innerHTML = "";
+        current_book_chapters = [];
 
         for (const c of data.chapters) {
+            
             const title_el = document.createElement("h1");
             title_el.textContent = c.chapter_local_title[userLang];
             sections.book_page.appendChild(title_el)
             parse_text_content(c.local_content[userLang]);
+            current_book_chapters.push(title_el);
 
         }
+
+        if (!UrlParams.get("pos")) { load_info_modal(); sections.info_modal.open = true; }
     }
 }
 
@@ -131,7 +141,7 @@ function return_back() {
 }
 
 function load_info_modal() {
-    var [close_btn, img_cover, title_element, description_element] = sections.info_modal.children;
+    var [close_btn, img_cover, title_element, description_element, chapter_list] = sections.info_modal.children;
     const current_book = UrlParams.get("book");
     const book = TEST_FETCH_BOOKS_DATA.filter(v => v.link_code === current_book)[0];
     
@@ -139,7 +149,24 @@ function load_info_modal() {
     title_element.textContent = book.title;
     description_element.textContent = book.description;
 
-    console.log(book);
+    chapter_list.innerHTML = "";
+
+    for (const c of current_book_chapters) {
+        
+        const li_element = document.createElement('li');
+        li_element.textContent = c.textContent;
+        li_element.addEventListener('click', () => {
+            c.scrollIntoView({ block: "center", inline: "center" });
+            sections.info_modal.open = false;
+            c.classList.add("notify");
+            setTimeout(() => {
+                c.classList.remove("notify");    
+            }, 200);
+        });
+        chapter_list.appendChild(li_element);
+        li_element.style.visibility = "visible";
+
+    }
 }
 
 const search_text_input = document.getElementById('search_text_input');
