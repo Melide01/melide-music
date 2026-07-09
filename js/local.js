@@ -53,14 +53,15 @@ export async function translate_page() {
     for (const e of [...document.getElementsByClassName("local"), ...document.getElementsByTagName("li")]) {
         let [key, word] = e.getAttribute("local_key") ? e.getAttribute("local_key").split("/") : e.textContent.split("/");
         var t = translate(key, word);
+        
         if (t) {
             e.setAttribute("local_key", key + "/" + word);
             e.textContent = t;
-        }
+        };
+        
         e.style.visibility = "visible";
     }
 
-    
     for (const e of document.getElementsByClassName("local_option")) {
         var c = e.getAttribute("code");
         var lang = localFile.filter(v => v.code === c)[0];
