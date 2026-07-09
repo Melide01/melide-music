@@ -337,6 +337,7 @@ body:has(#book_page.open) .info_button { display: flex; }
 
 .close_button {
     position: absolute;
+    position-anchor: --modal;
     right: 0;
     top: 0;
     background-color: var(--bg-2);
@@ -396,6 +397,7 @@ dialog {
 
     z-index: 100;
     background-color: var(--fg);
+    anchor-name: --modal;
     position: fixed;
     left: 50%; top: 50%;
     transform: translate(-50%, -50%);
