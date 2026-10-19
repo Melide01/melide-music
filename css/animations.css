@@ -1,0 +1,35 @@
+@property --in-view {
+    syntax: "<custom-ident>";
+    inherits: true;
+    initial-value: false;
+}
+
+@keyframes appear_from_bottom {
+    0% { transform: translateY(-1em); }
+    100% {  transform: translateY(0); opacity: 1; }
+}
+
+@keyframes appear_from_top {
+    0% { transform: translateY(-1em); }
+    100% {  transform: translateY(0); opacity: 1; }
+}
+
+@keyframes appear_from_left {
+    0% { transform: translateX(-1em); }
+    100% {  transform: translateY(0); opacity: 1; }
+}
+
+@keyframes appear_from_right {
+    0% { transform: translateX(1em); }
+    100% {  transform: translateY(0); opacity: 1; }
+}
+
+@keyframes parallax_background_y {
+    from { background-position-y: calc(50% + var(--parallax-distance)); }
+    to { background-position-y: calc(50% - var(--parallax-distance)); }
+}
+
+@keyframes item-in-view {
+    0% { --in-view: false; }
+    100% { --in-view: true; }
+}

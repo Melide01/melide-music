@@ -1,0 +1,76 @@
+/* -- phone: default layout below tablet -- */
+@media (max-width: 707px) {
+    .call_action { flex-direction: column; }
+    .explicative_icons>*:not(.except)>p { display: none; }
+}
+
+.explicative_icons>* { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: calc(var(--space) * var(--gap) * 2); }
+
+/* -- tablet -- */
+@media (min-width: 708px) {
+    .merch_page { flex-direction: row; gap: calc(var(--space)*var(--gap)*5) !important; }
+    .merch_page .merch_visual { width: 20em; }
+    footer nav { flex-direction: row; gap: calc(var(--space) * var(--gap) * 7); }
+    footer nav ul { max-width: 12em; }
+    a:has(>i.fa-brands) {
+        --padding: 1em;
+        font-size: 1.25em;
+    }
+    a:has(>i.fa-brands) > p { display: none; }
+
+    .explicative_icons>*>p { display: block; }
+    .explicative_icons>*:not(.except)>i { display: none; }
+
+    .track, .book { flex-direction: row; }
+    .merch_container { display: grid; grid-template-columns: repeat(auto-fit, minmax(14em, 1fr)) !important; }
+    
+    .merch_container > .merch { min-width: 0; }
+    .track.ver>.ver,
+    .book.ver>.ver,
+    .game.ver > .ver { width: 100%; min-width: 0; flex-direction: row; align-items: center; gap: calc(var(--space) * var(--gap) * 4); }
+    .project_container > .track > .ver { margin: unset; width: unset; flex-direction: column; align-items: flex-start; }
+
+    .track>.ver>img {
+        flex: 0 0 15em;
+        width: 15em;
+        height: 15em;
+        object-fit: cover;
+    }
+    .book>.ver>img {
+        flex-shrink: 0;
+        height: 15em;
+        width: auto;
+    }
+    .track>.ver>.ver,
+    .book>.ver>.ver { flex: 1 1 auto; min-width: 0; }
+    
+    .track>.ver>.ver>*,
+    .book>.ver>.ver>* { overflow-wrap: anywhere; }
+    
+    .track>.ver>*:not(img) { padding: calc(var(--space) * var(--padding)); }
+    
+    .track .call_action,
+    .book .call_action { justify-content: flex-start; }
+    .game .call_action { margin: unset; flex-direction: column; justify-content: center; margin-top: calc(var(--space) * var(--margin) * 10); margin-left: calc(var(--space) * var(--margin) * 10); }
+    .project_container > .track>.ver>*:not(img) { padding: unset !important; }
+
+    .call_action { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+    .call_action > a, .call_action > button/*,
+    .call_action > input, .project_container > .search > input*/ { border-radius: calc(var(--space) * var(--border-radius) / 1.75); }
+    .call_action > a::before, .call_action > button::before,
+    .call_action > input::before, .project_container > .search > input::before { border-radius: unset; background: linear-gradient(to left, transparent 70%, var(--fg-2)); }
+    .cadre { border-radius: calc(var(--space) * var(--border-radius)) !important; }
+}
+
+/* -- laptop -- */
+@media (min-width: 1080px) {
+    footer nav > ul { flex: 1; }
+    :root {
+        --space: .8;
+        --max-width: 1000px;
+    }
+
+    .track, .album { gap: calc(var(--space) * var(--gap) * 5) !important; }
+    .track>.ver>*:not(img) { padding: calc(var(--space) * var(--padding) * 1.5); }
+    .cadre { gap: 0; padding: calc(var(--space) * var(--padding) * 1.5); }
+}

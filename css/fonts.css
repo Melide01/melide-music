@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+@font-face {
+    font-family: AuNomDuDesespoir;
+    src: url(/fonts/au-nom-du-desespoir.ttf);
+}
+
+@font-face {
+    font-family: MinimalMono;
+    src: url(/fonts/minimal-mono.ttf);
+}
+
+@font-face {
+    font-family: SeptCentSoixanteDix;
+    src: url(/fonts/setp-cent-soixante-dix-mono.ttf);
+}
+
+@font-face {
+    font-family: Fukdat;
+    src: url(/fonts/fuckdat.ttf);
+}
+
+@font-face {
+    font-family: Melide;
+    src: url(/fonts/MelideSerif.ttf);
+}
+
+:root {
+    --font-sans: "Manrope", "Segoe UI", sans-serif;
+    --font-serif: "Cormorant Garamond", "Georgia", serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", monospace;
+    /* --font-mono: SeptCentSoixanteDix; */
+    --font-brand: "Melide", "Cormorant Garamond", serif;
+    --font-display: "Manrope", "Segoe UI", sans-serif;
+    
+    --font-body: var(--font-sans);
+    --font-heading: var(--font-display);
+    --font-label: var(--font-mono);
+}

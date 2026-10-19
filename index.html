@@ -1,76 +1,149 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Melide</title>
     <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon">
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/dark-icon.ico" type="image/x-icon" media="(prefers-color-scheme: dark)">
+    
     <link rel="stylesheet" href="style.css">
     <script defer type="module" src="script.js"></script>
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
+    
     <header>
-        <div class="logo">
-            <img src="assets/signed melide.png" style="width: 2em;">
-            <h1 style="color: #fff;">elide</h1>
+
+        <div class="hor align logo" onclick="location.href = '/';">
+            <img src="/assets/mld_logo_all_white.png" alt="Melide">
+            <h1>Melide</h1>
         </div>
         
-        <span class="local">TITLE/TU_TEN_SOUVIENDRAS</span>
+        <div class="hor align nav explicative_icons">
+            <a href="/" id="home_button"><i class="fa-solid fa-home"></i><p>Accueil</p></a>
+            <a href="?search=" id="projects_button" class="except"><i></i><p>Projects</p></a>
+            <a href="?page=contact" id="networks_button"><i class="fa-solid fa-globe"></i><p>Réseaux</p></a>
+        </div>
         
-        <ul class="nav"></ul>
     </header>
 
-    <main class="septcent-regular" id="story_section">
-        <img src="assets/pdp_blanc.png" class="autocolor" style="width: 70%; max-height: 15em; object-fit: cover; margin-left: 15%;">
-        <h1 style="text-align: start;">"Melide... c'est qui ?'"</h1>
-        <br>
-        <span>C'est un artiste de Tahiti inspiré par la nostalgie des anciennes technologie. Il aime l'ordre et le chaos, la nature lui paraît absolument parfaite sous tous ses angles.</span>
-        <br><br>
+    <main id="home" class=" page">
 
-        <img src="assets/IMG_20260704_010421_869 copy.jpg" class="autocolor" style="width: 50%; max-height: 15em; object-fit: cover;">
-        <h1 style="text-align: end;">"C'est pour qui'"</h1>
-        <br>
-        <span>Si vous aimez les vieilles références mélangées aux nouvelles, les chansons produites maladroitement dans un mélange de si et de ça.</span>
-        <br><br>
+        <section>
+            
+            <div class="ver center bottom" style="height: 80vh; padding-bottom: 30vh;">
+                <img src="/assets/mld_logo_all_white.png" style="height: 4em; object-fit: contain;">
+                <h1 style="font-size: 3em; font-family: var(--font-brand); font-weight: 100; color: var(--fg-1);">Melide</h1>
+                <ul class="ver align center" style="list-style-type: none;">
+                    <li>Musique</li>
+                    <li>Livre</li>
+                    <li>Jeux vidéo</li>
+                </ul>
+            </div>
 
-        <img src="assets/backroom.png" class="autocolor" style="width: 100%; max-height: 10em; object-fit: cover;">
-        <h1 style="text-align: center;">"Souviens toi, je t'en supplie."</h1>
-        <br>
-        <span>Ces mots sont gravés dans ma mémoire, comme si quelqu'un m'appelait et me demander de me souvenir d'elle. Je la revoie dans mes rêves, dans mes pensées, dans mes souvenirs sans savoir qui elle est ni d'où elle vient.</span>
-        <br><br><br>
-        <span>Je la cherche et un jour peut-être je la trouverai. En attendant je fais des musiques pour l'appeler, comme elle m'appelle de là où elle est.</span>
+        </section>
+
+        <section>
+            
+            <div class="hor" style="height: 15em; gap: 2em; align-items: center;">
+                <img src="/assets/IMG_20260704_010421_869.jpg" style="width: 25%; height: 100%; object-fit: cover; border-radius: 1em;">
+                <div class="ver">
+                    <h1 style="text-align: center;">Tu t'en souviendras.</h1>
+                    <p>Je fais des morceaux, j'écris des livres et je créer des jeux spécialement pour toi. J'espère qu'un jour tu te souviendras des moments qu'on a passé ensemble.</p>
+                </div>
+            </div>
+            
+        </section>
+
+        <hr>
+
+        <section>
+            
+            <div class="hor" style="height: 15em; gap: 2em; align-items: center;">
+                <div class="ver">
+                    <h1>Rien n'est impossible !</h1>
+                    <p>Ne l'oublie pas, ce n'est pas ce que l'on fait qui compte mais pourquoi nous le faisons.</p>
+                </div>
+                <img src="/assets/garden_still.JPG" style="width: 25%; height: 100%; object-fit: cover; border-radius: 1em;">
+            </div>
+            
+        </section>
+
+        <hr>
+
+        <section>
+
+            <div>
+                <img src="/assets/code_blur.JPG" style="width: 100%; height: 5em; object-fit: cover; border-radius: 1em;">
+                <h1 style="text-align: right;">...Rêves.</h1>
+                <p>On rêve de projet, mais on ne les met pas en place. On rêve d'une vie meilleur en restant spectateur. Mais nous aurions pu vivre une vie meilleur sans jamais l'avoir rêver. Au final, rêver c'est ce qui nous rapproche un peu plus de la réalité.</p>
+            </div>
+            
+        </section>
+
     </main>
-    
-    <main id="music_section">
-        <table id="music_repertoire">
-            <thead>
-                <tr><th></th><th>Artistes</th><th>Titre</th><th>Liens</th></tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
 
-        <!--
-        <button><</button>
-        <button>></button>
-        -->
+    <main class="ver align">
+
+        <section id="projectContainer" class="project_container closed"></section>
+
+        <section class="social_network cadre">
+
+            <span class="pill">Suivez-moi</span>
+
+            <div class="ver call_action">
+                
+                
+                <a href="#"><i class="fa-brands fa-instagram"></i><p>Instagram</p></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i><p>YouTube</p></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i><p>TikTok</p></a>
+            
+            </div>
+
+        </section>
+
     </main>
 
-    <main id="langage_section" class="septcent-regular">
-        <ul style="list-style-type: none; text-align: center;"></ul>
-    </main>
+    <footer class="ver align">
 
-    <main id="contact_section">
-        <ul style="list-style-type: none;">
-            <li>ig : @le.melide</li>
-            <li>mail : john.teuira@melide.music</li>
-            <li class="separator"></li>
-            <li><a class="local" href="/moodboard/">CONTACT/SEE_MOODBOARD</a></li>
-        </ul>
-    </main>
-    
-    <footer>
-        <ul class="nav"></ul>
+        <nav>
+            
+            <ul>
+                <li>Redirections</li>
+                <li><a href="/">Accueil</a></li>
+                <li><a href="?search=">Projets</a></li>
+                <li><a href="?merch=" id="merch_button">Merch</a></li>
+            </ul>
+            <ul>
+                <li>Pages</li>
+                <li><a href="?page=mon_histoire">Une histoire</a></li>
+                <li><a href="?page=les_projets">Les projets</a></li>
+                <li><a href="?page=contact">Les contacts</a></li>
+            </ul>
+            <ul>
+                <li>Légales</li>
+                <li><a href="?page=legal_mentions">Mentions légales</a></li>
+                <li><a href="?page=data_protection_policy">Politique sur la protection des données</a></li>
+            </ul>
+            
+        </nav>
+        <section class="call_action hor center fill">
+            <button>Login</button>
+            <button class="except">Access</button>
+        </section>
+        <p>©2026 Melide</p>
+
     </footer>
+
+    <div class="overlay_parallax">
+        <span></span>
+    </div>
+
 </body>
 </html>

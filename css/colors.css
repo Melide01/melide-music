@@ -1,0 +1,150 @@
+:root {
+
+    /* -- structure -- */
+    --html-bg: #f7f3e8;
+    --html-color: #19352a;
+    --body-bg: none;
+    --body-color: #254b39;
+    --header-bg: none;
+    --header-color: #285b40;
+    --footer-bg: none;
+    --footer-color: #285b40;
+
+    /* -- page -- */
+    --page-header-1-color: #19352a;
+    --page-header-2-color: #285b40;
+    --page-header-3-color: #39694d;
+    --page-header-secondary-1-color: #b64f22;
+    --page-header-secondary-2-color: #d86d2f;
+    --page-header-secondary-3-color: #efa86d;
+
+    /* -- global -- */
+    --bg-1: #f7f3e8;
+    --bg-2: #dfe9dc;
+    --bg-3: #edf1e8;
+    --bg-4: #c8dbc9;
+    --bg-5: #e5ece1;
+
+    --fg-1: #19352a;
+    --fg-2: #285b40;
+    --fg-3: #39694d;
+    --fg-4: #4b795a;
+    --fg-5: #214735;
+    --fg-secondary-1: #9b3f18;
+    --fg-secondary-2: #b64f22;
+    --fg-secondary-3: #d86d2f;
+    --fg-secondary-4: #e88c4d;
+    --fg-secondary-5: #f3b982;
+
+    --solid-black-1: #050505;
+    --solid-black-2: #101110;
+    --solid-black-3: #1b1f1d;
+    --solid-white-1: #f5fff7;
+    --solid-white-2: #dfeae2;
+    --solid-white-3: #c8d5ce;
+
+    --solid-gray-light-1: #b5c3ba;
+    --solid-gray-light-2: #9aa9a0;
+    --solid-gray-light-3: #7d8d86;
+    --solid-gray-1: #6d7f76;
+    --solid-gray-2: #586a62;
+    --solid-gray-3: #465852;
+    --solid-gray-dark-1: #2b3835;
+    --solid-gray-dark-2: #1f2825;
+    --solid-gray-dark-3: #171c1a;
+
+    /* -- forest / soft neon accents -- */
+    --solid-forest-1: #0f2d26;
+    --solid-forest-2: #1e4b3b;
+    --solid-forest-3: #2a6b52;
+    --solid-neon-cyan-1: #7ad9b4;
+    --solid-neon-cyan-2: #8be2bf;
+    --solid-neon-cyan-3: #a7f2cf;
+    --solid-neon-teal-1: #67c89c;
+    --solid-neon-teal-2: #7ed7ac;
+    --solid-neon-teal-3: #b0f3d4;
+
+    /* -- rgb -- */
+    --solid-rgb-red: #f76;
+    --solid-rgb-green: #7d9;
+    --solid-rgb-blue: #7af;
+    --solid-rgb-mix-1: #f89;
+    --solid-rgb-mix-2: #7ed;
+    --solid-rgb-mix-3: #8ad;
+
+    /* -- cmy -- */
+    --solid-cmy-cyan: #6de;
+    --solid-cmy-magenta: #f7a;
+    --solid-cmy-yellow: #ed5;
+    --solid-cmy-ink: #0d1c1a;
+
+    /* -- purple / pink -- */
+    --solid-purple-1: #96a;
+    --solid-purple-2: #b8a;
+    --solid-pink-1: #f7a;
+    --solid-pink-2: #f9c;
+
+    /* -- Printful apparel color presets -- */
+    --printful-black: #101110;
+    --printful-white: #f5fff7;
+    --printful-navy: #1f2a44;
+    --printful-royal-blue: #2855a6;
+    --printful-light-blue: #8fc7e8;
+    --printful-red: #c62828;
+    --printful-burgundy: #6e1f2b;
+    --printful-maroon: #641c2b;
+    --printful-orange: #e66b2f;
+    --printful-gold: #d5a928;
+    --printful-mustard: #c49a21;
+    --printful-yellow: #f0cf3a;
+    --printful-kelly-green: #2e8b57;
+    --printful-forest-green: #214735;
+    --printful-military-green: #596044;
+    --printful-heather-green: #7e9b85;
+    --printful-purple: #694b8f;
+    --printful-pink: #e8a8b8;
+    --printful-baby-pink: #f3c7d0;
+    --printful-dusty-rose: #c88d91;
+    --printful-brown: #76513b;
+    --printful-khaki: #b4a47d;
+    --printful-sand: #d8c5a3;
+    --printful-natural: #e8dfc8;
+    --printful-sport-grey: #a9ada8;
+    --printful-sport-gray: #a9ada8;
+    --printful-heather-grey: #8f9692;
+    --printful-heather-gray: #8f9692;
+    --printful-dark-heather-grey: #5f6865;
+    --printful-dark-heather-gray: #5f6865;
+    --printful-heather-navy: #49566b;
+    --printful-heather-athletic: #c3c6bc;
+    --printful-vert-foret: #214735;
+    --printful-ecru: #e8dfc8;
+    --printful-default: #b5c3ba;
+
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --html-bg: #070a08;
+        --html-color: #8ac7a8;
+        --body-color: #9bd8b5;
+        --header-color: #7fd9a5;
+        --footer-color: #7fd9a5;
+
+        --page-header-1-color: #9fe7ba;
+        --page-header-2-color: #7fd9a5;
+        --page-header-3-color: #b7f0cd;
+
+        --bg-1: #070a08;
+        --bg-2: #183c32;
+        --bg-3: #0d1815;
+        --bg-4: #214b3e;
+        --bg-5: #102722;
+
+        --fg-1: #edf9f2;
+        --fg-2: #7fd9a5;
+        --fg-3: #9fe7ba;
+        --fg-4: #6dbd8d;
+        --fg-5: #c7f4d7;
+    }
+}

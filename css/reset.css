@@ -1,0 +1,51 @@
+html, body {
+    min-width: 100%;
+    min-height: 100vh;
+    font-family: var(--font-body);
+    font-size: var(--font-size);
+    /* overflow-x: hidden; */
+}
+* { padding: 0; margin: 0; box-sizing: border-box; }
+
+html { background-color: var(--html-bg); color: var(--html-color); }
+body {
+    background-color: var(--body-bg);
+    color: var(--body-color);
+    display: flex;
+    flex-direction: column;
+    padding: 0 calc(var(--space) * var(--padding));
+    position: relative;
+}
+header { background-color: var(--header-bg); color: var(--header-color); }
+footer {
+    background-color: var(--footer-bg);
+    color: var(--footer-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    /* font-weight: 100; */
+    line-height: 1em;
+    letter-spacing: 0.02em;
+    margin: calc(var(--space) * var(--margin)) 0;
+}
+
+p, li, a, button, input, textarea, select {
+    font-family: var(--font-body);
+}
+
+code, pre, .mono {
+    font-family: var(--font-label);
+}
+
+body>* {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: var(--padding);
+}
+
+a:has(>i.fa-brands),
+a:has(>i.fa-solid) { display: flex; justify-content: center; align-items: center; gap: calc(var(--space) * var(--gap)); }
+a[href] { color: var(--fg-1); text-decoration: none; }
+ul, ol { list-style-position: inside; }

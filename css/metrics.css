@@ -1,0 +1,9 @@
+:root {
+    --font-size: 18px;
+    --space: 1;
+    --padding: 1em;
+    --margin: .25em;
+    --gap: .25em;
+    --border-radius: .75em;
+    --max-width: 777px;
+}
