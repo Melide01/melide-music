@@ -5,6 +5,8 @@
 .hor.align, .ver.center { align-items: center; }
 .hor.center, .ver.align { justify-content: center; }
 
+
+
 .hor .fill,
 .ver .fill,
 .hor.fill>*:not(.except),
@@ -47,7 +49,7 @@
 .merch h2 { font-size: calc(var(--space) * var(--font-size) * 1.5); }
 .merch .visual, .merch_visual { position: relative; }
 .merch .visual img, .merch_visual img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; background-color: var(--bg-2); }
-.merch .visual > .right { position: absolute; top: 0; right: 0; }
+.merch .visual > .right { position: absolute; --p: calc(var(--padding)*var(--space)/4); top: var(--p); right: var(--p); }
 .merch_metadata { flex-wrap: wrap; }
 .merch_metadata > .metadata_tag { white-space: nowrap; }
 .merch_page { width: 100%; }
@@ -584,21 +586,21 @@ input.nav.back:active::after {
     gap: calc(var(--space) * var(--gap));
     color: var(--fg-1);
 }
-.project_container > *:not(.search) > .ver {
+.project_container > *:not(.search):not(.merch) > .ver {
     padding-left: calc(var(--space) * var(--padding));
     transition: padding 100ms;
 }
-.project_container > *:not(.search):hover > .ver {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):hover > .ver {
     padding-left: calc(var(--space) * var(--padding) / 1.2);
 }
-.project_container > *:not(.search):active > .ver {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):active > .ver {
     padding-left: calc(var(--space) * var(--padding) / 2);
 }
 
-.project_container > *:not(.search):hover {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):hover {
     background-color: var(--bg-3);
 }
-.project_container > *:not(.search) {
+.project_container > *:not(.search):not(.merch_featured):not(.merch) {
     all: unset;
     gap: unset !important;
     cursor: pointer;
@@ -737,7 +739,30 @@ header > div:last-of-type > *:hover {
 .album_tracks_list .album_track { display: inline; }
 .album_tracks_list > li { padding: calc(var(--padding)*var(--space) / 4) 0; }
 .album_track { padding: calc(var(--space) * var(--padding)); text-align: left; }
-.track_lyrics { white-space: pre-line; }
+.track_lyrics { gap: calc(var(--space) * var(--gap) * 3); }
+.track_lyrics_section { gap: calc(var(--space) * var(--gap)); }
+.track_lyrics_section > h3 { margin: 0; font-family: var(--font-label); font-size: .85em; color: var(--fg-3); }
+.track_lyrics_line { display: flex; align-items: flex-start; gap: calc(var(--space) * var(--gap)); }
+.track_lyrics_text { margin: 0; white-space: pre-wrap; text-align: left; font: inherit; }
+button.track_lyrics_text {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--fg-2);
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: .2em;
+}
+.track_lyrics_back {
+    flex: 0 0 auto;
+    border: 0;
+    padding: 0 .5em;
+    background: var(--fg-2);
+    color: var(--bg-1);
+    font: inherit;
+    cursor: pointer;
+}
 .project_container > .book > img {
     height: 100%;
     width: auto;
@@ -838,7 +863,7 @@ footer nav ul a:hover { text-decoration: underline; }
 .merch_container > .search, .merch_container > #pagination_controls { grid-column: 1 / -1; }
 .project_container.merch_container {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: calc(var(--space)*var(--gap)*1);
 }
 

@@ -15,6 +15,7 @@ export class ProjectContainer {
         this.filterValue = "all";
         this.order = "desc";
         this.forcedType = typeof options.type === "string" ? options.type.toLowerCase() : null;
+        this.ownedDigitalMerchIds = new Set();
         this.contextFilters = {};
         this.contextControls = null;
         this.controls = null;
@@ -47,6 +48,8 @@ export class ProjectContainer {
         if (!this.container) return null;
 
         this.readUrlState();
+        this.renderers.forEach(renderer => renderer.unload?.());
+        this.renderers = [];
         this.container.classList.toggle("merch_container", this.forcedType === "merch");
         this.container.classList.add("load");
         this.container.classList.remove("closed");
@@ -183,16 +186,24 @@ export class ProjectContainer {
     }
 
     createRenderer(project) {
+        if (["merch", "merchandise"].includes(String(project?.type || "").toLowerCase())) {
+            const renderer = new Merch(project);
+            renderer.owned = this.ownedDigitalMerchIds.has(String(project.id));
+            return renderer;
+        }
         switch (String(project?.type || "").toLowerCase()) {
             case "track": return new Track(project, { albumRenderer: this.createAlbumRenderer(project) });
             case "book": return new Book(project);
             case "videogame":
             case "video_game":
             case "game": return new VideoGame(project);
-            case "merch":
-            case "merchandise": return new Merch(project);
             default: return null;
         }
+    }
+
+    setOwnedDigitalMerchIds(ids = []) {
+        this.ownedDigitalMerchIds = new Set(ids.map(id => String(id)));
+        this.reload();
     }
 
     createAlbumRenderer(track) {

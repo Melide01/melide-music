@@ -1,2 +1,9 @@
 /admin/
 /worker/
+/.wrangler/
+
+# Local credentials and development bindings
+.env
+.env.*
+!.env.example
+**/.dev.vars

@@ -1,10 +1,20 @@
 function escapeHtml(value) {
-    return value
+    return String(value)
         .replaceAll('&', '&amp;')
         .replaceAll('<', '&lt;')
         .replaceAll('>', '&gt;')
         .replaceAll('"', '&quot;')
         .replaceAll("'", '&#39;');
+}
+
+function isSafeMarkdownUrl(value, image = false) {
+    const url = value.trim();
+    if (!url || /[\u0000-\u001f\u007f\\]/.test(url) || url.startsWith("//")) return false;
+    const protocol = url.match(/^([a-z][a-z0-9+.-]*):/i)?.[1]?.toLowerCase();
+    if (!protocol) return true;
+    return image
+        ? protocol === "https" || protocol === "http"
+        : ["https", "http", "mailto", "tel"].includes(protocol);
 }
 
 function parseInline(value) {
@@ -18,9 +28,13 @@ function parseInline(value) {
     let result = escapeHtml(value);
     result = result.replace(/`([^`]+)`/g, (_, code) => keep(`<code>${code}</code>`));
     result = result.replace(/!\[([^\]]*)\]\(([^\s)]+)(?:\s+["']([^"']*)["'])?\)/g,
-        (_, alt, source, title) => keep(`<img src="${source}" alt="${alt}"${title ? ` title="${title}"` : ''}>`));
+        (_, alt, source, title) => isSafeMarkdownUrl(source, true)
+            ? keep(`<img src="${source}" alt="${alt}"${title ? ` title="${title}"` : ''}>`)
+            : alt);
     result = result.replace(/\[([^\]]+)\]\(([^\s)]+)(?:\s+["']([^"']*)["'])?\)/g,
-        (_, label, href, title) => keep(`<a href="${href}"${title ? ` title="${title}"` : ''}>${label}</a>`));
+        (_, label, href, title) => isSafeMarkdownUrl(href)
+            ? keep(`<a href="${href}"${title ? ` title="${title}"` : ''}>${label}</a>`)
+            : label);
     result = result.replace(/(\*\*|__)(.+?)\1/g, '<strong>$2</strong>');
     result = result.replace(/(~~)(.+?)\1/g, '<del>$2</del>');
     result = result.replace(/(?<!\w)(\*|_)([^*_\n]+?)\1(?!\w)/g, '<em>$2</em>');

@@ -1,5 +1,6 @@
 import { Metadata } from "/js/Metadata.js";
 import { getRemainingTime } from "/js/Utils.js";
+import { parseLyrics } from "/js/Lyrics.js";
 
 export class Track {
     constructor(project = {}, options = {}) {
@@ -149,10 +150,51 @@ export class Track {
     }
 
     renderLyrics(panel, lyrics) {
-        const text = document.createElement("p");
-        text.className = "track_lyrics";
-        text.textContent = lyrics;
-        panel.replaceChildren(text);
+        const content = document.createElement("div");
+        content.className = "track_lyrics ver";
+        parseLyrics(lyrics).forEach(section => {
+            const sectionElement = document.createElement("section");
+            sectionElement.className = "track_lyrics_section ver";
+            if (section.title) {
+                const heading = document.createElement("h3");
+                heading.textContent = section.title;
+                sectionElement.appendChild(heading);
+            }
+            section.lines.forEach(line => {
+                const row = document.createElement("div");
+                row.className = "track_lyrics_line";
+                const lyric = document.createElement(line.explanation ? "button" : "p");
+                lyric.className = line.explanation ? "track_lyrics_text has_explanation" : "track_lyrics_text";
+                lyric.textContent = line.text;
+                if (line.explanation) {
+                    lyric.type = "button";
+                    lyric.setAttribute("aria-label", `Afficher l’explication de : ${line.text}`);
+                    const back = document.createElement("button");
+                    back.type = "button";
+                    back.className = "track_lyrics_back";
+                    back.textContent = "Retour";
+                    back.hidden = true;
+                    lyric.addEventListener("click", () => {
+                        lyric.textContent = line.explanation;
+                        lyric.setAttribute("aria-label", "Afficher la parole originale");
+                        lyric.hidden = true;
+                        back.hidden = false;
+                    });
+                    back.addEventListener("click", () => {
+                        lyric.textContent = line.text;
+                        lyric.setAttribute("aria-label", `Afficher l’explication de : ${line.text}`);
+                        lyric.hidden = false;
+                        back.hidden = true;
+                    });
+                    row.append(lyric, back);
+                } else {
+                    row.appendChild(lyric);
+                }
+                sectionElement.appendChild(row);
+            });
+            content.appendChild(sectionElement);
+        });
+        panel.replaceChildren(content);
     }
 
     renderAlbumTracks(panel) {

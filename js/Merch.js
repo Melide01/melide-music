@@ -3,15 +3,19 @@ export class Merch {
         this.data = project && typeof project === "object" ? project : {};
         this.id = this.data.id;
         this.type = "merch";
-        this.title = this.data.title || this.data.metadata?.title || "";
-        this.state = this.data.state || "draft";
+        this.title = this.data.name || this.data.title || this.data.metadata?.title || "";
+        this.state = this.data.state || (this.data.active ? "published" : "draft");
         this.metadata = this.data.metadata && typeof this.data.metadata === "object" ? this.data.metadata : {};
-        this.thumbnail = this.metadata.thumbnail || this.metadata.visuals?.[0] || "/assets/placeholder.webp";
+        this.thumbnail = this.data.thumbnail || this.metadata.thumbnail || this.metadata.visuals?.[0] || "/assets/placeholder.webp";
         this.visuals = Array.isArray(this.metadata.visuals) && this.metadata.visuals.length ? this.metadata.visuals : [this.thumbnail];
-        this.price = this.metadata.price ?? this.data.price ?? "";
-        this.variants = this.normalizeVariants(this.metadata.available_variants);
+        this.price = this.data.price ?? this.metadata.price ?? "";
+        this.currency = this.data.currency || "EUR";
+        this.variants = Array.isArray(this.data.variants) && this.data.variants.length
+            ? this.data.variants.filter(variant => variant?.active !== false && variant?.id != null)
+            : this.normalizeVariants(this.metadata.available_variants);
         this.card = null;
         this.element = null;
+        this.owned = false;
     }
 
     normalizeVariants(availableVariants) {
@@ -41,7 +45,7 @@ export class Merch {
     }
 
     isUpcoming() {
-        const releaseDate = new Date(this.data.release_date || this.data.released_date).getTime();
+        const releaseDate = new Date(this.data.release_date || this.data.released_date || this.metadata.release_date).getTime();
         return Number.isFinite(releaseDate) && releaseDate > Date.now();
     }
 
@@ -57,13 +61,14 @@ export class Merch {
         image.loading = "lazy";
         const quickAction = document.createElement("div");
         quickAction.className = "ver right";
-        quickAction.appendChild(this.createAddButton());
+        quickAction.appendChild(this.createAddButton("card"));
         visual.append(image, quickAction);
         const title = document.createElement("h2");
         title.textContent = this.title;
         const price = document.createElement("p");
         price.textContent = this.formatPrice();
-        card.append(visual, this.createColorControl("card"), title, price, this.createMetadataDisplay());
+        card.append(visual, title, price, this.createMetadataDisplay());
+        if (!Array.isArray(this.data.variants) || !this.data.variants.length) card.insertBefore(this.createColorControl("card"), title);
         this.card = card;
         card.addEventListener("click", () => {
             card.dispatchEvent(new CustomEvent("project:select", { bubbles: true, detail: { project: this.data, renderer: this } }));
@@ -104,8 +109,11 @@ export class Merch {
         const controls = document.createElement("div"); controls.className = "ver align merch_controls";
         const buy = document.createElement("div"); buy.className = "hor fill buy";
         const quantity = document.createElement("input"); quantity.className = "except"; quantity.type = "number"; quantity.min = "1"; quantity.value = "1"; quantity.setAttribute("aria-label", "Quantité");
-        buy.append(quantity, this.createAddButton());
-        controls.append(this.createColorControl("page"), this.createSizeControl(), buy);
+        const variantControl = this.createVariantControl();
+        if (variantControl) controls.appendChild(variantControl);
+        else controls.append(this.createColorControl("page"), this.createSizeControl());
+        buy.append(quantity, this.createAddButton("page"));
+        controls.appendChild(buy);
         merch.append(intro, controls);
         section.appendChild(merch);
         this.element = section;
@@ -141,16 +149,102 @@ export class Merch {
         const metadata = document.createElement("div"); metadata.className = "hor fill align merch_metadata";
         [["is_full_cotton", "100% coton"], ["is_full_synthetic", "Synthétique"], ["is_best_seller", "Best seller"], ["is_artist_pinned", "Choix de l'artiste"], ["is_new", "Nouveau"]]
             .filter(([key]) => this.metadata[key]).forEach(([, label]) => { const tag = document.createElement("span"); tag.className = "metadata_tag"; tag.textContent = label; metadata.appendChild(tag); });
+        if (this.owned && this.isDigital()) {
+            const tag = document.createElement("span");
+            tag.className = "metadata_tag merch_owned";
+            tag.textContent = "Own";
+            metadata.appendChild(tag);
+        }
         return metadata;
     }
 
-    createAddButton() {
-        const button = document.createElement("button"); button.type = "button"; button.textContent = this.isUpcoming() ? "Bientôt disponible" : "Ajouter au panier"; button.disabled = this.isUpcoming();
-        button.addEventListener("click", event => event.stopPropagation());
+    isDigital() {
+        return this.metadata.digital_product === true;
+    }
+
+    createVariantControl() {
+        if (!Array.isArray(this.data.variants) || !this.data.variants.length) return null;
+        const label = document.createElement("label");
+        label.className = "ver merch_variant_control";
+        label.textContent = "Variante";
+        const select = document.createElement("select");
+        select.className = "merch_variant_select";
+        this.data.variants.filter(variant => variant?.active !== false && variant?.id != null).forEach(variant => {
+            const option = document.createElement("option");
+            option.value = String(variant.id);
+            option.textContent = `${variant.name} — ${this.formatPrice(variant.price ?? this.price)}`;
+            select.appendChild(option);
+        });
+        label.appendChild(select);
+        return label;
+    }
+
+    createAddButton(context = "card") {
+        const button = document.createElement("button");
+        button.type = "button";
+        if (this.owned && this.isDigital()) {
+            button.className = "pill merch_add_button merch_owned_button";
+            const icon = document.createElement("i");
+            icon.className = "fa-solid fa-check";
+            icon.setAttribute("aria-hidden", "true");
+            button.appendChild(icon);
+            button.setAttribute("aria-label", "Own — Mes commandes");
+            button.title = "Own — Mes commandes";
+            button.addEventListener("click", event => {
+                event.stopPropagation();
+                window.dispatchEvent(new CustomEvent("merch:orders", {
+                    detail: { merchId: this.id }
+                }));
+            });
+            return button;
+        }
+        const upcoming = this.isUpcoming();
+        button.className = `pill merch_add_button${upcoming ? " is_preorder" : ""}`;
+        const icon = document.createElement("i");
+        icon.className = `fa-solid ${upcoming ? "fa-calendar-plus" : "fa-cart-shopping"}`;
+        icon.setAttribute("aria-hidden", "true");
+        const label = upcoming ? "Précommander" : "Ajouter au panier";
+        button.appendChild(icon);
+        button.disabled = !this.variants.some(variant => variant?.active !== false && variant?.id != null);
+        button.setAttribute("aria-label", label);
+        button.title = label;
+        button.addEventListener("click", event => {
+            event.stopPropagation();
+            if (button.disabled) return;
+            const variantSelect = this.element?.querySelector(".merch_variant_select");
+            const legacyColor = this.element?.querySelector(".merch_colors input:checked")?.value;
+            const legacySize = this.element?.querySelector(".merch_sizes input:checked")?.value;
+            const variant = Array.isArray(this.data.variants) && this.data.variants.length
+                ? this.data.variants.find(item =>
+                    item?.active !== false &&
+                    item?.id != null &&
+                    String(item.id) === (context === "page" ? variantSelect?.value : String(this.data.variants.find(option => option?.active !== false && option?.id != null)?.id))
+                )
+                : null;
+            const quantityInput = context === "page" ? this.element?.querySelector(".buy input[type=number]") : null;
+            const quantity = Math.max(1, Math.min(100, Number.parseInt(quantityInput?.value || "1", 10) || 1));
+            const variantId = variant?.id ?? this.findLegacyVariantId(legacyColor, legacySize);
+            if (variantId == null) {
+                window.dispatchEvent(new CustomEvent("cart:error", { detail: { message: "Cette variante n'est pas disponible." } }));
+                return;
+            }
+            window.dispatchEvent(new CustomEvent("cart:add", { detail: { variantId, quantity } }));
+        });
         return button;
     }
 
-    formatPrice() { return this.price === "" || this.price == null ? "Prix indisponible" : typeof this.price === "number" ? `${this.price.toFixed(2)} €` : String(this.price); }
+    findLegacyVariantId(color, size) {
+        const variant = this.variants.find(item => {
+            const metadata = item?.metadata || {};
+            return (!color || metadata.color === color) && (!size || metadata.size === size);
+        });
+        return variant?.id ?? this.variants[0]?.id ?? null;
+    }
+
+    formatPrice(price = this.price) {
+        if (price === "" || price == null || !Number.isFinite(Number(price))) return "Prix indisponible";
+        return new Intl.NumberFormat("fr-FR", { style: "currency", currency: this.currency }).format(Number(price));
+    }
 
     createNavigation() {
         const button = document.createElement("button"); button.className = "nav back"; button.type = "button"; button.textContent = "Retour";

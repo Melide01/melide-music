@@ -1,10 +1,10 @@
 # Mentions légales
 
-*Dernière mise à jour : [DATE]*
+*Dernière mise à jour : 25/10/2026*
 
 ## Éditeur du site
 
-Le présent site [NOM_DU_SITE / NOM_DU_PROJET] est édité par :
+Le présent site [Melide.MUSIC](https://www.melide.music) est édité par :
 
 - **Nom** : John Teuira
 - **Nom d'artiste / pseudonyme** : Melide
@@ -33,7 +33,7 @@ Le site s'appuient sur les services techniques suivants :
 
 - **Cloudflare, Inc.** — gestion DNS, sécurité/performance (protection contre les attaques, mise en cache), ainsi que Workers (fonctions serverless), R2 (stockage objet) et KV (base de données clé-valeur) utilisés pour servir le contenu public du site (projets, assets, fichiers). Ces services ne stockent aucune donnée utilisateur.
 - **Zoho Corporation** — service de messagerie électronique professionnelle (adresse john.teuira@melide.music).
-- **Google LLC** — outils Google Workspace (Drive, notamment) utilisés pour l'hébergement de fichiers volumineux mis à disposition du public (jeux à installer, projets, livres, packs d'échantillons sonores), ainsi que Sheets, Forms et Apps Script, le cas échéant utilisés pour des sondages ou formulaires impliquant une collecte de données, décrite dans la [Politique de confidentialité](.?page=rgpd).
+- **Google LLC** — outils Google Workspace (Drive, notamment) utilisés pour l'hébergement de fichiers volumineux mis à disposition du public (jeux à installer, projets, livres, packs d'échantillons sonores), ainsi que Sheets, Forms et Apps Script, le cas échéant utilisés pour des sondages ou formulaires impliquant une collecte de données, décrite dans la [Politique de confidentialité](?page=rgpd).
 
 Ces prestataires agissent en tant que sous-traitants techniques et n'ont pas accès aux données dans un but qui leur serait propre, sauf mention contraire dans la politique de confidentialité.
 

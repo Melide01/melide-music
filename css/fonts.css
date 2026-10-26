@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Oranienbaum&family=Manrope:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
 
 @font-face {
     font-family: AuNomDuDesespoir;
@@ -36,4 +36,6 @@
     --font-body: var(--font-sans);
     --font-heading: var(--font-display);
     --font-label: var(--font-mono);
+
+    --font-serif-head: "Oranienbaum", serif;
 }

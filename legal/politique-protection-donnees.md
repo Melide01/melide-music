@@ -1,6 +1,6 @@
 # Politique de protection des données personnelles
 
-*Dernière mise à jour : [DATE]*
+*Dernière mise à jour : 25/10/2026*
 
 ## Préambule
 
@@ -33,7 +33,7 @@ Pour fonctionner, le site s'appuie sur plusieurs prestataires techniques qui agi
 ### Fourniture du contenu du site (aucune collecte de données utilisateur)
 
 * **Cloudflare** (DNS, sécurité, Workers, R2, KV) : sert le contenu public du site (projets, assets). Peut néanmoins collecter des **données de connexion standard** (adresse IP, navigateur, pages visitées) à des fins de sécurité et de performance, accessibles au responsable du site via le tableau de bord Cloudflare.
-* **[NOM_HÉBERGEUR / GitHub Pages]** : héberge le site, peut de la même façon journaliser des données de connexion.
+* **GitHub Pages** : héberge le site, peut de la même façon journaliser des données de connexion.
 * **Google Drive** : héberge les fichiers volumineux mis à disposition en téléchargement (jeux, projets, livres, packs d'échantillons). Aucune information sur les visiteurs n'est collectée à cette occasion.
 
 ### Messagerie
