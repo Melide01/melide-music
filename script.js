@@ -27,6 +27,12 @@ let cartPage;
 let loggedOut = false;
 let authRequestId = 0;
 let viewRequestId = 0;
+let cartAddInProgress = false;
+
+function redirectToConnect() {
+    const returnUrl = new URL(window.location.href);
+    window.location.assign(`${API_URL}/user/whoami?redirect_url=${encodeURIComponent(returnUrl.href)}`);
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
     homeButton?.addEventListener("click", event => {
@@ -49,8 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     connectButton?.addEventListener("click", event => {
         event.preventDefault();
-        const returnUrl = new URL(window.location.href);
-        window.location.assign(`${API_URL}/user/whoami?redirect_url=${encodeURIComponent(returnUrl.href)}`);
+        redirectToConnect();
     });
     logoutButton?.addEventListener("click", () => {
         loggedOut = true;
@@ -83,12 +88,29 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         showPage(destination.searchParams.get("page"));
     });
-    window.addEventListener("cart:add", event => {
+    window.addEventListener("cart:add", async event => {
+        if (cartAddInProgress) return;
+        cartAddInProgress = true;
         try {
+            const response = await fetch(`${API_URL}/user/whoami`, {
+                credentials: "include",
+                cache: "no-store",
+                redirect: "manual"
+            });
+            if (!response.ok) {
+                redirectToConnect();
+                return;
+            }
             cart.add(event.detail?.variantId, event.detail?.quantity);
+            connectButton.hidden = true;
+            accessButton.hidden = false;
+            logoutButton.hidden = false;
+            cartButton.hidden = false;
             notification.show("Article ajouté au panier.", "success");
         } catch (error) {
-            notification.show(error.message || "Impossible d'ajouter cet article.", "validation");
+            notification.show(error.message || "Impossible de vérifier votre connexion ou d'ajouter cet article.", "fatal");
+        } finally {
+            cartAddInProgress = false;
         }
     });
     window.addEventListener("notification", event => {
@@ -678,6 +700,7 @@ async function updateAuthButtons() {
         });
         if (requestId !== authRequestId) return;
         const authenticated = response.ok;
+        window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated } }));
         if (authenticated) loggedOut = false;
         connectButton.hidden = authenticated;
         accessButton.hidden = !authenticated;
@@ -685,6 +708,7 @@ async function updateAuthButtons() {
         cartButton.hidden = !authenticated;
     } catch {
         if (requestId !== authRequestId) return;
+        window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated: false } }));
         connectButton.hidden = false;
         accessButton.hidden = true;
         logoutButton.hidden = true;

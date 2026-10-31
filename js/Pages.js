@@ -7,7 +7,10 @@ const PAGE_SOURCES = new Map([
     ["legal/politique-protection-donnees.md", "/legal/politique-protection-donnees.md"],
     ["politique-protection-donnees.md", "/legal/politique-protection-donnees.md"],
     ["data_protection_policy", "/legal/politique-protection-donnees.md"],
-    ["rgpd", "/legal/politique-protection-donnees.md"]
+    ["rgpd", "/legal/politique-protection-donnees.md"],
+    ["legal/condition-d-utilisation.md", "/legal/condition-d-utilisation.md"],
+    ["condition-d-utilisation.md", "/legal/condition-d-utilisation.md"],
+    ["terms", "/legal/condition-d-utilisation.md"]
 ]);
 
 function getPageSource(identifier) {
