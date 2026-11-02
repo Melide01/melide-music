@@ -476,7 +476,7 @@ async function createAuthorPanel(author, requestId) {
                 method: "POST",
                 credentials: "include",
                 cache: "no-store",
-                headers: { "Content-Type": file.type },
+                headers: { "Content-Type": "text/plain;charset=UTF-8" },
                 body: file
             });
             const result = await response.json();
