@@ -2,6 +2,7 @@ import { ProjectContainer } from '/js/ProjectContainer.js';
 import { Cart, createCheckout, getOrderStatus, getUserOrders } from '/js/Cart.js';
 import { Pages } from '/js/Pages.js';
 import { Notification } from '/js/Notification.js';
+import { createAuthorProjectEditor, translateAuthorError } from '/js/AuthorProjectEditor.js';
 
 const API_URL = "https://api.melide.music";
 
@@ -13,6 +14,7 @@ const homeButton = document.getElementById("home_button");
 const projectsButton = document.getElementById("projects_button");
 const merchButtons = document.querySelectorAll("#merch_button, #footer_merch_button");
 const cartButton = document.getElementById("cart_button");
+const authorButton = document.getElementById("author_button");
 const connectButton = document.getElementById("connect_button");
 const accessButton = document.getElementById("access_button");
 const footerElement = document.querySelector("footer");
@@ -24,10 +26,12 @@ let merchContainer;
 let projectsLoading;
 let merchLoading;
 let cartPage;
+let authorPage;
 let loggedOut = false;
 let authRequestId = 0;
 let viewRequestId = 0;
 let cartAddInProgress = false;
+let authorBindingInProgress = false;
 
 function redirectToConnect() {
     const returnUrl = new URL(window.location.href);
@@ -53,9 +57,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         await showCartPage();
     });
+    authorButton?.addEventListener("click", async event => {
+        event.preventDefault();
+        await showAuthorPanel();
+    });
     connectButton?.addEventListener("click", event => {
         event.preventDefault();
         redirectToConnect();
+    });
+    accessButton?.addEventListener("click", async () => {
+        if (authorBindingInProgress) return;
+        authorBindingInProgress = true;
+        accessButton.disabled = true;
+        try {
+            const response = await fetch(`${API_URL}/user/authors/bind`, {
+                method: "POST",
+                credentials: "include",
+                cache: "no-store",
+                redirect: "manual"
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Impossible d’associer votre compte à un auteur.");
+            if (!Array.isArray(result.authors)) throw new Error("Réponse invalide du serveur.");
+            if (result.authors.length === 0) {
+                notification.show("Aucun auteur ne correspond à l’adresse de votre compte connecté.", "validation");
+                return;
+            }
+            notification.show("Accès auteur activé.", "success");
+            await updateAuthButtons();
+        } catch (error) {
+            notification.show(error.message || "Impossible d’associer votre compte à un auteur.", "error");
+        } finally {
+            authorBindingInProgress = false;
+            accessButton.disabled = false;
+        }
     });
     logoutButton?.addEventListener("click", () => {
         loggedOut = true;
@@ -103,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
             cart.add(event.detail?.variantId, event.detail?.quantity);
             connectButton.hidden = true;
-            accessButton.hidden = false;
             logoutButton.hidden = false;
             cartButton.hidden = false;
             notification.show("Article ajouté au panier.", "success");
@@ -129,6 +163,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await showOrderStatus(params.get("order_success"), { addHistory: false, fromOrders: false });
     } else if (params.has("order")) {
         await showOrderStatus(params.get("order"), { addHistory: false, fromOrders: true });
+    } else if (params.has("author")) {
+        await showAuthorPanel(false);
     } else if (params.has("orders")) {
         const orderId = params.get("orders");
         if (orderId && /^\d+$/.test(orderId)) {
@@ -219,16 +255,331 @@ function hasMerchRoute() {
 
 function navigationUrl(view = "home") {
     const url = new URL(window.location);
-    ["project", "book", "track", "game", "merch", "cart", "orders", "page", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
+    ["project", "book", "track", "game", "merch", "cart", "orders", "author", "page", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
     if (view === "projects") url.searchParams.set("search", "");
     if (view === "merch") url.searchParams.set("merch", "");
     if (view === "cart") url.searchParams.set("cart", "");
     if (view === "orders") url.searchParams.set("orders", "");
+    if (view === "author") url.searchParams.set("author", "");
     return url;
+}
+
+function clearAuthorPage() {
+    authorPage?.remove();
+    authorPage = null;
+}
+
+async function showAuthorPanel(addHistory = true) {
+    const requestId = ++viewRequestId;
+    if (addHistory) {
+        window.history.pushState({ view: "author" }, "", navigationUrl("author"));
+    }
+    activeRenderer?.unload?.();
+    activeRenderer = null;
+    projectContainerElement.classList.add("closed");
+    homeElement?.classList.add("closed");
+    cartPage?.remove();
+    cartPage = null;
+    clearAuthorPage();
+    pages.unload();
+    authorPage = document.createElement("main");
+    authorPage.className = "author_space ver";
+    authorPage.setAttribute("aria-labelledby", "author_panel_title");
+    const heading = document.createElement("h2");
+    heading.id = "author_panel_title";
+    heading.textContent = "Espace auteur";
+    authorPage.appendChild(heading);
+    const loading = document.createElement("p");
+    loading.textContent = "Chargement…";
+    authorPage.appendChild(loading);
+    document.querySelector("header")?.after(authorPage);
+
+    try {
+        const response = await fetch(`${API_URL}/user/authors`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual"
+        });
+        if (!response.ok) throw new Error("Impossible de charger les auteurs associés à votre compte.");
+        const authors = await response.json();
+        if (!Array.isArray(authors)) throw new Error("Réponse invalide du serveur.");
+        if (requestId !== viewRequestId) return;
+        if (authors.length === 0) {
+            if (authorButton) authorButton.hidden = true;
+            throw new Error("Aucun accès auteur n’est associé à ce compte.");
+        }
+
+        window.authors = authors;
+        authorPage.replaceChildren(heading);
+        for (const author of authors) {
+            const panel = await createAuthorPanel(author, requestId);
+            if (requestId !== viewRequestId) return;
+            authorPage.appendChild(panel);
+        }
+    } catch (error) {
+        if (requestId !== viewRequestId) return;
+        authorPage.replaceChildren(heading);
+        const message = document.createElement("p");
+        message.textContent = translateAuthorError(error.message, "Impossible de charger l’espace auteur.");
+        authorPage.appendChild(message);
+    }
+}
+
+async function createAuthorPanel(author, requestId) {
+    const panel = document.createElement("section");
+    panel.className = "author_profile ver";
+    const profile = document.createElement("div");
+    profile.className = "author_profile_header";
+    const portrait = document.createElement("div");
+    portrait.className = "author_profile_portrait";
+    const image = document.createElement("img");
+    image.className = "author_profile_thumbnail";
+    image.src = author.thumbnail || "/assets/mld_logo_all_white.png";
+    image.alt = "";
+    image.loading = "lazy";
+    const editThumbnail = document.createElement("button");
+    editThumbnail.type = "button";
+    editThumbnail.className = "author_profile_photo_edit";
+    editThumbnail.setAttribute("aria-label", "Modifier la photo de profil");
+    editThumbnail.title = "Modifier la photo";
+    editThumbnail.innerHTML = '<i class="fa-solid fa-pen" aria-hidden="true"></i>';
+    portrait.append(image, editThumbnail);
+    const identity = document.createElement("div");
+    identity.className = "author_profile_identity ver";
+    const name = document.createElement("h2");
+    name.className = "author_profile_name";
+    name.textContent = author.name || "Auteur";
+    const edit = document.createElement("button");
+    edit.type = "button";
+    edit.className = "author_profile_edit";
+    edit.setAttribute("aria-label", "Modifier le nom");
+    edit.title = "Modifier le nom";
+    edit.innerHTML = '<i class="fa-solid fa-pen" aria-hidden="true"></i>';
+    identity.append(name, edit);
+    profile.append(portrait, identity);
+    panel.appendChild(profile);
+
+    const profileForm = document.createElement("form");
+    profileForm.className = "author_profile_form";
+    profileForm.hidden = true;
+    const nameLabel = document.createElement("label");
+    nameLabel.textContent = "Nom";
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.required = true;
+    nameInput.maxLength = 100;
+    nameInput.value = author.name || "";
+    nameLabel.appendChild(nameInput);
+    const thumbnailLabel = document.createElement("label");
+    thumbnailLabel.textContent = "Adresse de la photo";
+    const thumbnailInput = document.createElement("input");
+    thumbnailInput.type = "text";
+    thumbnailInput.placeholder = "https://…";
+    thumbnailInput.value = author.thumbnail || "";
+    thumbnailLabel.appendChild(thumbnailInput);
+    const profileActions = document.createElement("div");
+    profileActions.className = "author_profile_actions";
+    const saveProfile = document.createElement("button");
+    saveProfile.type = "submit";
+    saveProfile.textContent = "Enregistrer";
+    const cancelProfile = document.createElement("button");
+    cancelProfile.type = "button";
+    cancelProfile.className = "author_profile_cancel";
+    cancelProfile.textContent = "Annuler";
+    profileActions.append(saveProfile, cancelProfile);
+    const profileStatus = document.createElement("p");
+    profileStatus.setAttribute("role", "status");
+    profileStatus.setAttribute("aria-live", "polite");
+    profileForm.append(nameLabel, thumbnailLabel, profileActions, profileStatus);
+    const openProfileForm = field => {
+        profileForm.hidden = false;
+        (field === "thumbnail" ? thumbnailInput : nameInput).focus();
+    };
+    edit.addEventListener("click", () => openProfileForm("name"));
+    editThumbnail.addEventListener("click", () => openProfileForm("thumbnail"));
+    cancelProfile.addEventListener("click", () => {
+        profileForm.hidden = true;
+        profileStatus.textContent = "";
+    });
+    profileForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        saveProfile.disabled = true;
+        profileStatus.textContent = "Enregistrement…";
+        try {
+            const response = await fetch(`${API_URL}/user/authors/${encodeURIComponent(author.id)}`, {
+                method: "PUT",
+                credentials: "include",
+                cache: "no-store",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name: nameInput.value.trim(), thumbnail: thumbnailInput.value.trim() })
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || "Impossible d’enregistrer le profil.");
+            author.name = result.name;
+            author.thumbnail = result.thumbnail;
+            name.textContent = author.name;
+            image.src = author.thumbnail || "/assets/mld_logo_all_white.png";
+            profileForm.hidden = true;
+            profileStatus.textContent = "Profil enregistré.";
+        } catch (error) {
+            profileStatus.textContent = translateAuthorError(error.message, "Impossible d’enregistrer le profil. Vérifiez les informations puis réessayez.");
+        } finally {
+            saveProfile.disabled = false;
+        }
+    });
+    panel.appendChild(profileForm);
+
+    const projectsHeading = document.createElement("h3");
+    projectsHeading.className = "author_projects_heading";
+    projectsHeading.textContent = "Projets";
+    const projectTools = document.createElement("div");
+    projectTools.className = "author_projects_tools";
+    const searchLabel = document.createElement("label");
+    searchLabel.className = "author_projects_search";
+    searchLabel.textContent = "Rechercher";
+    const search = document.createElement("input");
+    search.type = "search";
+    search.placeholder = "Nom, album, description…";
+    searchLabel.appendChild(search);
+    const filterLabel = document.createElement("label");
+    filterLabel.textContent = "Afficher";
+    const filter = document.createElement("select");
+    [["all", "Tous les projets"], ["track", "Morceaux"], ["book", "Livres"], ["videogame", "Jeux vidéo"], ["draft", "Brouillons"], ["published", "Publiés"]]
+        .forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            filter.appendChild(option);
+        });
+    filterLabel.appendChild(filter);
+    const sortLabel = document.createElement("label");
+    sortLabel.textContent = "Trier par";
+    const sort = document.createElement("select");
+    [["date", "Date"], ["album", "Album"], ["album_order", "Ordre dans l’album"], ["name", "Nom"]]
+        .forEach(([value, label]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = label;
+            sort.appendChild(option);
+        });
+    sortLabel.appendChild(sort);
+    projectTools.append(searchLabel, filterLabel, sortLabel);
+    const projectsContainer = document.createElement("div");
+    projectsContainer.className = "author_projects_grid";
+    const loading = document.createElement("p");
+    loading.textContent = "Chargement des projets…";
+    projectsContainer.appendChild(loading);
+    panel.append(projectsHeading, projectTools, projectsContainer);
+
+    let projects;
+    try {
+        const response = await fetch(`${API_URL}/user/authors/${encodeURIComponent(author.id)}/projects`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual"
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Impossible de charger les projets de cet auteur.");
+        if (!Array.isArray(result)) throw new Error("Réponse invalide du serveur.");
+        projects = result;
+    } catch (error) {
+        loading.textContent = translateAuthorError(error.message, "Impossible de charger les projets de cet auteur.");
+        return panel;
+    }
+    if (requestId !== viewRequestId) return panel;
+    const renderProjects = () => {
+        const query = search.value.trim().toLocaleLowerCase("fr");
+        const filteredProjects = projects.filter(project => {
+            const matchesFilter = filter.value === "all" ||
+                filter.value === project.type ||
+                filter.value === project.state;
+            const searchable = [project.title, project.metadata?.album, project.metadata?.description]
+                .filter(Boolean).join(" ").toLocaleLowerCase("fr");
+            return matchesFilter && (!query || searchable.includes(query));
+        });
+        const dateValue = project => Date.parse(project.release_date || project.creation_date || "") || 0;
+        const albumOrder = project => {
+            const value = Number(project.metadata?.album_order);
+            return Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER;
+        };
+        filteredProjects.sort((a, b) => {
+            if (sort.value === "name") return String(a.title || "").localeCompare(String(b.title || ""), "fr");
+            if (sort.value === "album") {
+                return String(a.metadata?.album || "").localeCompare(String(b.metadata?.album || ""), "fr") ||
+                    albumOrder(a) - albumOrder(b) ||
+                    String(a.title || "").localeCompare(String(b.title || ""), "fr");
+            }
+            if (sort.value === "album_order") {
+                return albumOrder(a) - albumOrder(b) ||
+                    String(a.metadata?.album || "").localeCompare(String(b.metadata?.album || ""), "fr") ||
+                    String(a.title || "").localeCompare(String(b.title || ""), "fr");
+            }
+            return dateValue(b) - dateValue(a) ||
+                String(a.metadata?.album || "").localeCompare(String(b.metadata?.album || ""), "fr") ||
+                albumOrder(a) - albumOrder(b) ||
+                String(a.title || "").localeCompare(String(b.title || ""), "fr");
+        });
+        projectsContainer.replaceChildren();
+        if (!filteredProjects.length) {
+            const empty = document.createElement("p");
+            empty.className = "author_projects_empty";
+            empty.textContent = projects.length ? "Aucun projet ne correspond à votre recherche." : "Aucun projet n’est encore associé à cet auteur.";
+            projectsContainer.appendChild(empty);
+            return;
+        }
+
+        const typeLabels = { track: "Morceau", book: "Livre", videogame: "Jeu vidéo" };
+        for (const project of filteredProjects) {
+            const link = document.createElement("a");
+            link.className = "author_project_card";
+            link.href = `?project=${encodeURIComponent(project.id)}&from=author`;
+            const thumbnail = document.createElement("img");
+            thumbnail.src = project.metadata?.thumbnail || "/assets/placeholder.webp";
+            thumbnail.alt = "";
+            thumbnail.loading = "lazy";
+            const content = document.createElement("div");
+            content.className = "author_project_card_content";
+            const title = document.createElement("h4");
+            title.textContent = project.title || "Projet sans titre";
+            const description = document.createElement("p");
+            const album = project.metadata?.album;
+            const date = project.release_date || project.creation_date;
+            const formattedDate = date && Number.isFinite(Date.parse(date))
+                ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "medium" }).format(new Date(date))
+                : "";
+            description.textContent = [typeLabels[project.type] || project.type, album, formattedDate].filter(Boolean).join(" · ");
+            const state = document.createElement("span");
+            state.className = `author_project_state${project.state === "draft" ? " is_draft" : ""}`;
+            state.textContent = project.state === "draft" ? "Brouillon" : "Publié";
+            content.append(title, description, state);
+            link.append(thumbnail, content);
+            link.addEventListener("click", event => {
+                event.preventDefault();
+                const container = ensureRendererContainer();
+                container.datas = projects;
+                container.filteredDatas = [...projects];
+                window.history.pushState({ view: "project", projectId: project.id, fromAuthor: true }, "", link.href);
+                const renderer = container.createRenderer(project);
+                showProject(renderer, false, true);
+            });
+            projectsContainer.appendChild(link);
+        }
+    };
+    search.addEventListener("input", renderProjects);
+    filter.addEventListener("change", renderProjects);
+    sort.addEventListener("change", renderProjects);
+    renderProjects();
+    return panel;
+}
+
+function ensureRendererContainer() {
+    if (!projectContainer) projectContainer = new ProjectContainer(projectContainerElement, [], {});
+    return projectContainer;
 }
 
 async function showProjects(addHistory = true) {
     const requestId = ++viewRequestId;
+    clearAuthorPage();
     if (addHistory) {
         window.history.pushState({ view: "container" }, "", navigationUrl("projects"));
     }
@@ -242,11 +593,12 @@ async function showProjects(addHistory = true) {
     await ensureProjectContainer();
     if (requestId !== viewRequestId) return;
     projectContainer.create();
-    showUrlProject();
+    await showUrlProject();
 }
 
 async function showPage(identifier, addHistory = true) {
     ++viewRequestId;
+    clearAuthorPage();
     const pageName = String(identifier || "").trim();
     if (addHistory) {
         const url = navigationUrl();
@@ -264,6 +616,7 @@ async function showPage(identifier, addHistory = true) {
 
 async function showMerch(addHistory = true) {
     const requestId = ++viewRequestId;
+    clearAuthorPage();
     if (addHistory) {
         window.history.pushState({ view: "merch" }, "", navigationUrl("merch"));
     }
@@ -441,6 +794,7 @@ function addMerchFeaturedCarousel() {
 
 function showHome(addHistory = true) {
     ++viewRequestId;
+    clearAuthorPage();
     if (addHistory) {
         window.history.pushState({ view: "home" }, "", navigationUrl("home"));
     }
@@ -456,6 +810,7 @@ function showHome(addHistory = true) {
 
 async function showCartPage(addHistory = true, message = "") {
     const requestId = ++viewRequestId;
+    clearAuthorPage();
     if (addHistory) window.history.pushState({ view: "cart" }, "", navigationUrl("cart"));
     activeRenderer?.unload?.();
     activeRenderer = null;
@@ -498,6 +853,7 @@ function createCartSkeleton() {
 
 async function showMyOrdersPage(addHistory = true, merchId = null) {
     const requestId = ++viewRequestId;
+    clearAuthorPage();
     activeRenderer?.unload?.();
     activeRenderer = null;
     projectContainerElement.classList.add("closed");
@@ -602,6 +958,7 @@ async function showMyOrdersPage(addHistory = true, merchId = null) {
 
 async function showOrderStatus(orderId, { addHistory = true, fromOrders = false } = {}) {
     const requestId = ++viewRequestId;
+    clearAuthorPage();
     if (addHistory) {
         const url = navigationUrl(fromOrders ? "orders" : "home");
         if (fromOrders) url.searchParams.set("orders", String(orderId));
@@ -688,8 +1045,10 @@ function updateCartCount() {
 async function updateAuthButtons() {
     if (!connectButton || !accessButton || !logoutButton || !cartButton) return;
     const requestId = ++authRequestId;
+    let authenticated = false;
     connectButton.hidden = false;
     accessButton.hidden = true;
+    if (authorButton) authorButton.hidden = true;
     logoutButton.hidden = true;
     cartButton.hidden = true;
     try {
@@ -699,20 +1058,43 @@ async function updateAuthButtons() {
             redirect: "manual"
         });
         if (requestId !== authRequestId) return;
-        const authenticated = response.ok;
+        authenticated = response.ok;
         window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated } }));
-        if (authenticated) loggedOut = false;
-        connectButton.hidden = authenticated;
-        accessButton.hidden = !authenticated;
-        logoutButton.hidden = !authenticated;
-        cartButton.hidden = !authenticated;
+        if (!authenticated) return;
+        loggedOut = false;
+        connectButton.hidden = true;
+        accessButton.hidden = false;
+        logoutButton.hidden = false;
+        cartButton.hidden = false;
+
+        const authorsResponse = await fetch(`${API_URL}/user/authors`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual"
+        });
+        if (!authorsResponse.ok) throw new Error("Impossible de vérifier les auteurs associés à votre compte.");
+        const authors = await authorsResponse.json();
+        if (!Array.isArray(authors)) throw new Error("Réponse invalide du serveur.");
+        if (requestId !== authRequestId) return;
+        accessButton.hidden = authors.length > 0;
+        if (authorButton) authorButton.hidden = authors.length === 0;
     } catch {
         if (requestId !== authRequestId) return;
-        window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated: false } }));
-        connectButton.hidden = false;
-        accessButton.hidden = true;
-        logoutButton.hidden = true;
-        cartButton.hidden = true;
+        if (authenticated) {
+            connectButton.hidden = true;
+            accessButton.hidden = false;
+            if (authorButton) authorButton.hidden = true;
+            logoutButton.hidden = false;
+            cartButton.hidden = false;
+            notification.show("Impossible de vérifier les auteurs associés à votre compte.", "error");
+        } else {
+            window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated: false } }));
+            connectButton.hidden = false;
+            accessButton.hidden = true;
+            if (authorButton) authorButton.hidden = true;
+            logoutButton.hidden = true;
+            cartButton.hidden = true;
+        }
     }
 }
 
@@ -731,9 +1113,10 @@ function projectUrl(renderer, fromSearch = false) {
     return url;
 }
 
-function showProject(renderer, addHistory = true, fromSearch = false) {
+function showProject(renderer, addHistory = true, fromSearch = false, authorizedProject = null, editorStatus = "") {
     if (!renderer) return;
-    ++viewRequestId;
+    const requestId = ++viewRequestId;
+    clearAuthorPage();
     activeRenderer?.unload?.();
     activeRenderer = renderer;
     if (addHistory) {
@@ -745,7 +1128,50 @@ function showProject(renderer, addHistory = true, fromSearch = false) {
         }, "", projectUrl(renderer, fromSearch));
     }
     projectContainerElement.classList.add("closed");
-    renderer.load("", fromSearch ? projectContainerElement : null);
+    const root = renderer.load("", fromSearch ? projectContainerElement : null);
+    if (root) void loadAuthorProjectEditor(renderer, root, requestId, authorizedProject, editorStatus);
+}
+
+async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProject = null, editorStatus = "") {
+    try {
+        let project = authorizedProject;
+        if (!project) {
+            const response = await fetch(`${API_URL}/user/project/${encodeURIComponent(renderer.id)}`, {
+                credentials: "include",
+                cache: "no-store",
+                redirect: "manual"
+            });
+            if (!response.ok) return;
+            project = await response.json();
+        }
+        if (requestId !== viewRequestId || activeRenderer !== renderer) return;
+        renderer.data = project;
+        const container = ensureRendererContainer();
+        const index = container.datas.findIndex(item => String(item.id) === String(project.id));
+        if (index === -1) container.datas.push(project);
+        else container.datas[index] = project;
+
+        const editor = createAuthorProjectEditor(project, root, async changes => {
+            const saveResponse = await fetch(`${API_URL}/user/project/${encodeURIComponent(project.id)}`, {
+                method: "PUT",
+                credentials: "include",
+                cache: "no-store",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(changes)
+            });
+            const result = await saveResponse.json();
+            if (!saveResponse.ok) throw new Error(result.error || "Impossible d’enregistrer le projet.");
+            const projectIndex = container.datas.findIndex(item => String(item.id) === String(result.id));
+            if (projectIndex === -1) container.datas.push(result);
+            else container.datas[projectIndex] = result;
+            const updatedRenderer = container.createRenderer(result);
+            showProject(updatedRenderer, false, new URLSearchParams(window.location.search).get("from") !== "author", result, "Projet enregistré.");
+        }, editorStatus);
+        const navigation = root.querySelector(".nav.back");
+        root.insertBefore(editor, navigation?.nextSibling || root.firstChild);
+    } catch (error) {
+        console.error("Could not load the author project editor.", error);
+    }
 }
 
 function showProjectContainer(addHistory = true) {
@@ -777,11 +1203,27 @@ function findProjectFromUrl() {
     return undefined;
 }
 
-function showUrlProject() {
+async function showUrlProject() {
     const params = new URLSearchParams(window.location.search);
     if (!["project", "book", "track", "game"].some(name => params.has(name))) return;
 
-    const project = findProjectFromUrl();
+    let project = findProjectFromUrl();
+    if (!project) {
+        const projectId = params.get("project") || params.get("book") || params.get("track") || params.get("game");
+        try {
+            const response = await fetch(`${API_URL}/user/project/${encodeURIComponent(projectId)}`, {
+                credentials: "include",
+                cache: "no-store",
+                redirect: "manual"
+            });
+            if (response.ok) {
+                project = await response.json();
+                projectContainer.datas.push(project);
+            }
+        } catch (error) {
+            console.warn("Could not check author access for this project.", error);
+        }
+    }
     if (!project) {
         projectContainerElement.classList.add("closed");
         const error = document.createElement("section");
@@ -800,8 +1242,8 @@ function showUrlProject() {
         return;
     }
 
-    const renderer = projectContainer.createRenderer(project);
-    showProject(renderer, false, params.get("from") === "search");
+    const renderer = ensureRendererContainer().createRenderer(project);
+    showProject(renderer, false, ["search", "author"].includes(params.get("from")));
 }
 
 function findMerchFromUrl() {
@@ -834,6 +1276,10 @@ document.addEventListener("project:open-content", event => {
 });
 
 document.addEventListener("project:back", event => {
+    if (new URLSearchParams(window.location.search).get("from") === "author") {
+        showAuthorPanel();
+        return;
+    }
     showProjectContainer();
 });
 
@@ -848,6 +1294,10 @@ window.addEventListener("popstate", event => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("page")) {
         showPage(params.get("page"), false);
+        return;
+    }
+    if (params.has("author")) {
+        showAuthorPanel(false);
         return;
     }
     pages.unload();
@@ -892,6 +1342,7 @@ window.addEventListener("pageshow", event => {
 });
 
 function clearCachedViews() {
+    clearAuthorPage();
     activeRenderer?.unload?.();
     activeRenderer = null;
     projectContainer?.renderers.forEach(renderer => renderer.unload?.());

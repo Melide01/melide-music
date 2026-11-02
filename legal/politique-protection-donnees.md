@@ -1,87 +1,95 @@
 # Politique de protection des données personnelles
 
-*Dernière mise à jour : 25/10/2026*
+*Dernière mise à jour : 01/11/2026*
 
-## Préambule
+## Responsable du traitement
 
-Cette politique explique quelles données sont collectées sur [Melide.MUSIC](https://www.melide.music), pourquoi, comment elles sont traitées, et quels sont vos droits. Elle est rédigée de façon transparente : ce site est un site vitrine qui ne collecte lui-même aucune donnée personnelle ; seuls des prestataires techniques tiers (hébergeur, Cloudflare) traitent des données de connexion nécessaires au fonctionnement du service.
+Le responsable du traitement est **John Teuira**, connu sous le pseudonyme **Melide**.
 
-Le responsable du traitement est :
-
-- **John Teuira**, connu sous le pseudonyme **Melide**
-- Contact : john.teuira@melide.music
+- Contact : [john.teuira@melide.music](mailto:john.teuira@melide.music)
 - Site : [www.melide.music](https://www.melide.music)
 
-## Principe général : un site sans cookies
+Cette politique décrit les traitements liés au site public, aux comptes Cloudflare Access, à l'accès auteur et aux commandes de la boutique.
 
-Ce site est un site vitrine statique, sans système de connexion ni base de données. Il n'utilise, ne dépose et ne gère aucun cookie, qu'il soit technique, analytique ou publicitaire, et ne collecte lui-même aucune donnée personnelle.
+## Données traitées et finalités
 
-Le site propose uniquement des redirections vers d'autres pages ou services externes ; nous vous invitons à consulter la politique de confidentialité de ces services tiers si vous les utilisez.
+### Navigation et fonctionnement du site
 
-## Quelles données sont collectées par le site ?
+GitHub Pages et Cloudflare peuvent traiter des données techniques de connexion (par exemple l'adresse IP, les informations du navigateur et les requêtes) pour fournir le site, assurer sa sécurité et diagnostiquer les dysfonctionnements. Les journaux et leur durée de conservation dépendent des paramètres et politiques de ces prestataires.
 
-Le site lui-même ne collecte aucune donnée personnelle par défaut. Il n'y a ni compte utilisateur, ni base de données propre au site pour du tracking ou du profilage.
+Le navigateur peut conserver :
 
-Ponctuellement, un sondage ou formulaire (via Google Forms) peut être proposé — dans ce cas, vous en êtes informé·e avant toute collecte, la participation est volontaire, et le détail est donné dans la section « Les prestataires techniques » ci-dessous.
+- le panier dans le stockage local (`localStorage`), avec les identifiants des variantes et les quantités, pour retrouver le panier ;
+- des données temporaires de contenu dans le stockage de session (`sessionStorage`).
 
-Le reste du contenu du site (projets, assets, fichiers à télécharger) est servi via Cloudflare et Google Drive, sans collecte de donnée vous concernant à cette occasion.
+Le site n'intègre pas de mesure d'audience ou de publicité. Il charge Google Fonts et Font Awesome depuis leurs services externes ; le navigateur contacte ces fournisseurs pour récupérer les polices et icônes. Les liens vers des services externes, tels que YouTube, Instagram ou Google Drive, sont soumis aux pratiques de ces services lorsque vous les consultez.
 
-## Les prestataires techniques (hébergeur et Cloudflare)
+### Connexion et accès auteur
 
-Pour fonctionner, le site s'appuie sur plusieurs prestataires techniques qui agissent en tant que sous-traitants :
+La connexion utilise Cloudflare Access avec Google comme fournisseur d'identité. Cloudflare Access traite les données nécessaires à l'authentification et peut utiliser des cookies techniques pour maintenir la session.
 
-### Fourniture du contenu du site (aucune collecte de données utilisateur)
+Lorsqu'une personne connectée utilise les fonctionnalités du site, le Worker peut créer un compte dans la base D1 de Cloudflare et traiter :
 
-* **Cloudflare** (DNS, sécurité, Workers, R2, KV) : sert le contenu public du site (projets, assets). Peut néanmoins collecter des **données de connexion standard** (adresse IP, navigateur, pages visitées) à des fins de sécurité et de performance, accessibles au responsable du site via le tableau de bord Cloudflare.
-* **GitHub Pages** : héberge le site, peut de la même façon journaliser des données de connexion.
-* **Google Drive** : héberge les fichiers volumineux mis à disposition en téléchargement (jeux, projets, livres, packs d'échantillons). Aucune information sur les visiteurs n'est collectée à cette occasion.
+- l'adresse e-mail et, si fourni par le fournisseur d'identité, le nom ;
+- un identifiant interne, la date de création et les états d'activation/approbation du compte ;
+- l'association du compte à un ou plusieurs profils d'auteur.
 
-### Messagerie
+Ces données servent à authentifier l'utilisateur, appliquer les autorisations du compte, afficher les projets associés à un auteur et protéger les commandes. Pour associer un auteur, le Worker compare l'adresse de l'identité authentifiée par Cloudflare Access à l'adresse enregistrée dans le profil auteur. L'adresse e-mail saisie par le visiteur n'est pas utilisée pour établir cette association.
 
-* **Zoho** : gère l'adresse professionnelle john.teuira@melide.music. Si vous nous contactez par e-mail, votre adresse et le contenu de votre message sont traités selon la politique de confidentialité de Zoho et à seule fin de vous répondre.
+Les informations d'e-mail des profils auteurs sont accessibles dans l'interface d'administration authentifiée et ne sont pas incluses dans la réponse publique des auteurs.
 
-### Sondages et formulaires ponctuels
+### Panier et commandes
 
-* **Google Sheets, Forms et Apps Script** : utilisés uniquement si un sondage ou un formulaire est ponctuellement proposé sur le site. Dans ce cas, vous en êtes informé·e avant toute collecte, et les réponses sont stockées dans un Google Sheet dont John Teuira (Melide) est l'unique gestionnaire et destinataire (compte protégé par validation en deux étapes).
+Le panier est conservé dans le navigateur sous la forme d'identifiants de variantes et de quantités. Lors de la validation, le Worker vérifie les articles et leurs prix à partir de la base de données ; les prix ou informations de paiement fournis par le navigateur ne font pas autorité.
 
-Nous vous invitons à consulter :
+Pour créer et suivre une commande, le site traite notamment l'identifiant du compte, l'adresse e-mail, les articles, les quantités, le montant, la devise, le statut et les dates de commande. Pour une commande payante, le formulaire demande les informations nécessaires à la livraison : nom, adresse, ville, code postal, pays et, facultativement, complément d'adresse, région et téléphone. Ces informations sont enregistrées dans la base de commandes.
 
-* [la politique de confidentialité de Cloudflare](https://www.cloudflare.com/privacypolicy/)
-* [la politique de confidentialité de Google](https://policies.google.com/privacy)
-* la politique de confidentialité de Zoho : [https://www.zoho.com/privacy.html](https://www.zoho.com/privacy.html)
+Les paiements payants sont effectués sur la page de paiement hébergée par **Stripe**. Le site transmet à Stripe les données nécessaires à la session de paiement, dont l'adresse e-mail, les articles, le montant et la référence de commande. Les données de carte sont saisies auprès de Stripe et ne sont pas enregistrées dans la base du site. Stripe traite ces données selon sa [politique de confidentialité](https://stripe.com/privacy).
 
-## Pourquoi ces données sont-elles collectées ?
+**Resend** envoie les confirmations de certaines commandes gratuites. Les données nécessaires à l'envoi peuvent inclure l'adresse e-mail, les articles, le montant, la référence ou le lien de commande et, si une adresse est présente, les informations de livraison. Les commandes payantes n'ont pas actuellement de flux de confirmation par e-mail connecté dans le Worker.
 
-Le site n'ayant pas de collecte propre, cette question ne s'applique qu'aux prestataires techniques mentionnés ci-dessus, qui traitent les données de connexion à des fins de sécurité et de bon fonctionnement du service (voir leurs politiques respectives).
+La boutique ne transmet pas actuellement les commandes à Printful ou à un autre prestataire de fulfillment. La livraison et l'exécution des commandes payantes ne sont donc pas automatisées par cette intégration.
 
-Elles ne sont **jamais utilisées à des fins commerciales, publicitaires, ou revendues à des tiers.**
+## Cookies et stockage dans le navigateur
 
-## Durée de conservation
+Le site n'utilise pas de cookies publicitaires ni de cookies de mesure d'audience. Cloudflare Access peut toutefois utiliser des cookies techniques nécessaires à la connexion et au maintien de la session sur l'API. Le panier et le cache de contenu utilisent les stockages locaux du navigateur décrits ci-dessus ; ils ne sont pas des cookies.
 
-Le site ne conservant aucune donnée propre, cette question relève de la politique de conservation de Cloudflare et de [NOM_HÉBERGEUR] concernant les logs de connexion.
+## Bases et durées de conservation
+
+Lorsque le RGPD s'applique, les traitements sont fondés selon le cas sur l'exécution des fonctionnalités demandées (connexion, accès auteur et commande), les obligations légales applicables aux commandes, ou l'intérêt légitime à sécuriser et maintenir le site.
+
+Les données de compte et d'association sont conservées tant que le compte et les fonctionnalités associées sont nécessaires. Les informations de commande peuvent être conservées pour le suivi des achats, la gestion des demandes et le respect des obligations légales applicables. Les données techniques de connexion suivent les durées définies par les fournisseurs d'hébergement et d'infrastructure. Le site ne dispose pas actuellement d'une durée automatique unique de purge applicable à tous ces éléments.
+
+Vous pouvez demander l'accès, la rectification ou la suppression des données vous concernant en écrivant à [john.teuira@melide.music](mailto:john.teuira@melide.music). Une suppression peut être limitée lorsque certaines informations doivent être conservées pour satisfaire une obligation légale ou traiter une commande.
+
+## Prestataires et transferts
+
+Les données peuvent être traitées par les prestataires nécessaires aux fonctionnalités décrites : GitHub (hébergement statique), Cloudflare (DNS, sécurité, authentification, Worker et base D1), Google (fournisseur d'identité et polices), Stripe (paiement), Resend (e-mails de confirmation), ainsi que Zoho pour les échanges par e-mail. Ces prestataires peuvent traiter certaines données depuis des pays autres que la Polynésie française. Leurs politiques et mécanismes applicables sont consultables sur leurs sites respectifs.
+
+- [Confidentialité de Cloudflare](https://www.cloudflare.com/privacypolicy/)
+- [Déclaration de confidentialité de GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
+- [Confidentialité de Google](https://policies.google.com/privacy)
+- [Confidentialité de Stripe](https://stripe.com/privacy)
+- [Confidentialité de Zoho](https://www.zoho.com/privacy.html)
+
+## Utilisation de l'intelligence artificielle (IA)
+
+GitHub Copilot est utilisé par l'éditeur comme assistant de développement dans son flux de travail de programmation. L'éditeur décrit une tâche, Copilot peut examiner le contexte du dépôt et proposer ou modifier du code, expliquer des erreurs et suggérer des vérifications. L'éditeur examine les propositions, vérifie les changements et décide ce qui est intégré et publié ; les résultats de Copilot ne sont pas publiés automatiquement.
+
+L'utilisation de Copilot intervient dans la maintenance et la création du site, et non dans une fonctionnalité d'IA proposée aux visiteurs. Le site n'envoie pas les données des comptes ou des commandes à Copilot dans son fonctionnement normal. Les prompts, le contexte du dépôt et les extraits de code fournis à Copilot peuvent être traités par GitHub et ses fournisseurs selon le produit, le compte, ses paramètres et les conditions applicables. L'éditeur évite d'inclure des données personnelles de visiteurs dans ces prompts. Pour en savoir plus, consultez la [présentation de GitHub Copilot](https://docs.github.com/en/copilot/get-started/about-github-copilot) et la [déclaration de confidentialité de GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement).
 
 ## Vos droits
 
-Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez des droits suivants concernant vos données :
+Lorsque le RGPD ou les règles locales applicables vous accordent des droits sur vos données, vous pouvez demander l'accès, la rectification, l'effacement, la limitation du traitement, vous opposer à certains traitements ou demander la portabilité lorsque celle-ci s'applique. Pour exercer vos droits, contactez [john.teuira@melide.music](mailto:john.teuira@melide.music). Une vérification raisonnable de votre identité peut être nécessaire pour protéger vos données.
 
-- **Droit d'accès** : savoir quelles données vous concernant sont détenues
-- **Droit de rectification** : corriger des données inexactes
-- **Droit à l'effacement** : demander la suppression de vos données
-- **Droit d'opposition** : vous opposer à la collecte, à tout moment
-- **Droit à la portabilité** : recevoir vos données dans un format structuré
+Vous pouvez également saisir l'autorité de contrôle compétente, notamment la CNIL lorsque celle-ci est compétente ([www.cnil.fr](https://www.cnil.fr)).
 
-Pour exercer l'un de ces droits, vous pouvez contacter directement : **john.teuira@melide.music**
+## Sécurité
 
-Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (Commission Nationale de l'Informatique et des Libertés) si vous estimez que vos droits ne sont pas respectés : [www.cnil.fr](https://www.cnil.fr)
+Des mesures raisonnables sont mises en œuvre pour protéger les données, notamment l'authentification des routes utilisateur et des contrôles côté serveur sur les opérations liées aux comptes et aux commandes. Aucun système ne peut toutefois garantir une sécurité absolue.
 
-## Sécurité des données
+## Modifications et contact
 
-Bien qu'aucun système ne puisse garantir une sécurité absolue, des mesures raisonnables sont mises en œuvre pour protéger les données collectées : accès restreint au seul responsable du traitement, sécurité renforcée des comptes Google et Cloudflare utilisés par les prestataires techniques, et absence de publication ou de partage des données.
+Cette politique peut évoluer avec les fonctionnalités du site ou les règles applicables. La date de mise à jour figure en haut du document.
 
-## Modification de cette politique
-
-Cette politique de confidentialité peut être amenée à évoluer, notamment pour se conformer à des exigences réglementaires nouvelles. La date de dernière mise à jour en haut de ce document reflète la version en vigueur.
-
-## Contact
-
-Pour toute question relative à cette politique ou à vos données personnelles : **john.teuira@melide.music**
+Pour toute question relative à cette politique ou à vos données personnelles : [john.teuira@melide.music](mailto:john.teuira@melide.music).

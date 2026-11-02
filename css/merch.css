@@ -360,6 +360,7 @@
 
 #connect_button[hidden],
 #access_button[hidden],
+#author_button[hidden],
 #logout_button[hidden],
 #cart_button[hidden] {
     display: none !important;

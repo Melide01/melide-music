@@ -1,6 +1,6 @@
 # Mentions légales
 
-*Dernière mise à jour : 25/10/2026*
+*Dernière mise à jour : 01/11/2026*
 
 ## Éditeur du site
 
@@ -10,38 +10,42 @@ Le présent site [Melide.MUSIC](https://www.melide.music) est édité par :
 - **Nom d'artiste / pseudonyme** : Melide
 - **Statut** : Personne physique, activité personnelle / artistique non déclarée sous forme de société
 - **Localisation** : Papara, Tahiti, Polynésie française — 98712
-- **Contact** : john.teuira@melide.music
+- **Contact** : [john.teuira@melide.music](mailto:john.teuira@melide.music)
 - **Site web** : [www.melide.music](https://www.melide.music)
 
-Pour des raisons de vie privée liées à une résidence sur une île de petite taille, l'adresse postale exacte n'est pas communiquée publiquement. Toute autorité compétente (administration, justice) souhaitant obtenir cette information peut en faire la demande via le contact indiqué ci-dessus.
+Pour des raisons de vie privée liées à une résidence sur une île de petite taille, l'adresse postale exacte n'est pas communiquée publiquement. Toute autorité compétente souhaitant obtenir cette information peut en faire la demande via le contact indiqué ci-dessus.
 
 ## Responsable de la publication
 
 John Teuira (Melide), à l'adresse de contact indiquée ci-dessus.
 
-## Hébergement
+## Hébergement et infrastructure
 
-Le site est hébergé par :
+- **Site statique** : GitHub Pages (GitHub, Inc.), 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis — [pages.github.com](https://pages.github.com).
+- **DNS, sécurité et API** : Cloudflare, Inc. — le site utilise Cloudflare pour le DNS et la protection du trafic, et des Workers pour son API. La base D1 de Cloudflare stocke les comptes, associations d'auteurs et commandes nécessaires aux fonctionnalités connectées.
+- **Authentification** : Cloudflare Access, avec Google comme fournisseur d'identité. L'authentification est utilisée pour les comptes, l'accès auteur et les commandes.
 
-- **Hébergeur** : GitHub Pages (GitHub, Inc.)
-- **Adresse** : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis
-- **Site web** : [https://pages.github.com](https://pages.github.com)
+## Services tiers
 
-## Infrastructure et services tiers
+Le site utilise également :
 
-Le site s'appuient sur les services techniques suivants :
+- **Stripe** pour héberger le paiement des commandes payantes.
+- **Resend** pour envoyer certaines confirmations de commande, notamment celles des commandes gratuites.
+- **Google Fonts** et **Font Awesome** pour charger des polices et icônes dans le navigateur.
+- **Zoho** pour la messagerie professionnelle de contact.
+- Des liens vers des services externes (notamment Google Drive, YouTube et Instagram) peuvent être proposés. Lorsque vous les ouvrez, leurs propres conditions et politiques de confidentialité s'appliquent.
 
-- **Cloudflare, Inc.** — gestion DNS, sécurité/performance (protection contre les attaques, mise en cache), ainsi que Workers (fonctions serverless), R2 (stockage objet) et KV (base de données clé-valeur) utilisés pour servir le contenu public du site (projets, assets, fichiers). Ces services ne stockent aucune donnée utilisateur.
-- **Zoho Corporation** — service de messagerie électronique professionnelle (adresse john.teuira@melide.music).
-- **Google LLC** — outils Google Workspace (Drive, notamment) utilisés pour l'hébergement de fichiers volumineux mis à disposition du public (jeux à installer, projets, livres, packs d'échantillons sonores), ainsi que Sheets, Forms et Apps Script, le cas échéant utilisés pour des sondages ou formulaires impliquant une collecte de données, décrite dans la [Politique de confidentialité](?page=rgpd).
+Les services Cloudflare, GitHub, Google, Stripe, Resend et les autres prestataires peuvent traiter des données techniques ou personnelles dans le cadre de leurs services. Les détails concernant les données de compte et de commande figurent dans la [politique de protection des données](?page=legal/politique-protection-donnees.md).
 
-Ces prestataires agissent en tant que sous-traitants techniques et n'ont pas accès aux données dans un but qui leur serait propre, sauf mention contraire dans la politique de confidentialité.
+## Utilisation de l'intelligence artificielle
+
+GitHub Copilot est utilisé comme assistant de développement pour contribuer à la maintenance du site. Le processus et les données susceptibles d'être traitées dans ce cadre sont décrits dans la section « Utilisation de l'intelligence artificielle » de la [politique de protection des données](?page=legal/politique-protection-donnees.md).
 
 ## Propriété intellectuelle
 
-Sauf mention contraire, l'ensemble des contenus présents sur ce site (textes, graphismes, logo, identité visuelle, musiques, code, gameplay, univers narratif) sont la propriété exclusive de John Teuira (Melide), sauf éléments appartenant à des tiers, dûment identifiés.
+Sauf mention contraire, les contenus présents sur ce site (textes, graphismes, logo, identité visuelle, musiques, code, gameplay et univers narratif) sont la propriété de John Teuira (Melide), à l'exception des éléments appartenant à des tiers, dûment identifiés.
 
-Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces différents éléments est strictement interdite sans l'accord exprès par écrit de l'éditeur, en dehors des cas prévus par la loi (courtes citations, etc.).
+Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est interdite sans l'accord exprès par écrit de l'éditeur, en dehors des cas prévus par la loi.
 
 ## Limitation de responsabilité
 
@@ -53,4 +57,4 @@ Les présentes mentions légales sont soumises au droit français, applicable en
 
 ## Contact
 
-Pour toute question relative au site ou à ces mentions légales : **john.teuira@melide.music**
+Pour toute question relative au site ou à ces mentions légales : [john.teuira@melide.music](mailto:john.teuira@melide.music).
