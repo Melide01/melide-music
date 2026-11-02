@@ -628,7 +628,9 @@ async function createAuthorPanel(author, requestId) {
             description.textContent = [typeLabels[project.type] || project.type, album, formattedDate].filter(Boolean).join(" · ");
             const state = document.createElement("span");
             state.className = `author_project_state${project.state === "draft" ? " is_draft" : ""}`;
-            state.textContent = project.state === "draft" ? "Brouillon" : "Publié";
+            state.textContent = project.canEdit === false
+                ? `${project.state === "draft" ? "Brouillon" : "Publié"} · Consultant (lecture seule)`
+                : project.state === "draft" ? "Brouillon" : "Publié";
             content.append(title, description, state);
             link.append(thumbnail, content);
             link.addEventListener("click", event => {
@@ -1223,6 +1225,7 @@ async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProj
             project = await response.json();
         }
         if (requestId !== viewRequestId || activeRenderer !== renderer) return;
+        if (project.canEdit === false) return;
         renderer.data = project;
         const container = ensureRendererContainer();
         const index = container.datas.findIndex(item => String(item.id) === String(project.id));

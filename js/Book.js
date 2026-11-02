@@ -30,7 +30,10 @@ export class Book {
 
     authorProfiles() {
         const availableAuthors = Array.isArray(window.authors) ? window.authors : [];
-        return this.authors.map(id => availableAuthors.find(author => String(author.id) === String(id))).filter(Boolean);
+        const visibleAuthorIds = this.authors.filter(id =>
+            !this.data.authorRoles || !this.data.authorRoles[id] || this.data.authorRoles[id] === "main"
+        );
+        return visibleAuthorIds.map(id => availableAuthors.find(author => String(author.id) === String(id))).filter(Boolean);
     }
 
     load(alert = "", from = null) {

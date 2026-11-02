@@ -45,7 +45,10 @@ export class Track {
 
     authorProfiles() {
         const availableAuthors = Array.isArray(window.authors) ? window.authors : [];
-        return this.authors
+        const visibleAuthorIds = this.authors.filter(authorId =>
+            !this.data.authorRoles || !this.data.authorRoles[authorId] || this.data.authorRoles[authorId] === "main"
+        );
+        return visibleAuthorIds
             .map(authorId => availableAuthors.find(author => String(author.id) === String(authorId)))
             .filter(Boolean);
     }
