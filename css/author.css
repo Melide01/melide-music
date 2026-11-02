@@ -136,6 +136,14 @@
     grid-column: 1 / -1;
 }
 
+.author_profile_photo_limit {
+    margin: 0;
+    color: var(--fg-2);
+    font-family: var(--font-body);
+    font-size: .82rem;
+    grid-column: 1 / -1;
+}
+
 .author_profile_form button,
 .author_editor_save,
 .author_editor_remove {

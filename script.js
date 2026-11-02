@@ -370,13 +370,6 @@ async function createAuthorPanel(author, requestId) {
     nameInput.maxLength = 100;
     nameInput.value = author.name || "";
     nameLabel.appendChild(nameInput);
-    const thumbnailLabel = document.createElement("label");
-    thumbnailLabel.textContent = "Adresse de la photo";
-    const thumbnailInput = document.createElement("input");
-    thumbnailInput.type = "text";
-    thumbnailInput.placeholder = "https://…";
-    thumbnailInput.value = author.thumbnail || "";
-    thumbnailLabel.appendChild(thumbnailInput);
     const profileActions = document.createElement("div");
     profileActions.className = "author_profile_actions";
     const saveProfile = document.createElement("button");
@@ -390,13 +383,17 @@ async function createAuthorPanel(author, requestId) {
     const profileStatus = document.createElement("p");
     profileStatus.setAttribute("role", "status");
     profileStatus.setAttribute("aria-live", "polite");
-    profileForm.append(nameLabel, thumbnailLabel, profileActions, profileStatus);
-    const openProfileForm = field => {
+    profileForm.append(nameLabel, profileActions, profileStatus);
+    const openProfileForm = () => {
         profileForm.hidden = false;
-        (field === "thumbnail" ? thumbnailInput : nameInput).focus();
+        nameInput.focus();
     };
-    edit.addEventListener("click", () => openProfileForm("name"));
-    editThumbnail.addEventListener("click", () => openProfileForm("thumbnail"));
+    edit.addEventListener("click", openProfileForm);
+    editThumbnail.addEventListener("click", () => {
+        updatePhotoAvailability();
+        photoForm.hidden = false;
+        if (!photoInput.disabled) photoInput.focus();
+    });
     cancelProfile.addEventListener("click", () => {
         profileForm.hidden = true;
         profileStatus.textContent = "";
@@ -411,14 +408,12 @@ async function createAuthorPanel(author, requestId) {
                 credentials: "include",
                 cache: "no-store",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ name: nameInput.value.trim(), thumbnail: thumbnailInput.value.trim() })
+                body: JSON.stringify({ name: nameInput.value.trim() })
             });
             const result = await response.json();
             if (!response.ok) throw new Error(result.error || "Impossible d’enregistrer le profil.");
             author.name = result.name;
-            author.thumbnail = result.thumbnail;
             name.textContent = author.name;
-            image.src = author.thumbnail || "/assets/mld_logo_all_white.png";
             profileForm.hidden = true;
             profileStatus.textContent = "Profil enregistré.";
         } catch (error) {
@@ -428,6 +423,89 @@ async function createAuthorPanel(author, requestId) {
         }
     });
     panel.appendChild(profileForm);
+
+    const photoForm = document.createElement("form");
+    photoForm.className = "author_profile_form author_profile_photo_form";
+    photoForm.hidden = true;
+    const photoLabel = document.createElement("label");
+    photoLabel.textContent = "Photo de profil (PNG, JPEG, WebP ou GIF · 5 Mo max.)";
+    const photoInput = document.createElement("input");
+    photoInput.type = "file";
+    photoInput.accept = "image/png,image/jpeg,image/webp,image/gif";
+    photoInput.required = true;
+    photoLabel.appendChild(photoInput);
+    const photoLimit = document.createElement("p");
+    photoLimit.className = "author_profile_photo_limit";
+    const updatePhotoAvailability = () => {
+        const availableAt = author.profilePictureNextUploadAt ? new Date(author.profilePictureNextUploadAt) : null;
+        if (availableAt && availableAt > new Date()) {
+            photoLimit.textContent = `Prochain envoi possible le ${availableAt.toLocaleDateString("fr-FR")}.`;
+            photoInput.disabled = true;
+        } else {
+            photoLimit.textContent = "Une photo par mois calendaire (UTC).";
+            photoInput.disabled = false;
+        }
+        uploadPhoto.disabled = photoInput.disabled;
+    };
+    const photoActions = document.createElement("div");
+    photoActions.className = "author_profile_actions";
+    const uploadPhoto = document.createElement("button");
+    uploadPhoto.type = "submit";
+    uploadPhoto.textContent = "Envoyer la photo";
+    const cancelPhoto = document.createElement("button");
+    cancelPhoto.type = "button";
+    cancelPhoto.textContent = "Annuler";
+    cancelPhoto.addEventListener("click", () => {
+        photoForm.hidden = true;
+        photoInput.value = "";
+        photoStatus.textContent = "";
+    });
+    photoActions.append(uploadPhoto, cancelPhoto);
+    const photoStatus = document.createElement("p");
+    photoStatus.setAttribute("role", "status");
+    photoStatus.setAttribute("aria-live", "polite");
+    photoForm.append(photoLabel, photoLimit, photoActions, photoStatus);
+    photoForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        const file = photoInput.files?.[0];
+        if (!file) return;
+        uploadPhoto.disabled = true;
+        photoStatus.textContent = "Envoi et traitement de la photo…";
+        try {
+            const response = await fetch(`${API_URL}/user/authors/${encodeURIComponent(author.id)}/thumbnail`, {
+                method: "POST",
+                credentials: "include",
+                cache: "no-store",
+                headers: { "Content-Type": file.type },
+                body: file
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                const error = new Error(result.error || "Impossible d’envoyer la photo.");
+                error.nextUploadAvailableAt = result.nextUploadAvailableAt;
+                throw error;
+            }
+            author.thumbnail = result.thumbnail;
+            author.profilePictureNextUploadAt = result.nextUploadAvailableAt;
+            image.src = author.thumbnail;
+            updatePhotoAvailability();
+            photoForm.hidden = true;
+            photoInput.value = "";
+            photoStatus.textContent = result.previousThumbnailCleanupFailed
+                ? "Photo enregistrée, mais l’ancienne image n’a pas pu être supprimée. Contactez l’administrateur."
+                : "Photo de profil enregistrée.";
+        } catch (error) {
+            photoStatus.textContent = translateAuthorError(error.message, "Impossible d’envoyer la photo. Vérifiez le fichier puis réessayez.");
+            if (error.nextUploadAvailableAt) {
+                author.profilePictureNextUploadAt = error.nextUploadAvailableAt;
+                const availableAt = new Date(error.nextUploadAvailableAt);
+                photoStatus.textContent += ` Vous pourrez en envoyer une autre à partir du ${availableAt.toLocaleDateString("fr-FR")}.`;
+            }
+        } finally {
+            updatePhotoAvailability();
+        }
+    });
+    panel.appendChild(photoForm);
 
     const projectsHeading = document.createElement("h3");
     projectsHeading.className = "author_projects_heading";
