@@ -1240,8 +1240,20 @@ async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProj
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(changes)
             });
-            const result = await saveResponse.json();
-            if (!saveResponse.ok) throw new Error(result.error || "Impossible d’enregistrer le projet.");
+            const responseText = await saveResponse.text();
+            let result;
+            try {
+                result = responseText ? JSON.parse(responseText) : null;
+            } catch {
+                const detail = saveResponse.ok
+                    ? "Le serveur a renvoyé une réponse invalide."
+                    : `Le serveur a répondu avec le statut ${saveResponse.status} sans message exploitable.`;
+                throw new Error(detail);
+            }
+            if (!saveResponse.ok) throw new Error(result?.error || "Impossible d’enregistrer le projet.");
+            if (!result || typeof result !== "object" || Array.isArray(result)) {
+                throw new Error("Le serveur a renvoyé une réponse invalide.");
+            }
             const projectIndex = container.datas.findIndex(item => String(item.id) === String(result.id));
             if (projectIndex === -1) container.datas.push(result);
             else container.datas[projectIndex] = result;

@@ -435,7 +435,9 @@ export function createAuthorProjectEditor(project, root, onSave, initialStatus =
             });
             status.textContent = "Projet enregistré.";
         } catch (error) {
-            status.textContent = translateAuthorError(error.message, "Impossible d’enregistrer le projet. Vérifiez les informations puis réessayez.");
+            const fallback = "Impossible d’enregistrer le projet. Vérifiez les informations puis réessayez.";
+            const translated = translateAuthorError(error.message, "");
+            status.textContent = translated || (error.message ? `${fallback} (${error.message})` : fallback);
             save.disabled = false;
         }
     });
