@@ -1234,7 +1234,7 @@ async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProj
 
         const editor = createAuthorProjectEditor(project, root, async changes => {
             const saveResponse = await fetch(`${API_URL}/user/project/${encodeURIComponent(project.id)}`, {
-                method: "PUT",
+                method: "POST",
                 credentials: "include",
                 cache: "no-store",
                 headers: { "Content-Type": "text/plain;charset=UTF-8" },
