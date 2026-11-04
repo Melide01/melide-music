@@ -1237,7 +1237,7 @@ async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProj
                 method: "PUT",
                 credentials: "include",
                 cache: "no-store",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "text/plain;charset=UTF-8" },
                 body: JSON.stringify(changes)
             });
             const responseText = await saveResponse.text();
