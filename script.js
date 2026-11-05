@@ -6,6 +6,7 @@ import { createAuthorProjectEditor, translateAuthorError } from '/js/AuthorProje
 import { createAuthorNewsEditor } from '/js/AuthorNewsEditor.js';
 import { NewsContainer, renderNewsArticle } from '/js/News.js';
 import { initializeCustomIcons } from '/js/Icons.js';
+import { Modal } from '/js/Modal.js';
 
 const API_URL = "https://api.melide.music";
 
@@ -148,13 +149,81 @@ document.addEventListener('DOMContentLoaded', async () => {
                 redirectToConnect();
                 return;
             }
-            cart.add(event.detail?.variantId, event.detail?.quantity);
+            const variantId = Number(event.detail?.variantId);
+            const product = merchContainer?.datas.find(item =>
+                item.variants?.some(variant => Number(variant.id) === variantId)
+            );
+            if (product?.metadata?.allow_multiple !== true) {
+                const sameProduct = cart.items.find(item => merchContainer?.datas.some(candidate =>
+                    candidate.id === product?.id &&
+                    candidate.variants?.some(variant => Number(variant.id) === item.variantId)
+                ));
+                if (sameProduct) {
+                    notification.show("Cet article est limité à un exemplaire par commande.", "validation");
+                    return;
+                }
+            }
+            cart.add(variantId, product?.metadata?.allow_multiple === true ? event.detail?.quantity : 1);
             connectButton.hidden = true;
             logoutButton.hidden = false;
             cartButton.hidden = false;
             notification.show("Article ajouté au panier.", "success");
         } catch (error) {
             notification.show(error.message || "Impossible de vérifier votre connexion ou d'ajouter cet article.", "fatal");
+        } finally {
+            cartAddInProgress = false;
+        }
+    });
+    window.addEventListener("merch:free-download", async event => {
+        if (cartAddInProgress) return;
+        cartAddInProgress = true;
+        try {
+            const response = await fetch(`${API_URL}/user/whoami`, {
+                credentials: "include",
+                cache: "no-store",
+                redirect: "manual"
+            });
+            if (!response.ok) {
+                redirectToConnect();
+                return;
+            }
+            connectButton.hidden = true;
+            logoutButton.hidden = false;
+            cartButton.hidden = false;
+            if (cart.count() > 0) {
+                const content = document.createElement("p");
+                content.textContent = "Le panier va être réinitialisé, voulez-vous continuer ?";
+                const modal = new Modal({ title: "Téléchargement", content });
+                modal.dialog.querySelector(".site_modal_close")?.remove();
+                let confirmed = false;
+                const result = new Promise(resolve => {
+                    modal.dialog.addEventListener("close", () => resolve(confirmed), { once: true });
+                });
+                const actions = document.createElement("div");
+                actions.className = "hor";
+                const ok = document.createElement("button");
+                ok.type = "button";
+                ok.textContent = "Ok";
+                ok.addEventListener("click", () => {
+                    confirmed = true;
+                    modal.close();
+                });
+                const cancel = document.createElement("button");
+                cancel.type = "button";
+                cancel.textContent = "Annuler";
+                cancel.addEventListener("click", () => modal.close());
+                actions.append(ok, cancel);
+                modal.dialog.querySelector(".site_modal_content")?.append(actions);
+                modal.open();
+                if (!await result) return;
+                cart.clear();
+            }
+            await createCheckout([{
+                merch_variant_id: Number(event.detail?.variantId),
+                quantity: 1
+            }]);
+        } catch (error) {
+            notification.show(error.message || "Impossible de démarrer le téléchargement gratuit.", "error");
         } finally {
             cartAddInProgress = false;
         }

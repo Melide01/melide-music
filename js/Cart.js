@@ -93,9 +93,22 @@ export class Cart {
         }
 
         const resolvedItems = this.resolveItems(products);
+        let normalizedFixedQuantity = false;
+        const fixedMerchCounts = new Map();
+        for (const item of resolvedItems) {
+            if (item.product.metadata?.allow_multiple === true) continue;
+            if (item.quantity !== 1) {
+                item.quantity = 1;
+                normalizedFixedQuantity = true;
+            }
+            fixedMerchCounts.set(item.product.id, (fixedMerchCounts.get(item.product.id) || 0) + 1);
+        }
+        if (normalizedFixedQuantity) this.save();
+        const hasDuplicateFixedMerch = [...fixedMerchCounts.values()].some(count => count > 1);
         const list = document.createElement("div");
         list.className = "ver cart_items";
         const total = resolvedItems.reduce((sum, item) => sum + Number(item.variant.price ?? item.product.price) * item.quantity, 0);
+        const requiresShipping = total > 0 && resolvedItems.some(item => item.product.metadata?.digital_product !== true);
         const currency = resolvedItems[0]?.product.currency || "EUR";
         resolvedItems.forEach(item => {
             const row = document.createElement("article");
@@ -115,6 +128,8 @@ export class Cart {
             quantity.max = "100";
             quantity.value = String(item.quantity);
             quantity.setAttribute("aria-label", `Quantité : ${name.textContent}`);
+            const fixedQuantity = item.product.metadata?.allow_multiple !== true;
+            quantity.hidden = fixedQuantity;
             quantity.addEventListener("change", () => {
                 const value = Number.parseInt(quantity.value, 10);
                 if (value < 1 || value > 100 || !Number.isInteger(value)) {
@@ -164,6 +179,9 @@ export class Cart {
         const error = document.createElement("p");
         error.className = "cart_error";
         error.setAttribute("role", "alert");
+        if (hasDuplicateFixedMerch) {
+            error.textContent = "Chaque produit est limité à un exemplaire par commande. Retirez les variantes en double pour continuer.";
+        }
         section.appendChild(error);
 
         const checkoutItems = () => this.items.map(item => ({
@@ -174,6 +192,7 @@ export class Cart {
         startCheckout.type = "button";
         startCheckout.className = "cart_checkout_start";
         startCheckout.textContent = total === 0 ? "Obtenir gratuitement" : "Proceed to payment";
+        startCheckout.disabled = hasDuplicateFixedMerch;
 
         const form = document.createElement("form");
         form.className = "ver cart_shipping";
@@ -216,7 +235,7 @@ export class Cart {
         form.appendChild(checkout);
         startCheckout.addEventListener("click", async () => {
             error.textContent = "";
-            if (total > 0) {
+            if (requiresShipping) {
                 form.hidden = false;
                 startCheckout.hidden = true;
                 form.querySelector("input")?.focus();
