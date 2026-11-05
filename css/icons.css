@@ -1,0 +1,33 @@
+.custom_icon {
+    position: relative;
+    display: inline-grid;
+    width: 1.15em;
+    height: 1.15em;
+    place-items: center;
+    vertical-align: middle;
+}
+
+.custom_icon.has_custom_icon::before { content: none !important; }
+
+.custom_icon_image {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+header .site_nav > a > .custom_icon { display: inline-grid; }
+
+header .site_nav > a > p {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

@@ -586,21 +586,21 @@ input.nav.back:active::after {
     gap: calc(var(--space) * var(--gap));
     color: var(--fg-1);
 }
-.project_container > *:not(.search):not(.merch) > .ver {
+.project_container > *:not(.search):not(.merch):not(.article_editor_page) > .ver {
     padding-left: calc(var(--space) * var(--padding));
     transition: padding 100ms;
 }
-.project_container > *:not(.search):not(.merch_featured):not(.merch):hover > .ver {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):not(.article_editor_page):hover > .ver {
     padding-left: calc(var(--space) * var(--padding) / 1.2);
 }
-.project_container > *:not(.search):not(.merch_featured):not(.merch):active > .ver {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):not(.article_editor_page):active > .ver {
     padding-left: calc(var(--space) * var(--padding) / 2);
 }
 
-.project_container > *:not(.search):not(.merch_featured):not(.merch):hover {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):not(.article_editor_page):hover {
     background-color: var(--bg-3);
 }
-.project_container > *:not(.search):not(.merch_featured):not(.merch) {
+.project_container > *:not(.search):not(.merch_featured):not(.merch):not(.article_editor_page) {
     all: unset;
     gap: unset !important;
     cursor: pointer;
@@ -739,29 +739,27 @@ header > div:last-of-type > *:hover {
 .album_tracks_list .album_track { display: inline; }
 .album_tracks_list > li { padding: calc(var(--padding)*var(--space) / 4) 0; }
 .album_track { padding: calc(var(--space) * var(--padding)); text-align: left; }
-.track_lyrics { gap: calc(var(--space) * var(--gap) * 3); }
+.track_lyrics { gap: calc(var(--space) * var(--gap) * 5); }
 .track_lyrics_section { gap: calc(var(--space) * var(--gap)); }
 .track_lyrics_section > h3 { margin: 0; font-family: var(--font-label); font-size: .85em; color: var(--fg-3); }
+.track_lyrics_section_timecode { color: var(--fg-3); font-size: .8em; font-variant-numeric: tabular-nums; }
+.track_credits { display: grid; grid-template-columns: minmax(7em, auto) 1fr; gap: calc(var(--space) * var(--gap)) calc(var(--space) * var(--gap) * 2); }
+.track_credits dt { color: var(--fg-3); }
+.track_credits dd { margin: 0; color: var(--fg-1); }
 .track_lyrics_line { display: flex; align-items: flex-start; gap: calc(var(--space) * var(--gap)); }
-.track_lyrics_text { margin: 0; white-space: pre-wrap; text-align: left; font: inherit; }
+.track_lyrics_text { color: var(--fg-1); margin: 0; white-space: pre-wrap; text-align: left; font: inherit; }
 button.track_lyrics_text {
     border: 0;
-    padding: 0;
-    background: transparent;
-    color: var(--fg-2);
+    padding: .08em .28em;
+    border-radius: .2em;
+    background: var(--bg-4);
+    color: var(--fg-1);
     cursor: pointer;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: .2em;
+    text-decoration: none;
 }
-.track_lyrics_back {
-    flex: 0 0 auto;
-    border: 0;
-    padding: 0 .5em;
-    background: var(--fg-2);
-    color: var(--bg-1);
-    font: inherit;
-    cursor: pointer;
+button.track_lyrics_text:hover {
+    background: var(--bg-4);
+    color: var(--fg-1);
 }
 .project_container > .book > img {
     height: 100%;

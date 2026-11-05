@@ -3,6 +3,9 @@ import { Cart, createCheckout, getOrderStatus, getUserOrders } from '/js/Cart.js
 import { Pages } from '/js/Pages.js';
 import { Notification } from '/js/Notification.js';
 import { createAuthorProjectEditor, translateAuthorError } from '/js/AuthorProjectEditor.js';
+import { createAuthorNewsEditor } from '/js/AuthorNewsEditor.js';
+import { NewsContainer, renderNewsArticle } from '/js/News.js';
+import { initializeCustomIcons } from '/js/Icons.js';
 
 const API_URL = "https://api.melide.music";
 
@@ -27,6 +30,9 @@ let projectsLoading;
 let merchLoading;
 let cartPage;
 let authorPage;
+let newsContainer;
+let newsArticles = null;
+let newsLoading = null;
 let loggedOut = false;
 let authRequestId = 0;
 let viewRequestId = 0;
@@ -39,6 +45,8 @@ function redirectToConnect() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    setDocumentTitle("Accueil");
+    initializeCustomIcons();
     homeButton?.addEventListener("click", event => {
         event.preventDefault();
         showHome();
@@ -52,6 +60,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             event.preventDefault();
             await showMerch();
         });
+    });
+    document.getElementById("footer_news_button")?.addEventListener("click", event => {
+        event.preventDefault();
+        showNews();
     });
     cartButton?.addEventListener("click", async event => {
         event.preventDefault();
@@ -159,6 +171,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("page")) {
         await showPage(params.get("page"), false);
+    } else if (params.has("article")) {
+        const articleSlug = params.get("article");
+        if (!articleSlug) await showNews(false);
+        else if (/^\d+$/.test(articleSlug)) await showArticleEditor(articleSlug, false);
+        else await showNewsArticle(articleSlug, false);
+    } else if (params.has("news")) {
+        await showNews(false);
     } else if (params.has("order_success")) {
         await showOrderStatus(params.get("order_success"), { addHistory: false, fromOrders: false });
     } else if (params.has("order")) {
@@ -253,14 +272,20 @@ function hasMerchRoute() {
     return new URLSearchParams(window.location.search).has("merch");
 }
 
+function setDocumentTitle(title, branded = true) {
+    const value = String(title || "").trim();
+    document.title = value ? branded ? `Melide - ${value}` : value : "Melide";
+}
+
 function navigationUrl(view = "home") {
     const url = new URL(window.location);
-    ["project", "book", "track", "game", "merch", "cart", "orders", "author", "page", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
+    ["project", "book", "track", "game", "merch", "cart", "orders", "author", "page", "article", "news", "article_search", "article_category", "article_tag", "article_order", "news_search", "news_category", "news_tag", "news_order", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
     if (view === "projects") url.searchParams.set("search", "");
     if (view === "merch") url.searchParams.set("merch", "");
     if (view === "cart") url.searchParams.set("cart", "");
     if (view === "orders") url.searchParams.set("orders", "");
     if (view === "author") url.searchParams.set("author", "");
+    if (view === "news") url.searchParams.set("article", "");
     return url;
 }
 
@@ -271,6 +296,7 @@ function clearAuthorPage() {
 
 async function showAuthorPanel(addHistory = true) {
     const requestId = ++viewRequestId;
+    setDocumentTitle("Espace auteur");
     if (addHistory) {
         window.history.pushState({ view: "author" }, "", navigationUrl("author"));
     }
@@ -507,9 +533,48 @@ async function createAuthorPanel(author, requestId) {
     });
     panel.appendChild(photoForm);
 
-    const projectsHeading = document.createElement("h3");
-    projectsHeading.className = "author_projects_heading";
-    projectsHeading.textContent = "Projets";
+    const navigation = document.createElement("nav");
+    navigation.className = "author_space_nav";
+    navigation.setAttribute("aria-label", `Navigation de ${author.name || "l’auteur"}`);
+    const viewProjects = document.createElement("button");
+    viewProjects.type = "button";
+    viewProjects.textContent = "Voir les projets";
+    viewProjects.addEventListener("click", () => showAuthorSubsection(author, "projects"));
+    navigation.appendChild(viewProjects);
+    if (author.newsWriter) {
+        const viewArticles = document.createElement("button");
+        viewArticles.type = "button";
+        viewArticles.textContent = "Voir les articles";
+        viewArticles.addEventListener("click", () => showAuthorSubsection(author, "articles"));
+        navigation.appendChild(viewArticles);
+    }
+    panel.append(navigation);
+    return panel;
+}
+
+async function showAuthorSubsection(author, subsection) {
+    const requestId = ++viewRequestId;
+    const url = navigationUrl("author");
+    window.history.pushState({ view: "author-section", subsection, authorId: author.id }, "", url);
+    authorPage.replaceChildren();
+    const back = document.createElement("button");
+    back.type = "button";
+    back.className = "nav back";
+    back.textContent = "Retour";
+    back.addEventListener("click", () => showAuthorPanel());
+    const heading = document.createElement("h2");
+    heading.className = "author_section_title";
+    heading.textContent = subsection === "projects" ? "MES PROJETS" : "MES ARTICLES";
+    authorPage.append(back, heading);
+    if (subsection === "projects") {
+        await loadAuthorProjects(author, requestId);
+        return;
+    }
+    const editor = await createAuthorNewsEditor(author, { showHeading: false });
+    if (requestId === viewRequestId) authorPage.appendChild(editor);
+}
+
+async function loadAuthorProjects(author, requestId) {
     const projectTools = document.createElement("div");
     projectTools.className = "author_projects_tools";
     const searchLabel = document.createElement("label");
@@ -547,7 +612,7 @@ async function createAuthorPanel(author, requestId) {
     const loading = document.createElement("p");
     loading.textContent = "Chargement des projets…";
     projectsContainer.appendChild(loading);
-    panel.append(projectsHeading, projectTools, projectsContainer);
+    authorPage.append(projectTools, projectsContainer);
 
     let projects;
     try {
@@ -561,10 +626,10 @@ async function createAuthorPanel(author, requestId) {
         if (!Array.isArray(result)) throw new Error("Réponse invalide du serveur.");
         projects = result;
     } catch (error) {
-        loading.textContent = translateAuthorError(error.message, "Impossible de charger les projets de cet auteur.");
-        return panel;
+        if (requestId === viewRequestId) loading.textContent = translateAuthorError(error.message, "Impossible de charger les projets de cet auteur.");
+        return;
     }
-    if (requestId !== viewRequestId) return panel;
+    if (requestId !== viewRequestId) return;
     const renderProjects = () => {
         const query = search.value.trim().toLocaleLowerCase("fr");
         const filteredProjects = projects.filter(project => {
@@ -649,7 +714,7 @@ async function createAuthorPanel(author, requestId) {
     filter.addEventListener("change", renderProjects);
     sort.addEventListener("change", renderProjects);
     renderProjects();
-    return panel;
+    return;
 }
 
 function ensureRendererContainer() {
@@ -663,6 +728,7 @@ async function showProjects(addHistory = true) {
     if (addHistory) {
         window.history.pushState({ view: "container" }, "", navigationUrl("projects"));
     }
+    setDocumentTitle("Projets");
     activeRenderer?.unload?.();
     activeRenderer = null;
     merchContainer?.renderers.forEach(renderer => renderer.unload?.());
@@ -670,6 +736,7 @@ async function showProjects(addHistory = true) {
     cartPage = null;
     homeElement?.classList.add("closed");
     projectContainerElement.classList.remove("closed");
+    projectContainerElement.classList.remove("news_container");
     await ensureProjectContainer();
     if (requestId !== viewRequestId) return;
     projectContainer.create();
@@ -694,12 +761,152 @@ async function showPage(identifier, addHistory = true) {
     await pages.load(pageName);
 }
 
+async function loadNewsArticles() {
+    if (newsArticles) return newsArticles;
+    if (!newsLoading) {
+        newsLoading = (async () => {
+            const response = await fetch(`${API_URL}/public/news`, { cache: "no-store" });
+            if (!response.ok) throw new Error("Impossible de charger les articles.");
+            const result = await response.json();
+            if (!Array.isArray(result)) throw new Error("Réponse invalide du serveur.");
+            newsArticles = result;
+            return result;
+        })();
+    }
+    try {
+        return await newsLoading;
+    } finally {
+        newsLoading = null;
+    }
+}
+
+function prepareNewsView(addHistory, slug = null) {
+    ++viewRequestId;
+    clearAuthorPage();
+    activeRenderer?.unload?.();
+    activeRenderer = null;
+    cartPage?.remove();
+    cartPage = null;
+    pages.unload();
+    if (addHistory) {
+        const url = navigationUrl("news");
+        url.searchParams.set("article", slug || "");
+        window.history.pushState({ view: slug ? "article" : "news", slug }, "", url);
+    }
+    homeElement?.classList.add("closed");
+    projectContainerElement.classList.remove("closed", "merch_container");
+    projectContainerElement.classList.add("news_container");
+    projectContainerElement.replaceChildren();
+    return viewRequestId;
+}
+
+async function showNews(addHistory = true) {
+    const requestId = prepareNewsView(addHistory);
+    setDocumentTitle("Articles");
+    const loading = document.createElement("p");
+    loading.textContent = "Chargement des articles…";
+    projectContainerElement.appendChild(loading);
+    try {
+        const articles = await loadNewsArticles();
+        if (requestId !== viewRequestId) return;
+        newsContainer = new NewsContainer(articles);
+        newsContainer.render(projectContainerElement);
+    } catch (error) {
+        if (requestId !== viewRequestId) return;
+        const message = document.createElement("p");
+        message.textContent = error.message || "Les articles sont momentanément indisponibles.";
+        projectContainerElement.replaceChildren(message);
+    }
+}
+
+async function showNewsArticle(slug, addHistory = true) {
+    const requestId = prepareNewsView(addHistory, slug);
+    try {
+        const articles = await loadNewsArticles();
+        if (requestId !== viewRequestId) return;
+        let article = articles.find(item => item.slug === slug);
+        if (!article) {
+            const response = await fetch(`${API_URL}/public/news/${encodeURIComponent(slug)}`, { cache: "no-store" });
+            if (!response.ok) throw new Error("Article introuvable.");
+            article = await response.json();
+        }
+        if (requestId !== viewRequestId) return;
+        renderNewsArticle(projectContainerElement, article);
+        setDocumentTitle(article.title);
+    } catch (error) {
+        if (requestId !== viewRequestId) return;
+        setDocumentTitle("Articles");
+        const message = document.createElement("p");
+        message.textContent = error.message || "Article introuvable.";
+        projectContainerElement.replaceChildren(message);
+    }
+}
+
+async function showArticleEditor(articleId, addHistory = true) {
+    const requestId = ++viewRequestId;
+    clearAuthorPage();
+    activeRenderer?.unload?.();
+    activeRenderer = null;
+    cartPage?.remove();
+    cartPage = null;
+    pages.unload();
+    if (addHistory) {
+        const url = navigationUrl("news");
+        url.searchParams.set("article", String(articleId));
+        window.history.pushState({ view: "article-editor", articleId }, "", url);
+    }
+    homeElement?.classList.add("closed");
+    projectContainerElement.classList.remove("closed", "merch_container");
+    projectContainerElement.classList.add("news_container");
+    projectContainerElement.replaceChildren();
+    const loading = document.createElement("p");
+    loading.textContent = "Chargement de l’article…";
+    projectContainerElement.appendChild(loading);
+    try {
+        const response = await fetch(`${API_URL}/user/news/${encodeURIComponent(articleId)}`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual"
+        });
+        const article = await response.json();
+        if (!response.ok) throw new Error(article.error || "Article introuvable ou accès refusé.");
+        if (requestId !== viewRequestId) return;
+        const author = {
+            id: article.author_id,
+            name: article.author_name,
+            thumbnail: article.author_thumbnail,
+            newsWriter: true
+        };
+        const editorPage = document.createElement("section");
+        editorPage.className = "article_editor_page";
+        const back = document.createElement("button");
+        back.type = "button";
+        back.className = "nav back";
+        back.textContent = "Retour";
+        back.addEventListener("click", () => showAuthorPanel());
+        const heading = document.createElement("h1");
+        heading.textContent = "ÉDITION DE L’ARTICLE";
+        const editor = await createAuthorNewsEditor(author, { articleId, editorOnly: true, showHeading: false });
+        if (requestId !== viewRequestId) return;
+        editorPage.append(back, heading, editor);
+        projectContainerElement.replaceChildren(editorPage);
+        setDocumentTitle(article.title);
+    } catch (error) {
+        if (requestId !== viewRequestId) return;
+        setDocumentTitle("Articles");
+        const message = document.createElement("p");
+        message.textContent = error.message || "Impossible de charger l’éditeur de l’article.";
+        projectContainerElement.replaceChildren(message);
+    }
+}
+
 async function showMerch(addHistory = true) {
     const requestId = ++viewRequestId;
     clearAuthorPage();
     if (addHistory) {
         window.history.pushState({ view: "merch" }, "", navigationUrl("merch"));
     }
+    setDocumentTitle("Merch");
     activeRenderer?.unload?.();
     activeRenderer = null;
     projectContainer?.renderers.forEach(renderer => renderer.unload?.());
@@ -707,6 +914,7 @@ async function showMerch(addHistory = true) {
     cartPage = null;
     homeElement?.classList.add("closed");
     projectContainerElement.classList.remove("closed");
+    projectContainerElement.classList.remove("news_container");
     try {
         await ensureMerchContainer(true);
         if (requestId !== viewRequestId) return;
@@ -878,6 +1086,7 @@ function showHome(addHistory = true) {
     if (addHistory) {
         window.history.pushState({ view: "home" }, "", navigationUrl("home"));
     }
+    setDocumentTitle("Accueil");
     activeRenderer?.unload?.();
     activeRenderer = null;
     cartPage?.remove();
@@ -892,6 +1101,7 @@ async function showCartPage(addHistory = true, message = "") {
     const requestId = ++viewRequestId;
     clearAuthorPage();
     if (addHistory) window.history.pushState({ view: "cart" }, "", navigationUrl("cart"));
+    setDocumentTitle("Panier");
     activeRenderer?.unload?.();
     activeRenderer = null;
     projectContainerElement.classList.add("closed");
@@ -933,6 +1143,7 @@ function createCartSkeleton() {
 
 async function showMyOrdersPage(addHistory = true, merchId = null) {
     const requestId = ++viewRequestId;
+    setDocumentTitle("Mes commandes");
     clearAuthorPage();
     activeRenderer?.unload?.();
     activeRenderer = null;
@@ -1038,6 +1249,7 @@ async function showMyOrdersPage(addHistory = true, merchId = null) {
 
 async function showOrderStatus(orderId, { addHistory = true, fromOrders = false } = {}) {
     const requestId = ++viewRequestId;
+    setDocumentTitle("Statut de la commande");
     clearAuthorPage();
     if (addHistory) {
         const url = navigationUrl(fromOrders ? "orders" : "home");
@@ -1199,6 +1411,15 @@ function showProject(renderer, addHistory = true, fromSearch = false, authorized
     clearAuthorPage();
     activeRenderer?.unload?.();
     activeRenderer = renderer;
+    if (renderer.type === "merch" || renderer.type === "merchandise") {
+        setDocumentTitle(renderer.title);
+    } else {
+        const authors = (Array.isArray(renderer.authors) ? renderer.authors : [])
+            .filter(authorId => !renderer.data.authorRoles?.[authorId] || renderer.data.authorRoles[authorId] === "main")
+            .map(authorId => window.authors?.find(author => String(author.id) === String(authorId))?.name)
+            .filter(Boolean);
+        setDocumentTitle(`${authors.length ? `${authors.join(", ")} - ` : ""}${renderer.title || "Projet"}`, false);
+    }
     if (addHistory) {
         window.history.pushState({
             view: "project",
@@ -1274,10 +1495,12 @@ function showProjectContainer(addHistory = true) {
     if (addHistory) {
         window.history.pushState({ view: "container" }, "", url);
     }
+    setDocumentTitle("Projets");
     activeRenderer?.unload?.();
     activeRenderer = null;
     homeElement?.classList.add("closed");
     projectContainerElement.classList.remove("closed");
+    projectContainerElement.classList.remove("news_container");
 }
 
 function findProjectFromUrl() {
@@ -1364,6 +1587,21 @@ document.addEventListener("project:select", event => {
     showProject(renderer, true, true);
 });
 
+document.addEventListener("news:select", event => {
+    const article = event.detail?.article;
+    if (article?.slug) showNewsArticle(article.slug);
+});
+window.addEventListener("news:edit", event => {
+    const articleId = event.detail?.articleId;
+    if (Number.isSafeInteger(Number(articleId)) && Number(articleId) > 0) showArticleEditor(articleId);
+});
+window.addEventListener("news:editor-close", () => showAuthorPanel());
+document.addEventListener("news:back", () => showNews());
+window.addEventListener("news:updated", () => {
+    newsArticles = null;
+    newsContainer = null;
+});
+
 document.addEventListener("project:open-content", event => {
     showProject(event.detail?.renderer, false, true);
 });
@@ -1387,6 +1625,17 @@ window.addEventListener("popstate", event => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("page")) {
         showPage(params.get("page"), false);
+        return;
+    }
+    if (params.has("article")) {
+        const articleSlug = params.get("article");
+        if (!articleSlug) showNews(false);
+        else if (/^\d+$/.test(articleSlug)) showArticleEditor(articleSlug, false);
+        else showNewsArticle(articleSlug, false);
+        return;
+    }
+    if (params.has("news")) {
+        showNews(false);
         return;
     }
     if (params.has("author")) {
@@ -1446,6 +1695,9 @@ function clearCachedViews() {
     merchContainer = null;
     projectsLoading = null;
     merchLoading = null;
+    newsContainer = null;
+    newsArticles = null;
+    newsLoading = null;
     projectContainerElement.replaceChildren();
     cartPage?.remove();
     cartPage = null;

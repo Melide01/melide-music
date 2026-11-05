@@ -45,6 +45,9 @@ export class Pages {
             const markdown = await response.text();
             if (requestId !== this.requestId) return;
             this.container.innerHTML = parseMarkdown(markdown);
+            const heading = markdown.match(/^\s*#{1,6}\s+(.+?)\s*#*\s*$/m);
+            const fallback = String(identifier || "").split("/").pop().replace(/\.md$/i, "").replace(/[-_]+/g, " ").trim();
+            document.title = `Melide - ${heading?.[1] || fallback || "Page"}`;
         } catch (error) {
             if (requestId !== this.requestId) return;
             console.error("Could not load the requested page.", error);
@@ -64,5 +67,6 @@ export class Pages {
         const paragraph = document.createElement("p");
         paragraph.textContent = message;
         this.container.replaceChildren(heading, paragraph);
+        document.title = "Melide - Page indisponible";
     }
 }

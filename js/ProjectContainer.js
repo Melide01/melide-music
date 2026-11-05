@@ -98,9 +98,9 @@ export class ProjectContainer {
         filters.className = "hor fill explicative_icons";
         const typeFilters = [
             ["Toutes", "all", ""],
-            ["Musiques", "tracks", "fa-solid fa-music"],
-            ["Livres", "books", "fa-solid fa-book"],
-            ["Jeux Vidéo", "video_games", "fa-solid fa-gamepad"]
+            ["Musiques", "tracks", "fa-solid fa-music custom_icon solid-music"],
+            ["Livres", "books", "fa-solid fa-book custom_icon solid-book"],
+            ["Jeux Vidéo", "video_games", "fa-solid fa-gamepad custom_icon solid-game"]
         ];
         if (!this.forcedType) typeFilters.forEach(([label, value, iconClass]) => {
             const labelElement = document.createElement("label");

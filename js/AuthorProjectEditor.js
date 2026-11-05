@@ -249,6 +249,28 @@ export function createAuthorProjectEditor(project, root, onSave, initialStatus =
                 if (!section.title) section.title = heading.value;
                 heading.addEventListener("change", () => { section.title = heading.value; });
 
+                const sectionTimecode = document.createElement("input");
+                sectionTimecode.type = "text";
+                sectionTimecode.className = "author_lyrics_section_timecode";
+                sectionTimecode.value = section.timecode || "";
+                sectionTimecode.placeholder = "0:00";
+                sectionTimecode.inputMode = "text";
+                sectionTimecode.maxLength = 6;
+                sectionTimecode.pattern = "[0-9]{1,3}:[0-9]{2}";
+                sectionTimecode.setAttribute("aria-label", `Section ${sectionIndex + 1} timecode`);
+                sectionTimecode.addEventListener("input", () => {
+                    const parts = sectionTimecode.value.replace(/[^\d:]/g, "").split(":");
+                    const left = parts[0].slice(0, 3);
+                    const right = parts.slice(1).join("").slice(0, 2);
+                    const formatted = parts.length > 1 ? `${left}:${right}` : left;
+                    if (sectionTimecode.value !== formatted) {
+                        const caret = formatted.length;
+                        sectionTimecode.value = formatted;
+                        sectionTimecode.setSelectionRange(caret, caret);
+                    }
+                    section.timecode = sectionTimecode.value;
+                });
+
                 const sectionActions = document.createElement("div");
                 sectionActions.className = "author_lyrics_controls";
                 const addLine = document.createElement("button");
@@ -265,13 +287,20 @@ export function createAuthorProjectEditor(project, root, onSave, initialStatus =
                 });
                 sectionActions.append(
                     addLine,
+                    lyricsAction("Dupliquer la section", "fa-copy", () => {
+                        lyricsSections.splice(sectionIndex + 1, 0, {
+                            ...section,
+                            lines: section.lines.map(line => ({ ...line }))
+                        });
+                        renderLyrics();
+                    }),
                     lyricsAction("Supprimer la section", "fa-trash", () => {
                         lyricsSections.splice(sectionIndex, 1);
                         renderLyrics();
                     }),
                     lyricsAction("Déplacer la section", "fa-grip-lines-vertical", () => {}, "author_lyrics_drag_handle")
                 );
-                header.append(heading, sectionActions);
+                header.append(heading, sectionTimecode, sectionActions);
                 sectionElement.appendChild(header);
                 enableLyricsReordering(sectionElement, sectionDrag, sectionIndex, lyricsList, renderLyrics);
 
@@ -326,6 +355,10 @@ export function createAuthorProjectEditor(project, root, onSave, initialStatus =
                     info.setAttribute("aria-expanded", "false");
                     lineControls.append(
                         info,
+                        lyricsAction("Dupliquer la ligne", "fa-copy", () => {
+                            section.lines.splice(lineIndex + 1, 0, { ...line });
+                            renderLyrics();
+                        }),
                         lyricsAction("Supprimer la ligne", "fa-trash", () => {
                             section.lines.splice(lineIndex, 1);
                             renderLyrics();
@@ -414,6 +447,9 @@ export function createAuthorProjectEditor(project, root, onSave, initialStatus =
             else delete nextMetadata.links;
             if (lyricsSections) {
                 for (const section of lyricsSections) {
+                    if (section.timecode && !/^\d{1,3}:[0-5]\d$/.test(section.timecode.trim())) {
+                        throw new Error("Les minutages des sections doivent utiliser le format 0:00.");
+                    }
                     for (const line of section.lines) {
                         if (line.timecode && !/^\d{1,2}:\d{1,2}$/.test(line.timecode.trim())) {
                             throw new Error("Les minutages doivent utiliser le format 0:00.");

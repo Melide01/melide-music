@@ -1,0 +1,47 @@
+.site_modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(32rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: min(80vh, 40rem);
+    padding: 0;
+    overflow: auto;
+    border: 1px solid var(--bg-4);
+    border-radius: calc(var(--space) * var(--border-radius));
+    background: var(--bg-1);
+    color: var(--fg-1);
+}
+.site_modal[open] { animation: site-modal-in 180ms ease-out both; }
+.site_modal[open]::backdrop { background: rgb(0 0 0 / 65%); animation: site-modal-backdrop-in 180ms ease-out both; }
+.site_modal.is-closing { animation: site-modal-out 140ms ease-in both; }
+.site_modal.is-closing::backdrop { animation: site-modal-backdrop-out 140ms ease-in both; }
+.site_modal_panel { position: relative; display: flex; flex-direction: column; gap: .75rem; padding: 1rem; }
+.site_modal_info { position: absolute; top: .55rem; right: .65rem; display: grid; place-items: center; width: 1.25rem; height: 1.25rem; border: 1px solid var(--fg-3); border-radius: 50%; color: var(--fg-3); font-family: var(--font-label); font-size: .8rem; font-weight: 600; line-height: 1; }
+.site_modal_content { padding-right: 1.5rem; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+.site_modal_close { align-self: flex-end; padding: .35rem .65rem; border: 1px solid var(--bg-4); border-radius: calc(var(--space) * var(--border-radius) / 2); background: transparent; color: var(--fg-1); cursor: pointer; }
+.site_modal_close:hover { border-color: var(--fg-3); color: var(--fg-3); }
+
+@keyframes site-modal-in {
+    from { opacity: 0; transform: translateY(.4rem) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes site-modal-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(.25rem) scale(.985); }
+}
+@keyframes site-modal-backdrop-in {
+    from { background: rgb(0 0 0 / 0%); }
+    to { background: rgb(0 0 0 / 65%); }
+}
+@keyframes site-modal-backdrop-out {
+    from { background: rgb(0 0 0 / 65%); }
+    to { background: rgb(0 0 0 / 0%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site_modal[open],
+    .site_modal[open]::backdrop,
+    .site_modal.is-closing,
+    .site_modal.is-closing::backdrop { animation-duration: 1ms; }
+}

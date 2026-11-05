@@ -23,8 +23,9 @@
 
 .author_profile_header {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: calc(var(--space) * var(--gap) * 2);
+    gap: calc(var(--space) * var(--gap));
 }
 
 .author_profile_portrait {
@@ -68,6 +69,8 @@
     gap: .75rem;
     min-width: 0;
 }
+
+.author_profile_portrait { width: clamp(5rem, 14vw, 7rem); }
 
 .author_profile_name {
     margin: 0;
@@ -340,7 +343,7 @@
     background: var(--bg-2);
     transition: border-color 140ms ease, opacity 140ms ease, background 140ms ease;
 }
-.author_lyrics_section_header { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.author_lyrics_section_header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; }
 .author_lyrics_section_type {
     width: min(100%, 16em);
     min-width: 0;
@@ -350,6 +353,17 @@
     font: inherit;
     font-weight: 600;
     letter-spacing: .06em;
+}
+.author_lyrics_section_timecode {
+    width: 4.5em;
+    border: 1px solid var(--bg-3);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    padding: .35rem .45rem;
+    background: var(--bg-1);
+    color: var(--fg-1);
+    text-align: center;
+    font: inherit;
+    font-variant-numeric: tabular-nums;
 }
 .author_lyrics_lines { display: flex; flex-direction: column; gap: .35rem; }
 .author_lyrics_line {
@@ -460,7 +474,7 @@
 }
 
 @media (max-width: 40rem) {
-    .author_profile_header { align-items: flex-start; }
+    .author_profile_header { align-items: center; }
     .author_profile_form,
     .author_editor_info_fields { grid-template-columns: minmax(0, 1fr); padding-left: 0; }
     .author_editor_info_fields > label:first-child { grid-column: auto; }

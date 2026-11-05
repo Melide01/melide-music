@@ -1,14 +1,19 @@
+function parseTimecode(value) {
+    const match = String(value || "").match(/^(\d+):([0-5]\d)$/);
+    return match ? `${match[1]}:${match[2]}` : "";
+}
+
 export function parseLyrics(value) {
     const sections = [];
-    let current = { title: "", lines: [] };
+    let current = { title: "", timecode: "", lines: [] };
 
     for (const rawLine of String(value || "").split(/\r?\n/)) {
         const line = rawLine.trim();
         if (!line) continue;
-        const heading = line.match(/^#\s+(.+)$/);
+        const heading = line.match(/^#\s+(.+?)(?:\s+\{(\d+):([0-5]\d)\})?$/);
         if (heading) {
             if (current.title || current.lines.length) sections.push(current);
-            current = { title: heading[1].trim(), lines: [] };
+            current = { title: heading[1].trim(), timecode: heading[2] ? `${heading[2]}:${heading[3]}` : "", lines: [] };
             continue;
         }
 
@@ -38,6 +43,8 @@ export function serializeLyrics(sections) {
             return `${prefix}${text}${explanation ? ` [${explanation}]` : ""}`;
         });
         const title = section.title.trim();
-        return [title ? `# ${title}` : "", ...lines].filter(Boolean).join("\n");
+        const timecode = parseTimecode(section.timecode);
+        const heading = title ? `# ${title}${timecode ? ` {${timecode}}` : ""}` : "";
+        return [heading, ...lines].filter(Boolean).join("\n");
     }).filter(Boolean).join("\n\n");
 }

@@ -1,6 +1,7 @@
 import { Metadata } from "/js/Metadata.js";
 import { getRemainingTime } from "/js/Utils.js";
 import { parseLyrics } from "/js/Lyrics.js";
+import { Modal } from "/js/Modal.js";
 
 export class Track {
     constructor(project = {}, options = {}) {
@@ -106,6 +107,15 @@ export class Track {
         if (typeof lyrics === "string" && lyrics.trim()) {
             contents.push({ label: "Paroles", render: panel => this.renderLyrics(panel, lyrics) });
         }
+        const credits = this.authorProfiles()
+            .map(author => ({
+                name: author.name || "Auteur",
+                type: this.data.authorCollaboratorTypes?.[author.id] || ""
+            }))
+            .filter(credit => credit.type);
+        if (credits.length) {
+            contents.push({ label: "Crédits", render: panel => this.renderCredits(panel, credits) });
+        }
         if (!contents.length && !this.albumRenderer) return null;
 
         const controller = document.createElement("section");
@@ -152,6 +162,19 @@ export class Track {
         return controller;
     }
 
+    renderCredits(panel, credits) {
+        const list = document.createElement("dl");
+        list.className = "track_credits ver";
+        credits.forEach(credit => {
+            const type = document.createElement("dt");
+            type.textContent = credit.type;
+            const name = document.createElement("dd");
+            name.textContent = credit.name;
+            list.append(type, name);
+        });
+        panel.replaceChildren(list);
+    }
+
     renderLyrics(panel, lyrics) {
         const content = document.createElement("div");
         content.className = "track_lyrics ver";
@@ -163,6 +186,12 @@ export class Track {
                 heading.textContent = section.title;
                 sectionElement.appendChild(heading);
             }
+            if (section.timecode) {
+                const timecode = document.createElement("time");
+                timecode.className = "track_lyrics_section_timecode";
+                timecode.textContent = section.timecode;
+                sectionElement.appendChild(timecode);
+            }
             section.lines.forEach(line => {
                 const row = document.createElement("div");
                 row.className = "track_lyrics_line";
@@ -172,24 +201,10 @@ export class Track {
                 if (line.explanation) {
                     lyric.type = "button";
                     lyric.setAttribute("aria-label", `Afficher l’explication de : ${line.text}`);
-                    const back = document.createElement("button");
-                    back.type = "button";
-                    back.className = "track_lyrics_back";
-                    back.textContent = "Retour";
-                    back.hidden = true;
                     lyric.addEventListener("click", () => {
-                        lyric.textContent = line.explanation;
-                        lyric.setAttribute("aria-label", "Afficher la parole originale");
-                        lyric.hidden = true;
-                        back.hidden = false;
+                        new Modal({ title: "Explication", content: line.explanation, showInfoIcon: true }).open();
                     });
-                    back.addEventListener("click", () => {
-                        lyric.textContent = line.text;
-                        lyric.setAttribute("aria-label", `Afficher l’explication de : ${line.text}`);
-                        lyric.hidden = false;
-                        back.hidden = true;
-                    });
-                    row.append(lyric, back);
+                    row.appendChild(lyric);
                 } else {
                     row.appendChild(lyric);
                 }
