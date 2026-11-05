@@ -93,6 +93,7 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
     create.type = "button";
     create.className = "author_editor_text_button";
     create.textContent = "Nouvel article";
+    create.hidden = author.canCreateNews === false;
     const list = document.createElement("div");
     list.className = "author_news_list ver";
     const status = document.createElement("p");
@@ -120,7 +121,7 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
             title.textContent = article.title;
             const articleState = document.createElement("span");
             articleState.textContent = article.state === "published" ? "Publié" : "Brouillon";
-            const edit = makeButton("Modifier", () => {
+            const edit = makeButton(article.can_edit === false ? "Voir" : "Modifier", () => {
                 window.dispatchEvent(new CustomEvent("news:edit", { detail: { articleId: article.id } }));
             });
             const remove = makeButton("Supprimer", async () => {
@@ -137,6 +138,7 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
                     remove.disabled = false;
                 }
             });
+            remove.hidden = article.can_delete === false;
             row.append(title, articleState, edit, remove);
             list.appendChild(row);
         });
@@ -151,6 +153,8 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
         const save = document.createElement("button");
         save.type = "submit";
         save.textContent = "Enregistrer";
+        const readOnly = article.can_edit === false;
+        save.hidden = readOnly;
         const finish = makeButton("Terminer", () => {
             if (editorOnly) window.dispatchEvent(new CustomEvent("news:editor-close"));
             else {
@@ -413,6 +417,16 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
         renderBlocks();
         contentSection.append(contentHeading, blockHelp, addBlock, blocksRoot);
         form.append(toolbar, articleHeader, contentSection);
+        if (readOnly) {
+            form.querySelectorAll("input, textarea, select, button").forEach(control => {
+                control.disabled = true;
+            });
+            finish.disabled = false;
+            form.querySelectorAll('input[type="file"]').forEach(input => {
+                input.closest("label")?.remove();
+            });
+            status.textContent = "Mode consultant — consultation uniquement.";
+        }
         form.addEventListener("submit", async event => {
             event.preventDefault();
             const content = serializeArticleBlocks(blocks);

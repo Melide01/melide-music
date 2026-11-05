@@ -306,16 +306,19 @@ export function renderNewsArticle(container, article) {
     });
     const profiles = document.createElement("div");
     profiles.className = "news_authors pfp_display hor";
-    if (article.author_name) {
+    const articleAuthors = Array.isArray(article.authors) && article.authors.length
+        ? article.authors
+        : article.author_name ? [{ name: article.author_name, thumbnail: article.author_thumbnail }] : [];
+    articleAuthors.forEach(author => {
         const profile = document.createElement("span");
-        profile.dataset.name = article.author_name;
+        profile.dataset.name = author.name || "";
         const portrait = document.createElement("img");
-        portrait.src = article.author_thumbnail || "/assets/mld_logo_all_white.png";
-        portrait.alt = article.author_name;
+        portrait.src = author.thumbnail || "/assets/mld_logo_all_white.png";
+        portrait.alt = author.name || "";
         portrait.loading = "lazy";
         profile.appendChild(portrait);
         profiles.appendChild(profile);
-    }
+    });
     const content = document.createElement("div");
     content.className = "news_article_content ver";
     content.innerHTML = parseMarkdown(article.content || "");
