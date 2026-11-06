@@ -187,6 +187,17 @@ function renderEditor(author, cv) {
     const role = field("Métier(s) / poste recherché", cv.role, { maxLength: 160 });
     topGrid.append(legalName.label, role.label);
 
+    const colorsSection = element("section", "cv_editor_section");
+    colorsSection.append(
+        element("h2", "", "Couleurs du CV"),
+        element("p", "", "La couleur d’accent habille le poste et les compétences ; la couleur d’information sert aux repères et en-têtes.")
+    );
+    const colorGrid = element("div", "cv_editor_grid");
+    const accentColor = field("Couleur d’accent", cv.accentColor || "#285b40", { type: "color" });
+    const infoColor = field("Couleur d’information", cv.infoColor || "#2f5d8a", { type: "color" });
+    colorGrid.append(accentColor.label, infoColor.label);
+    colorsSection.append(colorGrid);
+
     const photoSection = element("section", "cv_editor_section");
     photoSection.append(element("h2", "", "Photo du CV"), element("p", "", "La photo du CV est indépendante de la photo publique de votre profil auteur. JPEG, PNG ou WebP · 5 Mo maximum · recadrage carré et conversion WebP."));
     const photoRow = element("div", "cv_photo_row");
@@ -292,7 +303,7 @@ function renderEditor(author, cv) {
         : "Votre CV n’a pas encore été enregistré.");
 
     const previewHelp = element("p", "cv_editor_notice", "L’aperçu affiche la dernière version enregistrée. Enregistrez d’abord vos modifications pour les y voir.");
-    form.append(topGrid, photoSection, experiencesSection, skillsSection, traitsSection, actions, previewHelp, status, footer);
+    form.append(topGrid, colorsSection, photoSection, experiencesSection, skillsSection, traitsSection, actions, previewHelp, status, footer);
     form.addEventListener("submit", async event => {
         event.preventDefault();
         const submitter = event.submitter;
@@ -307,6 +318,8 @@ function renderEditor(author, cv) {
             })),
             skills: skills.input.value.split(/\r?\n/).map(item => item.trim()).filter(Boolean),
             traits: rowValues(traitsList, ["first", "second"]),
+            accentColor: accentColor.input.value,
+            infoColor: infoColor.input.value,
             status: nextStatus
         };
         const submitButtons = [...actions.querySelectorAll("button[type=submit]")];

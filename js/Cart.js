@@ -4,6 +4,24 @@ const API_URL = "https://api.melide.music";
 export class Cart {
     constructor() {
         this.items = this.readItems();
+        this.promoCode = this.readPromoCode();
+    }
+
+    readPromoCode() {
+        try {
+            const code = sessionStorage.getItem("melide-cart-code") || "";
+            return typeof code === "string" ? code.trim().toUpperCase() : "";
+        } catch {
+            return "";
+        }
+    }
+
+    setPromoCode(code) {
+        this.promoCode = String(code || "").trim().toUpperCase();
+        try {
+            if (this.promoCode) sessionStorage.setItem("melide-cart-code", this.promoCode);
+            else sessionStorage.removeItem("melide-cart-code");
+        } catch { }
     }
 
     readItems() {
@@ -176,6 +194,32 @@ export class Cart {
         totalLabel.textContent = `Total articles : ${this.formatPrice(total, currency)}`;
         section.appendChild(totalLabel);
 
+        const codeRow = document.createElement("div");
+        codeRow.className = "hor align cart_code";
+        const codeInput = document.createElement("input");
+        codeInput.type = "text";
+        codeInput.placeholder = "Code promo";
+        codeInput.autocomplete = "off";
+        codeInput.spellcheck = false;
+        codeInput.maxLength = 40;
+        codeInput.setAttribute("aria-label", "Code promo");
+        codeInput.value = this.promoCode || "";
+        const codeApply = document.createElement("button");
+        codeApply.type = "button";
+        codeApply.textContent = "Appliquer";
+        codeApply.addEventListener("click", () => {
+            this.setPromoCode(codeInput.value);
+            codeInput.value = this.promoCode;
+            window.dispatchEvent(new CustomEvent("notification", {
+                detail: { message: this.promoCode ? `Code « ${this.promoCode} » enregistré.` : "Code promo retiré.", status: "validation" }
+            }));
+        });
+        codeInput.addEventListener("keydown", event => {
+            if (event.key === "Enter") { event.preventDefault(); codeApply.click(); }
+        });
+        codeRow.append(codeInput, codeApply);
+        section.appendChild(codeRow);
+
         const error = document.createElement("p");
         error.className = "cart_error";
         error.setAttribute("role", "alert");
@@ -191,7 +235,14 @@ export class Cart {
         const startCheckout = document.createElement("button");
         startCheckout.type = "button";
         startCheckout.className = "cart_checkout_start";
-        startCheckout.textContent = total === 0 ? "Obtenir gratuitement" : "Proceed to payment";
+        if (total === 0) {
+            startCheckout.textContent = "Obtenir gratuitement";
+        } else {
+            const paypalIcon = document.createElement("i");
+            paypalIcon.className = "fa-brands fa-paypal";
+            paypalIcon.setAttribute("aria-hidden", "true");
+            startCheckout.append(paypalIcon, document.createTextNode(" Payer avec PayPal"));
+        }
         startCheckout.disabled = hasDuplicateFixedMerch;
 
         const form = document.createElement("form");
@@ -231,7 +282,10 @@ export class Cart {
         });
         const checkout = document.createElement("button");
         checkout.type = "submit";
-        checkout.textContent = "Continuer vers le paiement";
+        const checkoutPaypalIcon = document.createElement("i");
+        checkoutPaypalIcon.className = "fa-brands fa-paypal";
+        checkoutPaypalIcon.setAttribute("aria-hidden", "true");
+        checkout.append(checkoutPaypalIcon, document.createTextNode(" Payer avec PayPal"));
         form.appendChild(checkout);
         startCheckout.addEventListener("click", async () => {
             error.textContent = "";
@@ -243,7 +297,7 @@ export class Cart {
             }
             startCheckout.disabled = true;
             try {
-                await onSubmit(checkoutItems());
+                await onSubmit(checkoutItems(), undefined, this.promoCode || undefined);
             } catch (requestError) {
                 const message = requestError.message || "Impossible de confirmer la commande gratuite.";
                 error.textContent = message;
@@ -262,7 +316,7 @@ export class Cart {
             checkout.disabled = true;
             try {
                 const shipping = Object.fromEntries(new FormData(form).entries());
-                await onSubmit(checkoutItems(), shipping);
+                await onSubmit(checkoutItems(), shipping, this.promoCode || undefined);
             } catch (requestError) {
                 const message = requestError.message || "Impossible de démarrer le paiement.";
                 error.textContent = message;
@@ -286,7 +340,7 @@ export class Cart {
     }
 }
 
-export async function createCheckout(items, shipping = undefined) {
+export async function createCheckout(items, shipping = undefined, code = undefined) {
     let response;
     try {
         response = await fetch(`${API_URL}/user/order`, {
@@ -294,7 +348,7 @@ export async function createCheckout(items, shipping = undefined) {
             credentials: "include",
             redirect: "manual",
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
-            body: JSON.stringify({ items, ...(shipping ? { shipping } : {}) })
+            body: JSON.stringify({ items, ...(shipping ? { shipping } : {}), ...(code ? { code } : {}) })
         });
     } catch (error) {
         console.error("Checkout request was blocked before the API returned a response.", error);

@@ -46,6 +46,8 @@ function formatDate(value) {
 
 function renderCv(cv, isDraftPreview = false) {
     const paper = makeElement("article", "cv_paper");
+    paper.style.setProperty("--cv-accent", cv.accentColor || "#285b40");
+    paper.style.setProperty("--cv-info", cv.infoColor || "#2f5d8a");
     if (isDraftPreview) {
         paper.append(makeElement("p", "cv_draft_badge", "Brouillon · Aperçu privé"));
         paper.classList.add("is_draft_preview");
@@ -59,12 +61,39 @@ function renderCv(cv, isDraftPreview = false) {
     if (cv.role) identity.append(makeElement("p", "cv_role", cv.role));
     hero.append(identity);
     if (cv.profileImage) {
-        const portrait = makeElement("img", "cv_portrait");
+        const portraitFrame = makeElement("div", "cv_portrait");
+        const portrait = makeElement("img");
         portrait.src = cv.profileImage;
         portrait.alt = `Portrait de ${cv.legalName}`;
         portrait.loading = "lazy";
-        portrait.addEventListener("error", () => portrait.remove(), { once: true });
-        hero.append(portrait);
+        portraitFrame.append(portrait);
+        hero.append(portraitFrame);
+        const mobileLayout = window.matchMedia("screen and (max-width: 600px)");
+        const printMedia = window.matchMedia("print");
+        const syncPortraitSize = () => {
+            if (!portraitFrame.isConnected) return;
+            if (mobileLayout.matches) {
+                portraitFrame.style.width = "";
+                portraitFrame.style.height = "";
+                return;
+            }
+            const height = Math.min(identity.offsetHeight, 320);
+            portraitFrame.style.width = `${height}px`;
+            portraitFrame.style.height = `${height}px`;
+        };
+        const portraitObserver = new ResizeObserver(syncPortraitSize);
+        portraitObserver.observe(identity);
+        const onMediaChange = () => requestAnimationFrame(syncPortraitSize);
+        for (const media of [mobileLayout, printMedia]) {
+            if (typeof media.addEventListener === "function") media.addEventListener("change", onMediaChange);
+            else if (typeof media.addListener === "function") media.addListener(onMediaChange);
+        }
+        portrait.addEventListener("load", syncPortraitSize);
+        portrait.addEventListener("error", () => {
+            portraitObserver.disconnect();
+            portraitFrame.remove();
+        }, { once: true });
+        syncPortraitSize();
     }
     paper.append(hero);
 

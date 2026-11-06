@@ -1189,7 +1189,7 @@ async function showCartPage(addHistory = true, message = "") {
         if (requestId !== viewRequestId) return;
         cart.render(cartPage, merchContainer.datas, {
             message,
-            onSubmit: (items, shipping) => createCheckout(items, shipping),
+            onSubmit: (items, shipping, code) => createCheckout(items, shipping, code),
             onOrders: showMyOrdersPage
         });
     } catch (error) {

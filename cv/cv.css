@@ -100,7 +100,7 @@
 .cv_kicker,
 .cv_section_kicker {
     margin: 0 0 .7rem;
-    color: var(--fg-secondary-2);
+    color: var(--cv-info, #2f5d8a);
     font-family: var(--font-body);
     font-size: .72rem;
     font-weight: 700;
@@ -124,18 +124,28 @@
 .cv_role {
     margin: .8rem 0 0;
     padding: 0;
-    color: var(--fg-2);
+    color: var(--cv-accent, #285b40);
     font-family: var(--font-body);
     font-size: clamp(1rem, 2vw, 1.3rem);
 }
 
-.cv_portrait {
-    width: clamp(5rem, 12vw, 8rem);
-    aspect-ratio: 1;
-    border: .4rem solid color-mix(in srgb, var(--bg-1) 75%, transparent);
-    border-radius: 50%;
+.cv_hero > .cv_portrait {
+    position: relative;
+    justify-self: end;
+    margin: 0;
+    overflow: hidden;
+}
+
+.cv_hero > .cv_portrait img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
     object-fit: cover;
-    box-shadow: 0 .7rem 2rem #0002;
 }
 
 .cv_section {
@@ -162,11 +172,11 @@
 }
 
 .cv_skills li {
-    border: 1px solid color-mix(in srgb, var(--fg-2) 28%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cv-accent, #285b40) 45%, transparent);
     border-radius: 999px;
     padding: .65rem 1rem;
     background: color-mix(in srgb, var(--bg-2) 72%, transparent);
-    color: var(--fg-2);
+    color: var(--cv-accent, #285b40);
     font-family: var(--font-body);
     font-size: .93rem;
 }
@@ -186,7 +196,7 @@
 }
 
 .cv_experiences th {
-    color: var(--fg-secondary-2);
+    color: var(--cv-info, #2f5d8a);
     font-size: .73rem;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -203,8 +213,8 @@
 
 .cv_traits {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
-    gap: .8rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .6rem;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -213,21 +223,27 @@
 .cv_traits li {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: .7rem;
-    min-height: 4rem;
+    gap: .4rem;
+    min-height: 0;
     border: 1px solid color-mix(in srgb, var(--fg-2) 20%, transparent);
-    border-radius: .75rem;
-    padding: .8rem 1rem;
+    border-radius: .5rem;
+    padding: .55rem .7rem;
     background: color-mix(in srgb, var(--bg-2) 45%, transparent);
     color: var(--fg-1);
     font-family: var(--font-body);
-    text-align: center;
+    font-size: .8rem;
 }
 
-.cv_traits li span:first-child { font-weight: 700; }
-.cv_traits li span:last-child { color: var(--fg-3); }
-.cv_traits li span[aria-hidden="true"] { color: var(--fg-secondary-2); }
+.cv_traits li span {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.cv_traits li span:first-child { font-weight: 700; text-align: right; }
+.cv_traits li span:last-child { color: var(--fg-3); text-align: left; }
+.cv_traits li span[aria-hidden="true"] { flex: 0 0 auto; color: var(--cv-info, #2f5d8a); }
 
 .cv_last_updated {
     margin: 0;
@@ -280,12 +296,20 @@
 }
 .cv_site_footer { color: var(--fg-3); font-size: .82rem; }
 
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
     .cv_site_header,
     .cv_site_footer { width: min(100% - 1.25rem, 76rem); }
     .cv_page { width: min(100% - 1rem, 68rem); margin-top: .75rem; }
     .cv_hero { grid-template-columns: 1fr; gap: 1.3rem; }
-    .cv_portrait { grid-row: 1; width: 6.5rem; }
+    .cv_hero > .cv_portrait {
+        grid-row: 1;
+        justify-self: start;
+        align-self: start;
+        width: 6.5rem;
+        height: 6.5rem;
+        aspect-ratio: auto;
+    }
+    .cv_traits { grid-template-columns: 1fr; }
     .cv_experiences thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); }
     .cv_experiences,
     .cv_experiences tbody,
@@ -301,7 +325,7 @@
 
 @page {
     size: A4 portrait;
-    margin: 10mm;
+    margin: 0;
 }
 
 @media print {
@@ -330,7 +354,8 @@
 
     .cv_site_header,
     .cv_site_footer,
-    .cv_print_button {
+    .cv_print_button,
+    .cv_draft_badge {
         display: none !important;
     }
 
@@ -348,6 +373,7 @@
         overflow: visible;
         border: 0;
         border-radius: 0;
+        padding: 14mm 16mm;
         background: #fff;
         box-shadow: none;
         color: #17231c;
@@ -355,9 +381,9 @@
 
     .cv_hero {
         grid-template-columns: minmax(0, 1fr) auto;
-        gap: 10mm;
-        padding: 10mm 0;
-        background: #edf1e8 !important;
+        gap: 8mm;
+        padding: 0 0 8mm;
+        background: none !important;
         break-inside: avoid;
     }
 
@@ -369,18 +395,16 @@
     .cv_role,
     .cv_experiences td:first-child,
     .cv_traits li span:last-child {
-        color: #285b40;
+        color: var(--cv-accent, #285b40);
     }
 
-    .cv_portrait {
-        width: 32mm;
-        border-color: #fff;
-        box-shadow: none;
+    .cv_hero > .cv_portrait {
+        border: .3mm solid var(--cv-accent, #285b40);
     }
 
     .cv_section {
-        padding: 8mm 0;
-        border-color: #d3ddd3;
+        padding: 7mm 0;
+        border-color: #c9c9c9;
         break-inside: auto;
     }
 
@@ -394,23 +418,23 @@
     .cv_kicker,
     .cv_section_kicker,
     .cv_experiences th {
-        color: #9b3f18;
+        color: var(--cv-info, #2f5d8a);
     }
 
     .cv_skills { gap: 2mm; }
 
     .cv_skills li {
-        border-color: #b7c8b7;
+        border-color: var(--cv-accent, #285b40);
         padding: 2mm 4mm;
-        background: #edf1e8 !important;
-        color: #285b40;
+        background: none !important;
+        color: var(--cv-accent, #285b40);
         font-size: 9pt;
     }
 
     .cv_experiences th,
     .cv_experiences td {
         padding: 3mm 2mm;
-        border-color: #d3ddd3;
+        border-color: #c9c9c9;
     }
 
     .cv_experiences th { font-size: 8pt; }
@@ -419,23 +443,23 @@
     .cv_experiences tr { break-inside: avoid; }
 
     .cv_traits {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 3mm;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 2.5mm;
     }
 
     .cv_traits li {
         min-height: 0;
-        border-color: #d3ddd3;
-        border-radius: 2mm;
-        padding: 3mm;
-        background: #f7f3e8 !important;
+        border-color: #c9c9c9;
+        border-radius: 1mm;
+        padding: 2.5mm 3mm;
+        background: none !important;
         color: #19352a;
         break-inside: avoid;
     }
 
-    .cv_traits li span[aria-hidden="true"] { color: #b64f22; }
-    .cv_cv_footer { border-color: #d3ddd3; }
-    .cv_last_updated { padding: 4mm 0 0; color: #586a62; }
+    .cv_traits li span[aria-hidden="true"] { color: var(--cv-info, #2f5d8a); }
+    .cv_cv_footer { border-color: #c9c9c9; }
+    .cv_last_updated { padding: 4mm 0 0; color: #666; }
     .cv_empty,
     .cv_landing { display: none; }
 }

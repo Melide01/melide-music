@@ -56,6 +56,11 @@
 .cv_editor_page button:focus-visible,
 .cv_consent input:focus-visible { outline: 2px solid var(--fg-secondary-2); outline-offset: 2px; }
 .cv_editor_field textarea { min-height: 6rem; resize: vertical; }
+.cv_editor_field input[type="color"] {
+    height: 2.8rem;
+    padding: .3rem;
+    cursor: pointer;
+}
 .cv_editor_section { display: grid; gap: 1rem; }
 .cv_editor_section h2 { margin: 0; color: var(--fg-1); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 500; }
 .cv_editor_section > p { margin: -.6rem 0 0; color: var(--fg-3); font-size: .85rem; }
