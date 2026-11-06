@@ -38,6 +38,14 @@ Ces données servent à authentifier l'utilisateur, appliquer les autorisations 
 
 Les informations d'e-mail des profils auteurs sont accessibles dans l'interface d'administration authentifiée et ne sont pas incluses dans la réponse publique des auteurs.
 
+### Curriculum vitae des auteurs
+
+L'espace CV est réservé aux comptes connectés associés à un profil auteur. Il traite le nom légal, le ou les métiers, les expériences professionnelles, les compétences, les qualités personnelles, l'état de publication et les dates de mise à jour du CV. Une photo propre au CV peut aussi être envoyée ; elle ne remplace pas la photo du profil auteur et est recadrée au format carré puis convertie en WebP. Les fichiers d'origine de l'envoi ne sont pas conservés après conversion.
+
+Les CV en brouillon ne sont retournés qu'à l'auteur authentifié et autorisé. Lorsque l'auteur publie son CV, les informations choisies et sa photo deviennent accessibles par le lien public du CV. L'auteur peut désactiver la publication depuis l'éditeur. Le responsable du traitement ne vérifie pas les informations du CV et ne garantit pas leur exactitude ou leur actualité. Des copies précédemment téléchargées ou conservées par des tiers peuvent subsister après dépublication.
+
+Ces données sont conservées dans la base D1 et, pour les photos converties, le stockage d'images R2 de Cloudflare. Elles sont conservées tant que le CV est utilisé ou jusqu'à une demande de suppression, sous réserve d'une obligation légale. L'accès à l'éditeur nécessite l'acceptation des conditions spécifiques du CV ; la version et la date de cet accord sont enregistrées. Pour accéder à vos données, les rectifier ou demander leur suppression, contactez [john.teuira@melide.music](mailto:john.teuira@melide.music).
+
 ### Panier et commandes
 
 Le panier est conservé dans le navigateur sous la forme d'identifiants de variantes et de quantités. Lors de la validation, le Worker vérifie les articles et leurs prix à partir de la base de données ; les prix ou informations de paiement fournis par le navigateur ne font pas autorité.

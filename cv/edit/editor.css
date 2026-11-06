@@ -1,0 +1,148 @@
+.cv_editor_page {
+    width: min(100% - 2rem, 66rem);
+    min-height: 70vh;
+    margin: 2rem auto 4rem;
+    font-family: var(--font-body);
+}
+
+.cv_editor_intro {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.cv_editor_intro h1,
+.cv_consent h1 {
+    margin: 0;
+    color: var(--fg-1);
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 500;
+}
+
+.cv_editor_intro p,
+.cv_editor_help { color: var(--fg-3); line-height: 1.6; }
+.cv_editor_intro p { margin: .5rem 0 0; }
+.cv_author_picker { display: grid; gap: .35rem; min-width: min(100%, 16rem); color: var(--fg-2); }
+.cv_editor_card,
+.cv_consent {
+    border: 1px solid color-mix(in srgb, var(--fg-2) 18%, transparent);
+    border-radius: 1rem;
+    padding: clamp(1rem, 4vw, 2rem);
+    background: color-mix(in srgb, var(--bg-1) 92%, var(--bg-2));
+}
+
+.cv_editor_form { display: grid; gap: 1.5rem; }
+.cv_editor_grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.cv_editor_field { display: grid; gap: .4rem; min-width: 0; color: var(--fg-2); font-size: .9rem; }
+.cv_editor_field input,
+.cv_editor_field textarea,
+.cv_author_picker select {
+    width: 100%;
+    min-width: 0;
+    border: 1px solid color-mix(in srgb, var(--fg-2) 30%, transparent);
+    border-radius: .55rem;
+    padding: .75rem .85rem;
+    background: var(--bg-1);
+    color: var(--fg-1);
+    font: inherit;
+}
+
+.cv_editor_field input:focus-visible,
+.cv_editor_field textarea:focus-visible,
+.cv_author_picker select:focus-visible,
+.cv_editor_page button:focus-visible,
+.cv_consent input:focus-visible { outline: 2px solid var(--fg-secondary-2); outline-offset: 2px; }
+.cv_editor_field textarea { min-height: 6rem; resize: vertical; }
+.cv_editor_section { display: grid; gap: 1rem; }
+.cv_editor_section h2 { margin: 0; color: var(--fg-1); font-family: var(--font-heading); font-size: 1.5rem; font-weight: 500; }
+.cv_editor_section > p { margin: -.6rem 0 0; color: var(--fg-3); font-size: .85rem; }
+.cv_repeat_list { display: grid; gap: .8rem; }
+.cv_repeat_item {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    align-items: end;
+    gap: .7rem;
+    border: 1px solid color-mix(in srgb, var(--fg-2) 16%, transparent);
+    border-radius: .65rem;
+    padding: .85rem;
+    background: color-mix(in srgb, var(--bg-2) 35%, transparent);
+}
+.cv_repeat_item .cv_editor_field:last-of-type { grid-column: 1 / -1; }
+.cv_repeat_item.cv_trait_item { grid-template-columns: repeat(2, minmax(0, 1fr)) auto; }
+.cv_repeat_item.cv_trait_item .cv_editor_field:last-of-type { grid-column: auto; }
+.cv_editor_page button {
+    min-height: 2.7rem;
+    border: 1px solid color-mix(in srgb, var(--fg-2) 30%, transparent);
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    background: transparent;
+    color: var(--fg-2);
+    font: inherit;
+    cursor: pointer;
+}
+.cv_editor_page button:hover { background: color-mix(in srgb, var(--bg-2) 70%, transparent); }
+.cv_editor_page button:disabled { opacity: .6; cursor: wait; }
+.cv_add_button { justify-self: start; }
+.cv_editor_actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.cv_editor_actions .cv_action_primary {
+    border-color: var(--fg-2);
+    background: var(--fg-2);
+    color: var(--bg-1);
+}
+.cv_editor_actions .cv_action_publish {
+    border-color: var(--fg-secondary-2);
+    background: var(--fg-secondary-2);
+    color: var(--bg-1);
+}
+.cv_editor_preview {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.7rem;
+    border: 1px solid color-mix(in srgb, var(--fg-2) 30%, transparent);
+    border-radius: 999px;
+    padding: .55rem 1rem;
+    color: var(--fg-2);
+    text-decoration: none;
+}
+.cv_editor_preview:hover { background: color-mix(in srgb, var(--bg-2) 70%, transparent); }
+.cv_editor_status { min-height: 1.5em; margin: 0; color: var(--fg-3); }
+.cv_editor_status[data-error="true"] { color: #b83c29; }
+.cv_status_banner {
+    margin-bottom: 1rem;
+    border-left: .25rem solid var(--fg-secondary-2);
+    border-radius: .25rem;
+    padding: .75rem 1rem;
+    background: color-mix(in srgb, var(--fg-secondary-2) 9%, var(--bg-1));
+    color: var(--fg-2);
+}
+.cv_status_banner.is_published { border-color: var(--fg-2); }
+.cv_status_banner a { color: inherit; }
+.cv_photo_row { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
+.cv_photo_preview { width: 5rem; aspect-ratio: 1; border-radius: 50%; object-fit: cover; background: var(--bg-2); }
+.cv_photo_controls { display: grid; gap: .4rem; }
+.cv_photo_controls input { max-width: 100%; color: var(--fg-3); }
+.cv_editor_notice { margin: 0; color: var(--fg-3); font-size: .82rem; line-height: 1.5; }
+.cv_consent { display: grid; gap: 1rem; max-width: 48rem; margin: 5vh auto; }
+.cv_consent h1 { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+.cv_consent p,
+.cv_consent li { color: var(--fg-3); line-height: 1.65; }
+.cv_consent ul { margin: 0; padding-left: 1.3rem; }
+.cv_consent label { display: flex; align-items: flex-start; gap: .65rem; color: var(--fg-1); line-height: 1.5; }
+.cv_consent input { margin-top: .3rem; accent-color: var(--fg-2); }
+.cv_consent_actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+.cv_consent a { color: var(--fg-2); }
+
+@media (max-width: 650px) {
+    .cv_editor_page { width: min(100% - 1rem, 66rem); margin-top: .75rem; }
+    .cv_editor_intro { display: grid; grid-template-columns: minmax(0, 1fr); }
+    .cv_editor_intro > div { min-width: 0; }
+    .cv_editor_grid { grid-template-columns: 1fr; }
+    .cv_repeat_item,
+    .cv_repeat_item.cv_trait_item { grid-template-columns: 1fr 1fr; }
+    .cv_repeat_item .cv_editor_field:last-of-type,
+    .cv_repeat_item.cv_trait_item .cv_editor_field:last-of-type { grid-column: 1 / -1; }
+    .cv_repeat_item button { grid-column: 1 / -1; justify-self: start; }
+}
