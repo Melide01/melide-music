@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Melide - Retrait de mes données</title>
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon">
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/dark-icon.ico" type="image/x-icon" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    <style>
+        .aide_page { width: min(100%, 45em); margin: auto; padding: 2em 1em; }
+        .aide_page h1 { font-family: var(--font-serif-head); text-transform: uppercase; color: var(--fg-3); font-weight: 100; }
+        .aide_page .card { border: 1px solid var(--bg-4); border-radius: calc(var(--space) * var(--border-radius) / 2); padding: 1.2em; margin-top: 1.5em; }
+        .aide_page .danger { background: #c00; color: #fff; }
+        .aide_page button { padding: .7em 1.2em; border: 0; border-radius: calc(var(--space) * var(--border-radius) / 3); background: var(--fg-2); color: var(--bg-1); cursor: pointer; font: inherit; }
+        .aide_page button:disabled { opacity: .6; cursor: wait; }
+        .aide_status { margin-top: 1em; }
+        .aide_status[data-kind="error"] { color: #c00; }
+        .aide_status[data-kind="success"] { color: var(--fg-2); }
+        .aide_confirm { display: flex; gap: .8em; margin-top: 1em; }
+    </style>
+</head>
+<body>
+    <main class="aide_page">
+        <h1>Demander le retrait de mes données</h1>
+        <p>Cette action supprime définitivement votre compte et les données associées (profil auteur, CV, liens de compte). Vos commandes passées sont conservées de façon anonymisée pour respecter nos obligations légales et comptables, mais votre adresse e-mail et votre adresse de livraison en sont retirées.</p>
+        <div class="card" id="confirm_card">
+            <p><strong>Êtes-vous sûr·e ?</strong> Cette action est irréversible.</p>
+            <div class="aide_confirm">
+                <button id="confirm_delete" type="button" class="danger">Oui, supprimer mes données</button>
+                <button id="cancel" type="button">Annuler</button>
+            </div>
+            <p class="aide_status" id="status" role="status"></p>
+        </div>
+        <p><a href="/">← Retour à l'accueil</a> · <a href="/aide/donnees-personnelles.html">Voir mes données enregistrées</a></p>
+    </main>
+    <script type="module">
+        const API = "https://api.melide.music";
+        const status = document.getElementById("status");
+        const confirmButton = document.getElementById("confirm_delete");
+        const cancelButton = document.getElementById("cancel");
+        const card = document.getElementById("confirm_card");
+
+        cancelButton.addEventListener("click", () => { window.location.href = "/"; });
+
+        confirmButton.addEventListener("click", async () => {
+            confirmButton.disabled = true;
+            status.textContent = "Suppression en cours…";
+            status.dataset.kind = "";
+            try {
+                const response = await fetch(`${API}/user/data/delete`, {
+                    method: "POST",
+                    credentials: "include",
+                    redirect: "manual",
+                    headers: { "Content-Type": "text/plain;charset=UTF-8" },
+                    body: JSON.stringify({ confirm: true })
+                });
+                if (response.type === "opaqueredirect" || response.status === 0) throw new Error("Connectez-vous d'abord avec le bouton Connect de la page d'accueil.");
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.error || "La suppression a échoué.");
+                card.querySelector("p").textContent = "Vos données ont été supprimées. Vous allez être déconnecté.";
+                card.querySelector(".aide_confirm").remove();
+                status.textContent = "";
+                // Log out of Cloudflare Access.
+                const frame = document.createElement("iframe");
+                frame.hidden = true;
+                frame.src = `${API}/cdn-cgi/access/logout`;
+                document.body.appendChild(frame);
+                setTimeout(() => { window.location.href = "/"; }, 2500);
+            } catch (error) {
+                status.textContent = error.message;
+                status.dataset.kind = "error";
+                confirmButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

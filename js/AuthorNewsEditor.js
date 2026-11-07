@@ -120,11 +120,11 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
             const title = document.createElement("strong");
             title.textContent = article.title;
             const articleState = document.createElement("span");
-            articleState.textContent = article.state === "published" ? "Publié" : "Brouillon";
-            const edit = makeButton(article.can_edit === false ? "Voir" : "Modifier", () => {
+            articleState.textContent = article.state === "published" ? "✅" : "📃";
+            const edit = makeButton(article.can_edit === false ? "👁" : "🖌", () => {
                 window.dispatchEvent(new CustomEvent("news:edit", { detail: { articleId: article.id } }));
             });
-            const remove = makeButton("Supprimer", async () => {
+            const remove = makeButton("X", async () => {
                 if (!window.confirm(`Supprimer « ${article.title} » ?`)) return;
                 remove.disabled = true;
                 try {

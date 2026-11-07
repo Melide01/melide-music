@@ -35,6 +35,64 @@ export class Merch {
     colors() { return this.variants.map(variant => variant.color).filter((color, index, values) => values.indexOf(color) === index); }
     sizes() { return this.variants.flatMap(variant => variant.sizes).filter((size, index, values) => values.indexOf(size) === index); }
 
+    // Extract the size from a variant: metadata.size, else the part after the
+    // last "/" in the name (e.g. "RAW PAIN 1 / M" -> "M"), else the full name.
+    variantSize(variant) {
+        const metadata = variant?.metadata || {};
+        if (typeof metadata.size === "string" && metadata.size.trim()) return metadata.size.trim();
+        const name = String(variant?.name || "");
+        const parts = name.split("/");
+        if (parts.length > 1) {
+            const last = parts[parts.length - 1].trim();
+            if (last) return last;
+        }
+        return name;
+    }
+
+    variantColor(variant) {
+        const metadata = variant?.metadata || {};
+        return typeof metadata.color === "string" && metadata.color.trim() ? metadata.color.trim() : "";
+    }
+
+    // Group real DB variants by color -> sizes using their metadata.
+    // Returns an array of { color, colorHex, sizes: [{ size, variant }] }.
+    // Variants without a color go into a single "" group (size-only products).
+    variantGroups() {
+        const groups = new Map();
+        const active = (this.data.variants || []).filter(variant => variant?.active !== false && variant?.id != null);
+        for (const variant of active) {
+            const metadata = variant?.metadata || {};
+            const color = this.variantColor(variant);
+            const colorHex = typeof metadata.color_hex === "string" && metadata.color_hex.trim() ? metadata.color_hex.trim() : (metadata.hex || "");
+            const size = this.variantSize(variant);
+            if (!groups.has(color)) groups.set(color, { color, colorHex, sizes: [] });
+            const group = groups.get(color);
+            if (colorHex && !group.colorHex) group.colorHex = colorHex;
+            group.sizes.push({ size, variant });
+        }
+        return [...groups.values()];
+    }
+
+    hasColors() {
+        return this.variantGroups().some(group => group.color !== "");
+    }
+
+    // Resolve the variant for a given color + size selection.
+    findVariant(color, size) {
+        const active = (this.data.variants || []).filter(variant => variant?.active !== false && variant?.id != null);
+        if (!active.length) return null;
+        const wantedColor = color || "";
+        const byColorAndSize = active.find(variant => {
+            if (this.variantColor(variant) !== wantedColor) return false;
+            return !size || this.variantSize(variant) === size;
+        });
+        const resolved = byColorAndSize
+            || (size ? active.find(variant => this.variantSize(variant) === size) : null)
+            || active[0];
+        console.log("[merch-debug] findVariant", { color, size, resolved: resolved ? { id: resolved.id, name: resolved.name, price: resolved.price } : null, activeCount: active.length });
+        return resolved;
+    }
+
     colorVariable(color) {
         const slug = String(color)
             .normalize("NFD")
@@ -64,12 +122,21 @@ export class Merch {
         quickAction.className = "ver right";
         quickAction.appendChild(this.createAddButton("card"));
         visual.append(image, quickAction);
+        const collection = this.data.collection;
+        if (collection && collection.pinned) {
+            const label = document.createElement("span");
+            label.className = "merch_collection_label";
+            label.textContent = collection.name;
+            if (collection.back_color) label.style.background = collection.back_color;
+            if (collection.front_color) label.style.color = collection.front_color;
+            visual.appendChild(label);
+        }
         const title = document.createElement("h2");
         title.textContent = this.title;
         const price = document.createElement("p");
         price.textContent = this.formatPrice();
         card.append(visual, title, price, this.createMetadataDisplay());
-        if (!Array.isArray(this.data.variants) || !this.data.variants.length) card.insertBefore(this.createColorControl("card"), title);
+        if ((!Array.isArray(this.data.variants) || !this.data.variants.length) && this.colors().length) card.insertBefore(this.createColorControl("card"), title);
         this.card = card;
         card.addEventListener("click", () => {
             card.dispatchEvent(new CustomEvent("project:select", { bubbles: true, detail: { project: this.data, renderer: this } }));
@@ -107,33 +174,136 @@ export class Merch {
         showVisual(0);
         intro.append(title, visual);
 
+        // Collection label + description (clothes only), above the size radios.
+        const collection = this.data.collection;
+        let collectionBlock = null;
+        if (collection) {
+            collectionBlock = document.createElement("div");
+            collectionBlock.className = "merch_collection_block";
+            const label = document.createElement("span");
+            label.className = "merch_collection_tag";
+            label.textContent = collection.name;
+            if (collection.back_color) label.style.background = collection.back_color;
+            if (collection.front_color) label.style.color = collection.front_color;
+            collectionBlock.appendChild(label);
+            if (collection.description) {
+                const description = document.createElement("p");
+                description.className = "merch_collection_description";
+                description.textContent = collection.description;
+                if (collection.back_color) description.style.color = collection.back_color;
+                if (collection.front_color) description.style.background = collection.front_color;
+                collectionBlock.appendChild(description);
+            }
+        }
+
         const controls = document.createElement("div"); controls.className = "ver align merch_controls";
         const buy = document.createElement("div"); buy.className = "hor fill buy";
         const quantity = document.createElement("input"); quantity.className = "except"; quantity.type = "number"; quantity.min = "1"; quantity.max = "100"; quantity.value = "1"; quantity.setAttribute("aria-label", "Quantité");
-        const variantControl = this.createVariantControl();
-        if (variantControl) controls.appendChild(variantControl);
-        else controls.append(this.createColorControl("page"), this.createSizeControl());
+
+        // Variant selection: group by color -> sizes. No color box when there are no colors.
+        const groups = this.variantGroups();
+        const hasColors = this.hasColors();
+        const selection = { color: hasColors ? (groups.find(group => group.color)?.color ?? null) : null, size: null };
+        const sizeContainer = document.createElement("div");
+        sizeContainer.className = "merch_size_container";
+
         if (this.allowMultiple) buy.appendChild(quantity);
         const addButton = this.createAddButton("page");
-        buy.appendChild(addButton);
+        const priceDisplay = document.createElement("span");
+        priceDisplay.className = "merch_price_live";
+        priceDisplay.setAttribute("role", "status");
+        priceDisplay.setAttribute("aria-live", "polite");
+        buy.append(priceDisplay, addButton);
+
+        const syncPrice = () => {
+            const variant = this.findVariant(selection.color, selection.size);
+            const unit = variant?.price ?? this.price;
+            if (unit === "" || unit == null || !Number.isFinite(Number(unit))) {
+                priceDisplay.textContent = this.formatPrice(unit);
+                return;
+            }
+            const amount = this.allowMultiple
+                ? Number(unit) * Math.max(1, Math.min(100, Number.parseInt(quantity.value || "1", 10) || 1))
+                : Number(unit);
+            priceDisplay.textContent = this.formatPrice(amount);
+        };
+        const syncQuantity = () => { quantity.hidden = this.isFreeDigital(this.findVariant(selection.color, selection.size)); };
+        const syncAll = () => { syncPrice(); syncQuantity(); };
+
+        const renderSizes = () => {
+            sizeContainer.replaceChildren();
+            const group = hasColors ? groups.find(entry => entry.color === selection.color) : groups[0];
+            const sizes = group && group.sizes.length ? group.sizes : (groups[0]?.sizes || []);
+            selection.size = sizes[0]?.size ?? null;
+            if (sizes.length) sizeContainer.appendChild(this.createSizeSelectControl(sizes, selection));
+            syncAll();
+        };
+        const colorControl = hasColors ? this.createColorSwatchControl(groups, selection, renderSizes) : null;
+        if (colorControl) controls.appendChild(colorControl);
+        if (collectionBlock) controls.appendChild(collectionBlock);
+        controls.appendChild(sizeContainer);
         controls.appendChild(buy);
         merch.append(intro, controls);
         section.appendChild(merch);
         this.element = section;
-        if (this.allowMultiple) {
-            const initialVariant = this.data.variants?.find(variant => String(variant.id) === this.element.querySelector(".merch_variant_select")?.value);
-            quantity.hidden = this.isFreeDigital(initialVariant);
-        }
-        this.element.querySelector(".merch_variant_select")?.addEventListener("change", () => {
-            const selected = this.data.variants.find(variant =>
-                String(variant.id) === this.element.querySelector(".merch_variant_select").value
-            );
-            this.updateAddButton(addButton, selected);
-            quantity.hidden = this.isFreeDigital(selected);
-        });
+        this.selection = selection;
+        renderSizes();
+        sizeContainer.addEventListener("change", syncAll);
+        quantity.addEventListener("input", syncPrice);
         if (from instanceof Element) from.classList.add("closed");
         document.querySelector("header")?.after(section);
         return section;
+    }
+
+    // Color swatches; selecting one re-renders the sizes for that color.
+    createColorSwatchControl(groups, selection, onChange) {
+        const control = document.createElement("div");
+        control.className = "grid merch_colors";
+        groups.filter(group => group.color).forEach((group, index) => {
+            const label = document.createElement("label");
+            label.style.setProperty("--text", JSON.stringify(group.color));
+            label.style.setProperty("--color", group.colorHex || this.colorVariable(group.color));
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = `merch-color-${this.id || this.title}`;
+            input.value = group.color;
+            input.checked = index === 0;
+            input.setAttribute("aria-label", group.color);
+            input.addEventListener("change", () => {
+                if (!input.checked) return;
+                selection.color = group.color;
+                onChange();
+            });
+            label.appendChild(input);
+            control.appendChild(label);
+        });
+        return control;
+    }
+
+    // Size radio buttons for the currently selected color group.
+    createSizeSelectControl(sizes, selection) {
+        this.sizeRenderCount = (this.sizeRenderCount || 0) + 1;
+        const groupName = `merch-size-${this.id || this.title}-${this.sizeRenderCount}`;
+        const control = document.createElement("div");
+        control.className = "hor merch_sizes";
+        sizes.forEach(({ size }, index) => {
+            const label = document.createElement("label");
+            label.textContent = size;
+            const input = document.createElement("input");
+            input.type = "radio";
+            input.name = groupName;
+            input.value = size;
+            input.checked = index === 0;
+            input.addEventListener("change", () => {
+                if (input.checked) {
+                    selection.size = size;
+                    console.log("[merch-debug] size selected", size, "selection:", JSON.stringify(selection));
+                }
+            });
+            label.appendChild(input);
+            control.appendChild(label);
+        });
+        return control;
     }
 
     createColorControl(context) {
@@ -224,25 +394,22 @@ export class Merch {
         button.appendChild(icon);
         const firstVariant = this.data.variants?.find(variant => variant?.active !== false && variant?.id != null);
         this.updateAddButton(button, firstVariant);
-        button.disabled = !this.variants.some(variant => variant?.active !== false && variant?.id != null);
+        const activeVariants = (this.data.variants || []).filter(variant => variant?.active !== false && variant?.id != null);
+        button.disabled = activeVariants.length === 0;
         button.addEventListener("click", event => {
             event.stopPropagation();
             if (button.disabled) return;
-            const variantSelect = this.element?.querySelector(".merch_variant_select");
-            const legacyColor = this.element?.querySelector(".merch_colors input:checked")?.value;
-            const legacySize = this.element?.querySelector(".merch_sizes input:checked")?.value;
-            const variant = Array.isArray(this.data.variants) && this.data.variants.length
-                ? this.data.variants.find(item =>
-                    item?.active !== false &&
-                    item?.id != null &&
-                    String(item.id) === (context === "page" ? variantSelect?.value : String(this.data.variants.find(option => option?.active !== false && option?.id != null)?.id))
-                )
-                : null;
+            let variant = null;
+            if (context === "page" && this.selection) {
+                variant = this.findVariant(this.selection.color, this.selection.size);
+            } else if (Array.isArray(this.data.variants) && this.data.variants.length) {
+                variant = this.data.variants.find(item => item?.active !== false && item?.id != null);
+            }
             const quantityInput = context === "page" ? this.element?.querySelector(".buy input[type=number]") : null;
             const quantity = this.allowMultiple && !this.isFreeDigital(variant)
                 ? Math.max(1, Math.min(100, Number.parseInt(quantityInput?.value || "1", 10) || 1))
                 : 1;
-            const variantId = variant?.id ?? this.findLegacyVariantId(legacyColor, legacySize);
+            const variantId = variant?.id ?? null;
             if (variantId == null) {
                 window.dispatchEvent(new CustomEvent("cart:error", { detail: { message: "Cette variante n'est pas disponible." } }));
                 return;

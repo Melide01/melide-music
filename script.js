@@ -74,6 +74,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         event.preventDefault();
         await showAuthorPanel();
     });
+    document.querySelectorAll("#footer_apps a[data-app]").forEach(link => {
+        link.addEventListener("click", async event => {
+            event.preventDefault();
+            await showAuthorPanel();
+            const subsection = link.dataset.app;
+            const author = (window.authors || [])[0];
+            if (author && (subsection === "projects" || (subsection === "articles" && author.newsWriter))) {
+                await showAuthorSubsection(author, subsection);
+            }
+        });
+    });
     connectButton?.addEventListener("click", event => {
         event.preventDefault();
         redirectToConnect();
@@ -320,7 +331,8 @@ async function ensureMerchContainer(refresh = false) {
         if (!response.ok) throw new Error(`Merch API returned ${response.status}`);
         const merchData = await response.json();
         if (!Array.isArray(merchData)) throw new Error("Merch API returned an invalid product list.");
-        merchContainer.setDatas(merchData);
+        merchAllDatas = merchData;
+        applyMerchSection();
         return merchContainer;
     })();
 
@@ -603,20 +615,29 @@ async function createAuthorPanel(author, requestId) {
     panel.appendChild(photoForm);
 
     const navigation = document.createElement("nav");
-    navigation.className = "author_space_nav";
-    navigation.setAttribute("aria-label", `Navigation de ${author.name || "l’auteur"}`);
-    const viewProjects = document.createElement("button");
-    viewProjects.type = "button";
-    viewProjects.textContent = "Voir les projets";
-    viewProjects.addEventListener("click", () => showAuthorSubsection(author, "projects"));
-    navigation.appendChild(viewProjects);
+    navigation.className = "author_space_nav author_apps";
+    navigation.setAttribute("aria-label", `Applications de ${author.name || "l’auteur"}`);
+    const appsGrid = document.createElement("div");
+    appsGrid.className = "author_apps_grid";
+    const makeApp = (icon, label, onClick) => {
+        const app = document.createElement("button");
+        app.type = "button";
+        app.className = "author_app_card";
+        const iconEl = document.createElement("i");
+        iconEl.className = icon;
+        iconEl.setAttribute("aria-hidden", "true");
+        const text = document.createElement("span");
+        text.textContent = label;
+        app.append(iconEl, text);
+        app.addEventListener("click", onClick);
+        return app;
+    };
+    appsGrid.appendChild(makeApp("fa-solid fa-folder-open", "Projets", () => showAuthorSubsection(author, "projects")));
     if (author.newsWriter) {
-        const viewArticles = document.createElement("button");
-        viewArticles.type = "button";
-        viewArticles.textContent = "Voir les articles";
-        viewArticles.addEventListener("click", () => showAuthorSubsection(author, "articles"));
-        navigation.appendChild(viewArticles);
+        appsGrid.appendChild(makeApp("fa-solid fa-newspaper", "Articles", () => showAuthorSubsection(author, "articles")));
     }
+    appsGrid.appendChild(makeApp("fa-solid fa-id-card", "Curriculum vitae", () => { window.location.href = "/cv/"; }));
+    navigation.append(appsGrid);
     panel.append(navigation);
     return panel;
 }
@@ -999,6 +1020,7 @@ async function showMerch(addHistory = true) {
         const merchId = new URLSearchParams(window.location.search).get("merch");
         if (merchId === null || merchId === "") {
             document.getElementById("merchFeaturedSkeleton")?.remove();
+            addMerchSectionControls();
             addMerchFeaturedCarousel();
         } else {
             document.getElementById("merchFeaturedSkeleton")?.remove();
@@ -1018,6 +1040,67 @@ function merchDate(item, key) {
 
 function isPublishedMerch(item) {
     return String(item?.state || "").toLowerCase() === "published" || (item?.state == null && item?.active === true);
+}
+
+function getMerchType(item) {
+    const explicit = item?.metadata?.product_type;
+    if (explicit === "clothe" || explicit === "digital") return explicit;
+    return item?.metadata?.digital_product === true ? "digital" : "clothe";
+}
+
+function isDigitalMerch(item) {
+    return getMerchType(item) === "digital";
+}
+
+// Current merch section: "clothes" | "digital" (clothes selected by default)
+let merchSection = "clothes";
+let merchAllDatas = [];
+
+function applyMerchSection() {
+    if (!merchContainer) return;
+    const all = merchAllDatas.length ? merchAllDatas : merchContainer.datas;
+    let filtered = all;
+    if (merchSection === "clothes") filtered = all.filter(item => !isDigitalMerch(item));
+    else if (merchSection === "digital") filtered = all.filter(item => isDigitalMerch(item));
+    merchContainer.setDatas(filtered);
+}
+
+function addMerchSectionControls() {
+    document.getElementById("merchSectionControls")?.remove();
+    const controls = document.createElement("div");
+    controls.id = "merchSectionControls";
+    controls.className = "hor align merch_section_controls";
+    const makeButton = (section, icon, label) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "merch_section_button";
+        button.classList.toggle("selected", merchSection === section);
+        button.setAttribute("aria-pressed", String(merchSection === section));
+        button.setAttribute("aria-label", label);
+        button.title = label;
+        const iconEl = document.createElement("i");
+        iconEl.className = icon;
+        iconEl.setAttribute("aria-hidden", "true");
+        button.appendChild(iconEl);
+        button.addEventListener("click", () => {
+            merchSection = section;
+            controls.querySelectorAll(".merch_section_button").forEach(item => {
+                const active = item === button;
+                item.classList.toggle("selected", active);
+                item.setAttribute("aria-pressed", String(active));
+            });
+            applyMerchSection();
+            document.getElementById("merchFeaturedSkeleton")?.remove();
+            projectContainerElement.querySelector(".merch_featured")?.remove();
+            addMerchFeaturedCarousel();
+        });
+        return button;
+    };
+    controls.append(
+        makeButton("clothes", "fa-solid fa-shirt", "Vêtements"),
+        makeButton("digital", "fa-solid fa-file-arrow-down", "Produits numériques")
+    );
+    projectContainerElement.insertBefore(controls, projectContainerElement.querySelector("#search_controls"));
 }
 
 function addMerchFeaturedSkeleton() {
@@ -1042,7 +1125,9 @@ function addMerchFeaturedSkeleton() {
 }
 
 function addMerchFeaturedCarousel() {
-    const products = merchContainer.datas.filter(isPublishedMerch);
+    let products = merchContainer.datas.filter(isPublishedMerch);
+    if (merchSection === "clothes") products = products.filter(item => !isDigitalMerch(item));
+    else if (merchSection === "digital") products = products.filter(item => isDigitalMerch(item));
     if (!products.length) return;
 
     const byNewest = [...products].sort((first, second) => {
@@ -1053,6 +1138,12 @@ function addMerchFeaturedCarousel() {
     });
     const latest = byNewest[0];
     const featured = [{ item: latest, label: "Dernier ajout" }];
+
+    // Latest merch item belonging to a pinned collection.
+    const latestInPins = byNewest.find(item => item.collection && item.collection.pinned);
+    if (latestInPins && String(latestInPins.id) !== String(latest.id)) {
+        featured.push({ item: latestInPins, label: latestInPins.collection.name, collection: latestInPins.collection });
+    }
     const latestId = String(latest.id);
     const upcoming = products
         .filter(item => {
@@ -1080,7 +1171,7 @@ function addMerchFeaturedCarousel() {
     viewport.className = "merch_featured_viewport";
     const track = document.createElement("div");
     track.className = "merch_featured_track";
-    const slides = featured.map(({ item, label }) => {
+    const slides = featured.map(({ item, label, collection }) => {
         const slide = document.createElement("div");
         slide.className = "merch_featured_slide";
         slide.setAttribute("role", "group");
@@ -1098,6 +1189,15 @@ function addMerchFeaturedCarousel() {
         image.alt = "";
         image.loading = "lazy";
         hero.appendChild(image);
+        const itemCollection = collection || (item.collection || null);
+        if (itemCollection) {
+            const badge = document.createElement("span");
+            badge.className = "merch_featured_collection_badge";
+            badge.textContent = itemCollection.name;
+            if (itemCollection.back_color) badge.style.background = itemCollection.back_color;
+            if (itemCollection.front_color) badge.style.color = itemCollection.front_color;
+            hero.appendChild(badge);
+        }
         const details = document.createElement("span");
         details.className = "merch_featured_details";
         const title = document.createElement("strong");
@@ -1412,6 +1512,7 @@ async function updateAuthButtons() {
     if (authorButton) authorButton.hidden = true;
     logoutButton.hidden = true;
     cartButton.hidden = true;
+    updateFooterAide(false);
     try {
         const response = await fetch(`${API_URL}/user/whoami`, {
             credentials: "include",
@@ -1427,6 +1528,7 @@ async function updateAuthButtons() {
         accessButton.hidden = false;
         logoutButton.hidden = false;
         cartButton.hidden = false;
+        updateFooterAide(true);
 
         const authorsResponse = await fetch(`${API_URL}/user/authors`, {
             credentials: "include",
@@ -1439,6 +1541,7 @@ async function updateAuthButtons() {
         if (requestId !== authRequestId) return;
         accessButton.hidden = authors.length > 0;
         if (authorButton) authorButton.hidden = authors.length === 0;
+        updateFooterApps(authors);
     } catch {
         if (requestId !== authRequestId) return;
         if (authenticated) {
@@ -1447,6 +1550,8 @@ async function updateAuthButtons() {
             if (authorButton) authorButton.hidden = true;
             logoutButton.hidden = false;
             cartButton.hidden = false;
+            updateFooterApps(null);
+            updateFooterAide(true);
             notification.show("Impossible de vérifier les auteurs associés à votre compte.", "error");
         } else {
             window.dispatchEvent(new CustomEvent("auth:change", { detail: { authenticated: false } }));
@@ -1455,8 +1560,24 @@ async function updateAuthButtons() {
             if (authorButton) authorButton.hidden = true;
             logoutButton.hidden = true;
             cartButton.hidden = true;
+            updateFooterApps(null);
+            updateFooterAide(false);
         }
     }
+}
+
+function updateFooterApps(authors) {
+    const footerApps = document.getElementById("footer_apps");
+    if (!footerApps) return;
+    const list = Array.isArray(authors) ? authors : [];
+    footerApps.hidden = list.length === 0;
+    const articlesItem = document.getElementById("footer_app_articles")?.closest("li");
+    if (articlesItem) articlesItem.hidden = !list.some(author => author.newsWriter);
+}
+
+function updateFooterAide(authenticated) {
+    const footerAide = document.getElementById("footer_aide");
+    if (footerAide) footerAide.hidden = !authenticated;
 }
 
 function projectUrl(renderer, fromSearch = false) {
@@ -1499,7 +1620,8 @@ function showProject(renderer, addHistory = true, fromSearch = false, authorized
     }
     projectContainerElement.classList.add("closed");
     const root = renderer.load("", fromSearch ? projectContainerElement : null);
-    if (root) void loadAuthorProjectEditor(renderer, root, requestId, authorizedProject, editorStatus);
+    const isMerch = renderer.type === "merch" || renderer.type === "merchandise";
+    if (root && !isMerch) void loadAuthorProjectEditor(renderer, root, requestId, authorizedProject, editorStatus);
 }
 
 async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProject = null, editorStatus = "") {

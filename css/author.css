@@ -6,10 +6,11 @@
 
 .author_space > h2 {
     margin: 0;
-    color: var(--fg-2);
-    font-family: var(--font-heading);
+    color: var(--fg-3);
+    font-family: var(--font-serif-head);
     font-size: 2rem;
-    font-weight: 500;
+    font-weight: 100;
+    text-transform: uppercase;
 }
 
 .author_profile {
@@ -19,6 +20,32 @@
     border: 0;
     border-radius: 0;
     background: transparent;
+}
+
+.author_news_row { display: flex; flex-wrap: nowrap !important; border-radius: calc(var(--border-radius)/2); overflow: hidden; gap: 0 !important; padding: 0 !important; padding-left: calc(var(--padding)/2) !important; border: 2px solid var(--bg-2) !important; }
+.author_news_row>strong {
+    text-wrap: nowrap;
+    white-space: nowrap;
+    width: 1em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.author_news_row>span { margin-right: calc(var(--margin)*3); }
+.author_news_row button {
+    all:unset;
+    cursor: pointer;
+    font-size: 80% !important;
+    padding: 0 calc(var(--padding)*var(--space)*2);
+    background-color: var(--bg-2);
+    height: 5em !important;
+    transition: opacity 100ms;
+}
+.author_news_row button:last-child {
+    background: var(--bg-2) linear-gradient(to left, var(--solid-rgb-red) 50%, transparent);
+    color: var(--bg-1);
+}
+.author_news_row button:hover {
+    opacity: .7;
 }
 
 .author_profile_header {

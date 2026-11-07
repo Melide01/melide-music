@@ -26,7 +26,7 @@ Vous pouvez consulter les contenus pour votre usage personnel et dans le respect
 
 Les produits, descriptions, prix, variantes, disponibilités et modalités de livraison sont présentés au moment de la commande. Une commande peut nécessiter un compte connecté et, selon le produit, une adresse de livraison. Les informations affichées au récapitulatif de commande avant confirmation font foi pour la commande concernée.
 
-Le paiement, lorsqu'il est proposé, est traité par le prestataire indiqué lors du parcours de paiement. Les informations de paiement ne sont pas destinées à être stockées par le site. Une commande n'est considérée comme payée qu'après confirmation du paiement par le prestataire. Son état peut être consulté dans la rubrique « Mes commandes » lorsqu'elle est disponible.
+Le paiement, lorsqu'il est proposé, est traité par le prestataire indiqué lors du parcours de paiement (actuellement PayPal). Les informations de paiement ne sont pas destinées à être stockées par le site. Une commande n'est considérée comme payée qu'après confirmation du paiement par le prestataire. Son état peut être consulté dans la rubrique « Mes commandes » lorsqu'elle est disponible.
 
 Les produits numériques peuvent être accessibles par téléchargement ou par un lien communiqué après validation de la commande. Les produits physiques sont préparés et expédiés selon les informations communiquées au moment de l'achat.
 

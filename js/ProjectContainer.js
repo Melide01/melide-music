@@ -151,16 +151,25 @@ export class ProjectContainer {
         const orderRow = document.createElement("div");
         orderRow.className = "hor";
         const select = document.createElement("select");
-        const ascending = document.createElement("option");
-        ascending.value = "asc";
-        ascending.textContent = "Anciens";
         const descending = document.createElement("option");
         descending.value = "desc";
         descending.textContent = "Récents";
+        const ascending = document.createElement("option");
+        ascending.value = "asc";
+        ascending.textContent = "Anciens";
         select.append(descending, ascending);
+        if (this.forcedType === "merch" || this.contextType() === "merch") {
+            const paid = document.createElement("option");
+            paid.value = "price_desc";
+            paid.textContent = "Payant";
+            const free = document.createElement("option");
+            free.value = "price_asc";
+            free.textContent = "Gratuit";
+            select.append(paid, free);
+        }
         select.value = this.order;
         select.addEventListener("change", () => {
-            this.order = select.value === "desc" ? "desc" : "asc";
+            this.order = select.value;
             this.updateUrlState();
             this.setPage(1);
         });
@@ -307,6 +316,11 @@ export class ProjectContainer {
                 return `${title} ${description}`.toLocaleLowerCase().includes(this.searchValue);
             })
             .sort((first, second) => {
+                if (this.order === "price_asc" || this.order === "price_desc") {
+                    const firstPrice = Number(first?.price ?? first?.variants?.[0]?.price ?? 0);
+                    const secondPrice = Number(second?.price ?? second?.variants?.[0]?.price ?? 0);
+                    if (firstPrice !== secondPrice) return this.order === "price_desc" ? secondPrice - firstPrice : firstPrice - secondPrice;
+                }
                 const firstDate = new Date(first?.release_date || first?.released_date).getTime();
                 const secondDate = new Date(second?.release_date || second?.released_date).getTime();
                 const firstHasDate = Number.isFinite(firstDate);

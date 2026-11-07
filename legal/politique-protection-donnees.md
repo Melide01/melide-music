@@ -52,9 +52,9 @@ Le panier est conservé dans le navigateur sous la forme d'identifiants de varia
 
 Pour créer et suivre une commande, le site traite notamment l'identifiant du compte, l'adresse e-mail, les articles, les quantités, le montant, la devise, le statut et les dates de commande. Pour une commande payante, le formulaire demande les informations nécessaires à la livraison : nom, adresse, ville, code postal, pays et, facultativement, complément d'adresse, région et téléphone. Ces informations sont enregistrées dans la base de commandes.
 
-Les paiements payants sont effectués sur la page de paiement hébergée par **Stripe**. Le site transmet à Stripe les données nécessaires à la session de paiement, dont l'adresse e-mail, les articles, le montant et la référence de commande. Les données de carte sont saisies auprès de Stripe et ne sont pas enregistrées dans la base du site. Stripe traite ces données selon sa [politique de confidentialité](https://stripe.com/privacy).
+Les paiements payants sont effectués sur la page de paiement hébergée par **PayPal**. Le site transmet à PayPal les données nécessaires à la session de paiement, dont l'adresse e-mail, les articles, le montant et la référence de commande. Les données de carte ou de compte sont saisies auprès de PayPal et ne sont pas enregistrées dans la base du site. PayPal traite ces données selon sa [politique de confidentialité](https://www.paypal.com/privacy).
 
-**Resend** envoie les confirmations de certaines commandes gratuites. Les données nécessaires à l'envoi peuvent inclure l'adresse e-mail, les articles, le montant, la référence ou le lien de commande et, si une adresse est présente, les informations de livraison. Les commandes payantes n'ont pas actuellement de flux de confirmation par e-mail connecté dans le Worker.
+**Resend** envoie les confirmations de commande, y compris les commandes payantes et gratuites. Les données nécessaires à l'envoi peuvent inclure l'adresse e-mail, les articles, le montant, la référence ou le lien de commande, les liens de téléchargement éventuels et, si une adresse est présente, les informations de livraison.
 
 La boutique ne transmet pas actuellement les commandes à Printful ou à un autre prestataire de fulfillment. La livraison et l'exécution des commandes payantes ne sont donc pas automatisées par cette intégration.
 
@@ -72,12 +72,12 @@ Vous pouvez demander l'accès, la rectification ou la suppression des données v
 
 ## Prestataires et transferts
 
-Les données peuvent être traitées par les prestataires nécessaires aux fonctionnalités décrites : GitHub (hébergement statique), Cloudflare (DNS, sécurité, authentification, Worker et base D1), Google (fournisseur d'identité et polices), Stripe (paiement), Resend (e-mails de confirmation), ainsi que Zoho pour les échanges par e-mail. Ces prestataires peuvent traiter certaines données depuis des pays autres que la Polynésie française. Leurs politiques et mécanismes applicables sont consultables sur leurs sites respectifs.
+Les données peuvent être traitées par les prestataires nécessaires aux fonctionnalités décrites : GitHub (hébergement statique), Cloudflare (DNS, sécurité, authentification, Worker et base D1), Google (fournisseur d'identité et polices), PayPal (paiement), Resend (e-mails de confirmation), ainsi que Zoho pour les échanges par e-mail. Ces prestataires peuvent traiter certaines données depuis des pays autres que la Polynésie française. Leurs politiques et mécanismes applicables sont consultables sur leurs sites respectifs.
 
 - [Confidentialité de Cloudflare](https://www.cloudflare.com/privacypolicy/)
 - [Déclaration de confidentialité de GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
 - [Confidentialité de Google](https://policies.google.com/privacy)
-- [Confidentialité de Stripe](https://stripe.com/privacy)
+- [Confidentialité de PayPal](https://www.paypal.com/privacy)
 - [Confidentialité de Zoho](https://www.zoho.com/privacy.html)
 
 ## Utilisation de l'intelligence artificielle (IA)
@@ -88,7 +88,7 @@ L'utilisation de Copilot intervient dans la maintenance et la création du site,
 
 ## Vos droits
 
-Lorsque le RGPD ou les règles locales applicables vous accordent des droits sur vos données, vous pouvez demander l'accès, la rectification, l'effacement, la limitation du traitement, vous opposer à certains traitements ou demander la portabilité lorsque celle-ci s'applique. Pour exercer vos droits, contactez [john.teuira@melide.music](mailto:john.teuira@melide.music). Une vérification raisonnable de votre identité peut être nécessaire pour protéger vos données.
+Lorsque le RGPD ou les règles locales applicables vous accordent des droits sur vos données, vous pouvez demander l'accès, la rectification, l'effacement, la limitation du traitement, vous opposer à certains traitements ou demander la portabilité lorsque celle-ci s'applique. Si vous êtes connecté, vous pouvez utiliser les pages « [Demander mes données enregistrées](?page=legal/donnees-personnelles.md) » et « [Demander le retrait de mes données](?page=legal/retrait-donnees.md) » de la rubrique Aide, ou écrire à [john.teuira@melide.music](mailto:john.teuira@melide.music). Une vérification raisonnable de votre identité peut être nécessaire pour protéger vos données.
 
 Vous pouvez également saisir l'autorité de contrôle compétente, notamment la CNIL lorsque celle-ci est compétente ([www.cnil.fr](https://www.cnil.fr)).
 

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Melide - Mes données enregistrées</title>
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon">
+    <link rel="icon" href="/light-icon.ico" type="image/x-icon" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/dark-icon.ico" type="image/x-icon" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://kit.fontawesome.com/22e9bcee35.js" crossorigin="anonymous"></script>
+    <style>
+        .aide_page { width: min(100%, 45em); margin: auto; padding: 2em 1em; }
+        .aide_page h1 { font-family: var(--font-serif-head); text-transform: uppercase; color: var(--fg-3); font-weight: 100; }
+        .aide_page .card { border: 1px solid var(--bg-4); border-radius: calc(var(--space) * var(--border-radius) / 2); padding: 1.2em; margin-top: 1.5em; }
+        .aide_page button { padding: .7em 1.2em; border: 0; border-radius: calc(var(--space) * var(--border-radius) / 3); background: var(--fg-2); color: var(--bg-1); cursor: pointer; font: inherit; }
+        .aide_page button:disabled { opacity: .6; cursor: wait; }
+        .aide_page pre { overflow: auto; max-height: 24em; background: var(--bg-2); padding: 1em; border-radius: .5em; font-size: .8em; }
+        .aide_status { margin-top: 1em; }
+        .aide_status[data-kind="error"] { color: #c00; }
+        .aide_status[data-kind="success"] { color: var(--fg-2); }
+    </style>
+</head>
+<body>
+    <main class="aide_page">
+        <h1>Mes données enregistrées</h1>
+        <p>Cette page affiche les données associées à votre compte connecté (compte, profils auteur, commandes et CV). Vous pouvez les consulter ci-dessous ou les télécharger au format JSON.</p>
+        <div class="card">
+            <button id="load_data" type="button">Afficher mes données</button>
+            <button id="download_data" type="button" hidden>Télécharger (JSON)</button>
+            <p class="aide_status" id="status" role="status"></p>
+            <pre id="output" hidden></pre>
+        </div>
+        <p><a href="/">← Retour à l'accueil</a> · <a href="/aide/retrait-donnees.html">Demander le retrait de mes données</a></p>
+    </main>
+    <script type="module">
+        const API = "https://api.melide.music";
+        const status = document.getElementById("status");
+        const output = document.getElementById("output");
+        const loadButton = document.getElementById("load_data");
+        const downloadButton = document.getElementById("download_data");
+        let data = null;
+
+        loadButton.addEventListener("click", async () => {
+            loadButton.disabled = true;
+            status.textContent = "Chargement…";
+            status.dataset.kind = "";
+            try {
+                const response = await fetch(`${API}/user/data`, { credentials: "include", redirect: "manual" });
+                if (response.type === "opaqueredirect" || response.status === 0) throw new Error("Connectez-vous d'abord avec le bouton Connect de la page d'accueil.");
+                const result = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(result.error || "Impossible de charger vos données.");
+                data = result;
+                output.textContent = JSON.stringify(result, null, 2);
+                output.hidden = false;
+                downloadButton.hidden = false;
+                status.textContent = "Voici les données enregistrées sur votre compte.";
+                status.dataset.kind = "success";
+            } catch (error) {
+                status.textContent = error.message;
+                status.dataset.kind = "error";
+            } finally {
+                loadButton.disabled = false;
+            }
+        });
+
+        downloadButton.addEventListener("click", () => {
+            if (!data) return;
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "mes-donnees-melide.json";
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html>

@@ -29,13 +29,13 @@ John Teuira (Melide), à l'adresse de contact indiquée ci-dessus.
 
 Le site utilise également :
 
-- **Stripe** pour héberger le paiement des commandes payantes.
-- **Resend** pour envoyer certaines confirmations de commande, notamment celles des commandes gratuites.
+- **PayPal** pour héberger le paiement des commandes payantes.
+- **Resend** pour envoyer les confirmations de commande.
 - **Google Fonts** et **Font Awesome** pour charger des polices et icônes dans le navigateur.
 - **Zoho** pour la messagerie professionnelle de contact.
 - Des liens vers des services externes (notamment Google Drive, YouTube et Instagram) peuvent être proposés. Lorsque vous les ouvrez, leurs propres conditions et politiques de confidentialité s'appliquent.
 
-Les services Cloudflare, GitHub, Google, Stripe, Resend et les autres prestataires peuvent traiter des données techniques ou personnelles dans le cadre de leurs services. Les détails concernant les données de compte et de commande figurent dans la [politique de protection des données](?page=legal/politique-protection-donnees.md).
+Les services Cloudflare, GitHub, Google, PayPal, Resend et les autres prestataires peuvent traiter des données techniques ou personnelles dans le cadre de leurs services. Les détails concernant les données de compte et de commande figurent dans la [politique de protection des données](?page=legal/politique-protection-donnees.md).
 
 ## Utilisation de l'intelligence artificielle
 
