@@ -3,6 +3,7 @@ import { Cart, createCheckout, getOrderStatus, getUserOrders } from '/js/Cart.js
 import { Pages } from '/js/Pages.js';
 import { Notification } from '/js/Notification.js';
 import { createAuthorProjectEditor, translateAuthorError } from '/js/AuthorProjectEditor.js';
+import { createProjectWorkspace } from '/js/ProjectWorkspace.js';
 import { createAuthorNewsEditor } from '/js/AuthorNewsEditor.js';
 import { NewsContainer, renderNewsArticle } from '/js/News.js';
 import { initializeCustomIcons } from '/js/Icons.js';
@@ -1674,6 +1675,9 @@ async function loadAuthorProjectEditor(renderer, root, requestId, authorizedProj
         }, editorStatus);
         const navigation = root.querySelector(".nav.back");
         root.insertBefore(editor, navigation?.nextSibling || root.firstChild);
+        const workspace = createProjectWorkspace(`${API_URL}/user/project/${encodeURIComponent(project.id)}/workspace`);
+        root.appendChild(workspace);
+        void workspace.load();
     } catch (error) {
         console.error("Could not load the author project editor.", error);
     }

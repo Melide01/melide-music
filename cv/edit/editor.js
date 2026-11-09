@@ -34,6 +34,10 @@ async function request(path, options = {}) {
         redirect: "manual",
         ...options
     });
+    if (response.type === "opaqueredirect" || response.status === 0) {
+        returnToLogin();
+        throw new Error("Redirection vers la connexion…");
+    }
     let result = {};
     try { result = await response.json(); } catch { }
     if (!response.ok) throw new Error(result.error || "La requête a échoué. Veuillez réessayer.");
@@ -368,7 +372,7 @@ async function initialize() {
             cache: "no-store",
             redirect: "manual"
         });
-        if (!identityResponse.ok) {
+        if (identityResponse.type === "opaqueredirect" || identityResponse.status === 0 || !identityResponse.ok) {
             returnToLogin();
             return;
         }
