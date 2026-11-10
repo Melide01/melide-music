@@ -12,6 +12,122 @@
 .hor.fill>*:not(.except),
 .ver.fill>*:not(.except) { flex: 1; }
 
+/* -- dots menu -- */
+.dots { position: relative; display: inline-flex; flex: 0 0 auto; }
+.dots_button {
+    all: unset;
+    cursor: pointer;
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    opacity: .65;
+    transition: opacity 120ms ease, background-color 120ms ease;
+}
+.dots_button:hover,
+.dots_button:focus-visible { opacity: 1; background: var(--bg-3); }
+.dots_menu {
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    bottom: auto;
+    left: 0;
+    right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    min-width: 8.5rem;
+    margin: 0;
+    padding: .3rem;
+    list-style: none;
+    border: 1px solid var(--bg-3);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    background: var(--bg-1);
+    color: var(--fg-1);
+    box-shadow: 0 2px 12px var(--solid-black-1);
+}
+.dots_menu[hidden] { display: none; }
+.dots_menu button {
+    all: unset;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: .5em;
+    width: 100%;
+    padding: .45rem .65rem;
+    border-radius: calc(var(--space) * var(--border-radius) / 4);
+    font-size: .9em;
+    white-space: nowrap;
+}
+.dots_menu button:hover,
+.dots_menu button:focus-visible { background: var(--bg-2); }
+/* context positioning: header -> below, footer -> above */
+header .dots_menu { top: 100%; bottom: auto; left: 0; right: auto; }
+footer .dots_menu { top: auto; bottom: 100%; left: 0; right: auto; }
+/* message context: left message -> right of the dots, self (right) message -> left of the dots */
+.message .dots_menu { top: 0; bottom: auto; left: 100%; right: auto; }
+.message.self .dots_menu { top: 0; bottom: auto; left: auto; right: 100%; }
+
+/* -- compact form inputs -- */
+.project_workspace_form :is(input, textarea, select),
+.project_workspace_file_controls :is(input, select),
+.author_news_field :is(input, textarea, select),
+.author_news_type_select {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: .45rem .65rem;
+    border: 1px solid var(--bg-4);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    background: var(--bg-1);
+    color: var(--fg-1);
+    font: inherit;
+    font-size: .92em;
+}
+.project_workspace_form textarea,
+.author_news_field textarea { resize: none; }
+
+/* -- compact buttons -- */
+.project_workspace_form button,
+.article_editor_actions button,
+.author_news_form button[type="submit"] {
+    width: fit-content;
+    border: 1px solid var(--bg-3);
+    border-radius: calc(var(--space) * var(--border-radius) * 2);
+    padding: .45rem .9rem;
+    background: transparent;
+    color: var(--fg-2);
+    cursor: pointer;
+    font: inherit;
+    font-size: .92em;
+    transition: border-color 120ms ease, background-color 120ms ease, color 120ms ease;
+}
+
+
+.article_editor_actions button,
+.author_news_form button[type="submit"] {
+    background-color: var(--bg-2);
+    border: none;
+}
+
+.project_workspace_form button:hover,
+.article_editor_actions button:hover,
+.author_news_form button[type="submit"]:hover { border-color: var(--fg-2); }
+.project_workspace_form button[type="submit"] {
+    border: none;
+    box-shadow: 0 0 2px var(--bg-3);
+    width: 100%;
+    margin-top: calc(var(--margin)*3);
+    background: linear-gradient(to top, transparent, var(--fg-1));
+    color: var(--bg-1);
+}
+.project_workspace_form button:disabled,
+.article_editor_actions button:disabled,
+.author_news_form button[type="submit"]:disabled { cursor: wait; opacity: .6; }
+
 /* -- logo -- */
 .logo { height: 2em; cursor: pointer; transition: opacity 100ms; }
 .logo:hover { opacity: .8; }

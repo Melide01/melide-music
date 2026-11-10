@@ -268,7 +268,7 @@ export class NewsContainer {
     }
 }
 
-export function renderNewsArticle(container, article) {
+export function renderNewsArticle(container, article, { backLabel = "Retour aux articles", onBack = null } = {}) {
     container.replaceChildren();
     container.classList.add("news_container");
     const page = document.createElement("article");
@@ -278,8 +278,14 @@ export function renderNewsArticle(container, article) {
     const back = document.createElement("button");
     back.type = "button";
     back.className = "nav back";
-    back.textContent = "Retour aux articles";
-    back.addEventListener("click", () => back.dispatchEvent(new CustomEvent("news:back", { bubbles: true })));
+    back.textContent = backLabel;
+    back.addEventListener("click", () => {
+        if (onBack) {
+            onBack();
+            return;
+        }
+        back.dispatchEvent(new CustomEvent("news:back", { bubbles: true }));
+    });
     const meta = document.createElement("p");
     meta.className = "news_card_meta";
     meta.textContent = [article.category, formattedDate(article.published_at), article.author_name].filter(Boolean).join(" · ");

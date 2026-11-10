@@ -252,10 +252,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
     if (params.has("page")) {
         await showPage(params.get("page"), false);
+    } else if (params.has("article_edit")) {
+        const articleId = params.get("article_edit");
+        if (/^\d+$/.test(articleId)) await showArticleEditor(articleId, false);
+        else await showNews(false);
     } else if (params.has("article")) {
         const articleSlug = params.get("article");
         if (!articleSlug) await showNews(false);
-        else if (/^\d+$/.test(articleSlug)) await showArticleEditor(articleSlug, false);
         else await showNewsArticle(articleSlug, false);
     } else if (params.has("news")) {
         await showNews(false);
@@ -361,7 +364,7 @@ function setDocumentTitle(title, branded = true) {
 
 function navigationUrl(view = "home") {
     const url = new URL(window.location);
-    ["project", "book", "track", "game", "merch", "cart", "orders", "author", "page", "article", "news", "article_search", "article_category", "article_tag", "article_order", "news_search", "news_category", "news_tag", "news_order", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
+    ["project", "book", "track", "game", "merch", "cart", "orders", "author", "page", "article", "article_edit", "news", "article_search", "article_category", "article_tag", "article_order", "news_search", "news_category", "news_tag", "news_order", "order_success", "order_cancel", "from", "search", "type", "order"].forEach(name => url.searchParams.delete(name));
     if (view === "projects") url.searchParams.set("search", "");
     if (view === "merch") url.searchParams.set("merch", "");
     if (view === "cart") url.searchParams.set("cart", "");
@@ -637,7 +640,8 @@ async function createAuthorPanel(author, requestId) {
     if (author.newsWriter) {
         appsGrid.appendChild(makeApp("fa-solid fa-newspaper", "Articles", () => showAuthorSubsection(author, "articles")));
     }
-    appsGrid.appendChild(makeApp("fa-solid fa-id-card", "Curriculum vitae", () => { window.location.href = "/cv/"; }));
+    // CV access temporarily disabled until rework.
+    // appsGrid.appendChild(makeApp("fa-solid fa-id-card", "Curriculum vitae", () => { window.location.href = "/cv/"; }));
     navigation.append(appsGrid);
     panel.append(navigation);
     return panel;
@@ -943,7 +947,7 @@ async function showArticleEditor(articleId, addHistory = true) {
     pages.unload();
     if (addHistory) {
         const url = navigationUrl("news");
-        url.searchParams.set("article", String(articleId));
+        url.searchParams.set("article_edit", String(articleId));
         window.history.pushState({ view: "article-editor", articleId }, "", url);
     }
     homeElement?.classList.add("closed");
@@ -987,6 +991,43 @@ async function showArticleEditor(articleId, addHistory = true) {
         setDocumentTitle("Articles");
         const message = document.createElement("p");
         message.textContent = error.message || "Impossible de charger l’éditeur de l’article.";
+        projectContainerElement.replaceChildren(message);
+    }
+}
+
+async function showArticlePreview(articleId) {
+    const requestId = ++viewRequestId;
+    clearAuthorPage();
+    activeRenderer?.unload?.();
+    activeRenderer = null;
+    cartPage?.remove();
+    cartPage = null;
+    pages.unload();
+    homeElement?.classList.add("closed");
+    projectContainerElement.classList.remove("closed", "merch_container");
+    projectContainerElement.classList.add("news_container");
+    projectContainerElement.replaceChildren();
+    const loading = document.createElement("p");
+    loading.textContent = "Chargement de l’article…";
+    projectContainerElement.appendChild(loading);
+    try {
+        const response = await fetch(`${API_URL}/user/news/${encodeURIComponent(articleId)}`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual"
+        });
+        const article = await response.json();
+        if (!response.ok) throw new Error(article.error || "Article introuvable ou accès refusé.");
+        if (requestId !== viewRequestId) return;
+        renderNewsArticle(projectContainerElement, article, {
+            backLabel: "Retour à l’édition",
+            onBack: () => showArticleEditor(articleId, false)
+        });
+        setDocumentTitle(article.title);
+    } catch (error) {
+        if (requestId !== viewRequestId) return;
+        const message = document.createElement("p");
+        message.textContent = error.message || "Impossible de charger l’aperçu de l’article.";
         projectContainerElement.replaceChildren(message);
     }
 }
@@ -1790,7 +1831,10 @@ window.addEventListener("news:edit", event => {
     const articleId = event.detail?.articleId;
     if (Number.isSafeInteger(Number(articleId)) && Number(articleId) > 0) showArticleEditor(articleId);
 });
-window.addEventListener("news:editor-close", () => showAuthorPanel());
+window.addEventListener("news:view", event => {
+    const articleId = event.detail?.articleId;
+    if (Number.isSafeInteger(Number(articleId)) && Number(articleId) > 0) showArticlePreview(articleId);
+});
 document.addEventListener("news:back", () => showNews());
 window.addEventListener("news:updated", () => {
     newsArticles = null;
@@ -1822,10 +1866,15 @@ window.addEventListener("popstate", event => {
         showPage(params.get("page"), false);
         return;
     }
+    if (params.has("article_edit")) {
+        const articleId = params.get("article_edit");
+        if (/^\d+$/.test(articleId)) showArticleEditor(articleId, false);
+        else showNews(false);
+        return;
+    }
     if (params.has("article")) {
         const articleSlug = params.get("article");
         if (!articleSlug) showNews(false);
-        else if (/^\d+$/.test(articleSlug)) showArticleEditor(articleSlug, false);
         else showNewsArticle(articleSlug, false);
         return;
     }

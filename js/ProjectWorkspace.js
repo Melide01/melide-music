@@ -1,3 +1,5 @@
+import { createDotsMenu } from "/js/Utils.js";
+
 function button(text, className = "", iconClass = "") {
     const element = document.createElement("button");
     element.type = "button";
@@ -58,28 +60,22 @@ function inlineMessageText(value) {
 }
 
 function addField(form, labelText, type, placeholder = "", maxLength = 0) {
-    const label = document.createElement("label");
-    const caption = document.createElement("span");
-    caption.textContent = labelText;
     const input = document.createElement(type === "textarea" ? "textarea" : "input");
     if (type !== "textarea") input.type = type;
     if (maxLength) input.maxLength = maxLength;
-    input.placeholder = placeholder;
+    input.placeholder = placeholder || labelText;
+    input.setAttribute("aria-label", labelText);
     input.required = true;
-    label.append(caption, input);
-    form.appendChild(label);
+    form.appendChild(input);
     return input;
 }
 
 function addSelect(form, labelText, options, value) {
-    const label = document.createElement("label");
-    const caption = document.createElement("span");
-    caption.textContent = labelText;
     const select = document.createElement("select");
+    select.setAttribute("aria-label", labelText);
     options.forEach(([optionLabel, optionValue]) => select.add(new Option(optionLabel, optionValue)));
     select.value = value;
-    label.append(caption, select);
-    form.appendChild(label);
+    form.appendChild(select);
     return select;
 }
 
@@ -116,6 +112,8 @@ export function createProjectWorkspace(endpoint) {
     let fileSearch = "";
     let fileTypeFilter = "all";
     let fileOrder = "desc";
+    let messageSignal = null;
+    let messageTimer = null;
     const request = async (path, method, payload) => {
         const response = await fetch(`${endpoint}${path}`, {
             method,
@@ -129,24 +127,55 @@ export function createProjectWorkspace(endpoint) {
         return result;
     };
 
-    async function save(path, method, payload) {
+    async function save(path, method, payload, optimisticUpdate = null) {
+        const previousData = data;
         status.textContent = "Enregistrement…";
+        if (optimisticUpdate) {
+            data = optimisticUpdate(structuredClone(data));
+            console.log("Rafraichi");
+            renderActiveTab();
+        }
         try {
             data = await request(path, method, payload);
             status.textContent = "Enregistré.";
+            console.log("A jour");
             renderActiveTab();
         } catch (error) {
+            data = previousData;
             status.textContent = error.message;
+            renderActiveTab();
         }
     }
 
-    function removeButton(path) {
+    function removeButton(path, optimisticUpdate = null) {
         if (!canModerate) return null;
         const remove = button("Supprimer", "project_workspace_delete", "fa-solid fa-trash");
         remove.addEventListener("click", () => {
-            void save(path, "POST", { authorId: activeAuthorId });
+            void save(path, "POST", { authorId: activeAuthorId }, optimisticUpdate);
         });
         return remove;
+    }
+
+    function parseChange(value) {
+        if (!value) return null;
+        try { return JSON.parse(value); }
+        catch { return null; }
+    }
+
+    function changeText(value) {
+        if (value === null || value === undefined || value === "") return "—";
+        if (typeof value === "string") return value;
+        return JSON.stringify(value);
+    }
+
+    function appendChange(content, entry) {
+        const before = parseChange(entry.changeBefore);
+        const after = parseChange(entry.changeAfter);
+        if (!before && !after) return;
+        const change = document.createElement("span");
+        change.className = "project_workspace_change";
+        change.textContent = `Avant : ${changeText(before)} → Après : ${changeText(after)}`;
+        content.appendChild(change);
     }
 
     function renderEntries() {
@@ -159,11 +188,33 @@ export function createProjectWorkspace(endpoint) {
         const baselineContent = document.createElement("p");
         baselineContent.textContent = "Projet créé";
         baseline.append(baselineMeta, baselineContent);
+        if (canModerate) {
+            const removeBaseline = button("Supprimer", "project_workspace_delete", "fa-solid fa-trash");
+            removeBaseline.addEventListener("click", () => {
+                status.textContent = "Vous n'avez pas les authorisations pour supprimer le projet.";
+            });
+            baseline.appendChild(createDotsMenu("Actions du projet", [removeBaseline]));
+        }
         list.appendChild(baseline);
 
-        data.entries.forEach(entry => {
+        const entries = [...data.entries];
+        if (data.projectReleasedAt) {
+            entries.push({
+                id: "released",
+                type: "state",
+                stateType: "released",
+                authorName: "Projet",
+                content: "Projet publié",
+                createdAt: data.projectReleasedAt,
+                updatedAt: data.projectReleasedAt
+            });
+        }
+        entries.sort((first, second) => new Date(first.createdAt || first.updatedAt) - new Date(second.createdAt || second.updatedAt));
+        entries.forEach(entry => {
             const item = document.createElement("article");
-            const stateClass = entry.type === "state" ? entry.stateType || "note" : "validated";
+            const stateClass = entry.type === "file_added" || entry.type === "file_updated"
+                ? "files"
+                : entry.stateType || "note";
             item.className = `project_workspace_entry state_${stateClass}`;
             const meta = document.createElement("span");
             meta.textContent = `${entry.authorName} · ${localDate(entry.updatedAt)}`;
@@ -185,11 +236,11 @@ export function createProjectWorkspace(endpoint) {
                 const stateType = stateTypes.find(([, value]) => value === entry.stateType)?.[0] || "Note";
                 content.textContent = `${entry.authorName} · ${stateType} : ${entry.content}`;
             }
+            appendChange(content, entry);
             item.append(meta, content);
-            const remove = entry.type === "state" ? removeButton(`/states/${entry.id}/delete`) : null;
-            if (remove) item.appendChild(remove);
-            if (entry.type === "state" && Number(entry.authorId) === Number(activeAuthorId)) {
-                const edit = button("Modifier");
+            const actions = [];
+            if (entry.id !== "released" && entry.type === "state" && Number(entry.authorId) === Number(activeAuthorId)) {
+                const edit = button("Modifier", "", "fa-solid fa-pen");
                 edit.addEventListener("click", () => {
                     const form = document.createElement("form");
                     form.className = "project_workspace_form ver";
@@ -197,7 +248,7 @@ export function createProjectWorkspace(endpoint) {
                     author.type = "hidden";
                     author.value = String(entry.authorId);
                     const stateType = addSelect(form, "Type d’état", stateTypes, entry.stateType || "note");
-                    const input = addField(form, "État", "textarea", "", 2000);
+                    const input = addField(form, "État", "textarea", "", 30);
                     input.value = entry.content;
                     const submit = button("Enregistrer");
                     submit.type = "submit";
@@ -206,26 +257,51 @@ export function createProjectWorkspace(endpoint) {
                         event.preventDefault();
                         void save(`/states/${entry.id}`, "POST", {
                             authorId: Number(author.value), stateType: stateType.value, content: input.value
-                        });
+                        }, current => ({
+                            ...current,
+                            entries: current.entries.map(item => String(item.id) === String(entry.id)
+                                ? { ...item, stateType: stateType.value, content: input.value, updatedAt: new Date().toISOString() }
+                                : item)
+                        }));
                     });
                     item.replaceChildren(meta, form);
                     input.focus();
                 });
-                item.appendChild(edit);
+                actions.push(edit);
             }
+            const remove = entry.id !== "released" && entry.type === "state"
+                ? removeButton(`/states/${entry.id}/delete`, current => ({
+                    ...current,
+                    entries: current.entries.filter(item => String(item.id) !== String(entry.id))
+                }))
+                : null;
+            if (remove) actions.push(remove);
+            if (actions.length) item.appendChild(createDotsMenu("Actions de l’état", actions));
             list.appendChild(item);
         });
 
         const form = document.createElement("form");
         form.className = "project_workspace_form ver";
         const stateType = addSelect(form, "Type d’état", stateTypes, "note");
-        const input = addField(form, "Nouvel état", "textarea", "Ajouter une étape au projet", 2000);
+        const input = addField(form, "Nouvel état", "textarea", "Ajouter une étape au projet", 30);
         const submit = button("Ajouter un état");
         submit.type = "submit";
         form.appendChild(submit);
         form.addEventListener("submit", event => {
             event.preventDefault();
-            void save("/states", "POST", { authorId: activeAuthorId, stateType: stateType.value, content: input.value });
+            void save("/states", "POST", { authorId: activeAuthorId, stateType: stateType.value, content: input.value }, current => ({
+                ...current,
+                entries: [...current.entries, {
+                    id: `pending-${Date.now()}`,
+                    authorId: activeAuthorId,
+                    authorName: data.authors.find(author => author.id === activeAuthorId)?.name || "",
+                    type: "state",
+                    stateType: stateType.value,
+                    content: input.value,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }]
+            }));
         });
         panel.replaceChildren(list, form);
     }
@@ -233,18 +309,15 @@ export function createProjectWorkspace(endpoint) {
     function renderFiles() {
         const controls = document.createElement("div");
         controls.className = "project_workspace_file_controls hor";
-        const searchLabel = document.createElement("label");
-        const searchCaption = document.createElement("span");
-        searchCaption.textContent = "Recherche";
         const search = document.createElement("input");
         search.type = "search";
-        search.placeholder = "Nom ou lien";
+        search.placeholder = "Recherche";
+        search.setAttribute("aria-label", "Recherche");
         search.value = fileSearch;
         search.addEventListener("input", () => {
             fileSearch = search.value;
             renderActiveTab();
         });
-        searchLabel.append(searchCaption, search);
         const typeFilter = addSelect(controls, "Type", [["Tous", "all"], ...fileTypes.map(([label, value]) => [label, value])], fileTypeFilter);
         typeFilter.addEventListener("change", () => {
             fileTypeFilter = typeFilter.value;
@@ -255,7 +328,7 @@ export function createProjectWorkspace(endpoint) {
             fileOrder = order.value;
             renderActiveTab();
         });
-        controls.prepend(searchLabel);
+        controls.prepend(search);
 
         const list = document.createElement("div");
         list.className = "project_workspace_files ver";
@@ -278,12 +351,12 @@ export function createProjectWorkspace(endpoint) {
             const meta = document.createElement("span");
             const typeLabel = fileTypes.find(([, value]) => value === file.fileType)?.[0] || "Fichier";
             meta.textContent = `${typeLabel} · ${file.authorName} · ${localDate(file.updatedAt)}`;
-            const edit = button("Modifier");
+            const edit = button("Modifier", "", "fa-solid fa-pen");
             edit.addEventListener("click", () => {
                 const form = document.createElement("form");
                 form.className = "project_workspace_form ver";
                 const fileType = addSelect(form, "Type de fichier", fileTypes.map(([label, value]) => [label, value]), file.fileType || "file");
-                const label = addField(form, "Nom du fichier", "text", "", 200);
+                const label = addField(form, "Nom du fichier", "text", "", 20);
                 label.value = file.label;
                 const url = addField(form, "Lien", "url", "https://…");
                 url.value = file.url;
@@ -299,15 +372,16 @@ export function createProjectWorkspace(endpoint) {
                 item.replaceChildren(form);
             });
             const remove = removeButton(`/files/${file.id}/delete`);
-            item.append(link, meta, edit);
-            if (remove) item.appendChild(remove);
+            const actions = [edit];
+            if (remove) actions.push(remove);
+            item.append(link, meta, createDotsMenu("Actions du fichier", actions));
             list.appendChild(item);
         });
 
         const form = document.createElement("form");
         form.className = "project_workspace_form ver";
         const fileType = addSelect(form, "Type de fichier", fileTypes.map(([label, value]) => [label, value]), "file");
-        const label = addField(form, "Nom du fichier", "text", "Documents de production", 200);
+        const label = addField(form, "Nom du fichier", "text", "Docs production", 20);
         const url = addField(form, "Lien", "url", "https://…");
         const submit = button("Ajouter un fichier");
         submit.type = "submit";
@@ -327,25 +401,47 @@ export function createProjectWorkspace(endpoint) {
         data.messages.forEach(message => {
             const item = document.createElement("div");
             item.className = `message${Number(message.authorId) === Number(activeAuthorId) ? " self" : ""}`;
+            const header = document.createElement("div");
+            header.className = "message_header";
             const author = document.createElement("span");
             author.textContent = `${message.authorName} · ${localDate(message.createdAt)}`;
+            header.appendChild(author);
+            if (canModerate) {
+                const remove = button("Supprimer", "project_workspace_delete", "fa-solid fa-trash");
+                remove.addEventListener("click", () => {
+                    void save(`/messages/${message.id}/delete`, "POST", { authorId: activeAuthorId }, current => ({
+                        ...current,
+                        messages: current.messages.filter(item => String(item.id) !== String(message.id))
+                    }));
+                });
+                header.appendChild(createDotsMenu("Actions du message", [remove]));
+            }
             const content = document.createElement("p");
             content.appendChild(inlineMessageText(message.content));
-            const remove = removeButton(`/messages/${message.id}/delete`);
-            item.append(author, content);
-            if (remove) item.appendChild(remove);
+            item.append(header, content);
             list.appendChild(item);
         });
 
         const form = document.createElement("form");
         form.className = "project_workspace_form ver";
-        const input = addField(form, "Message", "textarea", "Écrire un message", 4000);
+        const input = addField(form, "Message", "textarea", "Écrire un message", 130);
         const submit = button("Envoyer");
         submit.type = "submit";
         form.appendChild(submit);
         form.addEventListener("submit", event => {
             event.preventDefault();
-            void save("/messages", "POST", { authorId: activeAuthorId, content: input.value });
+            const content = input.value;
+            input.value = "";
+            void save("/messages", "POST", { authorId: activeAuthorId, content }, current => ({
+                ...current,
+                messages: [...current.messages, {
+                    id: `pending-${Date.now()}`,
+                    authorId: activeAuthorId,
+                    authorName: data.authors.find(author => author.id === activeAuthorId)?.name || "",
+                    content,
+                    createdAt: new Date().toISOString()
+                }]
+            }));
         });
         panel.replaceChildren(list, form);
     }
@@ -359,6 +455,21 @@ export function createProjectWorkspace(endpoint) {
         }
         renderers[activeTab]?.();
         panel.appendChild(status);
+    }
+
+    async function checkMessages() {
+        if (activeTab !== 2 || !data) return;
+        try {
+            const signal = await request("/signal", "GET");
+            const current = messageSignal;
+            messageSignal = signal;
+            if (current && (signal.latestId !== current.latestId || signal.count !== current.count)) {
+                data = await request("", "GET");
+                renderActiveTab();
+            }
+        } catch (error) {
+            console.error("Could not check project messages.", error);
+        }
     }
 
     [
@@ -391,6 +502,9 @@ export function createProjectWorkspace(endpoint) {
             workspace.hidden = false;
             status.textContent = "";
             renderActiveTab();
+            messageSignal = await request("/signal", "GET");
+            if (messageTimer) clearInterval(messageTimer);
+            messageTimer = setInterval(() => void checkMessages(), 5000);
         } catch (error) {
             workspace.hidden = true;
             status.textContent = "";

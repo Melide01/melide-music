@@ -14,7 +14,8 @@
 .project_workspace_tabs { gap: calc(var(--space) * var(--gap) * 2); }
 .project_workspace_tabs .content_tab { cursor: pointer; display: inline-flex; align-items: center; gap: .45em; }
 .project_workspace_file_controls { align-items: end; flex-wrap: wrap; gap: calc(var(--space) * var(--gap)); flex-wrap: wrap; }
-.project_workspace_file_controls label { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) / 2); flex: 1; }
+.project_workspace_file_controls input { flex: 1; }
+.project_workspace_file_controls :is(input, select) { width: auto; }
 .project_workspace_file a { display: inline-flex; align-items: center; gap: .45em; }
 .project_workspace_panel,
 .project_workspace_form,
@@ -25,10 +26,7 @@
     padding: var(--padding);
 }
 .project_workspace_form label { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) / 2); }
-.project_workspace_form input,
-.project_workspace_form textarea,
-.project_workspace_form select { max-width: 100%; }
-.project_workspace_form textarea { min-height: 5rem; resize: vertical; }
+.project_workspace_form textarea { min-height: 3.5rem; }
 
 .project_workspace_form {
     padding: var(--padding);
@@ -49,10 +47,20 @@
     width: min-content;
     position: relative;
 }
-.project_workspace_entry.state_validated { border-color: var(--solid-rgb-green); }
-.project_workspace_entry.state_note { border-color: var(--solid-gray-light-2); }
-.project_workspace_entry.state_corrected { border-color: var(--solid-rgb-blue); }
-.project_workspace_entry.state_report { border-color: var(--solid-cmy-yellow); }
+.project_workspace_entry a {
+    background-color: var(--bg-2);
+    padding: 0 calc(var(--padding)/2);
+    white-space: nowrap;
+    border-radius: var(--border-radius);
+}
+
+.project_workspace_entry.state_validated,
+.project_workspace_entry.state_files { border-color: var(--solid-rgb-green); }
+.project_workspace_entry.state_note { border-color: var(--solid-gray-light-2); color: var(--solid-gray-light-2); }
+.project_workspace_entry.state_corrected,
+.project_workspace_entry.state_lyrics { border-color: var(--solid-rgb-blue); color: var(--solid-rgb-blue); }
+.project_workspace_entry.state_report { border-color: var(--solid-cmy-yellow); color: var(--solid-cmy-yellow); }
+.project_workspace_entry.state_released { border-color: var(--solid-neon-cyan-1); color: var(--solid-neon-cyan-1); }
 .project_workspace_entry> * {
     white-space: nowrap;
 }
@@ -67,13 +75,36 @@
 }
 
 .project_workspace_entry,
-.project_workspace_file,
 .project_workspace_messages .message {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: calc(var(--space) * var(--gap) / 2);
 }
+.project_workspace_entry > .dots {
+    position: absolute;
+    top: calc(var(--padding) / 2);
+    right: calc(var(--padding) / 2);
+}
+.project_workspace_entry:has(> .dots) { padding-right: calc(var(--padding) + 2.5rem); }
+.project_workspace_entry .dots_menu,
+.project_workspace_file .dots_menu { left: auto; right: 0; }
+.project_workspace_file {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: calc(var(--space) * var(--gap) / 2);
+    width: 100%;
+    padding: .6rem .8rem;
+    border: 1px solid var(--bg-3);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    background: var(--bg-1);
+}
+.project_workspace_file > a { grid-column: 1; min-width: 0; }
+.project_workspace_file > span { grid-column: 1; }
+.project_workspace_file > .dots { grid-column: 2; grid-row: 1 / -1; }
+.project_workspace_file > form { grid-column: 1 / -1; }
+.project_workspace_file a i { font-size: 1.25em; }
 .project_workspace_messages .message {
     color: var(--fg-1);
     padding: var(--padding) 0;
@@ -93,6 +124,8 @@
 .project_workspace_status:empty { display: none; }
 .project_workspace_status { margin: 0; }
 .project_workspace_delete { display: inline-flex; align-items: center; gap: .45em; }
+.project_workspace_change { display: block; font-size: .85em; opacity: .75; white-space: pre-wrap; }
+.project_workspace_messages .message_header { display: flex; align-items: center; gap: .5em; }
 
 .author_space > h2 {
     margin: 0;

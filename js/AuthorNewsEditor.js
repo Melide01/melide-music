@@ -1,4 +1,5 @@
 import { parseArticleBlocks, serializeArticleBlocks } from "/js/ArticleBlocks.js";
+import { createDotsMenu } from "/js/Utils.js";
 
 const API_URL = "https://api.melide.music";
 
@@ -155,13 +156,10 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
         save.textContent = "Enregistrer";
         const readOnly = article.can_edit === false;
         save.hidden = readOnly;
-        const finish = makeButton("Terminer", () => {
-            if (editorOnly) window.dispatchEvent(new CustomEvent("news:editor-close"));
-            else {
-                form.remove();
-                renderList();
-            }
+        const view = makeButton("Voir l’article", () => {
+            window.dispatchEvent(new CustomEvent("news:view", { detail: { articleId: article.id } }));
         });
+        view.disabled = !article.id;
         const stateField = field("Publication", "select", article.state || "draft");
         stateField.input.replaceChildren(new Option("Brouillon", "draft"), new Option("Publié", "published"));
         stateField.input.value = article.state || "draft";
@@ -169,7 +167,7 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
         toolbar.className = "article_editor_toolbar";
         const toolbarActions = document.createElement("div");
         toolbarActions.className = "article_editor_actions";
-        toolbarActions.append(save, finish);
+        toolbarActions.append(save, view);
         toolbar.append(stateField.label, toolbarActions, status);
 
         const banner = document.createElement("label");
@@ -230,33 +228,10 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
 
         const contentSection = document.createElement("section");
         contentSection.className = "article_editor_content";
-        const contentHeading = document.createElement("h2");
-        contentHeading.textContent = "Contenu de la page";
-        const blockHelp = document.createElement("p");
-        blockHelp.className = "author_news_editor_help";
-        blockHelp.textContent = "Composez la page avec des blocs. Leur contenu sera enregistré en Markdown.";
         const blocksRoot = document.createElement("div");
         blocksRoot.className = "author_news_blocks";
         let blocks = parseArticleBlocks(article.content || "");
         if (!blocks.length) blocks = [{ type: "paragraph", text: "" }];
-
-        const addBlock = document.createElement("div");
-        addBlock.className = "author_news_add_blocks";
-        [
-            ["Texte", { type: "paragraph", text: "" }],
-            ["Titre", { type: "heading", level: 2, text: "" }],
-            ["Liste", { type: "list", ordered: false, items: [""] }],
-            ["Lien", { type: "link", text: "", url: "" }],
-            ["Image", { type: "image", alt: "", url: "" }],
-            ["Tableau", { type: "table", rows: [["Colonne 1", "Colonne 2"], ["", ""]] }],
-            ["Citation", { type: "quote", text: "" }],
-            ["Séparateur", { type: "rule" }]
-        ].forEach(([label, block]) => {
-            addBlock.appendChild(makeButton(label, () => {
-                blocks.push({ ...block });
-                renderBlocks();
-            }));
-        });
 
         const typeLabels = {
             paragraph: "Texte",
@@ -285,6 +260,11 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
             button.innerHTML = `<i class="fa-solid ${icon}" aria-hidden="true"></i>`;
             return button;
         };
+        const addFab = iconButton("Ajouter un bloc de texte", "fa-plus", () => {
+            blocks.push({ type: "paragraph", text: "" });
+            renderBlocks();
+            blocksRoot.lastElementChild?.querySelector("textarea")?.focus();
+        }, "author_news_add_fab");
         const convertBlock = (block, type) => {
             const text = block.text || (block.items || []).join("\n") || block.alt || "";
             switch (type) {
@@ -328,14 +308,9 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
                 body.appendChild(blockTitle);
                 const actions = document.createElement("div");
                 actions.className = "author_news_block_actions";
-                const typeButton = iconButton("Modifier le type du bloc", "fa-pen-to-square", () => {
-                    typeSelect.hidden = !typeSelect.hidden;
-                    if (!typeSelect.hidden) typeSelect.focus();
-                });
                 const typeSelect = document.createElement("select");
                 typeSelect.className = "author_news_type_select";
                 typeSelect.setAttribute("aria-label", "Type de bloc");
-                typeSelect.hidden = true;
                 Object.entries(typeLabels).filter(([type]) => type !== "code").forEach(([type, label]) => {
                     typeSelect.add(new Option(label, type));
                 });
@@ -344,11 +319,15 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
                     blocks[index] = convertBlock(block, typeSelect.value);
                     renderBlocks();
                 });
-                const deleteButton = iconButton("Supprimer le bloc", "fa-trash", () => {
+                const deleteButton = makeButton("Supprimer", () => {
                     blocks.splice(index, 1);
                     renderBlocks();
                 });
-                actions.append(deleteButton, typeButton, typeSelect);
+                const deleteIcon = document.createElement("i");
+                deleteIcon.className = "fa-solid fa-trash";
+                deleteIcon.setAttribute("aria-hidden", "true");
+                deleteButton.prepend(deleteIcon);
+                actions.appendChild(createDotsMenu("Actions du bloc", [typeSelect, deleteButton]));
 
                 if (block.type === "paragraph" || block.type === "quote" || block.type === "code") {
                     body.appendChild(textArea(
@@ -415,13 +394,13 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
         }
 
         renderBlocks();
-        contentSection.append(contentHeading, blockHelp, addBlock, blocksRoot);
-        form.append(toolbar, articleHeader, contentSection);
+        contentSection.appendChild(blocksRoot);
+        form.append(toolbar, articleHeader, contentSection, addFab);
         if (readOnly) {
             form.querySelectorAll("input, textarea, select, button").forEach(control => {
                 control.disabled = true;
             });
-            finish.disabled = false;
+            view.disabled = false;
             form.querySelectorAll('input[type="file"]').forEach(input => {
                 input.closest("label")?.remove();
             });
@@ -455,6 +434,7 @@ export async function createAuthorNewsEditor(author, { articleId = null, editorO
                 );
                 article = saved;
                 bannerInput.disabled = !article.id;
+                view.disabled = !article.id;
                 const index = articles.findIndex(item => item.id === saved.id);
                 if (index < 0) articles.unshift(saved);
                 else articles[index] = saved;

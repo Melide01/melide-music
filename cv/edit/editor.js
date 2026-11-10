@@ -28,15 +28,21 @@ function setStatus(status, message, isError = false) {
 }
 
 async function request(path, options = {}) {
-    const response = await fetch(`${API_URL}${path}`, {
-        credentials: "include",
-        cache: "no-store",
-        redirect: "manual",
-        ...options
-    });
+    let response;
+    try {
+        response = await fetch(`${API_URL}${path}`, {
+            credentials: "include",
+            cache: "no-store",
+            redirect: "manual",
+            ...options
+        });
+    } catch (error) {
+        showLoginPanel();
+        throw error;
+    }
     if (response.type === "opaqueredirect" || response.status === 0) {
-        returnToLogin();
-        throw new Error("Redirection vers la connexion…");
+        showLoginPanel();
+        throw new Error("Connexion requise.");
     }
     let result = {};
     try { result = await response.json(); } catch { }
@@ -55,6 +61,19 @@ function showPanel(title, message, linkLabel = "Retour à l’accueil", linkUrl 
     const link = element("a", "", linkLabel);
     link.href = linkUrl;
     panel.append(link);
+    root.replaceChildren(panel);
+}
+
+function showLoginPanel() {
+    const panel = element("section", "cv_consent");
+    panel.append(
+        element("h1", "", "Connexion requise"),
+        element("p", "", "Connectez-vous pour ouvrir l’éditeur de CV.")
+    );
+    const connect = element("button", "", "Connect");
+    connect.type = "button";
+    connect.addEventListener("click", returnToLogin, { once: true });
+    panel.append(connect);
     root.replaceChildren(panel);
 }
 
@@ -367,16 +386,13 @@ async function loadAuthorCv(author) {
 
 async function initialize() {
     try {
-        const identityResponse = await fetch(`${API_URL}/user/whoami`, {
-            credentials: "include",
-            cache: "no-store",
-            redirect: "manual"
-        });
-        if (identityResponse.type === "opaqueredirect" || identityResponse.status === 0 || !identityResponse.ok) {
-            returnToLogin();
-            return;
+        let authors;
+        try {
+            authors = await request("/user/authors");
+        } catch (error) {
+            if (error?.message === "Failed to fetch" || error?.message === "Connexion requise.") return;
+            throw error;
         }
-        const authors = await request("/user/authors");
         if (!Array.isArray(authors) || authors.length === 0) {
             showPanel("Accès auteur requis", "Connectez-vous avec un compte associé à un profil auteur pour créer un CV.");
             return;

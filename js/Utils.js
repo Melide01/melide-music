@@ -22,6 +22,34 @@ export function loadFetch(key, f, cb, type = "json", force = false) {
 
 }
 
+export function createDotsMenu(label, items = []) {
+    const wrapper = document.createElement("span");
+    wrapper.className = "dots";
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "dots_button";
+    trigger.setAttribute("aria-label", label);
+    trigger.setAttribute("aria-haspopup", "true");
+    const icon = document.createElement("i");
+    icon.className = "fa-solid fa-ellipsis";
+    icon.setAttribute("aria-hidden", "true");
+    trigger.appendChild(icon);
+    const menu = document.createElement("ul");
+    menu.className = "dots_menu";
+    menu.hidden = true;
+    items.forEach(item => {
+        const entry = document.createElement("li");
+        entry.appendChild(item);
+        menu.appendChild(entry);
+    });
+    trigger.addEventListener("click", () => { menu.hidden = !menu.hidden; });
+    menu.addEventListener("click", event => {
+        if (event.target.closest("button")) menu.hidden = true;
+    });
+    wrapper.append(trigger, menu);
+    return wrapper;
+}
+
 export function getRemainingTime(date, now = Date.now()) {
     const target = date instanceof Date ? date.getTime() : new Date(date).getTime();
     const difference = target - now;
