@@ -457,7 +457,7 @@ footer .dots_menu { top: auto; bottom: 100%; left: 0; right: auto; }
 
 .pill {
     align-self: center;
-    color: var(--fg-secondary-4);
+    color: var(--fg-2);
     border: 1px solid;
     /* background-color: var(--fg-secondary-2);
     color: var(--solid-black-1); */

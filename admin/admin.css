@@ -1,0 +1,322 @@
+header.admin::after {
+    content: "Admin mode";
+    position: fixed;
+    top: -1.5em;
+    left: 0;
+    text-align: center;
+    color: var(--solid-white-1);
+    background: linear-gradient(to top, #f225, #d005 30%);
+    backdrop-filter: blur(2px);
+    width: 100%;
+}
+
+header.admin.open { animation: header_admin 400ms forwards; }
+header.admin.open::after { animation: header_admin_notice 400ms forwards; }
+
+@keyframes header_admin {
+    to { padding-top: 2em; }
+}
+
+@keyframes header_admin_notice {
+    to { top: 0; }
+}
+
+header.admin { gap: calc(var(--space) * var(--gap) * 5); }
+header.admin .admin_token_label { font-size: .75em; }
+header.admin #api_token { width: min(20em, 42vw); }
+
+.admin_collection_swatch {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 2.6rem;
+    aspect-ratio: 1;
+    border-radius: calc(var(--space) * var(--border-radius) / 3);
+    font-family: var(--font-label);
+    font-weight: 700;
+}
+.admin_collection_pin {
+    flex: 0 0 auto;
+    margin-left: auto;
+    padding: .4rem .8rem;
+    border: 1px solid var(--bg-4);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    background: transparent;
+    color: var(--fg-1);
+    cursor: pointer;
+}
+.admin_collection_pin:hover { border-color: var(--fg-2); }
+
+.admin_variant_maker {
+    margin-top: calc(var(--space) * var(--margin));
+    border: 1px solid var(--bg-4);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    padding: .8em 1em;
+}
+.admin_variant_maker summary { cursor: pointer; color: var(--fg-2); font-family: var(--font-label); text-transform: uppercase; font-size: .85em; }
+.admin_variant_maker_grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: .6em;
+    margin-top: .8em;
+}
+.admin_variant_maker_grid input[type="text"] { padding: .5em .7em; border: 1px solid var(--bg-4); border-radius: calc(var(--space) * var(--border-radius) / 3); background: var(--bg-1); color: var(--fg-1); font: inherit; }
+.admin_variant_maker_grid input[type="color"] { width: 3em; height: 2.4em; padding: 0; border: 1px solid var(--bg-4); border-radius: calc(var(--space) * var(--border-radius) / 3); background: var(--bg-1); cursor: pointer; }
+.admin_variant_maker_grid button { grid-column: 1 / -1; padding: .55em 1em; border: 0; border-radius: calc(var(--space) * var(--border-radius) / 3); background: var(--fg-2); color: var(--bg-1); cursor: pointer; font: inherit; }
+
+.admin_workspace {
+    width: 100%;
+    gap: calc(var(--space) * var(--gap) * 5);
+    min-height: 65vh;
+}
+.admin_workspace :is(input, textarea, button, select) {
+    font: inherit;
+    color: var(--fg-1);
+}
+.admin_users :is(input, textarea, button, select) {
+    font: inherit;
+    color: var(--fg-1);
+}
+.admin_workspace input,
+.admin_workspace textarea,
+.admin_workspace select,
+.admin_users input,
+.admin_users textarea,
+.admin_users select {
+    min-width: 0;
+    border: 1px solid var(--fg-2);
+    border-radius: calc(var(--space) * var(--border-radius) / 3);
+    background: var(--bg-1);
+    padding: calc(var(--space) * var(--padding) / 2);
+}
+.admin_workspace button,
+.admin_users button {
+    border: 1px solid var(--fg-2);
+    border-radius: calc(var(--space) * var(--border-radius) / 3);
+    background: transparent;
+    padding: calc(var(--space) * var(--padding) / 2) calc(var(--space) * var(--padding));
+    cursor: pointer;
+}
+.admin_workspace button:hover,
+.admin_users button:hover,
+.admin_workspace button[aria-selected="true"] { background: var(--bg-3); }
+.admin_workspace button:disabled,
+.admin_users button:disabled { cursor: not-allowed; opacity: .45; }
+.admin_workspace button[hidden] { display: none; }
+.admin_workspace [hidden] { display: none !important; }
+.admin_users[hidden],
+.admin_users [hidden] { display: none !important; }
+.admin_connection { gap: calc(var(--space) * var(--gap) * 2); }
+.admin_connection label { flex: 0 0 auto; }
+.admin_connection input { flex: 1 1 auto; }
+.admin_resources { gap: calc(var(--space) * var(--gap)); border-bottom: 1px solid var(--fg-2); }
+.admin_resources button { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.admin_workbench {
+    display: grid;
+    grid-template-columns: minmax(14em, .7fr) minmax(0, 1.8fr);
+    gap: calc(var(--space) * var(--gap) * 5);
+    min-height: 60vh;
+}
+.admin_list_panel,
+.admin_editor_panel { min-width: 0; gap: calc(var(--space) * var(--gap) * 3); }
+.admin_list_panel { border-right: 1px solid var(--fg-2); padding-right: calc(var(--space) * var(--padding) * 2); }
+.admin_list_header,
+.admin_editor_header { justify-content: space-between; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_list_header h2,
+.admin_editor_header h2 { margin: 0; font-size: .75em; color: var(--fg-1); font-weight: 100; font-family: var(--font-label); }
+.admin_search_label { font-size: .8em; }
+.admin_record_list { gap: calc(var(--space) * var(--gap)); max-height: 60vh; overflow: auto; }
+.admin_record_list.merch_container { grid-template-columns: repeat(auto-fit, minmax(min(100%, 11em), 1fr)); }
+.admin_record_list > .selected { outline: 2px solid var(--fg-2); outline-offset: -2px; }
+.admin_actions { flex-wrap: wrap; justify-content: flex-end; gap: calc(var(--space) * var(--gap)); }
+.admin_actions button { font-size: .8em; }
+.admin_record_form { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) * 4); }
+.admin_form_section { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) * 3); }
+.admin_form_section > h3 { margin: 0; font-size: 1em; }
+.admin_form_grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: calc(var(--space) * var(--gap) * 7); }
+.admin_field { display: flex; min-width: 0; flex-direction: column; gap: calc(var(--space) * var(--gap)); }
+.admin_field > label,
+.admin_form_section > label { font-size: .8em; }
+.admin_field input:not([type="checkbox"]),
+.admin_field select,
+.admin_field textarea { all: unset; width: 100%; background-color: var(--solid-white-1); color: var(--solid-black-1); padding: .2em .5em; }
+.admin_field textarea { min-height: 6em; resize: vertical; }
+.admin_field.full { grid-column: 1 / -1; }
+.admin_field input[readonly] { opacity: .65; }
+.admin_merch_variant {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(6em, .5fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: calc(var(--space) * var(--gap) * 2);
+    padding: calc(var(--space) * var(--padding));
+    border: 1px solid var(--fg-2);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+}
+.admin_merch_variant_metadata { grid-column: 1 / -1; min-height: 4em; }
+.admin_merch_variant > button { grid-column: 1 / -1; justify-self: end; }
+.admin_author_options { gap: calc(var(--space) * var(--gap)); }
+.admin_author_option { display: grid; grid-template-columns: auto minmax(6em, 1fr) minmax(7em, .7fr) minmax(8em, 1fr); align-items: center; gap: .5em; font-size: .85em; }
+.admin_author_option input { width: auto; }
+.admin_author_option input.admin_author_collaborator_type { width: 100%; }
+.admin_dynamic_list { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_dynamic_row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: calc(var(--space) * var(--gap)); }
+.admin_link_row { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr) auto; }
+.admin_custom_row { grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr) auto; }
+.admin_custom_value_field { display: grid; gap: calc(var(--space) * var(--gap)); }
+.admin_row_actions { display: flex; gap: .25em; }
+.admin_row_actions button,
+.admin_add_button { padding: .35em .6em !important; }
+.admin_checkbox_field { display: flex; align-items: center; gap: .6em; }
+.admin_checkbox_field input { width: 1em; height: 1em; }
+.admin_album_manager { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap) * 4); }
+.admin_album_header { justify-content: space-between; gap: calc(var(--space) * var(--gap) * 3); }
+.admin_album_header h3 { margin: 0; font-size: 1em; }
+.admin_album_track_list { list-style-type: none; display: block; max-height: 60vh; overflow-y: auto; list-style-position: inside; }
+.admin_album_track { display: list-item; padding: calc(var(--space) * var(--padding) / 3) 0; border-bottom: 1px solid var(--bg-4); }
+.admin_album_track_open { display: inline-flex; align-items: center; gap: .8em; width: calc(100% - 8em); border: 0 !important; text-align: left; vertical-align: middle; }
+.admin_album_track_number { color: var(--fg-3); font-variant-numeric: tabular-nums; }
+.admin_album_track_title { overflow-wrap: anywhere; }
+.admin_album_track_actions { display: inline-flex; gap: .25em; vertical-align: middle; }
+.admin_album_track_actions button { padding: .35em .55em !important; }
+.admin_back_to_album { align-self: flex-start; }
+.admin_lyrics_editor { gap: calc(var(--space) * var(--gap) * 3); }
+.admin_lyrics_title { margin: 0; font-family: var(--font-serif-head); font-size: 1.6em; font-weight: 100; letter-spacing: .08em; }
+.admin_lyrics_toolbar { justify-content: space-between; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_lyrics_toolbar > .admin_actions { margin-left: auto; }
+.admin_lyrics_toolbar #save_lyrics { background: var(--fg-2); color: var(--bg-1); }
+.admin_lyrics_sections { gap: calc(var(--space) * var(--gap) * 2); }
+.admin_lyrics_section {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--space) * var(--gap) * 2);
+    padding: calc(var(--space) * var(--padding) * 1.25);
+    border: 1px solid var(--bg-4);
+    border-radius: calc(var(--space) * var(--border-radius) / 2);
+    background: var(--bg-2);
+    transition: border-color 140ms ease, opacity 140ms ease, background 140ms ease;
+}
+.admin_lyrics_section_header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_lyrics_section_timecode {
+    width: 5.5em;
+    padding-inline: .35em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.admin_lyrics_section_type {
+    width: min(100%, 16em);
+    border: 0 !important;
+    background: transparent !important;
+    color: var(--fg-3) !important;
+    font-family: var(--font-label) !important;
+    font-weight: 600 !important;
+    letter-spacing: .06em;
+}
+.admin_lyrics_lines { display: flex; flex-direction: column; gap: calc(var(--space) * var(--gap)); }
+.admin_lyrics_line {
+    display: grid;
+    grid-template-columns: 4.5em minmax(0, 1fr) auto;
+    align-items: center;
+    gap: calc(var(--space) * var(--gap));
+    padding: .25em 0;
+    transition: opacity 140ms ease, background 140ms ease;
+}
+.admin_lyrics_line .admin_lyrics_timecode {
+    width: 100%;
+    padding-inline: .35em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.admin_lyrics_line .admin_lyrics_text {
+    width: 100%;
+    min-width: 0;
+    padding: .45em .6em;
+    background: var(--bg-1);
+}
+.admin_lyrics_line .admin_lyrics_explanation {
+    grid-column: 2 / -1;
+    width: 100%;
+    min-height: 4em;
+    resize: vertical;
+    background: var(--bg-1);
+}
+.admin_lyrics_controls { display: inline-flex; align-items: center; gap: .15em; }
+.admin_lyrics_controls button {
+    display: grid;
+    width: 2.25em;
+    height: 2.25em;
+    place-items: center;
+    padding: 0 !important;
+    border-color: transparent !important;
+    color: var(--fg-2) !important;
+}
+.admin_lyrics_controls button:hover { background: var(--bg-3) !important; }
+.admin_lyrics_controls .admin_lyrics_add_line {
+    width: 1.8em;
+    height: 1.8em;
+    border: 1px solid var(--bg-4) !important;
+    border-radius: 50%;
+    font-size: 1.15em;
+    line-height: 1;
+}
+.admin_lyrics_controls .admin_lyrics_info[aria-expanded="true"] { color: var(--fg-3) !important; }
+.admin_lyrics_controls .admin_lyrics_drag_handle { cursor: grab; touch-action: none; }
+.admin_lyrics_drag_handle:active { cursor: grabbing; }
+.admin_lyrics_section.is_dragging,
+.admin_lyrics_line.is_dragging { opacity: .4; }
+.admin_lyrics_section.drop_target,
+.admin_lyrics_line.drop_target { border-color: var(--fg-2); background-color: var(--bg-3); }
+#lyrics_status { min-height: 1.5em; font-size: .8em; }
+#lyrics_status[data-kind="success"] { color: var(--fg-3); }
+#lyrics_status[data-kind="error"] { color: var(--fg-secondary-3); }
+#admin_status { min-height: 1.5em; font-size: .8em; }
+#admin_status[data-kind="success"] { color: var(--fg-3); }
+#admin_status[data-kind="error"] { color: var(--fg-secondary-3); }
+.admin_users { gap: calc(var(--space) * var(--gap) * 3); }
+.admin_users > h2,
+.admin_users h3 { margin: 0; }
+.admin_users > h2 { font-family: var(--font-serif-head); font-size: 1.5em; }
+.admin_users form { gap: calc(var(--space) * var(--gap) * 2); }
+.admin_users form input { flex: 1 1 auto; }
+.admin_user_warning { color: var(--fg-secondary-3); font-size: .85em; }
+.admin_user_card,
+.admin_user_orders { gap: calc(var(--space) * var(--gap) * 2); }
+.admin_user_card,
+.admin_order_row { padding: calc(var(--space) * var(--padding)); border-radius: calc(var(--space) * var(--border-radius) / 2); background: var(--bg-2); }
+.admin_user_flags { gap: calc(var(--space) * var(--gap) * 3); flex-wrap: wrap; }
+.admin_user_flags label,
+.admin_order_actions label { display: inline-flex; align-items: center; gap: .5em; }
+.admin_user_flags input,
+.admin_order_actions input,
+.admin_order_select { width: auto; }
+.admin_order_actions { flex-wrap: wrap; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_order_list { gap: calc(var(--space) * var(--gap)); max-height: 60vh; overflow: auto; }
+.admin_order_row { align-items: flex-start; gap: calc(var(--space) * var(--gap) * 2); }
+.admin_order_row strong { overflow-wrap: anywhere; }
+#users_status { min-height: 1.5em; font-size: .8em; }
+#users_status[data-kind="success"] { color: var(--fg-3); }
+#users_status[data-kind="error"] { color: var(--fg-secondary-3); }
+
+@media (max-width: 707px) {
+    .admin_workbench { grid-template-columns: minmax(0, 1fr); }
+    .admin_users form { align-items: stretch; flex-direction: column; }
+    .admin_list_panel { border-right: 0; border-bottom: 1px solid var(--fg-2); padding: 0 0 calc(var(--space) * var(--padding) * 2); }
+    .admin_record_list { max-height: 14em; }
+    .admin_editor_header { align-items: flex-start; flex-direction: column; }
+    .admin_actions { justify-content: flex-start; }
+    .admin_album_header { align-items: flex-start; flex-direction: column; }
+    .admin_lyrics_toolbar { align-items: center; }
+    .admin_lyrics_line { grid-template-columns: 3.75em minmax(0, 1fr) auto; }
+    .admin_form_grid { grid-template-columns: minmax(0, 1fr); }
+    .admin_field.full { grid-column: auto; }
+    .admin_merch_variant { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .admin_merch_variant_metadata,
+    .admin_merch_variant > button { grid-column: 1 / -1; }
+    .admin_link_row,
+    .admin_custom_row { grid-template-columns: minmax(0, 1fr) auto; }
+    .admin_link_row .admin_link_label,
+    .admin_custom_row .admin_custom_key { grid-column: 1; }
+    .admin_link_row .admin_link_url,
+    .admin_custom_row .admin_custom_value_field { grid-column: 1; }
+    .admin_link_row .admin_row_actions,
+    .admin_custom_row .admin_row_actions { grid-column: 2; grid-row: 1 / span 2; }
+}

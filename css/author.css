@@ -60,7 +60,7 @@
 .project_workspace_entry.state_corrected,
 .project_workspace_entry.state_lyrics { border-color: var(--solid-rgb-blue); color: var(--solid-rgb-blue); }
 .project_workspace_entry.state_report { border-color: var(--solid-cmy-yellow); color: var(--solid-cmy-yellow); }
-.project_workspace_entry.state_released { border-color: var(--solid-neon-cyan-1); color: var(--solid-neon-cyan-1); }
+.project_workspace_entry.state_released { border-color: var(--fg-2); color: var(--fg-2); }
 .project_workspace_entry> * {
     white-space: nowrap;
 }
